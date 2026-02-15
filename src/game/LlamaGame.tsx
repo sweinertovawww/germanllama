@@ -22,7 +22,7 @@ interface Question {
 }
 
 const QUESTIONS: Question[] = [
-  { text: "Jaký člen má Lama?", options: ["der", "die", "das"], correct: 1 },
+  { text: "Jaký člen má Lama?", options: ["der", "die", "das"], correct: 2 },
   { text: "Jaký člen má Haus?", options: ["der", "die", "das"], correct: 2 },
   { text: "Jaký člen má Hund?", options: ["der", "die", "das"], correct: 0 },
   { text: "Jaký člen má Katze?", options: ["der", "die", "das"], correct: 1 },
