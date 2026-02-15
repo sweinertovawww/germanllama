@@ -188,6 +188,7 @@ const LlamaGame = () => {
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [quizResult, setQuizResult] = useState<"correct" | "wrong" | null>(null);
   const questionIndexRef = useRef(0);
+  const shuffledQuestionsRef = useRef<Question[]>([]);
 
   const gameRef = useRef({
     llamaY: GROUND_Y,
@@ -219,6 +220,9 @@ const LlamaGame = () => {
     g.score = 0;
     g.groundOffset = 0;
     questionIndexRef.current = 0;
+    const lamaQ = QUESTIONS.find(q => q.text.includes("Lama"))!;
+    const rest = QUESTIONS.filter(q => !q.text.includes("Lama")).sort(() => Math.random() - 0.5);
+    shuffledQuestionsRef.current = [lamaQ, ...rest];
     setScore(0);
     setCurrentQuestion(null);
     setQuizResult(null);
@@ -226,7 +230,7 @@ const LlamaGame = () => {
   }, []);
 
   const triggerQuiz = useCallback(() => {
-    const q = QUESTIONS[questionIndexRef.current % QUESTIONS.length];
+    const q = shuffledQuestionsRef.current[questionIndexRef.current % shuffledQuestionsRef.current.length];
     questionIndexRef.current++;
     setCurrentQuestion(q);
     setQuizResult(null);
