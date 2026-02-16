@@ -190,6 +190,7 @@ const LlamaGame = () => {
   const [quizPhase, setQuizPhase] = useState<"article" | "translation">("article");
   const [translationInput, setTranslationInput] = useState("");
   const [translationResult, setTranslationResult] = useState<"correct" | "wrong" | null>(null);
+  const [articleResult, setArticleResult] = useState<"correct" | "wrong" | null>(null);
   const questionIndexRef = useRef(0);
   const shuffledQuestionsRef = useRef<Question[]>([]);
   const translationInputRef = useRef<HTMLInputElement>(null);
@@ -232,6 +233,7 @@ const LlamaGame = () => {
     setQuizPhase("article");
     setTranslationInput("");
     setTranslationResult(null);
+    setArticleResult(null);
     setGameState("playing");
   }, []);
 
@@ -242,31 +244,36 @@ const LlamaGame = () => {
     setQuizPhase("article");
     setTranslationInput("");
     setTranslationResult(null);
+    setArticleResult(null);
     setGameState("quiz");
   }, []);
 
+  const resumeGame = useCallback(() => {
+    const g = gameRef.current;
+    g.obstacles = g.obstacles.filter(o => o.x > 80);
+    g.llamaY = GROUND_Y;
+    g.velocityY = 0;
+    g.isJumping = false;
+    setCurrentQuestion(null);
+    setQuizPhase("article");
+    setTranslationInput("");
+    setTranslationResult(null);
+    setArticleResult(null);
+    setGameState("playing");
+  }, []);
+
   const handleAnswer = useCallback((index: number) => {
-    if (!currentQuestion || quizPhase !== "article") return;
+    if (!currentQuestion || quizPhase !== "article" || articleResult !== null) return;
     if (index === currentQuestion.correct) {
-      // Correct article → move to translation phase
+      setArticleResult("correct");
       setQuizPhase("translation");
       setTimeout(() => translationInputRef.current?.focus(), 100);
     } else {
-      // Wrong article → game over
-      setQuizPhase("article");
-      setTimeout(() => {
-        const finalScore = gameRef.current.score;
-        setScore(finalScore);
-        if (finalScore > parseInt(localStorage.getItem("llama-highscore") || "0")) {
-          setHighScore(finalScore);
-          localStorage.setItem("llama-highscore", String(finalScore));
-        }
-        setGameState("over");
-        setCurrentQuestion(null);
-        setTranslationResult(null);
-      }, 1000);
+      // Wrong article → 0 points, show feedback then continue
+      setArticleResult("wrong");
+      setTimeout(resumeGame, 1000);
     }
-  }, [currentQuestion, quizPhase]);
+  }, [currentQuestion, quizPhase, articleResult, resumeGame]);
 
   const handleTranslationSubmit = useCallback(() => {
     if (!currentQuestion || quizPhase !== "translation") return;
@@ -274,20 +281,14 @@ const LlamaGame = () => {
     const points = isCorrect ? 2 : 1;
     setTranslationResult(isCorrect ? "correct" : "wrong");
     gameRef.current.score += points;
-    setScore(gameRef.current.score);
-    setTimeout(() => {
-      const g = gameRef.current;
-      g.obstacles = g.obstacles.filter(o => o.x > 80);
-      g.llamaY = GROUND_Y;
-      g.velocityY = 0;
-      g.isJumping = false;
-      setCurrentQuestion(null);
-      setQuizPhase("article");
-      setTranslationInput("");
-      setTranslationResult(null);
-      setGameState("playing");
-    }, 1000);
-  }, [currentQuestion, quizPhase, translationInput]);
+    const newScore = gameRef.current.score;
+    setScore(newScore);
+    if (newScore > parseInt(localStorage.getItem("llama-highscore") || "0")) {
+      setHighScore(newScore);
+      localStorage.setItem("llama-highscore", String(newScore));
+    }
+    setTimeout(resumeGame, 1000);
+  }, [currentQuestion, quizPhase, translationInput, resumeGame]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -439,14 +440,26 @@ const LlamaGame = () => {
                       <button
                         key={i}
                         onClick={() => handleAnswer(i)}
-                        className="font-game text-sm px-5 py-3 rounded-lg border-2 bg-card text-card-foreground border-border hover:border-primary hover:bg-muted transition-all"
+                        disabled={articleResult !== null}
+                        className={`font-game text-sm px-5 py-3 rounded-lg border-2 transition-all ${
+                          articleResult !== null && i === currentQuestion.correct
+                            ? "border-primary bg-primary/20 text-card-foreground scale-105"
+                            : articleResult === "wrong"
+                            ? "bg-destructive/20 text-card-foreground border-destructive/50 opacity-60"
+                            : "bg-card text-card-foreground border-border hover:border-primary hover:bg-muted"
+                        }`}
                       >
                         <span className="text-muted-foreground text-xs mr-1">{i + 1}.</span>
                         {opt}
                       </button>
                     ))}
                   </div>
-                  <p className="text-muted-foreground text-xs mt-4">Klávesy 1, 2, 3 pro odpověď</p>
+                  {articleResult === "wrong" && (
+                    <p className="font-game text-xs text-destructive mt-4">✗ Špatně! Správně: {currentQuestion.options[currentQuestion.correct]} — 0 bodů</p>
+                  )}
+                  {!articleResult && (
+                    <p className="text-muted-foreground text-xs mt-4">Klávesy 1, 2, 3 pro odpověď</p>
+                  )}
                 </>
               )}
 
