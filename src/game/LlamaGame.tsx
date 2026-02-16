@@ -18,56 +18,57 @@ interface Obstacle {
 interface Question {
   text: string;
   options: string[];
-  correct: number; // index of correct answer
+  correct: number;
+  translation: string;
 }
 
 const QUESTIONS: Question[] = [
-  { text: "Jaký člen má Lama?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Haus?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Hund?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Katze?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Buch?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Tisch?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Blume?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Auto?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Baum?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Schule?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Schreibtisch?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Stuhl?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Computer?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Monitor?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Tastatur?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Maus?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Dokument?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Formular?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Büro?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Drucker?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Scanner?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Kopierer?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Aktenschrank?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Regal?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Telefon?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má E-Mail?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Besprechung?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Pause?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Kantine?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Notebook?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Schrank?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Tür?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Fenster?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Papierkorb?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Lampe?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Whiteboard?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Chef?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Kollegin?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Kollege?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Meeting?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Projektor?", options: ["der", "die", "das"], correct: 0 },
-  { text: "Jaký člen má Präsentation?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má Bürogebäude?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Cafeteria?", options: ["der", "die", "das"], correct: 1 },
-  { text: "Jaký člen má WC?", options: ["der", "die", "das"], correct: 2 },
-  { text: "Jaký člen má Umkleide?", options: ["der", "die", "das"], correct: 1 },
+  { text: "Jaký člen má Lama?", options: ["der", "die", "das"], correct: 2, translation: "lama" },
+  { text: "Jaký člen má Haus?", options: ["der", "die", "das"], correct: 2, translation: "dům" },
+  { text: "Jaký člen má Hund?", options: ["der", "die", "das"], correct: 0, translation: "pes" },
+  { text: "Jaký člen má Katze?", options: ["der", "die", "das"], correct: 1, translation: "kočka" },
+  { text: "Jaký člen má Buch?", options: ["der", "die", "das"], correct: 2, translation: "kniha" },
+  { text: "Jaký člen má Tisch?", options: ["der", "die", "das"], correct: 0, translation: "stůl" },
+  { text: "Jaký člen má Blume?", options: ["der", "die", "das"], correct: 1, translation: "květina" },
+  { text: "Jaký člen má Auto?", options: ["der", "die", "das"], correct: 2, translation: "auto" },
+  { text: "Jaký člen má Baum?", options: ["der", "die", "das"], correct: 0, translation: "strom" },
+  { text: "Jaký člen má Schule?", options: ["der", "die", "das"], correct: 1, translation: "škola" },
+  { text: "Jaký člen má Schreibtisch?", options: ["der", "die", "das"], correct: 0, translation: "psací stůl" },
+  { text: "Jaký člen má Stuhl?", options: ["der", "die", "das"], correct: 0, translation: "židle" },
+  { text: "Jaký člen má Computer?", options: ["der", "die", "das"], correct: 0, translation: "počítač" },
+  { text: "Jaký člen má Monitor?", options: ["der", "die", "das"], correct: 0, translation: "monitor" },
+  { text: "Jaký člen má Tastatur?", options: ["der", "die", "das"], correct: 1, translation: "klávesnice" },
+  { text: "Jaký člen má Maus?", options: ["der", "die", "das"], correct: 1, translation: "myš" },
+  { text: "Jaký člen má Dokument?", options: ["der", "die", "das"], correct: 2, translation: "dokument" },
+  { text: "Jaký člen má Formular?", options: ["der", "die", "das"], correct: 2, translation: "formulář" },
+  { text: "Jaký člen má Büro?", options: ["der", "die", "das"], correct: 2, translation: "kancelář" },
+  { text: "Jaký člen má Drucker?", options: ["der", "die", "das"], correct: 0, translation: "tiskárna" },
+  { text: "Jaký člen má Scanner?", options: ["der", "die", "das"], correct: 0, translation: "skener" },
+  { text: "Jaký člen má Kopierer?", options: ["der", "die", "das"], correct: 0, translation: "kopírka" },
+  { text: "Jaký člen má Aktenschrank?", options: ["der", "die", "das"], correct: 0, translation: "kartotéka" },
+  { text: "Jaký člen má Regal?", options: ["der", "die", "das"], correct: 2, translation: "regál" },
+  { text: "Jaký člen má Telefon?", options: ["der", "die", "das"], correct: 2, translation: "telefon" },
+  { text: "Jaký člen má E-Mail?", options: ["der", "die", "das"], correct: 1, translation: "e-mail" },
+  { text: "Jaký člen má Besprechung?", options: ["der", "die", "das"], correct: 1, translation: "porada" },
+  { text: "Jaký člen má Pause?", options: ["der", "die", "das"], correct: 1, translation: "přestávka" },
+  { text: "Jaký člen má Kantine?", options: ["der", "die", "das"], correct: 1, translation: "jídelna" },
+  { text: "Jaký člen má Notebook?", options: ["der", "die", "das"], correct: 2, translation: "notebook" },
+  { text: "Jaký člen má Schrank?", options: ["der", "die", "das"], correct: 0, translation: "skříň" },
+  { text: "Jaký člen má Tür?", options: ["der", "die", "das"], correct: 1, translation: "dveře" },
+  { text: "Jaký člen má Fenster?", options: ["der", "die", "das"], correct: 2, translation: "okno" },
+  { text: "Jaký člen má Papierkorb?", options: ["der", "die", "das"], correct: 0, translation: "koš" },
+  { text: "Jaký člen má Lampe?", options: ["der", "die", "das"], correct: 1, translation: "lampa" },
+  { text: "Jaký člen má Whiteboard?", options: ["der", "die", "das"], correct: 2, translation: "tabule" },
+  { text: "Jaký člen má Chef?", options: ["der", "die", "das"], correct: 0, translation: "šéf" },
+  { text: "Jaký člen má Kollegin?", options: ["der", "die", "das"], correct: 1, translation: "kolegyně" },
+  { text: "Jaký člen má Kollege?", options: ["der", "die", "das"], correct: 0, translation: "kolega" },
+  { text: "Jaký člen má Meeting?", options: ["der", "die", "das"], correct: 2, translation: "schůzka" },
+  { text: "Jaký člen má Projektor?", options: ["der", "die", "das"], correct: 0, translation: "projektor" },
+  { text: "Jaký člen má Präsentation?", options: ["der", "die", "das"], correct: 1, translation: "prezentace" },
+  { text: "Jaký člen má Bürogebäude?", options: ["der", "die", "das"], correct: 2, translation: "kancelářská budova" },
+  { text: "Jaký člen má Cafeteria?", options: ["der", "die", "das"], correct: 1, translation: "kavárna" },
+  { text: "Jaký člen má WC?", options: ["der", "die", "das"], correct: 2, translation: "záchod" },
+  { text: "Jaký člen má Umkleide?", options: ["der", "die", "das"], correct: 1, translation: "šatna" },
 ];
 
 const drawLlama = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: number) => {
@@ -186,9 +187,12 @@ const LlamaGame = () => {
   });
   const [gameState, setGameState] = useState<"idle" | "playing" | "quiz" | "over">("idle");
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
-  const [quizResult, setQuizResult] = useState<"correct" | "wrong" | null>(null);
+  const [quizPhase, setQuizPhase] = useState<"article" | "translation">("article");
+  const [translationInput, setTranslationInput] = useState("");
+  const [translationResult, setTranslationResult] = useState<"correct" | "wrong" | null>(null);
   const questionIndexRef = useRef(0);
   const shuffledQuestionsRef = useRef<Question[]>([]);
+  const translationInputRef = useRef<HTMLInputElement>(null);
 
   const gameRef = useRef({
     llamaY: GROUND_Y,
@@ -225,7 +229,9 @@ const LlamaGame = () => {
     shuffledQuestionsRef.current = [lamaQ, ...rest];
     setScore(0);
     setCurrentQuestion(null);
-    setQuizResult(null);
+    setQuizPhase("article");
+    setTranslationInput("");
+    setTranslationResult(null);
     setGameState("playing");
   }, []);
 
@@ -233,30 +239,21 @@ const LlamaGame = () => {
     const q = shuffledQuestionsRef.current[questionIndexRef.current % shuffledQuestionsRef.current.length];
     questionIndexRef.current++;
     setCurrentQuestion(q);
-    setQuizResult(null);
+    setQuizPhase("article");
+    setTranslationInput("");
+    setTranslationResult(null);
     setGameState("quiz");
   }, []);
 
   const handleAnswer = useCallback((index: number) => {
-    if (!currentQuestion || quizResult) return;
+    if (!currentQuestion || quizPhase !== "article") return;
     if (index === currentQuestion.correct) {
-      setQuizResult("correct");
-      const newScore = Math.floor(gameRef.current.score / 5) + 1;
-      gameRef.current.score = newScore * 5;
-      setScore(newScore);
-      // Remove the colliding obstacle and resume after a short delay
-      setTimeout(() => {
-        const g = gameRef.current;
-        g.obstacles = g.obstacles.filter(o => o.x > 80);
-        g.llamaY = GROUND_Y;
-        g.velocityY = 0;
-        g.isJumping = false;
-        setQuizResult(null);
-        setCurrentQuestion(null);
-        setGameState("playing");
-      }, 800);
+      // Correct article → move to translation phase
+      setQuizPhase("translation");
+      setTimeout(() => translationInputRef.current?.focus(), 100);
     } else {
-      setQuizResult("wrong");
+      // Wrong article → game over
+      setQuizPhase("article");
       setTimeout(() => {
         const finalScore = gameRef.current.score;
         setScore(finalScore);
@@ -266,17 +263,43 @@ const LlamaGame = () => {
         }
         setGameState("over");
         setCurrentQuestion(null);
-        setQuizResult(null);
+        setTranslationResult(null);
       }, 1000);
     }
-  }, [currentQuestion, quizResult]);
+  }, [currentQuestion, quizPhase]);
+
+  const handleTranslationSubmit = useCallback(() => {
+    if (!currentQuestion || quizPhase !== "translation") return;
+    const isCorrect = translationInput.trim().toLowerCase() === currentQuestion.translation.toLowerCase();
+    const points = isCorrect ? 2 : 1;
+    setTranslationResult(isCorrect ? "correct" : "wrong");
+    gameRef.current.score += points;
+    setScore(gameRef.current.score);
+    setTimeout(() => {
+      const g = gameRef.current;
+      g.obstacles = g.obstacles.filter(o => o.x > 80);
+      g.llamaY = GROUND_Y;
+      g.velocityY = 0;
+      g.isJumping = false;
+      setCurrentQuestion(null);
+      setQuizPhase("article");
+      setTranslationInput("");
+      setTranslationResult(null);
+      setGameState("playing");
+    }, 1000);
+  }, [currentQuestion, quizPhase, translationInput]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (gameState === "quiz") {
-        if (e.code === "Digit1" || e.code === "Numpad1") { e.preventDefault(); handleAnswer(0); }
-        if (e.code === "Digit2" || e.code === "Numpad2") { e.preventDefault(); handleAnswer(1); }
-        if (e.code === "Digit3" || e.code === "Numpad3") { e.preventDefault(); handleAnswer(2); }
+        if (quizPhase === "article") {
+          if (e.code === "Digit1" || e.code === "Numpad1") { e.preventDefault(); handleAnswer(0); }
+          if (e.code === "Digit2" || e.code === "Numpad2") { e.preventDefault(); handleAnswer(1); }
+          if (e.code === "Digit3" || e.code === "Numpad3") { e.preventDefault(); handleAnswer(2); }
+        } else if (quizPhase === "translation" && e.code === "Enter") {
+          e.preventDefault();
+          handleTranslationSubmit();
+        }
         return;
       }
       if (e.code === "ArrowUp" || e.code === "Space") {
@@ -290,7 +313,7 @@ const LlamaGame = () => {
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [gameState, jump, startGame, handleAnswer]);
+  }, [gameState, quizPhase, jump, startGame, handleAnswer, handleTranslationSubmit]);
 
   useEffect(() => {
     if (gameState !== "playing") return;
@@ -404,36 +427,63 @@ const LlamaGame = () => {
         {gameState === "quiz" && currentQuestion && (
           <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
             <div className="bg-card rounded-xl p-6 shadow-2xl text-center max-w-md mx-4 border-2 border-primary">
-              <p className="font-game text-sm text-card-foreground mb-6 leading-relaxed">
+              <p className="font-game text-sm text-card-foreground mb-4 leading-relaxed">
                 {currentQuestion.text}
               </p>
-              <div className="flex gap-3 justify-center">
-                {currentQuestion.options.map((opt, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleAnswer(i)}
-                    disabled={quizResult !== null}
-                    className={`font-game text-sm px-5 py-3 rounded-lg border-2 transition-all ${
-                      quizResult !== null && i === currentQuestion.correct
-                        ? "bg-green-500 text-white border-green-600 scale-105"
-                        : quizResult === "wrong" && i !== currentQuestion.correct
-                        ? "bg-destructive text-destructive-foreground border-destructive opacity-60"
-                        : "bg-card text-card-foreground border-border hover:border-primary hover:bg-muted"
-                    }`}
-                  >
-                    <span className="text-muted-foreground text-xs mr-1">{i + 1}.</span>
-                    {opt}
-                  </button>
-                ))}
-              </div>
-              {quizResult === "correct" && (
-                <p className="font-game text-xs text-green-600 mt-4">✓ Správně! Pokračuješ...</p>
+
+              {/* Phase 1: Article selection */}
+              {quizPhase === "article" && (
+                <>
+                  <div className="flex gap-3 justify-center">
+                    {currentQuestion.options.map((opt, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleAnswer(i)}
+                        className="font-game text-sm px-5 py-3 rounded-lg border-2 bg-card text-card-foreground border-border hover:border-primary hover:bg-muted transition-all"
+                      >
+                        <span className="text-muted-foreground text-xs mr-1">{i + 1}.</span>
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-muted-foreground text-xs mt-4">Klávesy 1, 2, 3 pro odpověď</p>
+                </>
               )}
-              {quizResult === "wrong" && (
-                <p className="font-game text-xs text-destructive mt-4">✗ Špatně! Game Over</p>
-              )}
-              {!quizResult && (
-                <p className="text-muted-foreground text-xs mt-4">Klávesy 1, 2, 3 pro odpověď</p>
+
+              {/* Phase 2: Translation input */}
+              {quizPhase === "translation" && (
+                <>
+                  <p className="font-game text-xs text-primary mb-3">✓ Správný člen! Napiš překlad do češtiny:</p>
+                  <div className="flex gap-2 justify-center items-center">
+                    <input
+                      ref={translationInputRef}
+                      type="text"
+                      value={translationInput}
+                      onChange={(e) => setTranslationInput(e.target.value)}
+                      disabled={translationResult !== null}
+                      placeholder="Překlad..."
+                      className="font-game text-sm px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-48"
+                    />
+                    <button
+                      onClick={handleTranslationSubmit}
+                      disabled={translationResult !== null}
+                      className="font-game text-xs px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+                    >
+                      OK
+                    </button>
+                  </div>
+                  {translationResult === "correct" && (
+                    <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>✓ Správně! +2 body</p>
+                  )}
+                  {translationResult === "wrong" && (
+                    <p className="font-game text-xs text-destructive mt-3">
+                      ✗ Správně: {currentQuestion.translation} — +1 bod
+                    </p>
+                  )}
+                  {!translationResult && (
+                    <p className="text-muted-foreground text-xs mt-3">Enter pro potvrzení</p>
+                  )}
+                </>
               )}
             </div>
           </div>
