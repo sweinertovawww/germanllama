@@ -175,7 +175,7 @@ const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obs
   ctx.fillStyle = "#2a1a0a";
   ctx.font = "14px 'Press Start 2P', monospace";
   ctx.textAlign = "start";
-  ctx.fillText(`${Math.floor(g.score / 5)}`, CANVAS_WIDTH - 100, 30);
+  ctx.fillText(`${g.score}`, CANVAS_WIDTH - 100, 30);
 };
 
 const LlamaGame = () => {
@@ -241,10 +241,12 @@ const LlamaGame = () => {
     if (!currentQuestion || quizResult) return;
     if (index === currentQuestion.correct) {
       setQuizResult("correct");
+      const newScore = Math.floor(gameRef.current.score / 5) + 1;
+      gameRef.current.score = newScore * 5;
+      setScore(newScore);
       // Remove the colliding obstacle and resume after a short delay
       setTimeout(() => {
         const g = gameRef.current;
-        // Remove obstacle that caused collision (leftmost one near llama)
         g.obstacles = g.obstacles.filter(o => o.x > 80);
         g.llamaY = GROUND_Y;
         g.velocityY = 0;
@@ -256,7 +258,7 @@ const LlamaGame = () => {
     } else {
       setQuizResult("wrong");
       setTimeout(() => {
-        const finalScore = Math.floor(gameRef.current.score / 5);
+        const finalScore = gameRef.current.score;
         setScore(finalScore);
         if (finalScore > parseInt(localStorage.getItem("llama-highscore") || "0")) {
           setHighScore(finalScore);
@@ -329,9 +331,7 @@ const LlamaGame = () => {
       // Speed up
       g.speed += GAME_SPEED_INCREMENT;
 
-      // Score
-      g.score++;
-      if (g.score % 5 === 0) setScore(Math.floor(g.score / 5));
+      // Score (no distance-based scoring, only quiz answers count)
 
       // Collision → trigger quiz
       const llamaBox = { x: 38, y: g.llamaY - 22, w: 30, h: 62 };
