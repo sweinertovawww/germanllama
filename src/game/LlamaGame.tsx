@@ -292,6 +292,25 @@ const LlamaGame = () => {
     setGameState("playing");
   }, []);
 
+  const exitGame = useCallback(() => {
+    const g = gameRef.current;
+    const finalScore = g.score;
+    if (finalScore > 0) {
+      saveDailyScore(playerNameRef.current, finalScore);
+      setDailyBest(getDailyBest());
+    }
+    if (finalScore > parseInt(localStorage.getItem("llama-highscore") || "0")) {
+      setHighScore(finalScore);
+      localStorage.setItem("llama-highscore", String(finalScore));
+    }
+    setCurrentQuestion(null);
+    setQuizPhase("article");
+    setTranslationInput("");
+    setTranslationResult(null);
+    setArticleResult(null);
+    setGameState("over");
+  }, []);
+
   const handleAnswer = useCallback((index: number) => {
     if (!currentQuestion || quizPhase !== "article" || articleResult !== null) return;
     if (index === currentQuestion.correct) {
@@ -455,6 +474,16 @@ const LlamaGame = () => {
           height={CANVAS_HEIGHT}
           className="block"
         />
+
+        {/* Exit button during play or quiz */}
+        {(gameState === "playing" || gameState === "quiz") && (
+          <button
+            onClick={exitGame}
+            className="absolute top-2 right-2 font-game text-xs px-3 py-1 rounded bg-destructive/80 text-destructive-foreground hover:bg-destructive transition-colors z-20"
+          >
+            Exit
+          </button>
+        )}
 
         {/* Name input overlay on idle */}
         {gameState === "idle" && (
