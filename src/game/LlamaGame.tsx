@@ -15,11 +15,22 @@ interface Obstacle {
   height: number;
 }
 
+interface Star {
+  x: number;
+  y: number;
+  collected: boolean;
+}
+
 interface Question {
   text: string;
   options: string[];
   correct: number;
   translation: string;
+}
+
+interface FillQuestion {
+  sentence: string;
+  answer: string;
 }
 
 const QUESTIONS: Question[] = [
@@ -71,6 +82,29 @@ const QUESTIONS: Question[] = [
   { text: "Jaký člen má Umkleide?", options: ["der", "die", "das"], correct: 1, translation: "šatna" },
 ];
 
+const FILL_QUESTIONS: FillQuestion[] = [
+  { sentence: "Ich ___ Deutsch.", answer: "spreche" },
+  { sentence: "Er ___ ein Buch.", answer: "liest" },
+  { sentence: "Wir ___ nach Hause.", answer: "gehen" },
+  { sentence: "Sie ___ Kaffee.", answer: "trinkt" },
+  { sentence: "Du ___ sehr schnell.", answer: "läufst" },
+  { sentence: "Ich ___ müde.", answer: "bin" },
+  { sentence: "Er ___ Lehrer.", answer: "ist" },
+  { sentence: "Wir ___ Studenten.", answer: "sind" },
+  { sentence: "Sie ___ eine Katze.", answer: "hat" },
+  { sentence: "Du ___ Hunger.", answer: "hast" },
+  { sentence: "Ich ___ gern Musik.", answer: "höre" },
+  { sentence: "Er ___ Fußball.", answer: "spielt" },
+  { sentence: "Wir ___ ins Kino.", answer: "gehen" },
+  { sentence: "Sie ___ sehr gut.", answer: "kocht" },
+  { sentence: "Du ___ schön.", answer: "singst" },
+  { sentence: "Ich ___ Wasser.", answer: "trinke" },
+  { sentence: "Er ___ die Tür.", answer: "öffnet" },
+  { sentence: "Wir ___ Deutsch.", answer: "lernen" },
+  { sentence: "Sie ___ das Fenster.", answer: "schließt" },
+  { sentence: "Du ___ mir.", answer: "hilfst" },
+];
+
 const drawLlama = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: number) => {
   const legOffset = Math.sin(frame * 0.3) * 4;
 
@@ -114,6 +148,31 @@ const drawCactus = (ctx: CanvasRenderingContext2D, x: number, height: number) =>
   ctx.fillRect(x + 16, y + 23, 4, 10);
 };
 
+const drawStar = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: number) => {
+  const pulse = 1 + Math.sin(frame * 0.1) * 0.15;
+  const size = 10 * pulse;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(frame * 0.05);
+  ctx.fillStyle = "#FFD700";
+  ctx.strokeStyle = "#FFA500";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+    const method = i === 0 ? "moveTo" : "lineTo";
+    ctx[method](Math.cos(angle) * size, Math.sin(angle) * size);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Glow
+  ctx.shadowColor = "#FFD700";
+  ctx.shadowBlur = 8;
+  ctx.fill();
+  ctx.restore();
+};
+
 const drawGround = (ctx: CanvasRenderingContext2D, offset: number) => {
   ctx.fillStyle = "#8b7355";
   ctx.fillRect(0, GROUND_Y + 40, CANVAS_WIDTH, 20);
@@ -142,7 +201,7 @@ const drawSky = (ctx: CanvasRenderingContext2D, offset: number) => {
   }
 };
 
-const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obstacles: Obstacle[]; llamaY: number; frameCount: number; score: number }) => {
+const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obstacles: Obstacle[]; stars: Star[]; llamaY: number; frameCount: number; score: number }) => {
   const grad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
   grad.addColorStop(0, "#87CEEB");
   grad.addColorStop(0.7, "#c8e6f0");
@@ -167,6 +226,13 @@ const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obs
   // Obstacles
   for (const o of g.obstacles) {
     drawCactus(ctx, o.x, o.height);
+  }
+
+  // Stars
+  for (const s of g.stars) {
+    if (!s.collected) {
+      drawStar(ctx, s.x, s.y, g.frameCount);
+    }
   }
 
   // Llama
@@ -210,7 +276,7 @@ const LlamaGame = () => {
   const [highScore, setHighScore] = useState(() => {
     return parseInt(localStorage.getItem("llama-highscore") || "0");
   });
-  const [gameState, setGameState] = useState<"idle" | "playing" | "quiz" | "over">("idle");
+  const [gameState, setGameState] = useState<"idle" | "playing" | "quiz" | "starQuiz" | "over">("idle");
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [quizPhase, setQuizPhase] = useState<"article" | "translation">("article");
   const [translationInput, setTranslationInput] = useState("");
@@ -218,9 +284,15 @@ const LlamaGame = () => {
   const [articleResult, setArticleResult] = useState<"correct" | "wrong" | null>(null);
   const [playerName, setPlayerName] = useState("");
   const [dailyBest, setDailyBest] = useState<DailyEntry | null>(getDailyBest());
+  const [currentFillQuestion, setCurrentFillQuestion] = useState<FillQuestion | null>(null);
+  const [fillInput, setFillInput] = useState("");
+  const [fillResult, setFillResult] = useState<"correct" | "wrong" | null>(null);
   const questionIndexRef = useRef(0);
+  const fillIndexRef = useRef(0);
   const shuffledQuestionsRef = useRef<Question[]>([]);
+  const shuffledFillRef = useRef<FillQuestion[]>([]);
   const translationInputRef = useRef<HTMLInputElement>(null);
+  const fillInputRef = useRef<HTMLInputElement>(null);
   const playerNameRef = useRef("");
 
   const gameRef = useRef({
@@ -228,10 +300,12 @@ const LlamaGame = () => {
     velocityY: 0,
     isJumping: false,
     obstacles: [] as Obstacle[],
+    stars: [] as Star[],
     frameCount: 0,
     speed: GAME_SPEED_INITIAL,
     score: 0,
     groundOffset: 0,
+    starTimer: 0,
   });
 
   const jump = useCallback(() => {
@@ -250,16 +324,23 @@ const LlamaGame = () => {
     g.velocityY = 0;
     g.isJumping = false;
     g.obstacles = [];
+    g.stars = [];
+    g.starTimer = 0;
     g.frameCount = 0;
     g.speed = GAME_SPEED_INITIAL;
     g.score = 0;
     g.groundOffset = 0;
     questionIndexRef.current = 0;
+    fillIndexRef.current = 0;
     const lamaQ = QUESTIONS.find(q => q.text.includes("Lama"))!;
     const rest = QUESTIONS.filter(q => !q.text.includes("Lama")).sort(() => Math.random() - 0.5);
     shuffledQuestionsRef.current = [lamaQ, ...rest];
+    shuffledFillRef.current = [...FILL_QUESTIONS].sort(() => Math.random() - 0.5);
     setScore(0);
     setCurrentQuestion(null);
+    setCurrentFillQuestion(null);
+    setFillInput("");
+    setFillResult(null);
     setQuizPhase("article");
     setTranslationInput("");
     setTranslationResult(null);
@@ -285,12 +366,43 @@ const LlamaGame = () => {
     g.velocityY = 0;
     g.isJumping = false;
     setCurrentQuestion(null);
+    setCurrentFillQuestion(null);
+    setFillInput("");
+    setFillResult(null);
     setQuizPhase("article");
     setTranslationInput("");
     setTranslationResult(null);
     setArticleResult(null);
     setGameState("playing");
   }, []);
+
+  const triggerStarQuiz = useCallback(() => {
+    const q = shuffledFillRef.current[fillIndexRef.current % shuffledFillRef.current.length];
+    fillIndexRef.current++;
+    setCurrentFillQuestion(q);
+    setFillInput("");
+    setFillResult(null);
+    setGameState("starQuiz");
+    setTimeout(() => fillInputRef.current?.focus(), 100);
+  }, []);
+
+  const handleFillSubmit = useCallback(() => {
+    if (!currentFillQuestion || fillResult !== null) return;
+    const isCorrect = fillInput.trim().toLowerCase() === currentFillQuestion.answer.toLowerCase();
+    setFillResult(isCorrect ? "correct" : "wrong");
+    if (isCorrect) {
+      gameRef.current.score += 1;
+      const newScore = gameRef.current.score;
+      setScore(newScore);
+      if (newScore > parseInt(localStorage.getItem("llama-highscore") || "0")) {
+        setHighScore(newScore);
+        localStorage.setItem("llama-highscore", String(newScore));
+      }
+      saveDailyScore(playerNameRef.current, newScore);
+      setDailyBest(getDailyBest());
+    }
+    setTimeout(resumeGame, 1000);
+  }, [currentFillQuestion, fillInput, fillResult, resumeGame]);
 
   const exitGame = useCallback(() => {
     const g = gameRef.current;
@@ -343,6 +455,13 @@ const LlamaGame = () => {
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
+      if (gameState === "starQuiz") {
+        if (e.code === "Enter") {
+          e.preventDefault();
+          handleFillSubmit();
+        }
+        return;
+      }
       if (gameState === "quiz") {
         if (quizPhase === "article") {
           if (e.code === "Digit1" || e.code === "Numpad1") { e.preventDefault(); handleAnswer(0); }
@@ -365,7 +484,7 @@ const LlamaGame = () => {
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [gameState, quizPhase, jump, startGame, handleAnswer, handleTranslationSubmit]);
+  }, [gameState, quizPhase, jump, startGame, handleAnswer, handleTranslationSubmit, handleFillSubmit]);
 
   useEffect(() => {
     if (gameState !== "playing") return;
@@ -403,13 +522,39 @@ const LlamaGame = () => {
         return o.x > -30;
       });
 
+      // Spawn stars (every ~200 frames, random)
+      g.starTimer++;
+      if (g.starTimer > 150 + Math.random() * 100) {
+        g.starTimer = 0;
+        const starY = 80 + Math.random() * 80; // flying height
+        g.stars.push({ x: CANVAS_WIDTH, y: starY, collected: false });
+      }
+
+      // Move stars
+      g.stars = g.stars.filter((s) => {
+        s.x -= g.speed * 0.8;
+        return s.x > -20;
+      });
+
       // Speed up
       g.speed += GAME_SPEED_INCREMENT;
 
-      // Score (no distance-based scoring, only quiz answers count)
-
-      // Collision → trigger quiz
+      // Star collision (only while jumping)
       const llamaBox = { x: 38, y: g.llamaY - 22, w: 30, h: 62 };
+      if (g.isJumping) {
+        for (const s of g.stars) {
+          if (!s.collected &&
+            llamaBox.x < s.x + 12 && llamaBox.x + llamaBox.w > s.x - 12 &&
+            llamaBox.y < s.y + 12 && llamaBox.y + llamaBox.h > s.y - 12
+          ) {
+            s.collected = true;
+            triggerStarQuiz();
+            return;
+          }
+        }
+      }
+
+      // Obstacle collision → trigger quiz
       for (const o of g.obstacles) {
         const obsBox = { x: o.x, y: GROUND_Y - o.height + 40, w: o.width, h: o.height };
         if (
@@ -430,17 +575,17 @@ const LlamaGame = () => {
 
     animId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animId);
-  }, [gameState, triggerQuiz]);
+  }, [gameState, triggerQuiz, triggerStarQuiz]);
 
   // Draw idle/game over screen
   useEffect(() => {
-    if (gameState === "playing" || gameState === "quiz") return;
+    if (gameState === "playing" || gameState === "quiz" || gameState === "starQuiz") return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    drawScene(ctx, { groundOffset: 0, obstacles: [], llamaY: GROUND_Y, frameCount: 0, score: 0 });
+    drawScene(ctx, { groundOffset: 0, obstacles: [], stars: [], llamaY: GROUND_Y, frameCount: 0, score: 0 });
 
     ctx.fillStyle = "#2a1a0a";
     ctx.font = "20px 'Press Start 2P', monospace";
@@ -476,7 +621,7 @@ const LlamaGame = () => {
         />
 
         {/* Exit button during play or quiz */}
-        {(gameState === "playing" || gameState === "quiz") && (
+        {(gameState === "playing" || gameState === "quiz" || gameState === "starQuiz") && (
           <button
             onClick={exitGame}
             className="absolute top-2 right-2 font-game text-xs px-3 py-1 rounded bg-destructive/80 text-destructive-foreground hover:bg-destructive transition-colors z-20"
@@ -585,6 +730,46 @@ const LlamaGame = () => {
             </div>
           </div>
         )}
+        {/* Star Quiz overlay */}
+        {gameState === "starQuiz" && currentFillQuestion && (
+          <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
+            <div className="bg-card rounded-xl p-6 shadow-2xl text-center max-w-md mx-4 border-2 border-yellow-500">
+              <p className="font-game text-sm text-yellow-500 mb-2">⭐ Doplň slovo!</p>
+              <p className="font-game text-sm text-card-foreground mb-4 leading-relaxed">
+                {currentFillQuestion.sentence}
+              </p>
+              <div className="flex gap-2 justify-center items-center">
+                <input
+                  ref={fillInputRef}
+                  type="text"
+                  value={fillInput}
+                  onChange={(e) => setFillInput(e.target.value)}
+                  disabled={fillResult !== null}
+                  placeholder="Doplň..."
+                  className="font-game text-sm px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-yellow-500 focus:outline-none w-48"
+                />
+                <button
+                  onClick={handleFillSubmit}
+                  disabled={fillResult !== null}
+                  className="font-game text-xs px-4 py-2 rounded-lg bg-yellow-500 text-black hover:opacity-90 transition-opacity"
+                >
+                  OK
+                </button>
+              </div>
+              {fillResult === "correct" && (
+                <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>✓ Správně! +1 bod</p>
+              )}
+              {fillResult === "wrong" && (
+                <p className="font-game text-xs text-destructive mt-3">
+                  ✗ Správně: {currentFillQuestion.answer} — 0 bodů
+                </p>
+              )}
+              {!fillResult && (
+                <p className="text-muted-foreground text-xs mt-3">Enter pro potvrzení</p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col items-center gap-2">
@@ -606,7 +791,7 @@ const LlamaGame = () => {
       <button
         onClick={() => {
           if (gameState === "playing") jump();
-          else if (gameState !== "quiz") startGame();
+          else if (gameState !== "quiz" && gameState !== "starQuiz") startGame();
         }}
         className="bg-primary text-primary-foreground font-game text-xs px-6 py-3 rounded-lg hover:opacity-90 transition-opacity md:hidden"
       >
