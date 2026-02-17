@@ -179,6 +179,31 @@ const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obs
   ctx.fillText(`${g.score}`, CANVAS_WIDTH - 100, 30);
 };
 
+interface DailyEntry {
+  name: string;
+  score: number;
+  date: string;
+}
+
+const getTodayStr = () => new Date().toISOString().slice(0, 10);
+
+const getDailyBest = (): DailyEntry | null => {
+  const entries: DailyEntry[] = JSON.parse(localStorage.getItem("llama-daily") || "[]");
+  const today = getTodayStr();
+  const todayEntries = entries.filter(e => e.date === today);
+  if (todayEntries.length === 0) return null;
+  return todayEntries.reduce((best, e) => e.score > best.score ? e : best);
+};
+
+const saveDailyScore = (name: string, score: number) => {
+  const entries: DailyEntry[] = JSON.parse(localStorage.getItem("llama-daily") || "[]");
+  const today = getTodayStr();
+  // Keep only today's entries + new one
+  const todayEntries = entries.filter(e => e.date === today);
+  todayEntries.push({ name, score, date: today });
+  localStorage.setItem("llama-daily", JSON.stringify(todayEntries));
+};
+
 const LlamaGame = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [score, setScore] = useState(0);
@@ -191,9 +216,12 @@ const LlamaGame = () => {
   const [translationInput, setTranslationInput] = useState("");
   const [translationResult, setTranslationResult] = useState<"correct" | "wrong" | null>(null);
   const [articleResult, setArticleResult] = useState<"correct" | "wrong" | null>(null);
+  const [playerName, setPlayerName] = useState("");
+  const [dailyBest, setDailyBest] = useState<DailyEntry | null>(getDailyBest());
   const questionIndexRef = useRef(0);
   const shuffledQuestionsRef = useRef<Question[]>([]);
   const translationInputRef = useRef<HTMLInputElement>(null);
+  const playerNameRef = useRef("");
 
   const gameRef = useRef({
     llamaY: GROUND_Y,
@@ -215,6 +243,8 @@ const LlamaGame = () => {
   }, []);
 
   const startGame = useCallback(() => {
+    if (!playerName.trim()) return;
+    playerNameRef.current = playerName.trim();
     const g = gameRef.current;
     g.llamaY = GROUND_Y;
     g.velocityY = 0;
@@ -235,7 +265,7 @@ const LlamaGame = () => {
     setTranslationResult(null);
     setArticleResult(null);
     setGameState("playing");
-  }, []);
+  }, [playerName]);
 
   const triggerQuiz = useCallback(() => {
     const q = shuffledQuestionsRef.current[questionIndexRef.current % shuffledQuestionsRef.current.length];
@@ -287,6 +317,8 @@ const LlamaGame = () => {
       setHighScore(newScore);
       localStorage.setItem("llama-highscore", String(newScore));
     }
+    saveDailyScore(playerNameRef.current, newScore);
+    setDailyBest(getDailyBest());
     setTimeout(resumeGame, 1000);
   }, [currentQuestion, quizPhase, translationInput, resumeGame]);
 
@@ -396,9 +428,9 @@ const LlamaGame = () => {
     ctx.textAlign = "center";
 
     if (gameState === "idle") {
-      ctx.fillText("LLAMA RUN", CANVAS_WIDTH / 2, 100);
+      ctx.fillText("LLAMA RUN", CANVAS_WIDTH / 2, 80);
       ctx.font = "10px 'Press Start 2P', monospace";
-      ctx.fillText("Stiskni ↑ nebo MEZERNÍK", CANVAS_WIDTH / 2, 140);
+      ctx.fillText("Zadej jméno a stiskni START", CANVAS_WIDTH / 2, 120);
     } else {
       ctx.fillText("GAME OVER", CANVAS_WIDTH / 2, 90);
       ctx.font = "12px 'Press Start 2P', monospace";
@@ -423,7 +455,30 @@ const LlamaGame = () => {
           height={CANVAS_HEIGHT}
           className="block"
         />
-        
+
+        {/* Name input overlay on idle */}
+        {gameState === "idle" && (
+          <div className="absolute inset-0 flex items-center justify-center" style={{ paddingTop: "60px" }}>
+            <div className="flex flex-col items-center gap-3">
+              <input
+                type="text"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") startGame(); }}
+                placeholder="Tvoje jméno..."
+                maxLength={20}
+                className="font-game text-sm px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-56 text-center"
+              />
+              <button
+                onClick={startGame}
+                disabled={!playerName.trim()}
+                className="font-game text-xs px-6 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50"
+              >
+                START
+              </button>
+            </div>
+          </div>
+        )}
         {/* Quiz overlay */}
         {gameState === "quiz" && currentQuestion && (
           <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
@@ -503,13 +558,20 @@ const LlamaGame = () => {
         )}
       </div>
 
-      <div className="flex gap-8 font-game text-sm">
-        <span className="text-muted-foreground">
-          Skóre: <span className="text-foreground">{score}</span>
-        </span>
-        <span className="text-muted-foreground">
-          Nejlepší: <span className="text-primary">{highScore}</span>
-        </span>
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex gap-8 font-game text-sm">
+          <span className="text-muted-foreground">
+            Skóre: <span className="text-foreground">{score}</span>
+          </span>
+          <span className="text-muted-foreground">
+            Nejlepší: <span className="text-primary">{highScore}</span>
+          </span>
+        </div>
+        {dailyBest && (
+          <div className="font-game text-xs text-muted-foreground">
+            🏆 Dnes nejlepší: <span className="text-primary">{dailyBest.name}</span> — <span className="text-foreground">{dailyBest.score} b.</span>
+          </div>
+        )}
       </div>
 
       <button
