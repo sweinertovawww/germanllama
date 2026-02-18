@@ -593,7 +593,7 @@ const LlamaGame = () => {
     ctx.textAlign = "center";
 
     if (gameState === "idle") {
-      ctx.fillText("GermanLlama.com", CANVAS_WIDTH / 2, 80);
+      ctx.fillText("Llama Run", CANVAS_WIDTH / 2, 80);
       ctx.font = "10px 'Press Start 2P', monospace";
       ctx.fillText("Zadej jméno a stiskni START", CANVAS_WIDTH / 2, 120);
     } else {
