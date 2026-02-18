@@ -31,6 +31,7 @@ interface Question {
 interface FillQuestion {
   sentence: string;
   answer: string;
+  translation: string;
 }
 
 const QUESTIONS: Question[] = [
@@ -83,26 +84,26 @@ const QUESTIONS: Question[] = [
 ];
 
 const FILL_QUESTIONS: FillQuestion[] = [
-  { sentence: "Ich ___ Deutsch.", answer: "spreche" },
-  { sentence: "Er ___ ein Buch.", answer: "liest" },
-  { sentence: "Wir ___ nach Hause.", answer: "gehen" },
-  { sentence: "Sie ___ Kaffee.", answer: "trinkt" },
-  { sentence: "Du ___ sehr schnell.", answer: "läufst" },
-  { sentence: "Ich ___ müde.", answer: "bin" },
-  { sentence: "Er ___ Lehrer.", answer: "ist" },
-  { sentence: "Wir ___ Studenten.", answer: "sind" },
-  { sentence: "Sie ___ eine Katze.", answer: "hat" },
-  { sentence: "Du ___ Hunger.", answer: "hast" },
-  { sentence: "Ich ___ gern Musik.", answer: "höre" },
-  { sentence: "Er ___ Fußball.", answer: "spielt" },
-  { sentence: "Wir ___ ins Kino.", answer: "gehen" },
-  { sentence: "Sie ___ sehr gut.", answer: "kocht" },
-  { sentence: "Du ___ schön.", answer: "singst" },
-  { sentence: "Ich ___ Wasser.", answer: "trinke" },
-  { sentence: "Er ___ die Tür.", answer: "öffnet" },
-  { sentence: "Wir ___ Deutsch.", answer: "lernen" },
-  { sentence: "Sie ___ das Fenster.", answer: "schließt" },
-  { sentence: "Du ___ mir.", answer: "hilfst" },
+  { sentence: "Ich ___ Deutsch.", answer: "spreche", translation: "Já ___ německy." },
+  { sentence: "Er ___ ein Buch.", answer: "liest", translation: "On ___ knihu." },
+  { sentence: "Wir ___ nach Hause.", answer: "gehen", translation: "My ___ domů." },
+  { sentence: "Sie ___ Kaffee.", answer: "trinkt", translation: "Ona ___ kávu." },
+  { sentence: "Du ___ sehr schnell.", answer: "läufst", translation: "Ty ___ velmi rychle." },
+  { sentence: "Ich ___ müde.", answer: "bin", translation: "Já ___ unavený/á." },
+  { sentence: "Er ___ Lehrer.", answer: "ist", translation: "On ___ učitel." },
+  { sentence: "Wir ___ Studenten.", answer: "sind", translation: "My ___ studenti." },
+  { sentence: "Sie ___ eine Katze.", answer: "hat", translation: "Ona ___ kočku." },
+  { sentence: "Du ___ Hunger.", answer: "hast", translation: "Ty ___ hlad." },
+  { sentence: "Ich ___ gern Musik.", answer: "höre", translation: "Já rád/a ___ hudbu." },
+  { sentence: "Er ___ Fußball.", answer: "spielt", translation: "On ___ fotbal." },
+  { sentence: "Wir ___ ins Kino.", answer: "gehen", translation: "My ___ do kina." },
+  { sentence: "Sie ___ sehr gut.", answer: "kocht", translation: "Ona ___ velmi dobře." },
+  { sentence: "Du ___ schön.", answer: "singst", translation: "Ty ___ krásně." },
+  { sentence: "Ich ___ Wasser.", answer: "trinke", translation: "Já ___ vodu." },
+  { sentence: "Er ___ die Tür.", answer: "öffnet", translation: "On ___ dveře." },
+  { sentence: "Wir ___ Deutsch.", answer: "lernen", translation: "My se ___ německy." },
+  { sentence: "Sie ___ das Fenster.", answer: "schließt", translation: "Ona ___ okno." },
+  { sentence: "Du ___ mir.", answer: "hilfst", translation: "Ty mi ___." },
 ];
 
 const drawLlama = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: number) => {
@@ -742,8 +743,11 @@ const LlamaGame = () => {
           <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
             <div className="bg-card rounded-xl p-6 shadow-2xl text-center max-w-md mx-4 border-2 border-yellow-500">
               <p className="font-game text-sm text-yellow-500 mb-2">⭐ Doplň slovo!</p>
-              <p className="font-game text-sm text-card-foreground mb-4 leading-relaxed">
+              <p className="font-game text-sm text-card-foreground mb-2 leading-relaxed">
                 {currentFillQuestion.sentence}
+              </p>
+              <p className="font-game text-xs text-muted-foreground mb-4 italic">
+                {currentFillQuestion.translation}
               </p>
               <div className="flex gap-2 justify-center items-center">
                 <input
