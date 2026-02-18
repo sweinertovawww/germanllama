@@ -596,15 +596,22 @@ const LlamaGame = () => {
       ctx.font = "10px 'Press Start 2P', monospace";
       ctx.fillText("Zadej jméno a stiskni START", CANVAS_WIDTH / 2, 120);
     } else {
-      ctx.fillText("GAME OVER", CANVAS_WIDTH / 2, 90);
+      const t = Math.floor(score / 10);
+      const l = Math.floor(t / 10) + 1;
+      ctx.fillText("GAME OVER", CANVAS_WIDTH / 2, 80);
       ctx.font = "12px 'Press Start 2P', monospace";
-      ctx.fillText(`Skóre: ${score}`, CANVAS_WIDTH / 2, 125);
-      ctx.fillText(`Nejlepší: ${highScore}`, CANVAS_WIDTH / 2, 150);
+      ctx.fillText(`Skóre: ${score}`, CANVAS_WIDTH / 2, 110);
+      ctx.fillText(`Nejlepší: ${highScore}`, CANVAS_WIDTH / 2, 135);
       ctx.font = "10px 'Press Start 2P', monospace";
-      ctx.fillText("Stiskni ↑ pro restart", CANVAS_WIDTH / 2, 185);
+      ctx.fillText(`🏆 ${t}  ⭐ Level ${l}`, CANVAS_WIDTH / 2, 165);
+      ctx.fillText("Stiskni ↑ pro restart", CANVAS_WIDTH / 2, 195);
     }
     ctx.textAlign = "start";
   }, [gameState, score, highScore]);
+
+  const totalTrophies = Math.floor(score / 10);
+  const level = Math.floor(totalTrophies / 10) + 1;
+  const trophiesInLevel = totalTrophies % 10;
 
   return (
     <div className="flex flex-col items-center gap-6">
@@ -779,6 +786,14 @@ const LlamaGame = () => {
           </span>
           <span className="text-muted-foreground">
             Nejlepší: <span className="text-primary">{highScore}</span>
+          </span>
+        </div>
+        <div className="flex gap-6 font-game text-xs items-center">
+          <span className="text-muted-foreground">
+            🏆 {"🏆".repeat(trophiesInLevel)}{"◦".repeat(10 - trophiesInLevel)} <span className="text-foreground">{totalTrophies}</span>
+          </span>
+          <span className="text-muted-foreground">
+            ⭐ Level: <span className="text-primary">{level}</span>
           </span>
         </div>
         {dailyBest && (
