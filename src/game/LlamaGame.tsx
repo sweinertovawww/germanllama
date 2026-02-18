@@ -593,7 +593,7 @@ const LlamaGame = () => {
     ctx.textAlign = "center";
 
     if (gameState === "idle") {
-      ctx.fillText("LLAMA RUN", CANVAS_WIDTH / 2, 80);
+      ctx.fillText("GermanLlama.com", CANVAS_WIDTH / 2, 80);
       ctx.font = "10px 'Press Start 2P', monospace";
       ctx.fillText("Zadej jméno a stiskni START", CANVAS_WIDTH / 2, 120);
     } else {
@@ -617,7 +617,7 @@ const LlamaGame = () => {
   return (
     <div className="flex flex-col items-center gap-6">
       <h1 className="font-game text-2xl text-foreground tracking-wider">
-        🦙 Llama Run
+        🦙 GermanLlama.com
       </h1>
 
       <div className="relative rounded-xl overflow-hidden shadow-lg border-2 border-border">
