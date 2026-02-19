@@ -631,14 +631,14 @@ const LlamaGame = () => {
   const trophiesInLevel = totalTrophies % 10;
 
   return (
-    <div className="flex flex-col items-center gap-3 sm:gap-6 w-full max-w-[800px] mx-auto">
-      <h1 className="font-game text-base sm:text-2xl text-foreground tracking-wider text-center">
+    <div className="flex flex-col items-center gap-2 sm:gap-6 w-full max-w-[800px] mx-auto">
+      <h1 className="font-game text-sm sm:text-2xl text-foreground tracking-wider text-center">
         🦙 GermanLlama.com
       </h1>
 
       <div
         ref={containerRef}
-        className="relative rounded-xl overflow-hidden shadow-lg border-2 border-border"
+        className="relative rounded-lg sm:rounded-xl overflow-hidden shadow-lg border-2 border-border"
         style={{
           width: CANVAS_WIDTH * scale,
           height: CANVAS_HEIGHT * scale,
@@ -840,7 +840,7 @@ const LlamaGame = () => {
           if (gameState === "playing") jump();
           else if (gameState !== "quiz" && gameState !== "starQuiz") startGame();
         }}
-        className="bg-primary text-primary-foreground font-game text-sm px-10 py-4 rounded-xl hover:opacity-90 transition-opacity md:hidden active:scale-95 touch-manipulation"
+        className="bg-primary text-primary-foreground font-game text-sm w-full max-w-xs py-5 rounded-xl hover:opacity-90 transition-opacity md:hidden active:scale-95 touch-manipulation shadow-md"
       >
         ↑ SKOK
       </button>
