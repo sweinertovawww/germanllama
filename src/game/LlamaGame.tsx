@@ -273,6 +273,8 @@ const saveDailyScore = (name: string, score: number) => {
 
 const LlamaGame = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => {
     return parseInt(localStorage.getItem("llama-highscore") || "0");
@@ -454,6 +456,20 @@ const LlamaGame = () => {
     setTimeout(resumeGame, 1000);
   }, [currentQuestion, quizPhase, translationInput, resumeGame]);
 
+  // Responsive scaling
+  useEffect(() => {
+    const updateScale = () => {
+      const container = containerRef.current;
+      if (!container) return;
+      const parentWidth = container.parentElement?.clientWidth || window.innerWidth;
+      const maxWidth = Math.min(parentWidth - 16, CANVAS_WIDTH);
+      setScale(maxWidth / CANVAS_WIDTH);
+    };
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
+  }, []);
+
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (gameState === "starQuiz") {
@@ -615,17 +631,29 @@ const LlamaGame = () => {
   const trophiesInLevel = totalTrophies % 10;
 
   return (
-    <div className="flex flex-col items-center gap-6">
-      <h1 className="font-game text-2xl text-foreground tracking-wider">
+    <div className="flex flex-col items-center gap-3 sm:gap-6 w-full max-w-[800px] mx-auto">
+      <h1 className="font-game text-base sm:text-2xl text-foreground tracking-wider text-center">
         🦙 GermanLlama.com
       </h1>
 
-      <div className="relative rounded-xl overflow-hidden shadow-lg border-2 border-border">
+      <div
+        ref={containerRef}
+        className="relative rounded-xl overflow-hidden shadow-lg border-2 border-border"
+        style={{
+          width: CANVAS_WIDTH * scale,
+          height: CANVAS_HEIGHT * scale,
+        }}
+      >
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
-          className="block"
+          className="block origin-top-left"
+          style={{
+            transform: `scale(${scale})`,
+            width: CANVAS_WIDTH,
+            height: CANVAS_HEIGHT,
+          }}
         />
 
         {/* Exit button during play or quiz */}
@@ -640,8 +668,8 @@ const LlamaGame = () => {
 
         {/* Name input overlay on idle */}
         {gameState === "idle" && (
-          <div className="absolute inset-0 flex items-center justify-center" style={{ paddingTop: "60px" }}>
-            <div className="flex flex-col items-center gap-3">
+          <div className="absolute inset-0 flex items-center justify-center" style={{ paddingTop: `${60 * scale}px` }}>
+            <div className="flex flex-col items-center gap-2 sm:gap-3">
               <input
                 type="text"
                 value={playerName}
@@ -649,7 +677,7 @@ const LlamaGame = () => {
                 onKeyDown={(e) => { if (e.key === "Enter") startGame(); }}
                 placeholder="Tvoje jméno..."
                 maxLength={20}
-                className="font-game text-sm px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-56 text-center"
+                className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-40 sm:w-56 text-center"
               />
               <button
                 onClick={startGame}
@@ -664,21 +692,21 @@ const LlamaGame = () => {
         {/* Quiz overlay */}
         {gameState === "quiz" && currentQuestion && (
           <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
-            <div className="bg-card rounded-xl p-6 shadow-2xl text-center max-w-md mx-4 border-2 border-primary">
-              <p className="font-game text-sm text-card-foreground mb-4 leading-relaxed">
+            <div className="bg-card rounded-xl p-3 sm:p-6 shadow-2xl text-center max-w-[95%] sm:max-w-md mx-2 sm:mx-4 border-2 border-primary">
+              <p className="font-game text-xs sm:text-sm text-card-foreground mb-3 sm:mb-4 leading-relaxed">
                 {currentQuestion.text}
               </p>
 
               {/* Phase 1: Article selection */}
               {quizPhase === "article" && (
                 <>
-                  <div className="flex gap-3 justify-center">
+                  <div className="flex gap-2 sm:gap-3 justify-center">
                     {currentQuestion.options.map((opt, i) => (
                       <button
                         key={i}
                         onClick={() => handleAnswer(i)}
                         disabled={articleResult !== null}
-                        className={`font-game text-sm px-5 py-3 rounded-lg border-2 transition-all ${
+                        className={`font-game text-xs sm:text-sm px-3 sm:px-5 py-2 sm:py-3 rounded-lg border-2 transition-all ${
                           articleResult !== null && i === currentQuestion.correct
                             ? "border-primary bg-primary/20 text-card-foreground scale-105"
                             : articleResult === "wrong"
@@ -692,10 +720,10 @@ const LlamaGame = () => {
                     ))}
                   </div>
                   {articleResult === "wrong" && (
-                    <p className="font-game text-xs text-destructive mt-4">✗ Špatně! Správně: {currentQuestion.options[currentQuestion.correct]} — 0 bodů</p>
+                    <p className="font-game text-xs text-destructive mt-3 sm:mt-4">✗ Špatně! Správně: {currentQuestion.options[currentQuestion.correct]} — 0 bodů</p>
                   )}
                   {!articleResult && (
-                    <p className="text-muted-foreground text-xs mt-4">Klávesy 1, 2, 3 pro odpověď</p>
+                    <p className="text-muted-foreground text-xs mt-3 sm:mt-4 hidden sm:block">Klávesy 1, 2, 3 pro odpověď</p>
                   )}
                 </>
               )}
@@ -703,7 +731,7 @@ const LlamaGame = () => {
               {/* Phase 2: Translation input */}
               {quizPhase === "translation" && (
                 <>
-                  <p className="font-game text-xs text-primary mb-3">✓ Správný člen! Napiš překlad do češtiny:</p>
+                  <p className="font-game text-xs text-primary mb-2 sm:mb-3">✓ Správný člen! Napiš překlad do češtiny:</p>
                   <div className="flex gap-2 justify-center items-center">
                     <input
                       ref={translationInputRef}
@@ -712,12 +740,12 @@ const LlamaGame = () => {
                       onChange={(e) => setTranslationInput(e.target.value)}
                       disabled={translationResult !== null}
                       placeholder="Překlad..."
-                      className="font-game text-sm px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-48"
+                      className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-32 sm:w-48"
                     />
                     <button
                       onClick={handleTranslationSubmit}
                       disabled={translationResult !== null}
-                      className="font-game text-xs px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+                      className="font-game text-xs px-3 sm:px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
                     >
                       OK
                     </button>
@@ -731,7 +759,7 @@ const LlamaGame = () => {
                     </p>
                   )}
                   {!translationResult && (
-                    <p className="text-muted-foreground text-xs mt-3">Enter pro potvrzení</p>
+                    <p className="text-muted-foreground text-xs mt-3 hidden sm:block">Enter pro potvrzení</p>
                   )}
                 </>
               )}
@@ -741,12 +769,12 @@ const LlamaGame = () => {
         {/* Star Quiz overlay */}
         {gameState === "starQuiz" && currentFillQuestion && (
           <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
-            <div className="bg-card rounded-xl p-6 shadow-2xl text-center max-w-md mx-4 border-2 border-yellow-500">
-              <p className="font-game text-sm text-yellow-500 mb-2">⭐ Doplň slovo!</p>
-              <p className="font-game text-sm text-card-foreground mb-2 leading-relaxed">
+            <div className="bg-card rounded-xl p-3 sm:p-6 shadow-2xl text-center max-w-[95%] sm:max-w-md mx-2 sm:mx-4 border-2 border-accent">
+              <p className="font-game text-xs sm:text-sm text-accent mb-2">⭐ Doplň slovo!</p>
+              <p className="font-game text-xs sm:text-sm text-card-foreground mb-2 leading-relaxed">
                 {currentFillQuestion.sentence}
               </p>
-              <p className="font-game text-xs text-muted-foreground mb-4 italic">
+              <p className="font-game text-xs text-muted-foreground mb-3 sm:mb-4 italic">
                 {currentFillQuestion.translation}
               </p>
               <div className="flex gap-2 justify-center items-center">
@@ -757,12 +785,12 @@ const LlamaGame = () => {
                   onChange={(e) => setFillInput(e.target.value)}
                   disabled={fillResult !== null}
                   placeholder="Doplň..."
-                  className="font-game text-sm px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-yellow-500 focus:outline-none w-48"
+                  className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-accent focus:outline-none w-32 sm:w-48"
                 />
                 <button
                   onClick={handleFillSubmit}
                   disabled={fillResult !== null}
-                  className="font-game text-xs px-4 py-2 rounded-lg bg-yellow-500 text-black hover:opacity-90 transition-opacity"
+                  className="font-game text-xs px-3 sm:px-4 py-2 rounded-lg bg-accent text-accent-foreground hover:opacity-90 transition-opacity"
                 >
                   OK
                 </button>
@@ -776,7 +804,7 @@ const LlamaGame = () => {
                 </p>
               )}
               {!fillResult && (
-                <p className="text-muted-foreground text-xs mt-3">Enter pro potvrzení</p>
+                <p className="text-muted-foreground text-xs mt-3 hidden sm:block">Enter pro potvrzení</p>
               )}
             </div>
           </div>
@@ -784,7 +812,7 @@ const LlamaGame = () => {
       </div>
 
       <div className="flex flex-col items-center gap-2">
-        <div className="flex gap-8 font-game text-sm">
+        <div className="flex gap-4 sm:gap-8 font-game text-xs sm:text-sm">
           <span className="text-muted-foreground">
             Skóre: <span className="text-foreground">{score}</span>
           </span>
@@ -792,7 +820,7 @@ const LlamaGame = () => {
             Nejlepší: <span className="text-primary">{highScore}</span>
           </span>
         </div>
-        <div className="flex gap-6 font-game text-xs items-center">
+        <div className="flex gap-4 sm:gap-6 font-game text-xs items-center">
           <span className="text-muted-foreground">
             🏆 {"🏆".repeat(trophiesInLevel)}{"◦".repeat(10 - trophiesInLevel)} <span className="text-foreground">{totalTrophies}</span>
           </span>
@@ -812,12 +840,12 @@ const LlamaGame = () => {
           if (gameState === "playing") jump();
           else if (gameState !== "quiz" && gameState !== "starQuiz") startGame();
         }}
-        className="bg-primary text-primary-foreground font-game text-xs px-6 py-3 rounded-lg hover:opacity-90 transition-opacity md:hidden"
+        className="bg-primary text-primary-foreground font-game text-sm px-10 py-4 rounded-xl hover:opacity-90 transition-opacity md:hidden active:scale-95 touch-manipulation"
       >
         ↑ SKOK
       </button>
 
-      <p className="text-muted-foreground text-sm">
+      <p className="text-muted-foreground text-xs sm:text-sm hidden sm:block">
         Použij <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">↑</kbd> nebo{" "}
         <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">SPACE</kbd> pro skok
       </p>
