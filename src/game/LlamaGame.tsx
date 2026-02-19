@@ -254,6 +254,25 @@ interface DailyEntry {
 
 const getTodayStr = () => new Date().toISOString().slice(0, 10);
 
+const getDailyPlayers = (): string[] => {
+  const data = JSON.parse(localStorage.getItem("llama-daily-players") || "{}");
+  const today = getTodayStr();
+  if (data.date !== today) return [];
+  return data.players || [];
+};
+
+const addDailyPlayer = (name: string) => {
+  const today = getTodayStr();
+  const data = JSON.parse(localStorage.getItem("llama-daily-players") || "{}");
+  let players: string[] = data.date === today ? (data.players || []) : [];
+  const normalized = name.trim().toLowerCase();
+  if (!players.includes(normalized)) {
+    players.push(normalized);
+  }
+  localStorage.setItem("llama-daily-players", JSON.stringify({ date: today, players }));
+  return players.length;
+};
+
 const getDailyBest = (): DailyEntry | null => {
   const entries: DailyEntry[] = JSON.parse(localStorage.getItem("llama-daily") || "[]");
   const today = getTodayStr();
@@ -265,7 +284,6 @@ const getDailyBest = (): DailyEntry | null => {
 const saveDailyScore = (name: string, score: number) => {
   const entries: DailyEntry[] = JSON.parse(localStorage.getItem("llama-daily") || "[]");
   const today = getTodayStr();
-  // Keep only today's entries + new one
   const todayEntries = entries.filter(e => e.date === today);
   todayEntries.push({ name, score, date: today });
   localStorage.setItem("llama-daily", JSON.stringify(todayEntries));
@@ -290,6 +308,7 @@ const LlamaGame = () => {
   const [currentFillQuestion, setCurrentFillQuestion] = useState<FillQuestion | null>(null);
   const [fillInput, setFillInput] = useState("");
   const [fillResult, setFillResult] = useState<"correct" | "wrong" | null>(null);
+  const [dailyPlayerCount, setDailyPlayerCount] = useState(() => getDailyPlayers().length);
   const questionIndexRef = useRef(0);
   const fillIndexRef = useRef(0);
   const shuffledQuestionsRef = useRef<Question[]>([]);
@@ -348,6 +367,8 @@ const LlamaGame = () => {
     setTranslationInput("");
     setTranslationResult(null);
     setArticleResult(null);
+    const count = addDailyPlayer(playerName.trim());
+    setDailyPlayerCount(count);
     setGameState("playing");
   }, [playerName]);
 
@@ -833,6 +854,9 @@ const LlamaGame = () => {
             🏆 Dnes nejlepší: <span className="text-primary">{dailyBest.name}</span> — <span className="text-foreground">{dailyBest.score} b.</span>
           </div>
         )}
+        <div className="font-game text-xs text-muted-foreground">
+          👥 Hráči dnes: <span className="text-foreground">{dailyPlayerCount}</span>
+        </div>
       </div>
 
       <button
