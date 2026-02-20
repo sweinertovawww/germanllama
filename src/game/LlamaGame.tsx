@@ -21,6 +21,12 @@ interface Star {
   collected: boolean;
 }
 
+interface Sombrero {
+  x: number;
+  y: number;
+  collected: boolean;
+}
+
 interface Question {
   text: string;
   options: string[];
@@ -174,6 +180,33 @@ const drawStar = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: nu
   ctx.restore();
 };
 
+const drawSombrero = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: number) => {
+  const bob = Math.sin(frame * 0.08) * 3;
+  const dy = y + bob;
+  ctx.save();
+  // Brim
+  ctx.fillStyle = "#cc2222";
+  ctx.beginPath();
+  ctx.ellipse(x, dy + 8, 16, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = "#991111";
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  // Top
+  ctx.fillStyle = "#dd3333";
+  ctx.beginPath();
+  ctx.ellipse(x, dy, 9, 4, 0, Math.PI, 0);
+  ctx.fill();
+  ctx.fillRect(x - 9, dy - 6, 18, 6);
+  ctx.beginPath();
+  ctx.ellipse(x, dy - 6, 9, 3, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // Band
+  ctx.fillStyle = "#FFD700";
+  ctx.fillRect(x - 9, dy + 1, 18, 2);
+  ctx.restore();
+};
+
 const drawGround = (ctx: CanvasRenderingContext2D, offset: number) => {
   ctx.fillStyle = "#8b7355";
   ctx.fillRect(0, GROUND_Y + 40, CANVAS_WIDTH, 20);
@@ -202,7 +235,7 @@ const drawSky = (ctx: CanvasRenderingContext2D, offset: number) => {
   }
 };
 
-const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obstacles: Obstacle[]; stars: Star[]; llamaY: number; frameCount: number; score: number }) => {
+const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obstacles: Obstacle[]; stars: Star[]; sombreros: Sombrero[]; llamaY: number; frameCount: number; score: number }) => {
   const grad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
   grad.addColorStop(0, "#87CEEB");
   grad.addColorStop(0.7, "#c8e6f0");
@@ -233,6 +266,13 @@ const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obs
   for (const s of g.stars) {
     if (!s.collected) {
       drawStar(ctx, s.x, s.y, g.frameCount);
+    }
+  }
+
+  // Sombreros
+  for (const s of g.sombreros) {
+    if (!s.collected) {
+      drawSombrero(ctx, s.x, s.y, g.frameCount);
     }
   }
 
@@ -323,11 +363,13 @@ const LlamaGame = () => {
     isJumping: false,
     obstacles: [] as Obstacle[],
     stars: [] as Star[],
+    sombreros: [] as Sombrero[],
     frameCount: 0,
     speed: GAME_SPEED_INITIAL,
     score: 0,
     groundOffset: 0,
     starTimer: 0,
+    sombreroTimer: 0,
   });
 
   const jump = useCallback(() => {
@@ -347,7 +389,9 @@ const LlamaGame = () => {
     g.isJumping = false;
     g.obstacles = [];
     g.stars = [];
+    g.sombreros = [];
     g.starTimer = 0;
+    g.sombreroTimer = 0;
     g.frameCount = 0;
     g.speed = GAME_SPEED_INITIAL;
     g.score = 0;
@@ -574,6 +618,20 @@ const LlamaGame = () => {
         return s.x > -20;
       });
 
+      // Spawn sombreros (every ~250 frames)
+      g.sombreroTimer++;
+      if (g.sombreroTimer > 200 + Math.random() * 150) {
+        g.sombreroTimer = 0;
+        const sy = GROUND_Y - 20 - Math.random() * 60;
+        g.sombreros.push({ x: CANVAS_WIDTH, y: sy, collected: false });
+      }
+
+      // Move sombreros
+      g.sombreros = g.sombreros.filter((s) => {
+        s.x -= g.speed;
+        return s.x > -30;
+      });
+
       // Speed up
       g.speed += GAME_SPEED_INCREMENT;
 
@@ -589,6 +647,24 @@ const LlamaGame = () => {
             triggerStarQuiz();
             return;
           }
+        }
+      }
+
+      // Sombrero collision (collect for +2 points)
+      for (const sb of g.sombreros) {
+        if (!sb.collected &&
+          llamaBox.x < sb.x + 16 && llamaBox.x + llamaBox.w > sb.x - 16 &&
+          llamaBox.y < sb.y + 13 && llamaBox.y + llamaBox.h > sb.y - 6
+        ) {
+          sb.collected = true;
+          g.score += 2;
+          setScore(g.score);
+          if (g.score > parseInt(localStorage.getItem("llama-highscore") || "0")) {
+            setHighScore(g.score);
+            localStorage.setItem("llama-highscore", String(g.score));
+          }
+          saveDailyScore(playerNameRef.current, g.score);
+          setDailyBest(getDailyBest());
         }
       }
 
@@ -623,7 +699,7 @@ const LlamaGame = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    drawScene(ctx, { groundOffset: 0, obstacles: [], stars: [], llamaY: GROUND_Y, frameCount: 0, score: 0 });
+    drawScene(ctx, { groundOffset: 0, obstacles: [], stars: [], sombreros: [], llamaY: GROUND_Y, frameCount: 0, score: 0 });
 
     ctx.fillStyle = "#2a1a0a";
     ctx.font = "20px 'Press Start 2P', monospace";
