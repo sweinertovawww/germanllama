@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
 const CANVAS_WIDTH = 800;
-const CANVAS_HEIGHT = 300;
-const GROUND_Y = 240;
+const CANVAS_HEIGHT = 369;
+const GROUND_Y = 295;
 const GRAVITY = 0.6;
 const JUMP_FORCE = -12;
 const GAME_SPEED_INITIAL = 5;
