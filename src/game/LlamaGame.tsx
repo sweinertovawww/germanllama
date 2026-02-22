@@ -828,7 +828,8 @@ const LlamaGame = () => {
               {/* Phase 2: Translation input */}
               {quizPhase === "translation" && (
                 <>
-                  <p className="font-game text-xs text-primary mb-2 sm:mb-3">✓ Správný člen! Napiš překlad do češtiny:</p>
+                  <p className="font-game text-xs text-green-500 mb-1">✓ Správný člen! Napiš překlad do češtiny:</p>
+                  <p className="font-game text-[10px] text-muted-foreground mb-2 sm:mb-3">(Používej diakritiku)</p>
                   <div className="flex gap-2 justify-center items-center">
                     <input
                       ref={translationInputRef}
