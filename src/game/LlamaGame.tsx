@@ -540,6 +540,7 @@ const LlamaGame = () => {
       if (gameState === "starQuiz") {
         if (e.code === "Enter") {
           e.preventDefault();
+          fillInputRef.current?.blur();
           handleFillSubmit();
         }
         return;
@@ -551,6 +552,7 @@ const LlamaGame = () => {
           if (e.code === "Digit3" || e.code === "Numpad3") { e.preventDefault(); handleAnswer(2); }
         } else if (quizPhase === "translation" && e.code === "Enter") {
           e.preventDefault();
+          translationInputRef.current?.blur();
           handleTranslationSubmit();
         }
         return;
@@ -771,13 +773,13 @@ const LlamaGame = () => {
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") startGame(); }}
+                onKeyDown={(e) => { if (e.key === "Enter") { (e.target as HTMLInputElement).blur(); startGame(); } }}
                 placeholder="Tvoje jméno..."
                 maxLength={20}
                 className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-40 sm:w-56 text-center"
               />
               <button
-                onClick={startGame}
+                onClick={() => { document.activeElement instanceof HTMLElement && document.activeElement.blur(); startGame(); }}
                 disabled={!playerName.trim()}
                 className="font-game text-xs px-6 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50"
               >
@@ -841,7 +843,7 @@ const LlamaGame = () => {
                       className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-32 sm:w-48"
                     />
                     <button
-                      onClick={handleTranslationSubmit}
+                      onClick={() => { translationInputRef.current?.blur(); handleTranslationSubmit(); }}
                       disabled={translationResult !== null}
                       className="font-game text-xs px-3 sm:px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
                     >
@@ -886,7 +888,7 @@ const LlamaGame = () => {
                   className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-accent focus:outline-none w-32 sm:w-48"
                 />
                 <button
-                  onClick={handleFillSubmit}
+                  onClick={() => { fillInputRef.current?.blur(); handleFillSubmit(); }}
                   disabled={fillResult !== null}
                   className="font-game text-xs px-3 sm:px-4 py-2 rounded-lg bg-accent text-accent-foreground hover:opacity-90 transition-opacity"
                 >
