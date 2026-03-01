@@ -608,7 +608,7 @@ const LlamaGame = () => {
       g.starTimer++;
       if (g.starTimer > 150 + Math.random() * 100) {
         g.starTimer = 0;
-        const starY = 80 + Math.random() * 80; // flying height
+        const starY = GROUND_Y - 100 - Math.random() * 60; // flying height reachable by jump
         g.stars.push({ x: CANVAS_WIDTH, y: starY, collected: false });
       }
 
