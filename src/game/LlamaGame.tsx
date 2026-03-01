@@ -610,7 +610,7 @@ const LlamaGame = () => {
       g.starTimer++;
       if (g.starTimer > 150 + Math.random() * 100) {
         g.starTimer = 0;
-        const starY = GROUND_Y - 90 - Math.random() * 60; // between GROUND_Y-90 and GROUND_Y-150
+        const starY = GROUND_Y - 50 - Math.random() * 80; // between GROUND_Y-50 and GROUND_Y-130
         g.stars.push({ x: CANVAS_WIDTH, y: starY, collected: false });
       }
 
