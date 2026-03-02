@@ -700,9 +700,9 @@ const LlamaGame = () => {
         return s.x > -30;
       });
 
-      // Spawn wolves (every ~60 seconds = ~3600 frames)
+      // Spawn wolves (every ~30 seconds = ~1800 frames)
       g.wolfTimer++;
-      if (g.wolfTimer > 3600) {
+      if (g.wolfTimer > 1800) {
         g.wolfTimer = 0;
         g.wolves.push({ x: CANVAS_WIDTH, alive: true });
       }
