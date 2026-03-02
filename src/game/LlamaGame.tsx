@@ -27,6 +27,11 @@ interface Sombrero {
   collected: boolean;
 }
 
+interface Wolf {
+  x: number;
+  alive: boolean;
+}
+
 interface Question {
   text: string;
   options: string[];
@@ -207,6 +212,36 @@ const drawSombrero = (ctx: CanvasRenderingContext2D, x: number, y: number, frame
   ctx.restore();
 };
 
+const drawWolf = (ctx: CanvasRenderingContext2D, x: number, frame: number) => {
+  const y = GROUND_Y;
+  const legOffset = Math.sin(frame * 0.4) * 3;
+  // Body
+  ctx.fillStyle = "#555";
+  ctx.fillRect(x + 4, y + 8, 30, 16);
+  // Head
+  ctx.fillStyle = "#666";
+  ctx.fillRect(x + 30, y + 2, 14, 14);
+  // Ears
+  ctx.fillStyle = "#444";
+  ctx.fillRect(x + 36, y - 6, 4, 8);
+  ctx.fillRect(x + 42, y - 4, 4, 6);
+  // Snout
+  ctx.fillStyle = "#777";
+  ctx.fillRect(x + 44, y + 8, 8, 6);
+  // Eye
+  ctx.fillStyle = "#ff3333";
+  ctx.fillRect(x + 38, y + 5, 3, 3);
+  // Legs
+  ctx.fillStyle = "#444";
+  ctx.fillRect(x + 8, y + 22, 5, 10 + legOffset);
+  ctx.fillRect(x + 18, y + 22, 5, 10 - legOffset);
+  ctx.fillRect(x + 24, y + 22, 5, 10 + legOffset);
+  // Tail
+  ctx.fillStyle = "#555";
+  ctx.fillRect(x - 4, y + 6, 10, 4);
+  ctx.fillRect(x - 8, y + 2, 6, 6);
+};
+
 const drawGround = (ctx: CanvasRenderingContext2D, offset: number) => {
   ctx.fillStyle = "#8b7355";
   ctx.fillRect(0, GROUND_Y + 40, CANVAS_WIDTH, 20);
@@ -235,7 +270,7 @@ const drawSky = (ctx: CanvasRenderingContext2D, offset: number) => {
   }
 };
 
-const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obstacles: Obstacle[]; stars: Star[]; sombreros: Sombrero[]; llamaY: number; frameCount: number; score: number }) => {
+const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obstacles: Obstacle[]; stars: Star[]; sombreros: Sombrero[]; wolves: Wolf[]; llamaY: number; frameCount: number; score: number }) => {
   const grad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
   grad.addColorStop(0, "#87CEEB");
   grad.addColorStop(0.7, "#c8e6f0");
@@ -273,6 +308,13 @@ const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obs
   for (const s of g.sombreros) {
     if (!s.collected) {
       drawSombrero(ctx, s.x, s.y, g.frameCount);
+    }
+  }
+
+  // Wolves
+  for (const w of g.wolves) {
+    if (w.alive) {
+      drawWolf(ctx, w.x, g.frameCount);
     }
   }
 
@@ -383,12 +425,14 @@ const LlamaGame = () => {
     obstacles: [] as Obstacle[],
     stars: [] as Star[],
     sombreros: [] as Sombrero[],
+    wolves: [] as Wolf[],
     frameCount: 0,
     speed: GAME_SPEED_INITIAL,
     score: 0,
     groundOffset: 0,
     starTimer: 0,
     sombreroTimer: 0,
+    wolfTimer: 0,
   });
 
   const jump = useCallback(() => {
@@ -409,8 +453,10 @@ const LlamaGame = () => {
     g.obstacles = [];
     g.stars = [];
     g.sombreros = [];
+    g.wolves = [];
     g.starTimer = 0;
     g.sombreroTimer = 0;
+    g.wolfTimer = 0;
     g.frameCount = 0;
     g.speed = GAME_SPEED_INITIAL;
     g.score = 0;
@@ -654,6 +700,19 @@ const LlamaGame = () => {
         return s.x > -30;
       });
 
+      // Spawn wolves (every ~60 seconds = ~3600 frames)
+      g.wolfTimer++;
+      if (g.wolfTimer > 3600) {
+        g.wolfTimer = 0;
+        g.wolves.push({ x: CANVAS_WIDTH, alive: true });
+      }
+
+      // Move wolves
+      g.wolves = g.wolves.filter((w) => {
+        w.x -= g.speed * 0.7;
+        return w.x > -60;
+      });
+
       // Speed up
       g.speed += GAME_SPEED_INCREMENT;
 
@@ -681,6 +740,30 @@ const LlamaGame = () => {
           sb.collected = true;
           g.score += 2;
           setScore(g.score);
+          if (g.score > parseInt(localStorage.getItem("llama-highscore") || "0")) {
+            setHighScore(g.score);
+            localStorage.setItem("llama-highscore", String(g.score));
+          }
+          saveDailyScore(playerNameRef.current, g.score);
+          setDailyBest(getDailyBest());
+        }
+      }
+
+      // Wolf collision - llama must jump on top to kill
+      for (const w of g.wolves) {
+        if (!w.alive) continue;
+        const wolfBox = { x: w.x, y: GROUND_Y + 2, w: 52, h: 32 };
+        if (
+          llamaBox.x < wolfBox.x + wolfBox.w &&
+          llamaBox.x + llamaBox.w > wolfBox.x &&
+          llamaBox.y + llamaBox.h > wolfBox.y &&
+          llamaBox.y + llamaBox.h < wolfBox.y + 16 &&
+          g.velocityY > 0 // falling down = landing on wolf
+        ) {
+          w.alive = false;
+          g.score += 3;
+          setScore(g.score);
+          g.velocityY = JUMP_FORCE * 0.6; // bounce off
           if (g.score > parseInt(localStorage.getItem("llama-highscore") || "0")) {
             setHighScore(g.score);
             localStorage.setItem("llama-highscore", String(g.score));
@@ -721,7 +804,7 @@ const LlamaGame = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    drawScene(ctx, { groundOffset: 0, obstacles: [], stars: [], sombreros: [], llamaY: GROUND_Y, frameCount: 0, score: 0 });
+    drawScene(ctx, { groundOffset: 0, obstacles: [], stars: [], sombreros: [], wolves: [], llamaY: GROUND_Y, frameCount: 0, score: 0 });
 
     ctx.fillStyle = "#2a1a0a";
     ctx.font = "20px 'Press Start 2P', monospace";
