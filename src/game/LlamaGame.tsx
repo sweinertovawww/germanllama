@@ -329,6 +329,24 @@ const saveDailyScore = (name: string, score: number) => {
   localStorage.setItem("llama-daily", JSON.stringify(todayEntries));
 };
 
+interface LeaderboardEntry {
+  name: string;
+  score: number;
+}
+
+const getLeaderboard = (): LeaderboardEntry[] => {
+  return JSON.parse(localStorage.getItem("llama-leaderboard") || "[]");
+};
+
+const saveToLeaderboard = (name: string, score: number) => {
+  const board = getLeaderboard();
+  board.push({ name, score });
+  board.sort((a, b) => b.score - a.score);
+  const top10 = board.slice(0, 10);
+  localStorage.setItem("llama-leaderboard", JSON.stringify(top10));
+  return top10;
+};
+
 const LlamaGame = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -349,6 +367,7 @@ const LlamaGame = () => {
   const [fillInput, setFillInput] = useState("");
   const [fillResult, setFillResult] = useState<"correct" | "wrong" | null>(null);
   const [dailyPlayerCount, setDailyPlayerCount] = useState(() => getDailyPlayers().length);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>(getLeaderboard());
   const questionIndexRef = useRef(0);
   const fillIndexRef = useRef(0);
   const shuffledQuestionsRef = useRef<Question[]>([]);
@@ -478,6 +497,7 @@ const LlamaGame = () => {
     if (finalScore > 0) {
       saveDailyScore(playerNameRef.current, finalScore);
       setDailyBest(getDailyBest());
+      setLeaderboard(saveToLeaderboard(playerNameRef.current, finalScore));
     }
     if (finalScore > parseInt(localStorage.getItem("llama-highscore") || "0")) {
       setHighScore(finalScore);
@@ -952,6 +972,33 @@ const LlamaGame = () => {
         Použij <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">↑</kbd> nebo{" "}
         <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">SPACE</kbd> pro skok
       </p>
+
+      {leaderboard.length > 0 && (
+        <div className="w-full max-w-xs mt-2">
+          <h3 className="font-game text-xs text-center text-primary mb-2">🏆 Top 10 hráčů</h3>
+          <table className="w-full text-xs font-game">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="text-left py-1 px-2 text-muted-foreground">#</th>
+                <th className="text-left py-1 px-2 text-muted-foreground">Jméno</th>
+                <th className="text-right py-1 px-2 text-muted-foreground">Skóre</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 10 }).map((_, i) => {
+                const entry = leaderboard[i];
+                return (
+                  <tr key={i} className="border-b border-border/50">
+                    <td className="py-1 px-2 text-muted-foreground">{i + 1}.</td>
+                    <td className="py-1 px-2 text-foreground">{entry?.name || "—"}</td>
+                    <td className="py-1 px-2 text-right text-foreground">{entry?.score ?? "—"}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
