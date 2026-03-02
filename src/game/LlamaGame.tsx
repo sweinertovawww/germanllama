@@ -215,31 +215,37 @@ const drawSombrero = (ctx: CanvasRenderingContext2D, x: number, y: number, frame
 const drawWolf = (ctx: CanvasRenderingContext2D, x: number, frame: number) => {
   const y = GROUND_Y;
   const legOffset = Math.sin(frame * 0.4) * 3;
+  ctx.save();
+  // Flip horizontally so wolf faces left (toward llama)
+  ctx.translate(x + 26, 0);
+  ctx.scale(-1, 1);
+  const ox = -26; // offset after flip
   // Body
   ctx.fillStyle = "#555";
-  ctx.fillRect(x + 4, y + 8, 30, 16);
+  ctx.fillRect(ox + 4, y + 8, 30, 16);
   // Head
   ctx.fillStyle = "#666";
-  ctx.fillRect(x + 30, y + 2, 14, 14);
+  ctx.fillRect(ox + 30, y + 2, 14, 14);
   // Ears
   ctx.fillStyle = "#444";
-  ctx.fillRect(x + 36, y - 6, 4, 8);
-  ctx.fillRect(x + 42, y - 4, 4, 6);
+  ctx.fillRect(ox + 36, y - 6, 4, 8);
+  ctx.fillRect(ox + 42, y - 4, 4, 6);
   // Snout
   ctx.fillStyle = "#777";
-  ctx.fillRect(x + 44, y + 8, 8, 6);
+  ctx.fillRect(ox + 44, y + 8, 8, 6);
   // Eye
   ctx.fillStyle = "#ff3333";
-  ctx.fillRect(x + 38, y + 5, 3, 3);
+  ctx.fillRect(ox + 38, y + 5, 3, 3);
   // Legs
   ctx.fillStyle = "#444";
-  ctx.fillRect(x + 8, y + 22, 5, 10 + legOffset);
-  ctx.fillRect(x + 18, y + 22, 5, 10 - legOffset);
-  ctx.fillRect(x + 24, y + 22, 5, 10 + legOffset);
+  ctx.fillRect(ox + 8, y + 22, 5, 10 + legOffset);
+  ctx.fillRect(ox + 18, y + 22, 5, 10 - legOffset);
+  ctx.fillRect(ox + 24, y + 22, 5, 10 + legOffset);
   // Tail
   ctx.fillStyle = "#555";
-  ctx.fillRect(x - 4, y + 6, 10, 4);
-  ctx.fillRect(x - 8, y + 2, 6, 6);
+  ctx.fillRect(ox - 4, y + 6, 10, 4);
+  ctx.fillRect(ox - 8, y + 2, 6, 6);
+  ctx.restore();
 };
 
 const drawGround = (ctx: CanvasRenderingContext2D, offset: number) => {
