@@ -755,27 +755,35 @@ const LlamaGame = () => {
         }
       }
 
-      // Wolf collision - llama must jump on top to kill
+      // Wolf collision - llama must jump on top to kill, otherwise game over
       for (const w of g.wolves) {
         if (!w.alive) continue;
         const wolfBox = { x: w.x, y: GROUND_Y + 2, w: 52, h: 32 };
-        if (
+        const collides =
           llamaBox.x < wolfBox.x + wolfBox.w &&
           llamaBox.x + llamaBox.w > wolfBox.x &&
           llamaBox.y + llamaBox.h > wolfBox.y &&
-          llamaBox.y + llamaBox.h < wolfBox.y + 16 &&
-          g.velocityY > 0 // falling down = landing on wolf
-        ) {
-          w.alive = false;
-          g.score += 3;
-          setScore(g.score);
-          g.velocityY = JUMP_FORCE * 0.6; // bounce off
-          if (g.score > parseInt(localStorage.getItem("llama-highscore") || "0")) {
-            setHighScore(g.score);
-            localStorage.setItem("llama-highscore", String(g.score));
+          llamaBox.y < wolfBox.y + wolfBox.h;
+        if (collides) {
+          // Landed on top = kill wolf
+          if (llamaBox.y + llamaBox.h < wolfBox.y + 16 && g.velocityY > 0) {
+            w.alive = false;
+            g.score += 3;
+            setScore(g.score);
+            g.velocityY = JUMP_FORCE * 0.6; // bounce off
+            if (g.score > parseInt(localStorage.getItem("llama-highscore") || "0")) {
+              setHighScore(g.score);
+              localStorage.setItem("llama-highscore", String(g.score));
+            }
+            saveDailyScore(playerNameRef.current, g.score);
+            setDailyBest(getDailyBest());
+          } else {
+            // Wolf hit llama from side = game over, lose all points
+            g.score = 0;
+            setScore(0);
+            setGameState("over");
+            return;
           }
-          saveDailyScore(playerNameRef.current, g.score);
-          setDailyBest(getDailyBest());
         }
       }
 
