@@ -89,8 +89,6 @@ const QUESTIONS: Question[] = [
   { text: "Jaký člen má Meeting?", options: ["der", "die", "das"], correct: 2, translation: "schůzka" },
   { text: "Jaký člen má Projektor?", options: ["der", "die", "das"], correct: 0, translation: "projektor" },
   { text: "Jaký člen má Präsentation?", options: ["der", "die", "das"], correct: 1, translation: "prezentace" },
-  { text: "Jaký člen má Bürogebäude?", options: ["der", "die", "das"], correct: 2, translation: "kancelářská budova" },
-  { text: "Jaký člen má Cafeteria?", options: ["der", "die", "das"], correct: 1, translation: "kavárna" },
   { text: "Jaký člen má WC?", options: ["der", "die", "das"], correct: 2, translation: "záchod" },
   { text: "Jaký člen má Umkleide?", options: ["der", "die", "das"], correct: 1, translation: "šatna" },
 ];
