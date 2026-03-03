@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
@@ -382,17 +383,21 @@ interface LeaderboardEntry {
   score: number;
 }
 
-const getLeaderboard = (): LeaderboardEntry[] => {
-  return JSON.parse(localStorage.getItem("llama-leaderboard") || "[]");
+const fetchLeaderboard = async (): Promise<LeaderboardEntry[]> => {
+  const { data, error } = await supabase
+    .from("leaderboard")
+    .select("name, score")
+    .order("score", { ascending: false })
+    .limit(10);
+  if (error) {
+    console.error("Leaderboard fetch error:", error);
+    return [];
+  }
+  return data || [];
 };
 
-const saveToLeaderboard = (name: string, score: number) => {
-  const board = getLeaderboard();
-  board.push({ name, score });
-  board.sort((a, b) => b.score - a.score);
-  const top10 = board.slice(0, 10);
-  localStorage.setItem("llama-leaderboard", JSON.stringify(top10));
-  return top10;
+const saveToLeaderboardDB = async (name: string, score: number) => {
+  await supabase.from("leaderboard").insert({ name, score });
 };
 
 const LlamaGame = () => {
@@ -415,7 +420,7 @@ const LlamaGame = () => {
   const [fillInput, setFillInput] = useState("");
   const [fillResult, setFillResult] = useState<"correct" | "wrong" | null>(null);
   const [dailyPlayerCount, setDailyPlayerCount] = useState(() => getDailyPlayers().length);
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>(getLeaderboard());
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const questionIndexRef = useRef(0);
   const fillIndexRef = useRef(0);
   const shuffledQuestionsRef = useRef<Question[]>([]);
@@ -543,13 +548,15 @@ const LlamaGame = () => {
     setTimeout(resumeGame, 1000);
   }, [currentFillQuestion, fillInput, fillResult, resumeGame]);
 
-  const exitGame = useCallback(() => {
+  const exitGame = useCallback(async () => {
     const g = gameRef.current;
     const finalScore = g.score;
     if (finalScore > 0) {
       saveDailyScore(playerNameRef.current, finalScore);
       setDailyBest(getDailyBest());
-      setLeaderboard(saveToLeaderboard(playerNameRef.current, finalScore));
+      await saveToLeaderboardDB(playerNameRef.current, finalScore);
+      const updated = await fetchLeaderboard();
+      setLeaderboard(updated);
     }
     if (finalScore > parseInt(localStorage.getItem("llama-highscore") || "0")) {
       setHighScore(finalScore);
@@ -592,6 +599,11 @@ const LlamaGame = () => {
     setDailyBest(getDailyBest());
     setTimeout(resumeGame, 1000);
   }, [currentQuestion, quizPhase, translationInput, resumeGame]);
+
+  // Load global leaderboard on mount
+  useEffect(() => {
+    fetchLeaderboard().then(setLeaderboard);
+  }, []);
 
   // Responsive scaling
   useEffect(() => {
@@ -1070,9 +1082,8 @@ const LlamaGame = () => {
         <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">SPACE</kbd> pro skok
       </p>
 
-      {leaderboard.length > 0 && (
-        <div className="w-full max-w-xs mt-2">
-          <h3 className="font-game text-xs text-center text-primary mb-2">🏆 Top 10 hráčů</h3>
+      <div className="w-full max-w-xs mt-2">
+          <h3 className="font-game text-xs text-center text-primary mb-2">🌍 Globální Top 10</h3>
           <table className="w-full text-xs font-game">
             <thead>
               <tr className="border-b border-border">
@@ -1095,7 +1106,6 @@ const LlamaGame = () => {
             </tbody>
           </table>
         </div>
-      )}
     </div>
   );
 };
