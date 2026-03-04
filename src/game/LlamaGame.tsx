@@ -91,6 +91,21 @@ const QUESTIONS: Question[] = [
   { text: "Jaký člen má Präsentation?", options: ["der", "die", "das"], correct: 1, translation: "prezentace" },
   { text: "Jaký člen má WC?", options: ["der", "die", "das"], correct: 2, translation: "záchod" },
   { text: "Jaký člen má Umkleide?", options: ["der", "die", "das"], correct: 1, translation: "šatna" },
+  { text: "Jaký člen má Schicht?", options: ["der", "die", "das"], correct: 1, translation: "směna" },
+  { text: "Jaký člen má Frühschicht?", options: ["der", "die", "das"], correct: 1, translation: "ranní směna" },
+  { text: "Jaký člen má Spätschicht?", options: ["der", "die", "das"], correct: 1, translation: "odpolední směna" },
+  { text: "Jaký člen má Nachtschicht?", options: ["der", "die", "das"], correct: 1, translation: "noční směna" },
+  { text: "Jaký člen má Tagschicht?", options: ["der", "die", "das"], correct: 1, translation: "denní směna" },
+  { text: "Jaký člen má Schichtplan?", options: ["der", "die", "das"], correct: 0, translation: "plán směn" },
+  { text: "Jaký člen má Arbeitszeit?", options: ["der", "die", "das"], correct: 1, translation: "pracovní doba" },
+  { text: "Jaký člen má Teilzeit?", options: ["der", "die", "das"], correct: 1, translation: "zkrácený úvazek" },
+  { text: "Jaký člen má Vollzeit?", options: ["der", "die", "das"], correct: 1, translation: "plný úvazek" },
+  { text: "Jaký člen má Gleitzeit?", options: ["der", "die", "das"], correct: 1, translation: "pružná pracovní doba" },
+  { text: "Jaký člen má Dienstplan?", options: ["der", "die", "das"], correct: 0, translation: "rozpis služeb" },
+  { text: "Jaký člen má Urlaub?", options: ["der", "die", "das"], correct: 0, translation: "dovolená" },
+  { text: "Jaký člen má Feiertag?", options: ["der", "die", "das"], correct: 0, translation: "svátek" },
+  { text: "Jaký člen má Krankmeldung?", options: ["der", "die", "das"], correct: 1, translation: "nahlášení nemoci" },
+  { text: "Jaký člen má Vertretung?", options: ["der", "die", "das"], correct: 1, translation: "zástup" },
 ];
 
 const FILL_QUESTIONS: FillQuestion[] = [
