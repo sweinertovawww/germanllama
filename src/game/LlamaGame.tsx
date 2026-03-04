@@ -114,6 +114,13 @@ const FILL_QUESTIONS: FillQuestion[] = [
   { sentence: "Wir ___ Deutsch.", answer: "lernen", translation: "My se učíme německy." },
   { sentence: "Sie ___ das Fenster.", answer: "schließt", translation: "Ona zavírá okno." },
   { sentence: "Du ___ mir.", answer: "hilfst", translation: "Ty mi pomáháš." },
+  { sentence: "Wann ___ du an zu arbeiten?", answer: "fängst", translation: "Kdy začínáš pracovat?" },
+  { sentence: "Hast du heute viel ___?", answer: "Arbeit", translation: "Máš dnes hodně práce?" },
+  { sentence: "Kannst du mir damit ___?", answer: "helfen", translation: "Můžeš mi s tím pomoct?" },
+  { sentence: "Wer ist dafür ___?", answer: "verantwortlich", translation: "Kdo je za to zodpovědný?" },
+  { sentence: "Ich ___ mehr Zeit.", answer: "brauche", translation: "Potřebuji více času." },
+  { sentence: "Das ist nicht meine ___.", answer: "Verantwortung", translation: "To není moje zodpovědnost." },
+  { sentence: "Ich habe einen Fehler ___.", answer: "gemacht", translation: "Udělal jsem chybu." },
 ];
 
 const drawLlama = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: number) => {
