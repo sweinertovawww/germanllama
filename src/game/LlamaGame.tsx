@@ -116,6 +116,12 @@ const QUESTIONS: Question[] = [
   { text: "Jaký člen má Schutzbrille?", options: ["der", "die", "das"], correct: 1, translation: "ochranné brýle" },
   { text: "Jaký člen má Vorschrift?", options: ["der", "die", "das"], correct: 1, translation: "předpis" },
   { text: "Jaký člen má Sicherheit?", options: ["der", "die", "das"], correct: 1, translation: "bezpečnost" },
+  { text: "Jaký člen má Fließband?", options: ["der", "die", "das"], correct: 2, translation: "výrobní pás" },
+  { text: "Jaký člen má Reparatur?", options: ["der", "die", "das"], correct: 1, translation: "oprava" },
+  { text: "Jaký člen má Störung?", options: ["der", "die", "das"], correct: 1, translation: "porucha" },
+  { text: "Jaký člen má Defekt?", options: ["der", "die", "das"], correct: 0, translation: "závada" },
+  { text: "Jaký člen má Schraube?", options: ["der", "die", "das"], correct: 1, translation: "šroub" },
+  { text: "Jaký člen má Bohrmaschine?", options: ["der", "die", "das"], correct: 1, translation: "vrtačka" },
 ];
 
 const FILL_QUESTIONS: FillQuestion[] = [
