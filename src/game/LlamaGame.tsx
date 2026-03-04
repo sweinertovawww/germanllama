@@ -106,6 +106,16 @@ const QUESTIONS: Question[] = [
   { text: "Jaký člen má Feiertag?", options: ["der", "die", "das"], correct: 0, translation: "svátek" },
   { text: "Jaký člen má Krankmeldung?", options: ["der", "die", "das"], correct: 1, translation: "nahlášení nemoci" },
   { text: "Jaký člen má Vertretung?", options: ["der", "die", "das"], correct: 1, translation: "zástup" },
+  { text: "Jaký člen má Spind?", options: ["der", "die", "das"], correct: 0, translation: "skříňka" },
+  { text: "Jaký člen má Seife?", options: ["der", "die", "das"], correct: 1, translation: "mýdlo" },
+  { text: "Jaký člen má Erste Hilfe?", options: ["der", "die", "das"], correct: 1, translation: "první pomoc" },
+  { text: "Jaký člen má Feuerlöscher?", options: ["der", "die", "das"], correct: 0, translation: "hasicí přístroj" },
+  { text: "Jaký člen má Unfall?", options: ["der", "die", "das"], correct: 0, translation: "úraz" },
+  { text: "Jaký člen má Warnweste?", options: ["der", "die", "das"], correct: 1, translation: "výstražná vesta" },
+  { text: "Jaký člen má Helm?", options: ["der", "die", "das"], correct: 0, translation: "helma" },
+  { text: "Jaký člen má Schutzbrille?", options: ["der", "die", "das"], correct: 1, translation: "ochranné brýle" },
+  { text: "Jaký člen má Vorschrift?", options: ["der", "die", "das"], correct: 1, translation: "předpis" },
+  { text: "Jaký člen má Sicherheit?", options: ["der", "die", "das"], correct: 1, translation: "bezpečnost" },
 ];
 
 const FILL_QUESTIONS: FillQuestion[] = [
