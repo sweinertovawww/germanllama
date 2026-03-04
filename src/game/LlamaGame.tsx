@@ -121,6 +121,18 @@ const FILL_QUESTIONS: FillQuestion[] = [
   { sentence: "Ich ___ mehr Zeit.", answer: "brauche", translation: "Potřebuji více času." },
   { sentence: "Das ist nicht meine ___.", answer: "Verantwortung", translation: "To není moje zodpovědnost." },
   { sentence: "Ich habe einen Fehler ___.", answer: "gemacht", translation: "Udělal jsem chybu." },
+  { sentence: "Wo sind die ___?", answer: "Schutzhandschuhe", translation: "Kde jsou ochranné rukavice?" },
+  { sentence: "Muss ich eine Schutzbrille ___?", answer: "tragen", translation: "Musím nosit ochranné brýle?" },
+  { sentence: "Das ist ___.", answer: "gefährlich", translation: "To je nebezpečné." },
+  { sentence: "___ auf!", answer: "Pass", translation: "Dávej pozor!" },
+  { sentence: "Die Maschine ist ___.", answer: "kaputt", translation: "Ten stroj je rozbitý." },
+  { sentence: "Wer ist für die Sicherheit ___?", answer: "verantwortlich", translation: "Kdo je zodpovědný za bezpečnost?" },
+  { sentence: "Wir sollten das ___.", answer: "melden", translation: "Měli bychom to nahlásit." },
+  { sentence: "Ich brauche eine ___.", answer: "Sicherheitsschulung", translation: "Potřebuji bezpečnostní školení." },
+  { sentence: "Kannst du die Maschine ___?", answer: "ausschalten", translation: "Můžeš vypnout ten stroj?" },
+  { sentence: "Kannst du mir das ___?", answer: "erklären", translation: "Můžeš mi to vysvětlit?" },
+  { sentence: "Ich bin nicht deiner ___.", answer: "Meinung", translation: "Nesouhlasím s tebou." },
+  { sentence: "Das ist keine gute ___.", answer: "Idee", translation: "To není dobrý nápad." },
 ];
 
 const drawLlama = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: number) => {
