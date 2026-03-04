@@ -133,6 +133,18 @@ const FILL_QUESTIONS: FillQuestion[] = [
   { sentence: "Kannst du mir das ___?", answer: "erklären", translation: "Můžeš mi to vysvětlit?" },
   { sentence: "Ich bin nicht deiner ___.", answer: "Meinung", translation: "Nesouhlasím s tebou." },
   { sentence: "Das ist keine gute ___.", answer: "Idee", translation: "To není dobrý nápad." },
+  { sentence: "Hast du heute ___?", answer: "Zeit", translation: "Máš dnes čas?" },
+  { sentence: "Machen wir das ___?", answer: "zusammen", translation: "Uděláme to společně?" },
+  { sentence: "Das ist nicht ___.", answer: "fair", translation: "To není fér." },
+  { sentence: "Das ist nicht mein ___.", answer: "Problem", translation: "To není můj problém." },
+  { sentence: "Können wir eine Lösung ___?", answer: "finden", translation: "Můžeme najít řešení?" },
+  { sentence: "Warum hast du das ___?", answer: "gemacht", translation: "Proč jsi to udělal?" },
+  { sentence: "Das war ein ___.", answer: "Missverständnis", translation: "To bylo nedorozumění." },
+  { sentence: "Ich habe eine ___.", answer: "Frage", translation: "Mám otázku." },
+  { sentence: "Ich brauche ___.", answer: "Urlaub", translation: "Potřebuji dovolenou." },
+  { sentence: "Mein Kind ist ___.", answer: "krank", translation: "Moje dítě je nemocné." },
+  { sentence: "Ich bin damit nicht ___.", answer: "zufrieden", translation: "Nejsem s tím spokojený." },
+  { sentence: "Ich entschuldige mich für den ___.", answer: "Fehler", translation: "Omlouvám se za chybu." },
 ];
 
 const drawLlama = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: number) => {
