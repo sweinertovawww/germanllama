@@ -1,6 +1,6 @@
 import { useState } from "react";
 import LlamaGame from "@/game/LlamaGame";
-import llamaMascot from "@/assets/llama-mascot.png";
+import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import { Gamepad2, ArrowUp, Space, Trophy, SkullIcon, ShieldCheck, Instagram } from "lucide-react";
 
 const Index = () => {
@@ -12,16 +12,15 @@ const Index = () => {
       <header className="relative overflow-hidden">
         <div className="max-w-3xl mx-auto px-4 pt-10 pb-8 sm:pt-16 sm:pb-12 text-center">
           <img
-            src={llamaMascot}
-            alt="GermanLlama maskot – roztomilá lama s německou šálou"
-            className="w-28 h-28 sm:w-36 sm:h-36 mx-auto mb-6 drop-shadow-lg"
+            src={germanLlamaLogo}
+            alt="GermanLlama logo – pixel art lama s německou šálou"
+            className="w-40 h-40 sm:w-52 sm:h-52 mx-auto mb-6 drop-shadow-lg rounded-2xl"
           />
           <h1 className="font-game text-2xl sm:text-4xl text-primary mb-4 leading-tight">
             GermanLlama
           </h1>
-          <p className="text-lg sm:text-xl text-foreground/80 font-body max-w-xl mx-auto leading-relaxed">
-            Uč se němčinu hrou! Skákej, odpovídej a zlepšuj svoji němčinu
-            pro práci i každodenní život.
+          <p className="text-lg sm:text-xl text-foreground/80 font-body max-w-xl mx-auto leading-relaxed font-bold">
+            Němčina do práce hravě!
           </p>
           <p className="mt-3 text-sm text-muted-foreground">
             Pro úroveň A2–B1 · Ideální pro práci v Německu
