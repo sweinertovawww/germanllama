@@ -73,7 +73,7 @@ const Index = () => {
             Platforma pro samouky němčiny
           </p>
           <p className="mt-3 text-sm text-white/80 drop-shadow">
-            Pro úroveň A2–B1 · Ideální pro práci v Německu
+            Pro úroveň A2+ · Ideální pro práci v Německu
           </p>
           <button
             onClick={scrollToGame}
