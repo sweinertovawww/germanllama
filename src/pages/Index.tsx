@@ -75,13 +75,6 @@ const Index = () => {
           <p className="mt-3 text-sm text-white/80 drop-shadow">
             Pro úroveň A2+ · Ideální pro práci v Německu
           </p>
-          <button
-            onClick={scrollToGame}
-            className="mt-8 inline-flex items-center gap-2 bg-card text-foreground font-body font-bold text-base sm:text-lg px-8 py-4 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition-all active:scale-95 border border-border"
-          >
-            <Gamepad2 className="w-5 h-5 text-primary" />
-            Začít se učit zdarma!
-          </button>
         </div>
       </header>
 
