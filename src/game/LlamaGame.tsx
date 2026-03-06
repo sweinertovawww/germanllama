@@ -250,26 +250,46 @@ const drawSombrero = (ctx: CanvasRenderingContext2D, x: number, y: number, frame
   const bob = Math.sin(frame * 0.08) * 3;
   const dy = y + bob;
   ctx.save();
-  // Brim
-  ctx.fillStyle = "#cc2222";
+
+  // Brim - straw colored with colorful stripe edge
+  ctx.fillStyle = "#d4b96a";
   ctx.beginPath();
-  ctx.ellipse(x, dy + 8, 16, 5, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, dy + 8, 18, 6, 0, 0, Math.PI * 2);
   ctx.fill();
-  ctx.strokeStyle = "#991111";
-  ctx.lineWidth = 1;
+  // Colorful brim edge
+  ctx.strokeStyle = "#c0392b";
+  ctx.lineWidth = 2.5;
   ctx.stroke();
-  // Top
-  ctx.fillStyle = "#dd3333";
+  ctx.strokeStyle = "#2980b9";
+  ctx.lineWidth = 1.2;
   ctx.beginPath();
-  ctx.ellipse(x, dy, 9, 4, 0, Math.PI, 0);
-  ctx.fill();
-  ctx.fillRect(x - 9, dy - 6, 18, 6);
+  ctx.ellipse(x, dy + 8, 19.5, 7, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = "#27ae60";
+  ctx.lineWidth = 1.2;
   ctx.beginPath();
-  ctx.ellipse(x, dy - 6, 9, 3, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, dy + 8, 21, 8, 0, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Crown base
+  ctx.fillStyle = "#d4b96a";
+  ctx.beginPath();
+  ctx.ellipse(x, dy + 2, 9, 4, 0, Math.PI, 0);
   ctx.fill();
-  // Band
-  ctx.fillStyle = "#FFD700";
-  ctx.fillRect(x - 9, dy + 1, 18, 2);
+  ctx.fillRect(x - 9, dy - 8, 18, 10);
+
+  // Crown top dome
+  ctx.beginPath();
+  ctx.ellipse(x, dy - 8, 9, 4, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Colorful band around crown
+  const bandColors = ["#c0392b", "#27ae60", "#2980b9", "#c0392b", "#27ae60"];
+  bandColors.forEach((color, i) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(x - 9 + i * 3.6, dy + 0, 3.6, 3);
+  });
+
   ctx.restore();
 };
 
