@@ -72,46 +72,6 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Feature Cards */}
-      <section className="-mt-10 relative z-10 px-4">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="bg-card rounded-2xl shadow-lg border border-border p-6 sm:p-8">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">🎮🇩🇪</span>
-              <h2 className="font-body font-bold text-lg text-foreground">
-                Hrajte hry & Učte se
-              </h2>
-            </div>
-            <p className="font-body text-muted-foreground text-sm leading-relaxed mb-4">
-              Učte se německá slovíčka a členy (der, die, das) přímo ve hře Llama Run. Zábavně a efektivně!
-            </p>
-            <button
-              onClick={scrollToGame}
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body font-bold text-sm px-5 py-2.5 rounded-full hover:bg-primary/90 transition-colors"
-            >
-              Hrajte teď!
-            </button>
-          </div>
-
-          <div className="bg-card rounded-2xl shadow-lg border border-border p-6 sm:p-8">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">📚</span>
-              <h2 className="font-body font-bold text-lg text-foreground">
-                Jak se hraje?
-              </h2>
-            </div>
-            <p className="font-body text-muted-foreground text-sm leading-relaxed mb-4">
-              Skákej přes kaktusy, odpovídej na otázky, sbírej sombréra a pozor na vlka – na něj musíš skočit shora!
-            </p>
-            <button
-              onClick={scrollToGame}
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body font-bold text-sm px-5 py-2.5 rounded-full hover:bg-primary/90 transition-colors"
-            >
-              Zkusit hru
-            </button>
-          </div>
-        </div>
-      </section>
 
       {/* How to play details */}
       <section className="py-12 sm:py-16 px-4">
