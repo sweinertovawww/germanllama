@@ -1,6 +1,7 @@
 import { useState } from "react";
 import LlamaGame from "@/game/LlamaGame";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
+import heroBackground from "@/assets/hero-background.jpg";
 
 import {
   Gamepad2,
@@ -53,7 +54,7 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="relative overflow-hidden bg-primary/10">
+      <header className="relative overflow-hidden bg-primary/10" style={{ backgroundImage: `url(${heroBackground})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
         <div className="relative max-w-4xl mx-auto px-4 pt-16 pb-20 sm:pt-24 sm:pb-28 text-center">
           <h1 className="font-game text-xl sm:text-3xl text-white mb-3 leading-tight drop-shadow-lg">
