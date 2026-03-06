@@ -40,12 +40,6 @@ const Index = () => {
             </span>
           </div>
           <div className="hidden sm:flex items-center gap-6">
-            <button
-              onClick={scrollToGame}
-              className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors"
-            >
-              Hry
-            </button>
             <a
               href="https://www.instagram.com/playgermanllama/"
               target="_blank"
