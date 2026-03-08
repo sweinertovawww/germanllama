@@ -170,8 +170,8 @@ const Index = () => {
 
 function RuleItem({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
   return (
-    <div className="flex items-start gap-4">
-      <div className="mt-1 shrink-0">{icon}</div>
+    <div className="flex items-center gap-4">
+      <div className="shrink-0 w-10 h-10 flex items-center justify-center">{icon}</div>
       <div>
         <h3 className="font-body font-bold text-foreground">{title}</h3>
         <p className="font-body text-muted-foreground text-sm leading-relaxed">{text}</p>
