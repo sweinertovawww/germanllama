@@ -464,12 +464,21 @@ export const FILL_QUESTIONS: FillQuestion[] = [
    { sentence: "Ich ___ das Becken.", answer: "schließe", translation: "Zapojuji to umyvadlo.", profession: "instalatér" },
    { sentence: "Ich ___ das Wasser.", answer: "stoppe", translation: "Zastavuji tu vodu.", profession: "instalatér" },
    { sentence: "Ich ___ den Wasserdruck.", answer: "prüfe", translation: "Kontroluji tlak vody.", profession: "instalatér" },
-   // === ZAHRADNÍK ===
-   { sentence: "Ich muss die Pflanzen ___.", answer: "gießen", translation: "Musím zalít rostliny.", profession: "zahradník" },
-   { sentence: "Wir ___ heute die Hecke.", answer: "schneiden", translation: "Dnes stříháme živý plot.", profession: "zahradník" },
-   { sentence: "Der Rasen muss ___ werden.", answer: "gemäht", translation: "Trávník se musí posekat.", profession: "zahradník" },
-   { sentence: "Haben Sie ___ für die Rosen?", answer: "Dünger", translation: "Máte hnojivo na růže?", profession: "zahradník" },
-   { sentence: "Ich ___ einen neuen Baum im Garten.", answer: "pflanze", translation: "Sázím na zahradě nový strom.", profession: "zahradník" },
+    // === ZAHRADNÍK ===
+    { sentence: "Ich muss die Pflanzen ___.", answer: "gießen", translation: "Musím zalít rostliny.", profession: "zahradník" },
+    { sentence: "Wir ___ heute die Hecke.", answer: "schneiden", translation: "Dnes stříháme živý plot.", profession: "zahradník" },
+    { sentence: "Der Rasen muss ___ werden.", answer: "gemäht", translation: "Trávník se musí posekat.", profession: "zahradník" },
+    { sentence: "Haben Sie ___ für die Rosen?", answer: "Dünger", translation: "Máte hnojivo na růže?", profession: "zahradník" },
+    { sentence: "Ich ___ einen neuen Baum im Garten.", answer: "pflanze", translation: "Sázím na zahradě nový strom.", profession: "zahradník" },
+    // === KADEŘNÍK ===
+    { sentence: "Ich ___ Ihre Haare.", answer: "wasche", translation: "Umyji Vám vlasy.", profession: "kadeřník" },
+    { sentence: "Wie kurz ___ wir?", answer: "schneiden", translation: "Jak nakrátko stříháme?", profession: "kadeřník" },
+    { sentence: "Ich ___ die Haare.", answer: "föhne", translation: "Fénuju vlasy.", profession: "kadeřník" },
+    { sentence: "Welche ___ wählen wir?", answer: "Farbe", translation: "Jakou barvu vybereme?", profession: "kadeřník" },
+    { sentence: "Ich ___ nur Spitzen.", answer: "schneide", translation: "Stříhám jen konečky.", profession: "kadeřník" },
+    { sentence: "Soll ich ___ benutzen?", answer: "Gel", translation: "Mám použít gel?", profession: "kadeřník" },
+    { sentence: "Der ___ steht Ihnen.", answer: "Haarschnitt", translation: "Ten sestřih Vám sluší.", profession: "kadeřník" },
+    { sentence: "Ich ___ Ihre Haare.", answer: "kämme", translation: "Češu Vám vlasy.", profession: "kadeřník" },
 ];
 
 // Helper to extract German word from question text
