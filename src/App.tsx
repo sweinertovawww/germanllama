@@ -7,6 +7,7 @@ import Layout from "@/components/Layout";
 import Index from "./pages/Index";
 import FlashCards from "./pages/FlashCards";
 import Pexeso from "./pages/Pexeso";
+import SentenceBuilder from "./pages/SentenceBuilder";
 import Kontakt from "./pages/Kontakt";
 import NotFound from "./pages/NotFound";
 
@@ -40,6 +41,14 @@ const App = () => (
           element={
             <Layout>
               <Pexeso />
+            </Layout>
+          }
+        />
+        <Route
+          path="/skladani-vet"
+          element={
+            <Layout>
+              <SentenceBuilder />
             </Layout>
           }
         />

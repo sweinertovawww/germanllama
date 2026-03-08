@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
-import { Gamepad2, Layers, Brain, Instagram, Menu, X } from "lucide-react";
+import { Gamepad2, Layers, Brain, PuzzleIcon, Instagram, Menu, X } from "lucide-react";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const activeTab = location.pathname === "/flashcards" ? "flash-cards" : location.pathname === "/pexeso" ? "pexeso" : "llama-run";
+  const activeTab = location.pathname === "/flashcards" ? "flash-cards" : location.pathname === "/pexeso" ? "pexeso" : location.pathname === "/skladani-vet" ? "sentence-builder" : "llama-run";
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
@@ -84,7 +84,7 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Tab Navigation */}
       <section className="bg-card border-b border-border">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
             <button
               onClick={() => navigate("/")}
               className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-200 border-2 ${
@@ -136,6 +136,24 @@ const Layout = ({ children }: LayoutProps) => {
                 </span>
                 <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "pexeso" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
                   Paměťová hra
+                </span>
+              </div>
+            </button>
+            <button
+              onClick={() => navigate("/skladani-vet")}
+              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-200 border-2 ${
+                activeTab === "sentence-builder"
+                  ? "bg-primary text-primary-foreground border-primary shadow-lg scale-[1.02]"
+                  : "bg-muted text-muted-foreground border-border hover:border-primary/40 hover:bg-muted/80"
+              }`}
+            >
+              <PuzzleIcon className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "sentence-builder" ? "text-primary-foreground" : "text-primary"}`} />
+              <div className="text-left">
+                <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "sentence-builder" ? "text-primary-foreground" : "text-foreground"}`}>
+                  Skládání vět
+                </span>
+                <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "sentence-builder" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                  Přiřaď konce vět
                 </span>
               </div>
             </button>
