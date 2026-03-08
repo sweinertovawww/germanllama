@@ -90,12 +90,12 @@ const Pexeso = () => {
   const totalPairs = useMemo(() => new Set(cards.map((c) => c.pairId)).size, [cards]);
 
   const resetGame = useCallback(() => {
-    setCards(buildCards(pairCount));
+    setCards(buildCards(pairCount, profFilter.selected));
     setSelected([]);
     setChecking(false);
     setGameOver(false);
     setWon(false);
-  }, [pairCount]);
+  }, [pairCount, profFilter.selected]);
 
   const handleCardClick = useCallback(
     (id: number) => {
