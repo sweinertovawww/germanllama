@@ -16,22 +16,25 @@ const Index = () => {
     <div className="flex flex-col min-h-[100dvh] bg-background">
       {/* Navigation */}
       <nav className="w-full bg-card/80 backdrop-blur-sm border-b border-border sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative">
           <div className="flex items-center gap-3">
             <img
               src={germanLlamaLogo}
               alt="GermanLlama logo"
               className="w-10 h-10 rounded-lg"
             />
-            <div className="flex flex-col">
-              <span className="font-game text-sm sm:text-base text-foreground leading-tight">
-                Němčina do práce{" "}
-                <span className="text-accent">hravě!</span>
-              </span>
-              <span className="font-body text-xs sm:text-sm text-muted-foreground">
-                Platforma pro samouky němčiny
-              </span>
-            </div>
+            <span className="font-body font-bold text-lg text-foreground">
+              Germanllama.com
+            </span>
+          </div>
+          <div className="absolute left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center">
+            <span className="font-game text-sm sm:text-base text-foreground leading-tight">
+              Němčina do práce{" "}
+              <span className="text-accent">hravě!</span>
+            </span>
+            <span className="font-body text-xs text-muted-foreground">
+              Platforma pro samouky němčiny
+            </span>
           </div>
           <div className="hidden sm:flex items-center gap-6">
             <a
