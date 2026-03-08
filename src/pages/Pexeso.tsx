@@ -237,15 +237,11 @@ const Pexeso = () => {
                   }`}
                 >
                   {isRevealed ? (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-1.5 sm:p-2">
-                      <span
-                        className={`font-body text-[10px] sm:text-xs font-bold text-center leading-tight ${
-                          card.lang === "de" ? "text-primary" : "text-accent-foreground"
-                        }`}
-                      >
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-2 sm:p-3">
+                      <span className="font-body text-xs sm:text-sm font-bold text-foreground text-center leading-snug break-words">
                         {card.text}
                       </span>
-                      <span className="mt-1 font-body text-[8px] sm:text-[10px] text-muted-foreground uppercase">
+                      <span className={`mt-1.5 font-body text-[9px] sm:text-xs font-semibold uppercase ${card.lang === "de" ? "text-primary" : "text-accent"}`}>
                         {card.lang === "de" ? "DE" : "CZ"}
                       </span>
                     </div>
