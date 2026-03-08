@@ -1216,6 +1216,16 @@ const LlamaGame = () => {
               >
                 🦙 Zkusit znovu
               </button>
+              <button
+                onClick={() => {
+                  setScore(0);
+                  setPlayerName("");
+                  setGameState("idle");
+                }}
+                className="font-game text-xs sm:text-sm px-6 sm:px-8 py-2 sm:py-3 rounded-xl border-2 border-border bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/50 hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
+              >
+                👤 Nový hráč
+              </button>
             </div>
           </div>
         )}
