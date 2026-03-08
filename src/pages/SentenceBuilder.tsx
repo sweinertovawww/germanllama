@@ -146,22 +146,47 @@ const SentenceBuilder = () => {
   const isMobile = useIsMobile();
   const profFilter = useProfessionFilter();
   const filteredQuestions = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
-  const [inLobby, setInLobby] = useState(true);
-  const [pairs, setPairs] = useState<SentencePair[]>([]);
-  const [score, setScore] = useState(0);
-  const [totalScore, setTotalScore] = useState(0);
-  const [completedRounds, setCompletedRounds] = useState(0);
+  // --- localStorage persistence ---
+  const STORAGE_KEY = "sb-game-state";
+
+  const loadSaved = () => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw) as {
+        pairs: SentencePair[];
+        score: number;
+        totalScore: number;
+        completedRounds: number;
+      };
+    } catch { return null; }
+  };
+
+  const saved = useRef(loadSaved());
+
+  const [inLobby, setInLobby] = useState(!saved.current);
+  const [pairs, setPairs] = useState<SentencePair[]>(saved.current?.pairs ?? []);
+  const [score, setScore] = useState(saved.current?.score ?? 0);
+  const [totalScore, setTotalScore] = useState(saved.current?.totalScore ?? 0);
+  const [completedRounds, setCompletedRounds] = useState(saved.current?.completedRounds ?? 0);
   const [copied, setCopied] = useState(false);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
   const [overSlotId, setOverSlotId] = useState<string | null>(null);
   const [selectedEndId, setSelectedEndId] = useState<number | null>(null);
 
+  // Persist game state on every meaningful change
+  React.useEffect(() => {
+    if (inLobby || pairs.length === 0) {
+      localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ pairs, score, totalScore, completedRounds }));
+  }, [inLobby, pairs, score, totalScore, completedRounds]);
+
   // Queue-based approach: a ref holds a pre-shuffled queue of all sentences.
-  // Each round pops SENTENCES_PER_ROUND from the front. When exhausted, reshuffle.
   const queueRef = useRef<typeof FILL_QUESTIONS>([]);
 
   const popRound = useCallback(() => {
-    // If queue doesn't have enough, reshuffle the full pool
     if (queueRef.current.length < SENTENCES_PER_ROUND) {
       queueRef.current = shuffleArray(filteredQuestions);
     }
@@ -170,7 +195,6 @@ const SentenceBuilder = () => {
   }, [filteredQuestions]);
 
   const startGame = useCallback(() => {
-    // Fresh shuffle of the entire pool
     queueRef.current = shuffleArray(filteredQuestions);
     setPairs(popRound());
     setScore(0);
