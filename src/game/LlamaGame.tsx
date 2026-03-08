@@ -1027,6 +1027,7 @@ const LlamaGame = () => {
               <p className="font-game text-xs sm:text-sm text-card-foreground mb-2 leading-relaxed">
                 {currentFillQuestion.sentence}
               </p>
+              <span className="font-game text-[7px] text-muted-foreground/60 block mb-1">[{currentFillQuestion.profession}]</span>
               <p className="font-game text-xs text-muted-foreground mb-3 sm:mb-4 italic">
                 {currentFillQuestion.translation}
               </p>

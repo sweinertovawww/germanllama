@@ -350,6 +350,7 @@ const SentenceBuilder = () => {
                     <p className="font-body text-xs text-muted-foreground mb-1.5 italic">
                       🇨🇿 {pair.translation}
                     </p>
+                    <span className="font-body text-[7px] sm:text-[8px] text-muted-foreground/60">[{pair.profession}]</span>
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-body text-sm font-bold text-foreground whitespace-nowrap">
                         🇩🇪 {pair.start}
