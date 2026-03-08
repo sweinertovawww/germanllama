@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
-import { Gamepad2, Layers, Brain, PuzzleIcon, Instagram, Users } from "lucide-react";
+import { Gamepad2, Layers, Brain, PuzzleIcon, Instagram, Users, Music } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -293,6 +293,15 @@ const Layout = ({ children }: LayoutProps) => {
                 className="inline-flex items-center text-primary-foreground/80 hover:text-accent hover:scale-110 transition-all duration-200"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              </a>
+              <a
+                href="https://open.spotify.com/show/3hoxYnDeM1UMlXz2YfhCiD?si=89c40afb384e49d4"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Otevřít Spotify"
+                className="inline-flex items-center text-primary-foreground/80 hover:text-accent hover:scale-110 transition-all duration-200"
+              >
+                <Music className="w-5 h-5" />
               </a>
             </div>
           </div>
