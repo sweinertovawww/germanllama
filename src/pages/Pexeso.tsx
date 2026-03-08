@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { getAllFlashCards, FlashCard } from "@/game/vocabularyData";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
-import { Brain, RotateCcw, Trophy, Skull } from "lucide-react";
+import { Brain, RotateCcw, Trophy, Skull, Copy, Check } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MemoryCard {
@@ -73,6 +73,9 @@ const Pexeso = () => {
   const [checking, setChecking] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [won, setWon] = useState(false);
+  const [completedGames, setCompletedGames] = useState(0);
+  const [totalMatchedPairs, setTotalMatchedPairs] = useState(0);
+  const [copied, setCopied] = useState(false);
 
   // Rebuild when pairCount changes (resize)
   useEffect(() => {
@@ -193,26 +196,98 @@ const Pexeso = () => {
 
           {/* Overlay */}
           {(won || gameOver) && (
-            <div className="relative z-10 mb-4">
-              <div className={`rounded-2xl border-2 px-6 py-8 text-center ${won ? "bg-primary/10 border-primary" : "bg-destructive/10 border-destructive"}`}>
+            <div className="relative z-10 mb-4 flex flex-col items-center gap-4">
+              <div className={`rounded-2xl border-2 px-6 py-8 text-center w-full ${won ? "bg-primary/10 border-primary" : "bg-destructive/10 border-destructive"}`}>
                 <div className="flex justify-center mb-3">
                   {won ? <Trophy className="w-12 h-12 text-primary" /> : <Skull className="w-12 h-12 text-destructive" />}
                 </div>
                 <h3 className={`font-game text-lg sm:text-2xl mb-2 ${won ? "text-primary" : "text-destructive"}`}>
                   {won ? "Výborně!" : "Game Over"}
                 </h3>
-                <p className="font-body text-muted-foreground text-sm mb-4">
+                <p className="font-body text-muted-foreground text-sm mb-2">
                   {won
                     ? `Všech ${totalPairs} dvojic nalezeno!`
                     : "Vyčerpal jsi pokusy u jedné z karet."}
                 </p>
+                {completedGames > 0 && (
+                  <p className="font-body text-muted-foreground text-xs mb-4">
+                    Dokončeno her: {completedGames}
+                  </p>
+                )}
                 <button
-                  onClick={resetGame}
+                  onClick={() => {
+                    if (won) {
+                      setTotalMatchedPairs((prev) => prev + totalPairs);
+                      setCompletedGames((prev) => prev + 1);
+                    }
+                    resetGame();
+                  }}
                   className="font-game text-xs sm:text-sm bg-primary text-primary-foreground px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors"
                 >
-                  {won ? "Hrát znovu" : "Zkusit znovu"}
+                  {won ? "Další hra" : "Zkusit znovu"}
                 </button>
               </div>
+
+              {/* Share section */}
+              {won && (
+                <div className="bg-share-bg rounded-2xl shadow-lg p-6 w-full max-w-xs flex flex-col items-center gap-3 relative overflow-hidden">
+                  {Array.from({ length: 20 }).map((_, i) => {
+                    const left = Math.random() * 100;
+                    const top = Math.random() * 100;
+                    const delay = (Math.random() * 2).toFixed(2);
+                    const size = Math.random() > 0.5 ? "text-sm" : "text-xs";
+                    return (
+                      <span
+                        key={`bg-${i}`}
+                        className={`absolute ${size} pointer-events-none`}
+                        style={{
+                          left: `${left}%`,
+                          top: `${top}%`,
+                          animation: `sparkle-float 2s ease-in-out ${delay}s infinite`,
+                        }}
+                      >
+                        ✨
+                      </span>
+                    );
+                  })}
+                  <span className="relative z-10 font-game text-sm text-foreground text-center">📣 Pochlub se a sdílej výsledek 🤩</span>
+                  <div className="relative">
+                    {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
+                      const rad = (angle * Math.PI) / 180;
+                      const x = Math.cos(rad) * 38;
+                      const y = Math.sin(rad) * 38;
+                      return (
+                        <span
+                          key={i}
+                          className="absolute left-1/2 top-1/2 text-xs pointer-events-none"
+                          style={{
+                            ["--sp-x" as string]: `${x}px`,
+                            ["--sp-y" as string]: `${y}px`,
+                            animation: `sparkle-burst 1.6s ease-in-out ${(i * 0.2).toFixed(1)}s infinite`,
+                          }}
+                        >
+                          ✨
+                        </span>
+                      );
+                    })}
+                    <button
+                      onClick={() => {
+                        const newCompleted = completedGames + 1;
+                        const newPairs = totalMatchedPairs + totalPairs;
+                        navigator.clipboard.writeText(
+                          `V pexesu na https://www.google.com/search?q=Germanllama.com jsem našel už ${newPairs} dvojic a dokončil ${newCompleted} kol! Zkus to taky 🦙`
+                        );
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 2000);
+                      }}
+                      className="relative z-10 flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
+                    >
+                      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      {copied ? "Zkopírováno!" : "Kopírovat"}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
