@@ -920,6 +920,16 @@ const LlamaGame = () => {
   }, [playerName, filteredQuestions, filteredFill]);
 
   const goToLobby = useCallback(() => {
+    // Preserve playerName so it's pre-filled after profession change
+    setInLobby(true);
+    setNameEntry(false);
+    setScore(0);
+    setGameState("idle");
+  }, []);
+
+  const newPlayer = useCallback(() => {
+    setPlayerName("");
+    localStorage.removeItem("llama-player-name");
     setInLobby(true);
     setNameEntry(false);
     setScore(0);
@@ -1145,13 +1155,21 @@ const LlamaGame = () => {
               >
                 🦙 Zkusit znovu
               </button>
-              <button
-                onClick={goToLobby}
-                className="font-game text-xs sm:text-sm px-6 sm:px-8 py-2 sm:py-3 rounded-xl border-2 border-border bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/50 hover:scale-105 active:scale-95 transition-all whitespace-nowrap flex items-center gap-1"
-              >
-                <ArrowLeft className="w-3 h-3" />
-                Změnit obor
-              </button>
+              <div className="flex gap-2 sm:gap-3">
+                <button
+                  onClick={goToLobby}
+                  className="font-game text-[10px] sm:text-xs px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-border bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/50 hover:scale-105 active:scale-95 transition-all whitespace-nowrap flex items-center gap-1"
+                >
+                  <ArrowLeft className="w-3 h-3" />
+                  Změnit obor
+                </button>
+                <button
+                  onClick={newPlayer}
+                  className="font-game text-[10px] sm:text-xs px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-destructive/50 bg-card/80 text-destructive hover:text-destructive hover:border-destructive hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
+                >
+                  👤 Nový hráč
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -1233,16 +1251,6 @@ const LlamaGame = () => {
           </table>
         </div>
 
-      {/* Změnit obor button - only when not in lobby and game is idle/over */}
-      {!inLobby && gameState === "over" && (
-        <button
-          onClick={goToLobby}
-          className="font-game text-[10px] sm:text-xs border border-border text-muted-foreground px-2.5 py-1 rounded-lg hover:text-foreground hover:border-primary/50 transition-colors flex items-center gap-1"
-        >
-          <ArrowLeft className="w-3 h-3" />
-          Změnit obor
-        </button>
-      )}
       </>
       )}
     </div>
