@@ -17,9 +17,11 @@ function shuffleArray<T>(arr: T[]): T[] {
 type Category = "mix" | "nouns" | "sentences";
 
 const FlashCards = () => {
-  const allCards = useMemo(() => getAllFlashCards(), []);
+  const allCardsRaw = useMemo(() => getAllFlashCards(), []);
+  const profFilter = useProfessionFilter();
+  const allCards = useMemo(() => filterByProfession(allCardsRaw, profFilter.selected), [allCardsRaw, profFilter.selected]);
   const [category, setCategory] = useState<Category>("mix");
-  const [cards, setCards] = useState<FlashCard[]>(() => shuffleArray(allCards));
+  const [cards, setCards] = useState<FlashCard[]>(() => shuffleArray(allCardsRaw));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
