@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Shuffle, BookOpen } from "lucide-react";
+import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
 import { getAllFlashCards, type FlashCard } from "@/game/vocabularyData";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 
