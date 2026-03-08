@@ -1,8 +1,10 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
-import { getAllFlashCards, FlashCard } from "@/game/vocabularyData";
+import { getAllFlashCards, FlashCard, filterByProfession } from "@/game/vocabularyData";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import { Brain, RotateCcw, Trophy, Skull, Copy, Check } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useProfessionFilter } from "@/hooks/useProfessionFilter";
+import ProfessionFilter from "@/components/ProfessionFilter";
 
 interface MemoryCard {
   id: number;
@@ -26,15 +28,15 @@ function shuffleArray<T>(arr: T[]): T[] {
 
 const MAX_FLIPS = 3;
 
-function buildCards(pairCount: number): MemoryCard[] {
-  let allCards = getAllFlashCards();
+function buildCards(pairCount: number, professions: import("@/game/vocabularyData").Profession[] = []): MemoryCard[] {
+  let allCards = filterByProfession(getAllFlashCards(), professions);
   if (!allCards || allCards.length === 0) {
     allCards = [
-      { german: "der Hund", czech: "pes", type: "noun" },
-      { german: "die Katze", czech: "kočka", type: "noun" },
-      { german: "das Haus", czech: "dům", type: "noun" },
-      { german: "der Tisch", czech: "stůl", type: "noun" },
-      { german: "die Blume", czech: "květina", type: "noun" },
+      { german: "der Hund", czech: "pes", type: "noun", profession: "obecné" },
+      { german: "die Katze", czech: "kočka", type: "noun", profession: "obecné" },
+      { german: "das Haus", czech: "dům", type: "noun", profession: "obecné" },
+      { german: "der Tisch", czech: "stůl", type: "noun", profession: "obecné" },
+      { german: "die Blume", czech: "květina", type: "noun", profession: "obecné" },
     ];
   }
   const selected = shuffleArray(allCards).slice(0, pairCount);
@@ -67,8 +69,9 @@ function buildCards(pairCount: number): MemoryCard[] {
 const Pexeso = () => {
   const isMobile = useIsMobile();
   const pairCount = 5;
+  const profFilter = useProfessionFilter();
 
-  const [cards, setCards] = useState<MemoryCard[]>(() => buildCards(pairCount));
+  const [cards, setCards] = useState<MemoryCard[]>(() => buildCards(pairCount, profFilter.selected));
   const [selected, setSelected] = useState<number[]>([]);
   const [checking, setChecking] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -87,12 +90,12 @@ const Pexeso = () => {
   const totalPairs = useMemo(() => new Set(cards.map((c) => c.pairId)).size, [cards]);
 
   const resetGame = useCallback(() => {
-    setCards(buildCards(pairCount));
+    setCards(buildCards(pairCount, profFilter.selected));
     setSelected([]);
     setChecking(false);
     setGameOver(false);
     setWon(false);
-  }, [pairCount]);
+  }, [pairCount, profFilter.selected]);
 
   const handleCardClick = useCallback(
     (id: number) => {
@@ -177,6 +180,8 @@ const Pexeso = () => {
           </div>
         </div>
       </section>
+
+      <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
 
       {/* Game Area */}
       <section className="px-3 sm:px-4 pb-8">

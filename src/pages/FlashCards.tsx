@@ -1,7 +1,9 @@
 import { useState, useMemo, useCallback } from "react";
 import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
-import { getAllFlashCards, type FlashCard } from "@/game/vocabularyData";
+import { getAllFlashCards, filterByProfession, type FlashCard } from "@/game/vocabularyData";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
+import { useProfessionFilter } from "@/hooks/useProfessionFilter";
+import ProfessionFilter from "@/components/ProfessionFilter";
 
 function shuffleArray<T>(arr: T[]): T[] {
   const shuffled = [...arr];
@@ -15,9 +17,11 @@ function shuffleArray<T>(arr: T[]): T[] {
 type Category = "mix" | "nouns" | "sentences";
 
 const FlashCards = () => {
-  const allCards = useMemo(() => getAllFlashCards(), []);
+  const allCardsRaw = useMemo(() => getAllFlashCards(), []);
+  const profFilter = useProfessionFilter();
+  const allCards = useMemo(() => filterByProfession(allCardsRaw, profFilter.selected), [allCardsRaw, profFilter.selected]);
   const [category, setCategory] = useState<Category>("mix");
-  const [cards, setCards] = useState<FlashCard[]>(() => shuffleArray(allCards));
+  const [cards, setCards] = useState<FlashCard[]>(() => shuffleArray(allCardsRaw));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
@@ -78,6 +82,8 @@ const FlashCards = () => {
             </div>
           </div>
         </div>
+
+        <ProfessionFilter selected={profFilter.selected} onToggle={(p) => { profFilter.toggle(p); setFlipped(false); setCurrentIndex(0); }} onSelectAll={() => { profFilter.selectAll(); setFlipped(false); setCurrentIndex(0); }} isAllSelected={profFilter.isAllSelected} />
 
         {/* Category filter */}
         <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-4 sm:mb-6">

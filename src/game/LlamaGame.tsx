@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Copy, Check } from "lucide-react";
-import { QUESTIONS, FILL_QUESTIONS, type Question, type FillQuestion } from "./vocabularyData";
+import { QUESTIONS, FILL_QUESTIONS, filterByProfession, type Question, type FillQuestion } from "./vocabularyData";
+import { useProfessionFilter } from "@/hooks/useProfessionFilter";
+import ProfessionFilter from "@/components/ProfessionFilter";
 
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
@@ -417,6 +419,9 @@ const saveToLeaderboardDB = async (name: string, score: number) => {
 };
 
 const LlamaGame = () => {
+  const profFilter = useProfessionFilter();
+  const filteredQuestions = useMemo(() => filterByProfession(QUESTIONS, profFilter.selected), [profFilter.selected]);
+  const filteredFill = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -490,10 +495,10 @@ const LlamaGame = () => {
     g.groundOffset = 0;
     questionIndexRef.current = 0;
     fillIndexRef.current = 0;
-    const lamaQ = QUESTIONS.find(q => q.text.includes("Lama"))!;
-    const rest = QUESTIONS.filter(q => !q.text.includes("Lama")).sort(() => Math.random() - 0.5);
-    shuffledQuestionsRef.current = [lamaQ, ...rest];
-    shuffledFillRef.current = [...FILL_QUESTIONS].sort(() => Math.random() - 0.5);
+    const lamaQ = filteredQuestions.find(q => q.text.includes("Lama"));
+    const rest = filteredQuestions.filter(q => !q.text.includes("Lama")).sort(() => Math.random() - 0.5);
+    shuffledQuestionsRef.current = lamaQ ? [lamaQ, ...rest] : rest;
+    shuffledFillRef.current = [...filteredFill].sort(() => Math.random() - 0.5);
     setScore(0);
     setCurrentQuestion(null);
     setCurrentFillQuestion(null);
@@ -877,6 +882,8 @@ const LlamaGame = () => {
       <h1 className="font-game text-sm sm:text-2xl text-foreground tracking-wider text-center">
         🦙 GermanLlama.com
       </h1>
+
+      <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
 
       <div
         ref={containerRef}

@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
-import { FILL_QUESTIONS } from "@/game/vocabularyData";
+import { FILL_QUESTIONS, filterByProfession } from "@/game/vocabularyData";
+import { useProfessionFilter } from "@/hooks/useProfessionFilter";
+import ProfessionFilter from "@/components/ProfessionFilter";
 import { Copy, Check, ArrowRight, GripVertical, PuzzleIcon } from "lucide-react";
 import {
   DndContext,
@@ -44,8 +46,8 @@ function splitSentence(sentence: string): { start: string; end: string } {
   };
 }
 
-function buildRound(): SentencePair[] {
-  const selected = shuffleArray(FILL_QUESTIONS).slice(0, SENTENCES_PER_ROUND);
+function buildRound(source = FILL_QUESTIONS): SentencePair[] {
+  const selected = shuffleArray(source).slice(0, SENTENCES_PER_ROUND);
   return selected.map((q, i) => {
     const full = q.sentence.replace("___", q.answer);
     const { start, end } = splitSentence(full);
@@ -142,7 +144,9 @@ function DroppableSlot({
 
 const SentenceBuilder = () => {
   const isMobile = useIsMobile();
-  const [pairs, setPairs] = useState<SentencePair[]>(() => buildRound());
+  const profFilter = useProfessionFilter();
+  const filteredQuestions = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
+  const [pairs, setPairs] = useState<SentencePair[]>(() => buildRound(filteredQuestions));
   const [score, setScore] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [completedRounds, setCompletedRounds] = useState(0);
@@ -227,7 +231,7 @@ const SentenceBuilder = () => {
     setCompletedRounds(newRounds);
     setScore(0);
     setSelectedEndId(null);
-    setPairs(buildRound());
+    setPairs(buildRound(filteredQuestions));
   };
 
   const handleCopy = () => {
@@ -272,6 +276,8 @@ const SentenceBuilder = () => {
           </div>
         </div>
       </section>
+
+      <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
 
       {/* Game Area */}
       <section className="px-3 sm:px-4 pb-8">
