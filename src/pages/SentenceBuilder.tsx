@@ -156,26 +156,57 @@ const SentenceBuilder = () => {
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
   const [overSlotId, setOverSlotId] = useState<string | null>(null);
   const [selectedEndId, setSelectedEndId] = useState<number | null>(null);
+  const [usedIndices, setUsedIndices] = useState<Set<number>>(new Set());
+
+  // Build a round from filtered questions, avoiding recently used sentences
+  const buildNextRound = useCallback((questions: typeof FILL_QUESTIONS, used: Set<number>): { pairs: SentencePair[]; newUsed: Set<number> } => {
+    let available = questions.filter((_, i) => !used.has(i));
+    let newUsed = new Set(used);
+
+    // If not enough unseen sentences, reset the pool
+    if (available.length < SENTENCES_PER_ROUND) {
+      newUsed = new Set();
+      available = [...questions];
+    }
+
+    const shuffled = shuffleArray(available.map((q, i) => ({ q, origIdx: questions.indexOf(q) })));
+    const selected = shuffled.slice(0, SENTENCES_PER_ROUND);
+
+    selected.forEach(s => newUsed.add(s.origIdx));
+
+    const builtPairs = selected.map(({ q }, i) => {
+      const full = q.sentence.replace("___", q.answer);
+      const { start, end } = splitSentence(full);
+      return { id: i, fullGerman: full, translation: q.translation, start, end, matched: false, profession: q.profession };
+    });
+
+    return { pairs: builtPairs, newUsed };
+  }, []);
 
   const startGame = useCallback(() => {
-    setPairs(buildRound(filteredQuestions));
+    const { pairs: newPairs, newUsed } = buildNextRound(filteredQuestions, new Set());
+    setPairs(newPairs);
+    setUsedIndices(newUsed);
     setScore(0);
+    setTotalScore(0);
+    setCompletedRounds(0);
     setSelectedEndId(null);
     setInLobby(false);
-  }, [filteredQuestions]);
+  }, [filteredQuestions, buildNextRound]);
 
   const goToLobby = useCallback(() => {
     setInLobby(true);
     setPairs([]);
     setScore(0);
     setSelectedEndId(null);
+    setUsedIndices(new Set());
   }, []);
 
   const availableEnds = useMemo(() => {
     const matched = new Set(pairs.filter((p) => p.matched).map((p) => p.id));
     return shuffleArray(pairs.filter((p) => !matched.has(p.id)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pairs]);
+  }, [pairs.map(p => p.matched).join(",")]);
 
   const allMatched = pairs.every((p) => p.matched);
 
@@ -186,7 +217,7 @@ const SentenceBuilder = () => {
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveDragId(event.active.id as string);
-    setSelectedEndId(null); // clear tap selection when dragging
+    setSelectedEndId(null);
   }, []);
 
   const handleDragOver = useCallback((event: any) => {
@@ -221,18 +252,15 @@ const SentenceBuilder = () => {
     [tryMatch]
   );
 
-  // Tap-to-select: tap an end piece
   const handleEndTap = useCallback((endId: number) => {
     setSelectedEndId((prev) => (prev === endId ? null : endId));
   }, []);
 
-  // Tap-to-select: tap a slot
   const handleSlotTap = useCallback(
     (slotId: number) => {
       if (selectedEndId === null) return;
       const matched = tryMatch(selectedEndId, slotId);
       if (!matched) {
-        // Wrong match — deselect
         setSelectedEndId(null);
       }
     },
@@ -246,7 +274,9 @@ const SentenceBuilder = () => {
     setCompletedRounds(newRounds);
     setScore(0);
     setSelectedEndId(null);
-    setPairs(buildRound(filteredQuestions));
+    const { pairs: newPairs, newUsed } = buildNextRound(filteredQuestions, usedIndices);
+    setPairs(newPairs);
+    setUsedIndices(newUsed);
   };
 
   const handleCopy = () => {
