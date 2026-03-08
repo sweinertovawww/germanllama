@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "@/components/Layout";
 import Index from "./pages/Index";
 import FlashCards from "./pages/FlashCards";
+import Pexeso from "./pages/Pexeso";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,10 +31,18 @@ const App = () => (
             element={
               <Layout>
                 <FlashCards />
-              </Layout>
-            }
-          />
-          <Route path="*" element={<NotFound />} />
+            </Layout>
+          }
+        />
+        <Route
+          path="/pexeso"
+          element={
+            <Layout>
+              <Pexeso />
+            </Layout>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
