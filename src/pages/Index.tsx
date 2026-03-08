@@ -16,6 +16,7 @@ import {
 
 const Index = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"llama-run" | "flash-cards">("llama-run");
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
