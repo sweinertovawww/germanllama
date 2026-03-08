@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
-import { Gamepad2, Layers, Brain, PuzzleIcon, Instagram, Menu, X, Users } from "lucide-react";
+import { Gamepad2, Layers, Brain, PuzzleIcon, Instagram, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface LayoutProps {
@@ -10,7 +10,6 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const [visitDate, setVisitDate] = useState<string>("");
   const navigate = useNavigate();
@@ -45,15 +44,15 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
       {/* Navigation */}
-      <nav className="w-full bg-card/80 backdrop-blur-sm border-b border-border sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-3 sm:py-6 flex items-center justify-between relative">
+      <nav className="w-full bg-card border-b border-border fixed top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 py-2 sm:py-6 flex items-center justify-between relative">
           <div className="flex items-center gap-2 sm:gap-4">
             <img
               src={germanLlamaLogo}
               alt="GermanLlama logo"
-              className="w-12 h-12 sm:w-20 sm:h-20 rounded-lg"
+              className="w-10 h-10 sm:w-20 sm:h-20 rounded-lg"
             />
-            <span className="font-body font-bold text-base sm:text-2xl text-foreground">
+            <span className="font-body font-bold text-sm sm:text-2xl text-foreground">
               Germanllama.com
             </span>
           </div>
@@ -71,6 +70,7 @@ const Layout = ({ children }: LayoutProps) => {
               </span>
             )}
           </div>
+          {/* Desktop: Kontakt */}
           <div className="hidden sm:flex items-center gap-6">
             <button
               onClick={() => navigate("/kontakt")}
@@ -79,39 +79,32 @@ const Layout = ({ children }: LayoutProps) => {
               Kontakt
             </button>
           </div>
+          {/* Mobile: Kontakt button */}
           <button
-            className="sm:hidden p-2 text-foreground"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Menu"
+            onClick={() => navigate("/kontakt")}
+            className="sm:hidden font-body font-semibold text-xs text-foreground/70 hover:text-primary transition-colors px-2 py-1"
           >
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            Kontakt
           </button>
         </div>
-        {menuOpen && (
-          <div className="sm:hidden border-t border-border bg-card px-4 py-4 space-y-3">
-            <div className="flex flex-col items-center text-center">
-              <span className="font-game text-sm text-foreground leading-tight">
-                Němčina do práce hravě!
-              </span>
-              <span className="font-body text-xs text-foreground">
-                Platforma pro samouky němčiny
-              </span>
-              {visitorCount !== null && (
-                <span className="flex items-center gap-1 font-body text-[10px] text-muted-foreground mt-1">
-                  <Users className="w-3 h-3" />
-                  Počet samouků na webu dnes ({visitDate}): {visitorCount}
-                </span>
-              )}
-            </div>
-            <button
-              onClick={() => { navigate("/kontakt"); setMenuOpen(false); }}
-              className="block w-full text-center font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors"
-            >
-              Kontakt
-            </button>
-          </div>
-        )}
+        {/* Mobile: slogan + counter strip */}
+        <div className="md:hidden border-t border-border bg-card px-4 py-1.5 text-center">
+          <span className="font-game text-[9px] text-foreground leading-tight block">
+            Němčina do práce hravě!
+          </span>
+          <span className="font-body text-[9px] text-muted-foreground block">
+            Platforma pro samouky němčiny
+          </span>
+          {visitorCount !== null && (
+            <span className="flex items-center justify-center gap-1 font-body text-[8px] text-muted-foreground mt-0.5">
+              <Users className="w-2.5 h-2.5" />
+              Počet samouků na webu dnes ({visitDate}): {visitorCount}
+            </span>
+          )}
+        </div>
       </nav>
+      {/* Spacer for fixed nav */}
+      <div className="h-[88px] sm:h-[120px] md:h-[100px]" />
 
       {/* Hero Section */}
       <header className="relative overflow-hidden bg-primary/10" style={{ backgroundImage: `url(${heroBackground})`, backgroundSize: 'cover', backgroundPosition: 'center 40%' }}>
