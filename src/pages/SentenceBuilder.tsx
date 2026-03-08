@@ -188,39 +188,31 @@ const SentenceBuilder = () => {
 
   return (
     <>
-      <section className="max-w-3xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
-        {/* Rules box */}
-        <div className="mb-6">
-          <button
-            onClick={() => setRulesOpen(!rulesOpen)}
-            className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-muted border-2 border-border hover:border-primary/30 transition-colors"
-          >
-            <span className="font-game text-[10px] sm:text-xs text-foreground">📖 Pravidla hry</span>
-            {rulesOpen ? (
-              <ChevronUp className="w-4 h-4 text-muted-foreground" />
-            ) : (
-              <ChevronDown className="w-4 h-4 text-muted-foreground" />
-            )}
-          </button>
-          {rulesOpen && (
-            <div className="mt-2 px-4 py-3 rounded-xl bg-card border border-border">
-              <p className="font-body text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                Přiřaď správné konce německých vět k jejich začátkům. Pomůže ti český překlad vlevo.
-                Stačí konec věty chytit a přetáhnout na správné místo.
-              </p>
+      {/* Rules */}
+      <section className="py-4 sm:py-8 px-3 sm:px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-t-2xl px-4 sm:px-8 py-2 sm:py-2.5 text-center">
+            <h2 className="font-game text-base sm:text-xl font-bold">Pravidla Hry</h2>
+          </div>
+          <div className="bg-muted rounded-b-2xl border border-t-0 border-border px-4 sm:px-8 py-3 sm:py-4 shadow-sm">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="shrink-0 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center">
+                <PuzzleIcon className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-body font-bold text-foreground text-sm sm:text-base">Skládání vět</h3>
+                <p className="font-body text-muted-foreground text-xs sm:text-sm leading-relaxed">
+                  Přiřaď správné konce německých vět k jejich začátkům. Pomůže ti český překlad vlevo. Stačí konec věty chytit a přetáhnout na správné místo.
+                </p>
+              </div>
             </div>
-          )}
+          </div>
         </div>
+      </section>
 
-        {/* Score */}
-        <div className="flex items-center justify-between mb-5">
-          <span className="font-game text-[10px] sm:text-xs text-muted-foreground">
-            Kolo: {completedRounds + 1}
-          </span>
-          <span className="font-game text-[10px] sm:text-xs text-foreground">
-            ✅ {score}/{SENTENCES_PER_ROUND}
-          </span>
-        </div>
+      {/* Game Area */}
+      <section className="px-3 sm:px-4 pb-8">
+        <div className="max-w-4xl mx-auto">
 
         <DndContext
           sensors={sensors}
