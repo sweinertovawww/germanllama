@@ -29,8 +29,7 @@ const Index = () => {
           </div>
           <div className="absolute left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center">
             <span className="font-game text-base sm:text-xl text-foreground leading-tight">
-              Němčina do práce{" "}
-              <span className="text-accent">hravě!</span>
+              Němčina do práce hravě!
             </span>
             <span className="font-body text-sm text-foreground">
               Platforma pro samouky němčiny
