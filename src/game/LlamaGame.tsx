@@ -965,7 +965,34 @@ const LlamaGame = () => {
           />
 
         {/* Exit button during play or quiz */}
-        {!inLobby && (gameState === "playing" || gameState === "quiz" || gameState === "starQuiz") && (
+        {/* Phase 2: Name entry overlay */}
+        {nameEntry && (
+          <div className="absolute inset-0 z-30 flex items-center justify-center bg-foreground/40 backdrop-blur-[2px]">
+            <div className="bg-card/95 rounded-2xl p-6 sm:p-8 shadow-2xl border-2 border-primary flex flex-col items-center gap-4 max-w-[90%] sm:max-w-xs">
+              <p className="font-game text-sm sm:text-base text-foreground">🦙 Zadej své jméno</p>
+              <input
+                type="text"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter" && playerName.trim()) { (e.target as HTMLInputElement).blur(); enterGame(); } }}
+                placeholder="Tvoje jméno..."
+                maxLength={20}
+                autoFocus
+                className="font-game text-xs sm:text-sm px-4 py-2.5 rounded-xl border-2 border-primary/40 bg-card text-card-foreground focus:border-primary focus:outline-none w-full text-center"
+              />
+              <button
+                onClick={enterGame}
+                disabled={!playerName.trim()}
+                className="font-game text-sm px-8 py-2.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-md disabled:opacity-50"
+              >
+                START
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Exit button during play or quiz */}
+        {!inLobby && !nameEntry && (gameState === "playing" || gameState === "quiz" || gameState === "starQuiz") && (
           <button
             onClick={exitGame}
             className="absolute top-2 right-2 font-game text-xs px-3 py-1 rounded bg-destructive/80 text-destructive-foreground hover:bg-destructive transition-colors z-20"
