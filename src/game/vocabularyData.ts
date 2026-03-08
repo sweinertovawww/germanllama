@@ -694,7 +694,23 @@ export const FILL_QUESTIONS: FillQuestion[] = [
     { sentence: "Das Feuerwehrbedienfeld befindet sich am ___.", answer: "Eingang", translation: "Ovládací panel hasičů se nachází u vchodu.", profession: "systemy_pro_haseni" },
     { sentence: "Drücken Sie im Notfall die ___.", answer: "Handauslösung", translation: "V nouzi stiskněte ruční spuštění.", profession: "systemy_pro_haseni" },
     { sentence: "Die ___ wurde automatisch aktiviert.", answer: "Klimaabschaltung", translation: "Vypnutí klimatizace bylo automaticky aktivováno.", profession: "systemy_pro_haseni" },
-    { sentence: "Die externe Stromversorgung ist ___.", answer: "ausgefallen", translation: "Externí napájení vypadlo.", profession: "systemy_pro_haseni" },
+     { sentence: "Die externe Stromversorgung ist ___.", answer: "ausgefallen", translation: "Externí napájení vypadlo.", profession: "systemy_pro_haseni" },
+     // === SYSTÉMY PRO HAŠENÍ - TECHNICKÉ VĚTY ===
+     { sentence: "Die Flaschenbatterie ist im Lager ___.", answer: "installiert", translation: "Lahvová baterie je instalována ve skladu.", profession: "systemy_pro_haseni" },
+     { sentence: "Prüfen Sie das Sicherheitsventil ___.", answer: "regelmäßig", translation: "Kontrolujte pravidelně bezpečnostní ventil.", profession: "systemy_pro_haseni" },
+     { sentence: "Das Sammelrohr leitet das Löschmittel ___.", answer: "weiter", translation: "Sběrné potrubí vede hasivo dále.", profession: "systemy_pro_haseni" },
+     { sentence: "Das Bereichsventil ___ bei einem Alarm.", answer: "öffnet", translation: "Sekční ventil se otevře při poplachu.", profession: "systemy_pro_haseni" },
+     { sentence: "Kontrollieren Sie die ___.", answer: "Schleichgassicherung", translation: "Zkontrolujte ochranu proti úniku plynu.", profession: "systemy_pro_haseni" },
+     { sentence: "Das Makrofon gibt ein ___ Signal.", answer: "akustisches", translation: "Siréna vydává akustický signál.", profession: "systemy_pro_haseni" },
+     { sentence: "Die Energieversorgung muss ___ sein.", answer: "stabil", translation: "Dodávka energie musí být stabilní.", profession: "systemy_pro_haseni" },
+     { sentence: "Das Vorsteuerventil wird ___ gesteuert.", answer: "pneumatisch", translation: "Předstihový řídicí ventil je ovládán pneumaticky.", profession: "systemy_pro_haseni" },
+     { sentence: "Die Warnschilder sind gut ___ montiert.", answer: "sichtbar", translation: "Výstražné značení je namontováno dobře viditelně.", profession: "systemy_pro_haseni" },
+     { sentence: "Das Rückschlagventil ___ den Rückfluss.", answer: "verhindert", translation: "Zpětná klapka zabraňuje zpětnému toku.", profession: "systemy_pro_haseni" },
+     { sentence: "Die Blitzleuchte zeigt den Alarm ___ an.", answer: "optisch", translation: "Blikající maják opticky signalizuje poplach.", profession: "systemy_pro_haseni" },
+     { sentence: "Der elektrische Schaltschrank ist ___.", answer: "verschlossen", translation: "Elektrický rozvaděč je uzamčený.", profession: "systemy_pro_haseni" },
+     { sentence: "Das Branderkennungselement hat ___.", answer: "reagiert", translation: "Prvek detekce požáru zareagoval.", profession: "systemy_pro_haseni" },
+     { sentence: "Öffnen Sie die ___ vorsichtig.", answer: "Hauptabsperrarmatur", translation: "Otevřete opatrně hlavní uzavírací ventil.", profession: "systemy_pro_haseni" },
+     { sentence: "Das Seilzugsystem ist ___ verbunden.", answer: "mechanisch", translation: "Kabelový systém je mechanicky propojen.", profession: "systemy_pro_haseni" },
 ];
 
 
