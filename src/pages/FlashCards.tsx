@@ -34,7 +34,7 @@ const FlashCards = () => {
     (cat: Category) => {
       setCategory(cat);
       setFlipped(false);
-      setCards(filteredByCategory(cat));
+      setCards(shuffleArray(filteredByCategory(cat)));
       setCurrentIndex(0);
     },
     [filteredByCategory]
