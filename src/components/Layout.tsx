@@ -96,6 +96,12 @@ const Layout = ({ children }: LayoutProps) => {
               <span className="font-body text-xs text-foreground">
                 Platforma pro samouky němčiny
               </span>
+              {visitorCount !== null && (
+                <span className="flex items-center gap-1 font-body text-[10px] text-muted-foreground mt-1">
+                  <Users className="w-3 h-3" />
+                  Počet samouků na webu dnes ({visitDate}): {visitorCount}
+                </span>
+              )}
             </div>
             <button
               onClick={() => { navigate("/kontakt"); setMenuOpen(false); }}
