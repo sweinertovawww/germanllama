@@ -278,6 +278,21 @@ export const FILL_QUESTIONS: FillQuestion[] = [
   { sentence: "Wir müssen die Werkstatt sauber ___.", answer: "machen", translation: "Musíme uklidit dílnu." },
   { sentence: "___ Sie mir bitte den Hammer.", answer: "Geben", translation: "Dejte mi prosím to kladivo." },
   { sentence: "Haben Sie einen Moment ___ für mich?", answer: "Zeit", translation: "Máte na mě chvilku čas?" },
+  { sentence: "Das Messer muss sehr ___ sein.", answer: "scharf", translation: "Ten nůž musí být velmi ostrý." },
+  { sentence: "Ich ___ das Fleisch in der Pfanne.", answer: "brate", translation: "Smažím to maso na pánvi." },
+  { sentence: "Die Suppe schmeckt ein bisschen zu ___.", answer: "salzig", translation: "Ta polévka chutná trochu moc slaně." },
+  { sentence: "Stellen Sie die Teller in den ___.", answer: "Wärmeschrank", translation: "Dejte ty talíře do ohřívací skříně." },
+  { sentence: "Wo sind die frischen ___ für die Soße?", answer: "Kräuter", translation: "Kde jsou čerstvé bylinky do té omáčky?" },
+  { sentence: "Ich muss das Gemüse noch putzen und ___.", answer: "schneiden", translation: "Musím ještě očistit a nakrájet zeleninu." },
+  { sentence: "Haben wir noch genug Vorräte im ___?", answer: "Kühlraum", translation: "Máme ještě dost zásob v chladicím boxu?" },
+  { sentence: "Die Bestellung für Tisch Nummer fünf ist ___.", answer: "fertig", translation: "Objednávka pro stůl číslo pět je hotová." },
+  { sentence: "Möchten Sie schon einen Nachtisch ___?", answer: "bestellen", translation: "Chcete si už objednat dezert?" },
+  { sentence: "Ich ___ den Tisch für vier Personen.", answer: "decke", translation: "Prostírám stůl pro čtyři osoby." },
+  { sentence: "Bringen Sie dem Gast bitte ein neues ___.", answer: "Besteck", translation: "Přineste prosím hostovi nový příbor." },
+  { sentence: "Die Gläser müssen ___ werden.", answer: "poliert", translation: "Ty sklenice se musí vyleštit." },
+  { sentence: "Ist in diesem Gericht ___ enthalten?", answer: "Knoblauch", translation: "Je v tomto jídle obsažen česnek?" },
+  { sentence: "Wir haben heute eine Empfehlung vom ___.", answer: "Küchenchef", translation: "Dnes máme doporučení od šéfkuchaře." },
+  { sentence: "Ich nehme die ___ auf.", answer: "Getränkebestellung", translation: "Přijmu objednávku na nápoje." },
 ];
 
 // Helper to extract German word from question text
