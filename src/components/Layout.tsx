@@ -301,7 +301,7 @@ const Layout = ({ children }: LayoutProps) => {
                 title="Otevřít Spotify"
                 className="inline-flex items-center text-primary-foreground/80 hover:text-accent hover:scale-110 transition-all duration-200"
               >
-                <Music className="w-5 h-5" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" strokeWidth="2"/><circle cx="9" cy="11" r="1.5" fill="currentColor"/><circle cx="12" cy="9" r="1.5" fill="currentColor"/><circle cx="15" cy="11" r="1.5" fill="currentColor"/></svg>
               </a>
             </div>
           </div>
