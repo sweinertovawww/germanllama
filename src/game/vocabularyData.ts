@@ -385,7 +385,15 @@ export const FILL_QUESTIONS: FillQuestion[] = [
    { sentence: "Die Gläser müssen ___ werden.", answer: "poliert", translation: "Ty sklenice se musí vyleštit.", profession: "gastro" },
    { sentence: "Wir haben heute eine Empfehlung vom ___.", answer: "Küchenchef", translation: "Dnes máme doporučení od šéfkuchaře.", profession: "gastro" },
    { sentence: "Ich nehme die ___ auf.", answer: "Getränkebestellung", translation: "Přijmu objednávku na nápoje.", profession: "gastro" },
-  // === POKLADNÍ ===
+   { sentence: "Ich ___ einen Espresso.", answer: "bestelle", translation: "Objednávám si espresso.", profession: "gastro" },
+   { sentence: "Ich ___ frisches Gebäck.", answer: "backe", translation: "Peču čerstvé pečivo.", profession: "gastro" },
+   { sentence: "Ich ___ kalte Vorspeisen.", answer: "serviere", translation: "Servíruji studené předkrmy.", profession: "gastro" },
+   { sentence: "Ich ___ süße Nachtische.", answer: "genieße", translation: "Vychutnávám si sladké dezerty.", profession: "gastro" },
+   { sentence: "Ich ___ viel Milchschaum.", answer: "mache", translation: "Dělám hodně mléčné pěny.", profession: "gastro" },
+   { sentence: "Ich ___ heute Brot.", answer: "kaufe", translation: "Dnes kupuji chléb.", profession: "gastro" },
+   { sentence: "Ich ___ zuerst Suppe.", answer: "bringe", translation: "Přinesu nejdříve polévku.", profession: "gastro" },
+   { sentence: "Ich ___ Kuchen lecker.", answer: "finde", translation: "Považuji dort za chutný.", profession: "gastro" },
+   // === POKLADNÍ ===
   { sentence: "Guten Tag, haben Sie eine ___?", answer: "Kundenkarte", translation: "Dobrý den, máte zákaznickou kartu?", profession: "pokladní" },
   { sentence: "Das macht zusammen ___ Euro.", answer: "achtundzwanzig", translation: "Dělí to dohromady dvacet osm euro.", profession: "pokladní" },
   { sentence: "___ Sie bar oder mit Karte?", answer: "Zahlen", translation: "Platíte hotově, nebo kartou?", profession: "pokladní" },
