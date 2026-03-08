@@ -1197,6 +1197,19 @@ const LlamaGame = () => {
             </tbody>
           </table>
         </div>
+
+      {/* Změnit obor button */}
+      {gameState === "idle" && (
+        <button
+          onClick={goToLobby}
+          className="font-game text-[10px] sm:text-xs border border-border text-muted-foreground px-2.5 py-1 rounded-lg hover:text-foreground hover:border-primary/50 transition-colors flex items-center gap-1"
+        >
+          <ArrowLeft className="w-3 h-3" />
+          Změnit obor
+        </button>
+      )}
+      </>
+      )}
     </div>
   );
 };
