@@ -343,6 +343,7 @@ const SentenceBuilder = () => {
             </button>
           </div>
         )}
+        </div>
       </section>
     </>
   );
