@@ -86,7 +86,7 @@ const FlashCards = () => {
                 <span className="text-[10px] sm:text-xs font-body text-muted-foreground mb-2 uppercase tracking-wider">
                   {card.type === "noun" ? "Podstatné jméno" : "Věta"}
                 </span>
-                <p className="font-body font-bold text-foreground text-lg sm:text-2xl text-center leading-relaxed">
+                <p className={`font-body font-bold text-foreground text-center leading-relaxed break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`}>
                   {card.german}
                 </p>
                 <span className="text-[10px] sm:text-xs font-body text-muted-foreground mt-4">
