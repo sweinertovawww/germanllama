@@ -19,6 +19,7 @@ export const PROFESSION_LIST: ProfessionInfo[] = [
   { id: "sestřička", label: "Sestřička", emoji: "🏥", group: "zdravotnictví" },
   { id: "uklízečka", label: "Uklízečka", emoji: "🧹", group: "úklid" },
   { id: "automechanik", label: "Automechanik", emoji: "🚗", group: "doprava" },
+  { id: "zahradník", label: "Zahradník", emoji: "🌱", group: "zemědělství" },
 ];
 
 export interface Question {
