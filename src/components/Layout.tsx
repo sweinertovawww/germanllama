@@ -301,7 +301,7 @@ const Layout = ({ children }: LayoutProps) => {
                 title="Otevřít Spotify"
                 className="inline-flex items-center text-primary-foreground/80 hover:text-accent hover:scale-110 transition-all duration-200"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" strokeWidth="2"/><circle cx="9" cy="11" r="1.5" fill="currentColor"/><circle cx="12" cy="9" r="1.5" fill="currentColor"/><circle cx="15" cy="11" r="1.5" fill="currentColor"/></svg>
+                <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="20" height="20"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm5.508 17.302c-.223.367-.704.482-1.071.258-2.858-1.745-6.456-2.14-10.693-1.171-.42.096-.842-.17-.938-.59-.096-.42.17-.842.59-.938 4.634-1.06 8.605-.612 11.854 1.371.367.224.482.704.258 1.07zm1.47-3.254c-.28.455-.878.6-1.333.32-3.273-2.013-8.262-2.593-12.132-1.417-.512.155-1.063-.142-1.218-.654-.155-.512.142-1.063.654-1.218 4.417-1.34 9.914-.688 13.709 1.64.455.28.6.878.32 1.333zm.126-3.374C15.244 8.354 8.878 8.143 5.132 9.28c-.58.176-1.192-.156-1.368-.736-.176-.58.156-1.192.736-1.368 4.29-1.3 11.33-1.056 15.786 1.59.522.31.693.985.383 1.507-.31.522-.985.693-1.507.383z"/></svg>
               </a>
             </div>
           </div>
