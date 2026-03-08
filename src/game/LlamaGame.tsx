@@ -958,6 +958,7 @@ const LlamaGame = () => {
             // Wolf hit llama from side = game over, lose all points
             g.score = 0;
             setScore(0);
+            fetchLeaderboard().then(setLeaderboard);
             setGameState("over");
             return;
           }
