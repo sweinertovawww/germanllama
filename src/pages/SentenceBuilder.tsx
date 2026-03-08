@@ -35,6 +35,7 @@ interface SentencePair {
   start: string;
   end: string;
   matched: boolean;
+  profession: string;
 }
 
 function splitSentence(sentence: string): { start: string; end: string } {
@@ -51,7 +52,7 @@ function buildRound(source = FILL_QUESTIONS): SentencePair[] {
   return selected.map((q, i) => {
     const full = q.sentence.replace("___", q.answer);
     const { start, end } = splitSentence(full);
-    return { id: i, fullGerman: full, translation: q.translation, start, end, matched: false };
+    return { id: i, fullGerman: full, translation: q.translation, start, end, matched: false, profession: q.profession };
   });
 }
 
@@ -349,6 +350,7 @@ const SentenceBuilder = () => {
                     <p className="font-body text-xs text-muted-foreground mb-1.5 italic">
                       🇨🇿 {pair.translation}
                     </p>
+                    <span className="font-body text-[7px] sm:text-[8px] text-muted-foreground/60">[{pair.profession}]</span>
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-body text-sm font-bold text-foreground whitespace-nowrap">
                         🇩🇪 {pair.start}

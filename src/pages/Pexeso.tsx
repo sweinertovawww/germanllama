@@ -15,6 +15,7 @@ interface MemoryCard {
   matched: boolean;
   flipCount: number;
   locked: boolean;
+  profession: string;
 }
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -51,6 +52,7 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
       matched: false,
       flipCount: 0,
       locked: false,
+      profession: card.profession,
     });
     memoryCards.push({
       id: i * 2 + 1,
@@ -61,6 +63,7 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
       matched: false,
       flipCount: 0,
       locked: false,
+      profession: card.profession,
     });
   });
   return shuffleArray(memoryCards);
@@ -361,6 +364,7 @@ const Pexeso = () => {
                         <span className={`mt-1.5 font-body text-[9px] sm:text-xs font-semibold uppercase ${card.lang === "de" ? "text-primary" : "text-accent"}`}>
                           {card.lang === "de" ? "DE" : "CZ"}
                         </span>
+                        <span className="font-body text-[7px] sm:text-[8px] text-muted-foreground/60 mt-0.5">[{card.profession}]</span>
                       </div>
                     ) : isLocked ? (
                       <div className="absolute inset-0 flex items-center justify-center">

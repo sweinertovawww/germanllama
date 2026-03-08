@@ -136,6 +136,7 @@ const FlashCards = () => {
                 <p className={`font-body font-bold text-foreground text-center leading-relaxed break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`}>
                   {card.german}
                 </p>
+                <span className="font-body text-[8px] sm:text-[9px] text-muted-foreground/50 mt-1">[{card.profession}]</span>
                 <span className="text-[10px] sm:text-xs font-body text-muted-foreground mt-4">
                   Klikni pro otočení →
                 </span>
