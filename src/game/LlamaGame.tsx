@@ -1209,7 +1209,7 @@ const LlamaGame = () => {
           <div className="absolute inset-0 flex items-center justify-center z-30 animate-fade-in">
             <div className="absolute inset-0 bg-foreground/60 animate-game-over-flash" />
             <div className="relative z-10 flex flex-col items-center gap-3 sm:gap-4 bg-card/95 rounded-2xl p-4 sm:p-8 shadow-2xl border-2 border-primary mx-4 animate-scale-in max-w-[90%]">
-              <p className="font-game text-lg sm:text-2xl text-destructive animate-bounce">💀 GAME OVER</p>
+              <p className="font-game text-lg sm:text-2xl text-destructive">💀 GAME OVER</p>
               <div className="flex flex-col items-center gap-1">
                 <p className="font-game text-sm sm:text-base text-foreground">Skóre: <span className="text-primary">{score}</span></p>
                 <p className="font-game text-xs text-muted-foreground">Nejlepší: <span className="text-primary">{highScore}</span></p>
