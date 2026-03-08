@@ -75,16 +75,16 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Navigation */}
       <nav className="w-full bg-card border-b border-border fixed top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-2 sm:py-6 flex items-center justify-between relative">
-          <div className="flex items-center gap-2 sm:gap-4">
-            <img
-              src={germanLlamaLogo}
-              alt="GermanLlama logo"
-              className="w-10 h-10 sm:w-20 sm:h-20 rounded-lg"
-            />
-            <span className="font-body font-bold text-sm sm:text-2xl text-foreground">
-              Germanllama.com
-            </span>
-          </div>
+            <Link to="/" className="flex items-center gap-2 sm:gap-4 cursor-pointer hover:opacity-80 transition-opacity">
+              <img
+                src={germanLlamaLogo}
+                alt="GermanLlama logo"
+                className="w-10 h-10 sm:w-20 sm:h-20 rounded-lg"
+              />
+              <span className="font-body font-bold text-sm sm:text-2xl text-foreground">
+                Germanllama.com
+              </span>
+            </Link>
           <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center">
             <span className="font-game text-base lg:text-xl text-foreground leading-tight">
               Němčina do práce hravě!
