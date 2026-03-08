@@ -31,17 +31,17 @@ export default function ProfessionFilter({
         🎯 Vyber si svou profesi
       </p>
       <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-        {/* Všechny profese */}
+        {/* Všechny profese – vizuálně odlišené */}
         <button
           onClick={onSelectAll}
-          className={`font-body font-semibold text-[10px] sm:text-xs px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full border-2 transition-all active:scale-95 ${
+          className={`font-body font-bold text-[10px] sm:text-xs px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border-2 transition-all active:scale-95 ${
             isAllSelected
-              ? "text-primary-foreground border-transparent shadow-md"
-              : "bg-card text-muted-foreground border-border hover:border-primary/40"
+              ? "text-primary-foreground border-transparent shadow-lg ring-2 ring-primary/30"
+              : "bg-card text-foreground border-primary/50 hover:border-primary hover:shadow-md"
           }`}
           style={isAllSelected ? { backgroundColor: "hsl(var(--primary))", borderColor: "hsl(var(--primary))" } : undefined}
         >
-          🌍 Všechny
+          🌍 Všechny profese
         </button>
 
         {PROFESSION_LIST.map((prof) => {
