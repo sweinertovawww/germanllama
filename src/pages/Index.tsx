@@ -136,13 +136,5 @@ function RuleItem({ icon, title, text }: { icon: React.ReactNode; title: string;
   );
 }
 
-function WhyCard({ icon, label }: { icon: React.ReactNode; label: string }) {
-  return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="text-primary">{icon}</div>
-      <span className="font-body font-bold text-foreground text-sm">{label}</span>
-    </div>
-  );
-}
 
 export default Index;
