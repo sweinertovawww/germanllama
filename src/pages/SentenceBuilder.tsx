@@ -144,6 +144,8 @@ function DroppableSlot({
 
 const SentenceBuilder = () => {
   const isMobile = useIsMobile();
+  const profFilter = useProfessionFilter();
+  const filteredQuestions = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
   const [pairs, setPairs] = useState<SentencePair[]>(() => buildRound());
   const [score, setScore] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
