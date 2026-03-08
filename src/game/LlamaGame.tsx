@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Copy, Check } from "lucide-react";
-import { QUESTIONS, FILL_QUESTIONS, type Question, type FillQuestion } from "./vocabularyData";
+import { QUESTIONS, FILL_QUESTIONS, filterByProfession, type Question, type FillQuestion } from "./vocabularyData";
+import { useProfessionFilter } from "@/hooks/useProfessionFilter";
+import ProfessionFilter from "@/components/ProfessionFilter";
 
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
