@@ -84,6 +84,50 @@ const Index = () => {
         )}
       </nav>
 
+      {/* Tab Navigation */}
+      <section className="bg-card border-b border-border">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+            <button
+              onClick={() => setActiveTab("llama-run")}
+              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-200 border-2 ${
+                activeTab === "llama-run"
+                  ? "bg-primary text-primary-foreground border-primary shadow-lg scale-[1.02]"
+                  : "bg-muted text-muted-foreground border-border hover:border-primary/40 hover:bg-muted/80"
+              }`}
+            >
+              <Gamepad2 className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "llama-run" ? "text-primary-foreground" : "text-primary"}`} />
+              <div className="text-left">
+                <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "llama-run" ? "text-primary-foreground" : "text-foreground"}`}>
+                  Llama Run
+                </span>
+                <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "llama-run" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                  Vyskákej si lepší němčinu
+                </span>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab("flash-cards")}
+              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-200 border-2 ${
+                activeTab === "flash-cards"
+                  ? "bg-primary text-primary-foreground border-primary shadow-lg scale-[1.02]"
+                  : "bg-muted text-muted-foreground border-border hover:border-primary/40 hover:bg-muted/80"
+              }`}
+            >
+              <Layers className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "flash-cards" ? "text-primary-foreground" : "text-primary"}`} />
+              <div className="text-left">
+                <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "flash-cards" ? "text-primary-foreground" : "text-foreground"}`}>
+                  Flash Cards
+                </span>
+                <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "flash-cards" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                  Kartičky na překlad
+                </span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* Hero Section */}
       <header className="relative overflow-hidden bg-primary/10" style={{ backgroundImage: `url(${heroBackground})`, backgroundSize: 'cover', backgroundPosition: 'center 40%' }}>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
