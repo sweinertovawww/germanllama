@@ -3,6 +3,7 @@ import LlamaGame from "@/game/LlamaGame";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
 import sombreroIcon from "@/assets/sombrero-icon.png";
+import { Gamepad2, Layers } from "lucide-react";
 
 import {
   ArrowUp,
