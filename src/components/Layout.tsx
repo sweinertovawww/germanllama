@@ -4,6 +4,7 @@ import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
 import { Gamepad2, Layers, Brain, PuzzleIcon, Instagram, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface LayoutProps {
   children: React.ReactNode;
