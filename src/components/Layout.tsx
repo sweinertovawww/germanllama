@@ -229,9 +229,14 @@ const Layout = ({ children }: LayoutProps) => {
       <footer className="border-t border-border bg-foreground text-primary-foreground">
         <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-            <p className="text-xs text-primary-foreground/60 text-center">
-              © 2026 Germanllama.com · Všechna práva vyhrazena.
-            </p>
+            <div className="flex flex-col items-center sm:items-start gap-1">
+              <p className="text-xs text-primary-foreground/60 text-center sm:text-left">
+                © 2026 Germanllama.com · Všechna práva vyhrazena.
+              </p>
+              <p className="text-[10px] text-primary-foreground/40 text-center sm:text-left">
+                🍪 Tento web používá nezbytné technické cookies pro správné fungování statistik.
+              </p>
+            </div>
             <div className="flex items-center gap-4">
               <span className="text-xs sm:text-sm text-primary-foreground/60 font-body">
                 Sledujte nás:
