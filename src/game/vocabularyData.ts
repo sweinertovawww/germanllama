@@ -508,6 +508,15 @@ export const FILL_QUESTIONS: FillQuestion[] = [
     { sentence: "Soll ich ___ benutzen?", answer: "Gel", translation: "Mám použít gel?", profession: "kadeřník" },
     { sentence: "Der ___ steht Ihnen.", answer: "Haarschnitt", translation: "Ten sestřih Vám sluší.", profession: "kadeřník" },
       { sentence: "Ich ___ Ihre Haare.", answer: "kämme", translation: "Češu Vám vlasy.", profession: "kadeřník" },
+   // === POŽÁRNÍ SYSTÉMY ===
+   { sentence: "Wir müssen eine ___ machen.", answer: "Revision", translation: "Musím udělat revizi.", profession: "pozarni_systemy" },
+   { sentence: "Wir haben heute ___.", answer: "Notdienst", translation: "Máme dnes pohotovost.", profession: "pozarni_systemy" },
+   { sentence: "Der Kunde hat eine ___.", answer: "Störung", translation: "Zákazník má poruchu.", profession: "pozarni_systemy" },
+   { sentence: "Ein Sprinkler ist ___.", answer: "defekt", translation: "Jeden sprinkler je nefunkční.", profession: "pozarni_systemy" },
+   { sentence: "Eine ___ ist nötig.", answer: "Instandsetzung", translation: "Je nutná oprava.", profession: "pozarni_systemy" },
+   { sentence: "Ich ___ die Sprinkleranlage.", answer: "prüfe", translation: "Kontroluji sprinklerový systém.", profession: "pozarni_systemy" },
+   { sentence: "Der Wasserdruck ist zu ___.", answer: "niedrig", translation: "Tlak vody je příliš nízký.", profession: "pozarni_systemy" },
+   { sentence: "Ich ___ das Ventil aus.", answer: "tausche", translation: "Vyměňuji ten ventil.", profession: "pozarni_systemy" },
 ];
 
 
