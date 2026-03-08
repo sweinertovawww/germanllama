@@ -685,14 +685,21 @@ const LlamaGame = () => {
     fetchLeaderboard().then(setLeaderboard);
   }, []);
 
-  // Responsive scaling
+  // Responsive scaling - fit within viewport
   useEffect(() => {
     const updateScale = () => {
       const container = containerRef.current;
       if (!container) return;
       const parentWidth = container.parentElement?.clientWidth || window.innerWidth;
       const maxWidth = Math.min(parentWidth - 16, CANVAS_WIDTH);
-      setScale(maxWidth / CANVAS_WIDTH);
+      const scaleByWidth = maxWidth / CANVAS_WIDTH;
+
+      // Calculate available height: viewport minus nav, title, jump button, margins
+      const navHeight = document.querySelector('nav')?.getBoundingClientRect().height || 0;
+      const availableHeight = window.innerHeight - navHeight - 140; // 140px for title + jump btn + gaps
+      const scaleByHeight = Math.max(0.3, availableHeight / CANVAS_HEIGHT);
+
+      setScale(Math.min(scaleByWidth, scaleByHeight));
     };
     updateScale();
     window.addEventListener("resize", updateScale);
