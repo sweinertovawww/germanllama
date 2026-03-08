@@ -361,6 +361,7 @@ const Pexeso = () => {
                         <span className={`mt-1.5 font-body text-[9px] sm:text-xs font-semibold uppercase ${card.lang === "de" ? "text-primary" : "text-accent"}`}>
                           {card.lang === "de" ? "DE" : "CZ"}
                         </span>
+                        <span className="font-body text-[7px] sm:text-[8px] text-muted-foreground/60 mt-0.5">[{card.profession}]</span>
                       </div>
                     ) : isLocked ? (
                       <div className="absolute inset-0 flex items-center justify-center">

@@ -443,13 +443,13 @@ export function getAllFlashCards(): FlashCard[] {
   return [...nounCards, ...sentenceCards];
 }
 
-/** Filter questions by selected professions. "obecné" items are always included. */
+/** Filter questions by selected professions. Strict: only matching professions are returned. */
 export function filterByProfession<T extends { profession: Profession }>(
   items: T[],
   selectedProfessions: Profession[]
 ): T[] {
   if (selectedProfessions.length === 0) return items;
   return items.filter(
-    (item) => item.profession === "obecné" || selectedProfessions.includes(item.profession)
+    (item) => selectedProfessions.includes(item.profession)
   );
 }
