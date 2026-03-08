@@ -1807,34 +1807,46 @@ export function getAllFlashCards(): FlashCard[] {
   return [...nounCards, ...sentenceCards];
 }
 
-/** Smart translation check: case-insensitive, trims whitespace.
- * - Slash-separated variants: any single variant or keyword (≥3 chars) is accepted.
+export function normalizeText(text: string): string {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+/** Smart translation check: case-insensitive, trims whitespace, removes diacritics.
+ * - Slash-separated variants: any single variant or keyword is accepted.
+ * - Partial match: if input is part of the expected translation (≥4 chars), it's correct.
  * - Word-order flexibility: for multi-word terms without slashes, reversed word order is also accepted.
  */
 export function isTranslationCorrect(input: string, expected: string): boolean {
-  const normalizedInput = input.trim().toLowerCase().replace(/\s+/g, " ");
-  const normalizedExpected = expected.trim().toLowerCase().replace(/\s+/g, " ");
-  // Exact match
-  if (normalizedInput === normalizedExpected) return true;
-  // Reversed word order (e.g. "testovací sprinkler" ↔ "sprinkler testovací")
-  const inputWords = normalizedInput.split(" ");
-  const expectedWords = normalizedExpected.split(" ");
-  if (inputWords.length >= 2 && inputWords.length === expectedWords.length &&
-      inputWords.slice().sort().join(" ") === expectedWords.slice().sort().join(" ")) {
-    return true;
-  }
-  // Split by "/" and check each variant
-  const variants = normalizedExpected.split("/").map(v => v.trim()).filter(Boolean);
+  const normInput = normalizeText(input);
+  const normExpected = normalizeText(expected);
+  
+  if (!normInput) return false;
+
+  const variants = normExpected.split("/").map(v => v.trim()).filter(Boolean);
+  
   for (const variant of variants) {
-    if (normalizedInput === variant) return true;
-    // Reversed word order within variant
+    if (normInput === variant) return true;
+    
+    // Partial match (Keyword matching)
+    if (variant.includes(normInput) && normInput.length >= 4) {
+      return true;
+    }
+    
+    // Word order flexibility
+    const inputWords = normInput.split(" ");
     const varWords = variant.split(" ");
     if (inputWords.length >= 2 && inputWords.length === varWords.length &&
         inputWords.slice().sort().join(" ") === varWords.slice().sort().join(" ")) {
       return true;
     }
-    // Single keyword match (≥3 chars)
-    if (varWords.some(w => w === normalizedInput && w.length >= 3)) return true;
+    
+    // Single keyword match
+    if (varWords.some(w => w === normInput && w.length >= 3)) return true;
   }
   return false;
 }

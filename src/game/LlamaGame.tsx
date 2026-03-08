@@ -561,7 +561,7 @@ const LlamaGame = () => {
 
   const handleFillSubmit = useCallback(() => {
     if (!currentFillQuestion || fillResult !== null) return;
-    const isCorrect = fillInput.trim().toLowerCase() === currentFillQuestion.answer.toLowerCase();
+    const isCorrect = isTranslationCorrect(fillInput, currentFillQuestion.answer);
     setFillResult(isCorrect ? "correct" : "wrong");
     if (isCorrect) {
       gameRef.current.score += 1;
@@ -1074,7 +1074,9 @@ const LlamaGame = () => {
                     </button>
                   </div>
                   {translationResult === "correct" && (
-                    <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>✓ Správně! +2 body</p>
+                    <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
+                      ✓ Správně! ({currentQuestion.translation}) +2 body
+                    </p>
                   )}
                   {translationResult === "wrong" && (
                     <p className="font-game text-xs text-destructive mt-3">
@@ -1120,7 +1122,9 @@ const LlamaGame = () => {
                 </button>
               </div>
               {fillResult === "correct" && (
-                <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>✓ Správně! +1 bod</p>
+                <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
+                  ✓ Správně! ({currentFillQuestion.answer}) +1 bod
+                </p>
               )}
               {fillResult === "wrong" && (
                 <p className="font-game text-xs text-destructive mt-3">
