@@ -164,8 +164,14 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Erdgeschoss?", options: ["der", "die", "das"], correct: 2, translation: "přízemí", profession: "zedník" },
   { text: "Jaký člen má Mörtel?", options: ["der", "die", "das"], correct: 0, translation: "malta", profession: "zedník" },
   { text: "Jaký člen má Mauer?", options: ["der", "die", "das"], correct: 1, translation: "zeď", profession: "zedník" },
-  { text: "Jaký člen má Baustelle?", options: ["der", "die", "das"], correct: 1, translation: "stavba (místo)", profession: "zedník" },
-  // === SESTŘIČKA ===
+   { text: "Jaký člen má Baustelle?", options: ["der", "die", "das"], correct: 1, translation: "stavba (místo)", profession: "zedník" },
+   // === ZAHRADNÍK ===
+   { text: "Jaký člen má Schaufel?", options: ["der", "die", "das"], correct: 1, translation: "lopata", profession: "zahradník" },
+   { text: "Jaký člen má Gießkanne?", options: ["der", "die", "das"], correct: 1, translation: "konve", profession: "zahradník" },
+   { text: "Jaký člen má Rasenmäher?", options: ["der", "die", "das"], correct: 0, translation: "sekačka na trávu", profession: "zahradník" },
+   { text: "Jaký člen má Erde?", options: ["der", "die", "das"], correct: 1, translation: "hlína / zemina", profession: "zahradník" },
+   { text: "Jaký člen má Zaun?", options: ["der", "die", "das"], correct: 0, translation: "plot", profession: "zahradník" },
+   // === SESTŘIČKA ===
   { text: "Jaký člen má Patient?", options: ["der", "die", "das"], correct: 0, translation: "pacient", profession: "sestřička" },
   { text: "Jaký člen má Fieber?", options: ["der", "die", "das"], correct: 2, translation: "teplota / horečka", profession: "sestřička" },
   { text: "Jaký člen má Medikamente?", options: ["der", "die", "das"], correct: 1, translation: "léky", profession: "sestřička" },
