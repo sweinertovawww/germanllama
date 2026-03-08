@@ -56,15 +56,15 @@ const Index = () => {
 
 
       {/* How to play details */}
-      <section className="py-12 sm:py-16 px-4">
+      <section className="py-6 sm:py-8 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-t-2xl px-6 sm:px-8 py-4 text-center">
-            <h2 className="font-game text-xl sm:text-2xl font-bold">
+          <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-t-2xl px-6 sm:px-8 py-2.5 text-center">
+            <h2 className="font-game text-lg sm:text-xl font-bold">
               Pravidla Hry
             </h2>
           </div>
-          <div className="bg-card rounded-b-2xl border border-t-0 border-border p-6 sm:p-8 shadow-sm">
-            <div className="space-y-4">
+          <div className="bg-card rounded-b-2xl border border-t-0 border-border px-6 sm:px-8 py-4 shadow-sm">
+            <div className="space-y-2.5">
               <RuleItem
                 icon={<ArrowUp className="w-6 h-6 text-primary" />}
                 title="Skákej"
