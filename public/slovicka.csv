@@ -445,3 +445,61 @@ Eine Instandsetzung ist nötig.;Je nutná oprava.;pozarni_systemy
 Ich prüfe die Sprinkleranlage.;Kontroluji sprinklerový systém.;pozarni_systemy
 Der Wasserdruck ist zu niedrig.;Tlak vody je příliš nízký.;pozarni_systemy
 Ich tausche das Ventil aus.;Vyměňuji ten ventil.;pozarni_systemy
+der Wasseranschluss;přípojka vody;pozarni_systemy
+die Spüleinrichtung;proplachovací zařízení;pozarni_systemy
+der Erdbehälter;podzemní nádrž;pozarni_systemy
+der Hochbehälter;nadzemní nádrž;pozarni_systemy
+der Zwischenbehälter;nádrž s redukovaným objemem;pozarni_systemy
+die Füllstandsanzeige;ukazatel hladiny;pozarni_systemy
+der Kompressor;kompresor;pozarni_systemy
+die Sprinklerpumpe mit E-Motor;sprinklerové čerpadlo s elektropohonem;pozarni_systemy
+die Sprinklerpumpe mit Dieselmotor;sprinklerové čerpadlo s dieselem;pozarni_systemy
+der Kraftstoffbehälter;nádrž na palivo;pozarni_systemy
+das Notstromaggregat;náhradní zdroj el. energie;pozarni_systemy
+der Auffüllbehälter;plnící nádrž;pozarni_systemy
+die Rückschlagklappe;zpětná klapka;pozarni_systemy
+der Steinfänger;lapač kamenů;pozarni_systemy
+der Feuerwehranschluss;připojení hasičů;pozarni_systemy
+das Überströmventil;přetlakový ventil;pozarni_systemy
+die Heizung der Sprinklerzentrale;vytápění strojovny sprinklerů;pozarni_systemy
+die Behälterheizung;vytápění nádrže;pozarni_systemy
+die Rohrbegleitheizung;vytápění potrubí;pozarni_systemy
+der Schaltschrank;rozvaděč;pozarni_systemy
+die Nass-Alarmventilstation (NAV);mokrá ventilová stanice;pozarni_systemy
+die Alarmglocke;poplachový zvon;pozarni_systemy
+die Trocken-Alarmventilstation (TAV);suchá ventilová stanice;pozarni_systemy
+der Revisionsschieber;revizní šoupátko;pozarni_systemy
+die vorgesteuerte TAV;předstihová ventilová stanice;pozarni_systemy
+die Tandemventilstation;tandemová ventilová stanice;pozarni_systemy
+die Fernschaltventilstation;ventilová stanice na dálkové ovládání;pozarni_systemy
+der Schnellöffner;rychlootvírač;pozarni_systemy
+die Trennstation;dělící stanice;pozarni_systemy
+der Systemtrenner;systémový oddělovač;pozarni_systemy
+die Hupe;siréna / houkačka;pozarni_systemy
+die Blitzleuchte;zábleskové čidlo;pozarni_systemy
+die Druckerhöhungspumpe;čerpadlo pro zvýšení tlaku;pozarni_systemy
+der Strömungswächter;průtokový hlásič;pozarni_systemy
+der Sprinkler;sprinkler;pozarni_systemy
+der Doppelsprinkler;dvojitý sprinkler;pozarni_systemy
+der Trockensprinkler;sprinkler suchý;pozarni_systemy
+der Testsprinkler;sprinkler testovací;pozarni_systemy
+die Entleerung;vypouštění;pozarni_systemy
+die Entwässerungseinheit;odvodňovací jednotka;pozarni_systemy
+der Frostschutzmittelbehälter;nádrž na nemrznoucí směs;pozarni_systemy
+der Wärmefühler;tepelné čidlo;pozarni_systemy
+die Wasserschleierdüse;tryska vodní clony;pozarni_systemy
+der Handauslösekasten;ruční hlásič;pozarni_systemy
+die Dosieranlage;dávkovací systém;pozarni_systemy
+der Korrosionsschutzmittelbehälter;nádrž pro antikorozní ochranu;pozarni_systemy
+die Hydranteneinrichtung;hydrantové zařízení;pozarni_systemy
+der Schnellentlüfter;rychloodvzdušňovač;pozarni_systemy
+die Störmeldezentrale;monitorovací centrála;pozarni_systemy
+der Schaummittelvorratstank;zásobní nádrž pěnidla;pozarni_systemy
+der Venturizumischer;Venturiho příměšovadlo;pozarni_systemy
+der Druckzumischer;tlakový přiměšovač;pozarni_systemy
+der Motorschieber;motorové šoupě;pozarni_systemy
+die Schaummittelpumpe;pěnové čerpadlo;pozarni_systemy
+der Schaumerzeuger;generátor pěny;pozarni_systemy
+der Schaumwasserwerfer;pěnové vodní dělo;pozarni_systemy
+die Laboruntersuchung;laboratorní test;pozarni_systemy
+die Prüfung der Zumischrate;zkouška příměsi pěnidla;pozarni_systemy
