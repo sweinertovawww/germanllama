@@ -510,7 +510,6 @@ export const FILL_QUESTIONS: FillQuestion[] = [
       { sentence: "Ich ___ Ihre Haare.", answer: "kämme", translation: "Češu Vám vlasy.", profession: "kadeřník" },
 ];
 
-export const QUESTIONS: Question[] = [
 
 // Helper to extract German word from question text
 function extractGermanWord(q: Question): string {
