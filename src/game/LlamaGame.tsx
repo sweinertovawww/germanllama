@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, ArrowLeft, Gamepad2 } from "lucide-react";
 import { QUESTIONS, FILL_QUESTIONS, filterByProfession, type Question, type FillQuestion } from "./vocabularyData";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
@@ -420,6 +420,7 @@ const saveToLeaderboardDB = async (name: string, score: number) => {
 
 const LlamaGame = () => {
   const profFilter = useProfessionFilter();
+  const [inLobby, setInLobby] = useState(true);
   const filteredQuestions = useMemo(() => filterByProfession(QUESTIONS, profFilter.selected), [profFilter.selected]);
   const filteredFill = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -877,12 +878,38 @@ const LlamaGame = () => {
   const level = Math.floor(totalTrophies / 10) + 1;
   const trophiesInLevel = totalTrophies % 10;
 
+  const enterGame = useCallback(() => {
+    setInLobby(false);
+    setScore(0);
+    setPlayerName("");
+    setGameState("idle");
+  }, []);
+
+  const goToLobby = useCallback(() => {
+    setInLobby(true);
+    setScore(0);
+    setPlayerName("");
+    setGameState("idle");
+  }, []);
+
   return (
     <div className="flex flex-col items-center gap-2 sm:gap-6 w-full max-w-[800px] mx-auto">
 
-      {gameState === "idle" && (
-        <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
-      )}
+      {inLobby ? (
+        /* === LOBBY === */
+        <div className="flex flex-col items-center gap-4 py-4">
+          <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
+          <button
+            onClick={enterGame}
+            className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg flex items-center gap-2"
+          >
+            <Gamepad2 className="w-5 h-5" />
+            START HRY
+          </button>
+        </div>
+      ) : (
+      /* === GAME === */
+      <>
 
       <div
         ref={containerRef}
@@ -1083,14 +1110,11 @@ const LlamaGame = () => {
                 🦙 Zkusit znovu
               </button>
               <button
-                onClick={() => {
-                  setScore(0);
-                  setPlayerName("");
-                  setGameState("idle");
-                }}
-                className="font-game text-xs sm:text-sm px-6 sm:px-8 py-2 sm:py-3 rounded-xl border-2 border-border bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/50 hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
+                onClick={goToLobby}
+                className="font-game text-xs sm:text-sm px-6 sm:px-8 py-2 sm:py-3 rounded-xl border-2 border-border bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/50 hover:scale-105 active:scale-95 transition-all whitespace-nowrap flex items-center gap-1"
               >
-                👤 Nový hráč
+                <ArrowLeft className="w-3 h-3" />
+                Změnit obor
               </button>
             </div>
           </div>
@@ -1170,6 +1194,19 @@ const LlamaGame = () => {
             </tbody>
           </table>
         </div>
+
+      {/* Změnit obor button */}
+      {gameState === "idle" && (
+        <button
+          onClick={goToLobby}
+          className="font-game text-[10px] sm:text-xs border border-border text-muted-foreground px-2.5 py-1 rounded-lg hover:text-foreground hover:border-primary/50 transition-colors flex items-center gap-1"
+        >
+          <ArrowLeft className="w-3 h-3" />
+          Změnit obor
+        </button>
+      )}
+      </>
+      )}
     </div>
   );
 };
