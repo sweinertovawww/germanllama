@@ -1217,7 +1217,7 @@ const LlamaGame = () => {
               </div>
               <button
                 onClick={() => { startGame(); }}
-                className="font-game text-sm sm:text-base px-8 sm:px-12 py-3 sm:py-4 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all animate-retry-pulse"
+                className="font-game text-sm sm:text-base px-8 sm:px-12 py-3 sm:py-4 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all animate-retry-pulse whitespace-nowrap"
                 style={{
                   background: 'linear-gradient(135deg, hsl(168, 72%, 40%), hsl(168, 72%, 30%))',
                   color: 'hsl(0, 0%, 100%)',
