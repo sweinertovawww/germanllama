@@ -17,7 +17,7 @@ type Category = "mix" | "nouns" | "sentences";
 const FlashCards = () => {
   const allCards = useMemo(() => getAllFlashCards(), []);
   const [category, setCategory] = useState<Category>("mix");
-  const [cards, setCards] = useState<FlashCard[]>(allCards);
+  const [cards, setCards] = useState<FlashCard[]>(() => shuffleArray(allCards));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
