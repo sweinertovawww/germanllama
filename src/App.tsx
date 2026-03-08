@@ -43,6 +43,14 @@ const App = () => (
             </Layout>
           }
         />
+        <Route
+          path="/kontakt"
+          element={
+            <Layout>
+              <Kontakt />
+            </Layout>
+          }
+        />
         <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
