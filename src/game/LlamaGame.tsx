@@ -1006,16 +1006,6 @@ const LlamaGame = () => {
       ctx.fillText("Llama Run", CANVAS_WIDTH / 2, 80);
       ctx.font = "10px 'Press Start 2P', monospace";
       ctx.fillText("Zadej jméno a stiskni START", CANVAS_WIDTH / 2, 120);
-    } else {
-      const t = Math.floor(score / 10);
-      const l = Math.floor(t / 10) + 1;
-      ctx.fillText("GAME OVER", CANVAS_WIDTH / 2, 80);
-      ctx.font = "12px 'Press Start 2P', monospace";
-      ctx.fillText(`Skóre: ${score}`, CANVAS_WIDTH / 2, 110);
-      ctx.fillText(`Nejlepší: ${highScore}`, CANVAS_WIDTH / 2, 135);
-      ctx.font = "10px 'Press Start 2P', monospace";
-      ctx.fillText(`🏆 ${t}  ⭐ Level ${l}`, CANVAS_WIDTH / 2, 165);
-      ctx.fillText("Stiskni ↑ pro restart", CANVAS_WIDTH / 2, 195);
     }
     ctx.textAlign = "start";
   }, [gameState, score, highScore]);
@@ -1231,32 +1221,34 @@ const LlamaGame = () => {
         )}
       </div>
 
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex gap-4 sm:gap-8 font-game text-xs sm:text-sm">
-          <span className="text-muted-foreground">
-            Skóre: <span className="text-foreground">{score}</span>
-          </span>
-          <span className="text-muted-foreground">
-            Nejlepší: <span className="text-primary">{highScore}</span>
-          </span>
-        </div>
-        <div className="flex gap-4 sm:gap-6 font-game text-xs items-center">
-          <span className="text-muted-foreground">
-            🏆 {"🏆".repeat(trophiesInLevel)}{"◦".repeat(10 - trophiesInLevel)} <span className="text-foreground">{totalTrophies}</span>
-          </span>
-          <span className="text-muted-foreground">
-            ⭐ Level: <span className="text-primary">{level}</span>
-          </span>
-        </div>
-        {dailyBest && (
-          <div className="font-game text-xs text-muted-foreground">
-            🏆 Dnes nejlepší: <span className="text-primary">{dailyBest.name}</span> — <span className="text-foreground">{dailyBest.score} b.</span>
+      {gameState !== "over" && (
+        <div className="flex flex-col items-center gap-2">
+          <div className="flex gap-4 sm:gap-8 font-game text-xs sm:text-sm">
+            <span className="text-muted-foreground">
+              Skóre: <span className="text-foreground">{score}</span>
+            </span>
+            <span className="text-muted-foreground">
+              Nejlepší: <span className="text-primary">{highScore}</span>
+            </span>
           </div>
-        )}
-        <div className="font-game text-xs text-muted-foreground">
-          👥 Hráči dnes: <span className="text-foreground">{dailyPlayerCount}</span>
+          <div className="flex gap-4 sm:gap-6 font-game text-xs items-center">
+            <span className="text-muted-foreground">
+              🏆 {"🏆".repeat(trophiesInLevel)}{"◦".repeat(10 - trophiesInLevel)} <span className="text-foreground">{totalTrophies}</span>
+            </span>
+            <span className="text-muted-foreground">
+              ⭐ Level: <span className="text-primary">{level}</span>
+            </span>
+          </div>
+          {dailyBest && (
+            <div className="font-game text-xs text-muted-foreground">
+              🏆 Dnes nejlepší: <span className="text-primary">{dailyBest.name}</span> — <span className="text-foreground">{dailyBest.score} b.</span>
+            </div>
+          )}
+          <div className="font-game text-xs text-muted-foreground">
+            👥 Hráči dnes: <span className="text-foreground">{dailyPlayerCount}</span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Share buttons - visible on game over */}
       {gameState === "over" && score > 0 && (
