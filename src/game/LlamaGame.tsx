@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Copy, Check } from "lucide-react";
+import { QUESTIONS, FILL_QUESTIONS, type Question, type FillQuestion } from "./vocabularyData";
 
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
@@ -33,22 +34,6 @@ interface Wolf {
   x: number;
   alive: boolean;
 }
-
-interface Question {
-  text: string;
-  options: string[];
-  correct: number;
-  translation: string;
-}
-
-interface FillQuestion {
-  sentence: string;
-  answer: string;
-  translation: string;
-}
-
-const QUESTIONS: Question[] = [
-  { text: "Jaký člen má Lama?", options: ["der", "die", "das"], correct: 2, translation: "lama" },
   { text: "Jaký člen má Haus?", options: ["der", "die", "das"], correct: 2, translation: "dům" },
   { text: "Jaký člen má Hund?", options: ["der", "die", "das"], correct: 0, translation: "pes" },
   { text: "Jaký člen má Katze?", options: ["der", "die", "das"], correct: 1, translation: "kočka" },
