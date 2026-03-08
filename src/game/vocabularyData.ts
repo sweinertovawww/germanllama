@@ -92,6 +92,7 @@ export const QUESTIONS: Question[] = [
    { text: "Jaký člen má Deadline?", options: ["der", "die", "das"], correct: 1, translation: "termín (uzávěrka)", profession: "obecné" },
    { text: "Jaký člen má Zusammenarbeit?", options: ["der", "die", "das"], correct: 1, translation: "spolupráce", profession: "obecné" },
   // === OBECNÉ (práce, směny, bezpečnost) ===
+  { text: "Jaký člen má Feierabend?", options: ["der", "die", "das"], correct: 0, translation: "volno po práci", profession: "obecné" },
   { text: "Jaký člen má Pause?", options: ["der", "die", "das"], correct: 1, translation: "přestávka", profession: "obecné" },
   { text: "Jaký člen má Kantine?", options: ["der", "die", "das"], correct: 1, translation: "jídelna", profession: "obecné" },
   { text: "Jaký člen má Schrank?", options: ["der", "die", "das"], correct: 0, translation: "skříň", profession: "obecné" },
