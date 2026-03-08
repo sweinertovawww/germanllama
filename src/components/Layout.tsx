@@ -13,6 +13,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const [visitDate, setVisitDate] = useState<string>("");
+  const [privacyOpen, setPrivacyOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
