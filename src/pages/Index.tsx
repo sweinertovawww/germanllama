@@ -135,47 +135,65 @@ const Index = () => {
         </div>
       </header>
 
-      {/* How to play details */}
-      <section className="py-4 sm:py-8 px-3 sm:px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-t-2xl px-4 sm:px-8 py-2 sm:py-2.5 text-center">
-            <h2 className="font-game text-base sm:text-xl font-bold">
-              Pravidla Hry
-            </h2>
-          </div>
-          <div className="bg-muted rounded-b-2xl border border-t-0 border-border px-4 sm:px-8 py-3 sm:py-4 shadow-sm">
-            <div className="space-y-2 sm:space-y-2.5">
-              <RuleItem
-                icon={<ArrowUp className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />}
-                title="Skákej"
-                text="Šipkou nahoru / mezerníkem / tlačítkem Skok na mobilu."
-              />
-              <RuleItem
-                icon={<Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />}
-                title="Odpovídej správně"
-                text="Překládej slovíčka (použij diakritiku) a urči správný člen (der, die, das)."
-              />
-              <RuleItem
-                icon={<img src={sombreroIcon} alt="Sombréro" className="w-8 h-8 sm:w-10 sm:h-10" />}
-                title="Sbírej sombréra"
-                text="Přidají ti body navíc"
-              />
-              <RuleItem
-                icon={<SkullIcon className="w-5 h-5 sm:w-6 sm:h-6 text-destructive" />}
-                title="Pozor na vlka!"
-                text="Skoč na něj shora, jinak hra končí a ztrácíš body."
-              />
+      {activeTab === "llama-run" && (
+        <>
+          {/* How to play details */}
+          <section className="py-4 sm:py-8 px-3 sm:px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-t-2xl px-4 sm:px-8 py-2 sm:py-2.5 text-center">
+                <h2 className="font-game text-base sm:text-xl font-bold">
+                  Pravidla Hry
+                </h2>
+              </div>
+              <div className="bg-muted rounded-b-2xl border border-t-0 border-border px-4 sm:px-8 py-3 sm:py-4 shadow-sm">
+                <div className="space-y-2 sm:space-y-2.5">
+                  <RuleItem
+                    icon={<ArrowUp className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />}
+                    title="Skákej"
+                    text="Šipkou nahoru / mezerníkem / tlačítkem Skok na mobilu."
+                  />
+                  <RuleItem
+                    icon={<Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />}
+                    title="Odpovídej správně"
+                    text="Překládej slovíčka (použij diakritiku) a urči správný člen (der, die, das)."
+                  />
+                  <RuleItem
+                    icon={<img src={sombreroIcon} alt="Sombréro" className="w-8 h-8 sm:w-10 sm:h-10" />}
+                    title="Sbírej sombréra"
+                    text="Přidají ti body navíc"
+                  />
+                  <RuleItem
+                    icon={<SkullIcon className="w-5 h-5 sm:w-6 sm:h-6 text-destructive" />}
+                    title="Pozor na vlka!"
+                    text="Skoč na něj shora, jinak hra končí a ztrácíš body."
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Game Section */}
+          <section id="game-section" className="bg-background">
+            <div className="flex flex-col items-center justify-start py-2 sm:py-4 px-1 sm:px-2">
+              <LlamaGame />
+            </div>
+          </section>
+        </>
+      )}
+
+      {activeTab === "flash-cards" && (
+        <section className="py-8 sm:py-16 px-3 sm:px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="bg-card border border-border rounded-2xl p-8 sm:p-12 shadow-sm">
+              <Layers className="w-12 h-12 sm:w-16 sm:h-16 text-primary mx-auto mb-4" />
+              <h2 className="font-game text-sm sm:text-lg text-foreground mb-2">Flash Cards</h2>
+              <p className="font-body text-muted-foreground text-sm sm:text-base">
+                Kartičky na překlad — již brzy! 🚧
+              </p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Game Section */}
-      <section id="game-section" className="bg-background">
-        <div className="flex flex-col items-center justify-start py-2 sm:py-4 px-1 sm:px-2">
-          <LlamaGame />
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="border-t border-border bg-foreground text-primary-foreground">
