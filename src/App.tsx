@@ -7,6 +7,7 @@ import Layout from "@/components/Layout";
 import Index from "./pages/Index";
 import FlashCards from "./pages/FlashCards";
 import Pexeso from "./pages/Pexeso";
+import Kontakt from "./pages/Kontakt";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
