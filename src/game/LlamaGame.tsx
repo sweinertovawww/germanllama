@@ -879,9 +879,6 @@ const LlamaGame = () => {
 
   return (
     <div className="flex flex-col items-center gap-2 sm:gap-6 w-full max-w-[800px] mx-auto">
-      <h1 className="font-game text-sm sm:text-2xl text-foreground tracking-wider text-center">
-        🦙 GermanLlama.com
-      </h1>
 
       {gameState === "idle" && (
         <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
