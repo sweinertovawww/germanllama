@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useRef } from "react";
 import { FILL_QUESTIONS, filterByProfession } from "@/game/vocabularyData";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
@@ -47,9 +47,8 @@ function splitSentence(sentence: string): { start: string; end: string } {
   };
 }
 
-function buildRound(source = FILL_QUESTIONS): SentencePair[] {
-  const selected = shuffleArray(source).slice(0, SENTENCES_PER_ROUND);
-  return selected.map((q, i) => {
+function makePairs(questions: typeof FILL_QUESTIONS): SentencePair[] {
+  return questions.map((q, i) => {
     const full = q.sentence.replace("___", q.answer);
     const { start, end } = splitSentence(full);
     return { id: i, fullGerman: full, translation: q.translation, start, end, matched: false, profession: q.profession };
