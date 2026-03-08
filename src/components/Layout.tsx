@@ -286,7 +286,7 @@ const Layout = ({ children }: LayoutProps) => {
                 <Instagram className="w-5 h-5" />
               </a>
               <a
-                href="https://www.facebook.com/profile.php?id=61586284749463"
+                href="https://www.facebook.com/share/1CfQYLGWrR/?mibextid=wwXIfr"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center text-primary-foreground/80 hover:text-accent hover:scale-110 transition-all duration-200"
