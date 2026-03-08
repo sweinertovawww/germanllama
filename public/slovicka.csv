@@ -124,32 +124,32 @@ die Schmerzen;bolesti;sestřička
 der Schwindel;závrať;sestřička
 der Arzt;lékař;sestřička
 die Visite;vizita;sestřička
-das Tagesmenü;denní menu;kuchař
-das Gericht;jídlo / pokrm;kuchař
-das Fleisch;maso;kuchař
-das Messer;nůž;kuchař
-die Pfanne;pánev;kuchař
-der Kochtopf;hrnec;kuchař
-die Suppe;polévka;kuchař
-die Kräuter;bylinky;kuchař
-die Soße;omáčka;kuchař
-das Gemüse;zelenina;kuchař
-der Kühlraum;chladicí místnost / box;kuchař
-der Knoblauch;česnek;kuchař
-der Küchenchef;šéfkuchař;kuchař
-die Vorspeise;předkrm;kuchař
-das Hauptgericht;hlavní chod;kuchař
-der Teller;talíř;číšník
-der Nachtisch;dezert;číšník
-das Besteck;příbor;číšník
-das Glas;sklenice;číšník
-die Serviette;ubrousek;číšník
-die Tischdecke;ubrus;číšník
-das Trinkgeld;spropitné;číšník
-die Allergie;alergie;číšník
-das Bier;pivo;číšník
-die Speisekarte;jídelní lístek;číšník
-die Rechnung;účet / faktura;číšník
+das Tagesmenü;denní menu;gastro
+das Gericht;jídlo / pokrm;gastro
+das Fleisch;maso;gastro
+das Messer;nůž;gastro
+die Pfanne;pánev;gastro
+der Kochtopf;hrnec;gastro
+die Suppe;polévka;gastro
+die Kräuter;bylinky;gastro
+die Soße;omáčka;gastro
+das Gemüse;zelenina;gastro
+der Kühlraum;chladicí místnost / box;gastro
+der Knoblauch;česnek;gastro
+der Küchenchef;šéfkuchař;gastro
+die Vorspeise;předkrm;gastro
+das Hauptgericht;hlavní chod;gastro
+der Teller;talíř;gastro
+der Nachtisch;dezert;gastro
+das Besteck;příbor;gastro
+das Glas;sklenice;gastro
+die Serviette;ubrousek;gastro
+die Tischdecke;ubrus;gastro
+das Trinkgeld;spropitné;gastro
+die Allergie;alergie;gastro
+das Bier;pivo;gastro
+die Speisekarte;jídelní lístek;gastro
+die Rechnung;účet / faktura;gastro
 die Kasse;pokladna;pokladní
 der Kassenbon;účtenka;pokladní
 die Kundenkarte;zákaznická karta;pokladní
