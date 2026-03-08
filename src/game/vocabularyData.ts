@@ -10,11 +10,10 @@ export interface ProfessionInfo {
 export const PROFESSION_LIST: ProfessionInfo[] = [
   { id: "obecné", label: "Obecné", emoji: "📚", group: "obecné" },
   { id: "automechanik", label: "Automechanik", emoji: "🚗", group: "doprava" },
-  { id: "číšník", label: "Číšník", emoji: "🍽️", group: "gastro" },
   { id: "elektrikář", label: "Elektrikář", emoji: "⚡", group: "řemesla" },
+  { id: "gastro", label: "Gastro", emoji: "🍽️", group: "gastro" },
   { id: "instalatér", label: "Instalatér", emoji: "🔧", group: "řemesla" },
   { id: "kancelář", label: "Kancelář", emoji: "🏢", group: "kancelář" },
-  { id: "kuchař", label: "Kuchař", emoji: "👨‍🍳", group: "gastro" },
   { id: "pokladní", label: "Pokladní", emoji: "🛒", group: "obchod" },
   { id: "sestřička", label: "Sestřička", emoji: "🏥", group: "zdravotnictví" },
   { id: "truhlář", label: "Truhlář", emoji: "🪚", group: "řemesla" },
