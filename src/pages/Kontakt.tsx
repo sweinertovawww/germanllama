@@ -29,6 +29,11 @@ const Kontakt = () => {
       return;
     }
 
+    // Send email notification (fire and forget)
+    supabase.functions.invoke("send-feedback-email", {
+      body: { message: message.trim(), email: email.trim() || null },
+    }).catch(console.error);
+
     setSubmitted(true);
     setLoading(false);
   };
