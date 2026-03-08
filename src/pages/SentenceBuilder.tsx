@@ -263,9 +263,9 @@ const SentenceBuilder = () => {
                 <h3 className="font-body font-bold text-foreground text-sm sm:text-base">Skládání vět</h3>
                 <p className="font-body text-muted-foreground text-xs sm:text-sm leading-relaxed">
                   Přiřaď správné konce německých vět k jejich začátkům. Pomůže ti český překlad.
-                  {isMobile
-                    ? " Klepni na konec věty a pak klepni na správné prázdné místo."
-                    : " Stačí konec věty chytit a přetáhnout na správné místo."}
+                  Stačí konec věty chytit a přetáhnout na správné místo.
+                  <br />
+                  Na mobilu 📲 klikni nejdříve na konec věty z výběru dole a pak na místo, kam jí chceš přiřadit.
                 </p>
               </div>
             </div>
