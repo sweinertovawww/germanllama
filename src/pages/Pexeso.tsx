@@ -52,6 +52,7 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
       matched: false,
       flipCount: 0,
       locked: false,
+      profession: card.profession,
     });
     memoryCards.push({
       id: i * 2 + 1,
@@ -62,6 +63,7 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
       matched: false,
       flipCount: 0,
       locked: false,
+      profession: card.profession,
     });
   });
   return shuffleArray(memoryCards);
