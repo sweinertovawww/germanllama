@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { getAllFlashCards, FlashCard } from "@/game/vocabularyData";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
-import { Brain, RotateCcw, Trophy, Skull } from "lucide-react";
+import { Brain, RotateCcw, Trophy, Skull, Copy, Check } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MemoryCard {
