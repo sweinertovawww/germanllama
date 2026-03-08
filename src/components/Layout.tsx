@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
-import { Gamepad2, Layers, Instagram, Menu, X } from "lucide-react";
+import { Gamepad2, Layers, Brain, Instagram, Menu, X } from "lucide-react";
 
 interface LayoutProps {
   children: React.ReactNode;
