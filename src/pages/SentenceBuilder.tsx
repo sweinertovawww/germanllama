@@ -457,6 +457,8 @@ const SentenceBuilder = () => {
           )}
         </div>
       </section>
+      </>
+      )}
     </>
   );
 };
