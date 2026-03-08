@@ -614,6 +614,23 @@ export function getAllFlashCards(): FlashCard[] {
   return [...nounCards, ...sentenceCards];
 }
 
+/** Smart translation check: accepts any single word/variant from slash-separated alternatives. Case-insensitive. */
+export function isTranslationCorrect(input: string, expected: string): boolean {
+  const normalizedInput = input.trim().toLowerCase();
+  const normalizedExpected = expected.trim().toLowerCase();
+  // Exact match
+  if (normalizedInput === normalizedExpected) return true;
+  // Split by "/" and check each variant
+  const variants = normalizedExpected.split("/").map(v => v.trim()).filter(Boolean);
+  for (const variant of variants) {
+    if (normalizedInput === variant) return true;
+    // Also check individual words within each variant
+    const words = variant.split(/\s+/);
+    if (words.some(w => w === normalizedInput && w.length >= 3)) return true;
+  }
+  return false;
+}
+
 /** Filter questions by selected professions. Strict: only matching professions are returned. */
 export function filterByProfession<T extends { profession: Profession }>(
   items: T[],

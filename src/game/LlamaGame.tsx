@@ -614,7 +614,7 @@ const LlamaGame = () => {
 
   const handleTranslationSubmit = useCallback(() => {
     if (!currentQuestion || quizPhase !== "translation") return;
-    const isCorrect = translationInput.trim().toLowerCase() === currentQuestion.translation.toLowerCase();
+    const isCorrect = isTranslationCorrect(translationInput, currentQuestion.translation);
     const points = isCorrect ? 2 : 1;
     setTranslationResult(isCorrect ? "correct" : "wrong");
     gameRef.current.score += points;
