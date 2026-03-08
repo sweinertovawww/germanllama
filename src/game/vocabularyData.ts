@@ -1,4 +1,4 @@
-export type Profession = "obecné" | "truhlář" | "zedník" | "instalatér" | "elektrikář" | "číšník" | "kuchař" | "pokladní" | "uklízečka" | "sestřička" | "kancelář" | "automechanik";
+export type Profession = "obecné" | "truhlář" | "zedník" | "instalatér" | "elektrikář" | "číšník" | "kuchař" | "pokladní" | "uklízečka" | "sestřička" | "kancelář" | "automechanik" | "zahradník";
 
 export interface ProfessionInfo {
   id: Profession;
