@@ -94,7 +94,7 @@ der Moment;moment / chvilka;obecné
 die Zeit;čas;obecné
 die Maschine;stroj;obecné
 das Teil;díl / součástka;obecné
-das Förderband;dopravní pás;obecné
+das Förderband;výrobní pás;obecné
 die Quote;kvóta;obecné
 die Stunde;hodina;obecné
 der Schichtbetrieb;směnný provoz;obecné
@@ -178,7 +178,6 @@ der Besen;koště;uklízečka
 der Staub;prach;uklízečka
 der Müll;odpadky;uklízečka
 die Mülltonne;popelnice;uklízečka
-das Fensterleder;jelenice na okna;uklízečka
 der Schwamm;houbička;uklízečka
 das Waschbecken;umyvadlo;uklízečka
 die Toilette;toaleta;uklízečka
@@ -195,8 +194,8 @@ Wir gehen nach Hause.;My jdeme domů.;obecné
 Sie trinkt Kaffee.;Ona pije kávu.;obecné
 Du läufst sehr schnell.;Ty běžíš velmi rychle.;obecné
 Ich bin müde.;Já jsem unavený/á.;obecné
-Er ist Lehrer.;On je učitel.;obecné
-Wir sind Studenten.;My jsme studenti.;obecné
+Er ist Lehrer.;On je učitel.;učitel
+Wir sind Studenten.;My jsme studenti.;učitel
 Sie hat eine Katze.;Ona má kočku.;obecné
 Du hast Hunger.;Ty máš hlad.;obecné
 Ich höre gern Musik.;Já rád/a poslouchám hudbu.;obecné
