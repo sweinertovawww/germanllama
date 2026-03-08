@@ -503,3 +503,66 @@ der Schaumerzeuger;generátor pěny;pozarni_systemy
 der Schaumwasserwerfer;pěnové vodní dělo;pozarni_systemy
 die Laboruntersuchung;laboratorní test;pozarni_systemy
 die Prüfung der Zumischrate;zkouška příměsi pěnidla;pozarni_systemy
+das Software-Update;aktualizace softwaru;pozarni_systemy
+die Schnittstellenvernetzung;rozhraní / centrální síť;pozarni_systemy
+die Meldergruppen;skupiny hlásičů;pozarni_systemy
+die Meldeloops;signální smyčky;pozarni_systemy
+die Batterien / Akkus;baterie / akumulátory;pozarni_systemy
+die externe Stromversorgung;externí napájení;pozarni_systemy
+der Protokolldrucker;protokolová tiskárna;pozarni_systemy
+der Wartungsschalter;přepínač revize;pozarni_systemy
+die Visualisierung;vizualizace;pozarni_systemy
+die Meldungspunkte;body hlášení;pozarni_systemy
+das Lageplantableau;tablo rozmístění;pozarni_systemy
+die Lampen;světla / lampy;pozarni_systemy
+die Hinweisleuchte;indikační světlo;pozarni_systemy
+das Warntransparent;značení úniková cesta;pozarni_systemy
+die Hauptmelderansteuerung;ovládání hlavního hlásiče;pozarni_systemy
+das Feuerwehrschlüsseldepot;sklad klíčů hasičů;pozarni_systemy
+das Feuerwehranzeigetableau;hasičský zobrazovací panel;pozarni_systemy
+die Feuerwehrlaufkarten;průvodky pro hasiče;pozarni_systemy
+das Feuerwehrbedienfeld;ovládací panel hasičů;pozarni_systemy
+die Freischalteinrichtung;odpojovací zařízení;pozarni_systemy
+das automatische Wahlgerät;automatická přenosová ústředna;pozarni_systemy
+die übertragenen Kanäle;přenášené kanály;pozarni_systemy
+die Weitermeldung;přenos hlášení;pozarni_systemy
+das optische Alarmmittel;optický alarm;pozarni_systemy
+das akustische Alarmmittel;zvukový alarm;pozarni_systemy
+das Alarmsteuergerät;alarmová řídicí jednotka;pozarni_systemy
+der Druckknopffeuermelder;tlačítko požárního poplachu;pozarni_systemy
+die Handauslösung;ruční spuštění;pozarni_systemy
+der Stopptaster;tlačítko zastavení;pozarni_systemy
+der Nachfluttaster;tlačítko dodatečného zaplavení;pozarni_systemy
+der Rauchmelder;kouřový hlásič;pozarni_systemy
+der Wärmemelder;tepelný detektor;pozarni_systemy
+der Multisensor;multisenzor;pozarni_systemy
+der Brandgassensor;snímač požárního plynu;pozarni_systemy
+das CO2-Warngerät;výstražné zařízení CO2;pozarni_systemy
+der Flammenmelder;detektor plamene;pozarni_systemy
+der Funkenmelder;detektor jisker;pozarni_systemy
+die Anzeigen;displeje / ukazatele;pozarni_systemy
+das Branderkennungselement;prvek detekce požáru;pozarni_systemy
+das Rauchansaugsystem;systém nasávání kouře;pozarni_systemy
+der Kanalmelder;detektor kanálu;pozarni_systemy
+der Bypassmelder;detektor bypassu;pozarni_systemy
+der Loopkoppler;spojka smyčky;pozarni_systemy
+die Gasmeldezentrale;plynová hlásicí centrála;pozarni_systemy
+die Gasmeldelinienkarte;přehled linek hlášení plynu;pozarni_systemy
+der Gasmelder;plynový detektor;pozarni_systemy
+die Gaslöschbereiche;plynem hašené sektory;pozarni_systemy
+die Löschanlagenüberwachung;monitorování hasicích systémů;pozarni_systemy
+der Alarmdruckschalter;alarmový tlakový spínač;pozarni_systemy
+die Auslösung;spouštění;pozarni_systemy
+die Doppelsprinklerzentrale;ústředna pro dvojité sprinklery;pozarni_systemy
+die Türsteuerzentrale;centrála řízení dveří;pozarni_systemy
+die Feststelleinrichtung;uzamykací zařízení;pozarni_systemy
+der Haftmagnet;přídržný magnet;pozarni_systemy
+die Klimaabschaltung;vypnutí klimatizace;pozarni_systemy
+die Maschinenabschaltung;vypnutí strojů;pozarni_systemy
+die Löschautomatik;automatický hasicí systém;pozarni_systemy
+das Heizband;topná páska;pozarni_systemy
+die Behälterheizung;ohřev nádrže;pozarni_systemy
+die Rohrbegleitheizung;ohřev potrubí;pozarni_systemy
+der Heizkreis;topný okruh;pozarni_systemy
+das Eingangsmodul;vstupní modul;pozarni_systemy
+das Ausgangsmodul;výstupní modul;pozarni_systemy
