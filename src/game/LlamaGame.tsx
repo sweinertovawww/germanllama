@@ -923,30 +923,34 @@ const LlamaGame = () => {
   return (
     <div className="flex flex-col items-center gap-2 sm:gap-6 w-full max-w-[800px] mx-auto">
 
-      <div
-        ref={containerRef}
-        className="relative rounded-lg sm:rounded-xl overflow-hidden shadow-lg border-2 border-border"
-        style={{
-          width: CANVAS_WIDTH * scale,
-          height: CANVAS_HEIGHT * scale,
-        }}
-      >
-        <canvas
-          ref={canvasRef}
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
-          className="block origin-top-left"
+      <div className="relative">
+        <div
+          ref={containerRef}
+          className="relative rounded-lg sm:rounded-xl overflow-hidden shadow-lg border-2 border-border"
           style={{
-            transform: `scale(${scale})`,
-            width: CANVAS_WIDTH,
-            height: CANVAS_HEIGHT,
+            width: CANVAS_WIDTH * scale,
+            height: CANVAS_HEIGHT * scale,
           }}
-        />
+        >
+          <canvas
+            ref={canvasRef}
+            width={CANVAS_WIDTH}
+            height={CANVAS_HEIGHT}
+            className="block origin-top-left"
+            style={{
+              transform: `scale(${scale})`,
+              width: CANVAS_WIDTH,
+              height: CANVAS_HEIGHT,
+            }}
+          />
+        </div>
 
-        {/* Lobby overlay — transparent, floating over the canvas */}
+        {/* Lobby overlay — floating above the canvas */}
         {inLobby && (
-          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-foreground/30 backdrop-blur-[2px]">
-            <div className="flex flex-col items-center gap-3 px-4 py-6 max-w-[95%]">
+          <div
+            className="absolute inset-0 z-30 flex flex-col items-center justify-center rounded-lg sm:rounded-xl bg-background/40 backdrop-blur-sm"
+          >
+            <div className="flex flex-col items-center gap-3 px-4 py-4 max-w-[95%] overflow-y-auto max-h-full">
               <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
               <input
                 type="text"
