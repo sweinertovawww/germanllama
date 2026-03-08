@@ -638,7 +638,18 @@ export const FILL_QUESTIONS: FillQuestion[] = [
    { sentence: "Eine ___ ist nötig.", answer: "Instandsetzung", translation: "Je nutná oprava.", profession: "pozarni_systemy" },
    { sentence: "Ich ___ die Sprinkleranlage.", answer: "prüfe", translation: "Kontroluji sprinklerový systém.", profession: "pozarni_systemy" },
    { sentence: "Der Wasserdruck ist zu ___.", answer: "niedrig", translation: "Tlak vody je příliš nízký.", profession: "pozarni_systemy" },
-   { sentence: "Ich ___ das Ventil aus.", answer: "tausche", translation: "Vyměňuji ten ventil.", profession: "pozarni_systemy" },
+    { sentence: "Ich ___ das Ventil aus.", answer: "tausche", translation: "Vyměňuji ten ventil.", profession: "pozarni_systemy" },
+    // === POŽÁRNÍ SYSTÉMY - ROZŠÍŘENÍ ===
+    { sentence: "Das Software-Update ist für die Zentrale ___.", answer: "bereit", translation: "Aktualizace softwaru je pro centrálu připravena.", profession: "pozarni_systemy" },
+    { sentence: "Der Wartungsschalter muss auf Aus ___.", answer: "stehen", translation: "Přepínač revize musí být v poloze vypnuto.", profession: "pozarni_systemy" },
+    { sentence: "Die Meldergruppen sind im ersten Stock ___.", answer: "aktiv", translation: "Skupiny hlásičů jsou v prvním patře aktivní.", profession: "pozarni_systemy" },
+    { sentence: "Prüfen Sie bitte die ___ und Akkus.", answer: "Batterien", translation: "Zkontrolujte prosím baterie a akumulátory.", profession: "pozarni_systemy" },
+    { sentence: "Der Rauchmelder hat einen Alarm ___.", answer: "ausgelöst", translation: "Kouřový hlásič vyvolal poplach.", profession: "pozarni_systemy" },
+    { sentence: "Wir müssen die ___ kontrollieren.", answer: "Rohrbegleitheizung", translation: "Musíme zkontrolovat ohřev potrubí.", profession: "pozarni_systemy" },
+    { sentence: "Das Feuerwehrbedienfeld befindet sich am ___.", answer: "Eingang", translation: "Ovládací panel hasičů se nachází u vchodu.", profession: "pozarni_systemy" },
+    { sentence: "Drücken Sie im Notfall die ___.", answer: "Handauslösung", translation: "V nouzi stiskněte ruční spuštění.", profession: "pozarni_systemy" },
+    { sentence: "Die ___ wurde automatisch aktiviert.", answer: "Klimaabschaltung", translation: "Vypnutí klimatizace bylo automaticky aktivováno.", profession: "pozarni_systemy" },
+    { sentence: "Die externe Stromversorgung ist ___.", answer: "ausgefallen", translation: "Externí napájení vypadlo.", profession: "pozarni_systemy" },
 ];
 
 
