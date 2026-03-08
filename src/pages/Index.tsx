@@ -90,7 +90,7 @@ const Index = () => {
                 text="Překládej slovíčka (použij diakritiku) a urči správný člen (der, die, das)."
               />
               <RuleItem
-                icon={<span className="text-2xl">👒</span>}
+                icon={<img src={sombreroIcon} alt="Sombréro" className="w-7 h-7" />}
                 title="Sbírej sombréra"
                 text="Přidají ti body navíc"
               />
