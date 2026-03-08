@@ -19,20 +19,47 @@ const Layout = ({ children }: LayoutProps) => {
 
   useEffect(() => {
     const trackVisit = async () => {
-      let visitorId = localStorage.getItem("gl_visitor_id");
+      // 1. Get or create visitor_id from cookie (30-day expiry)
+      let visitorId = document.cookie.match(/(?:^|; )gl_visitor_id=([^;]*)/)?.[1];
       if (!visitorId) {
-        visitorId = crypto.randomUUID();
-        localStorage.setItem("gl_visitor_id", visitorId);
+        // Migrate from old localStorage key if present
+        visitorId = localStorage.getItem("gl_visitor_id") || crypto.randomUUID();
+        localStorage.removeItem("gl_visitor_id");
       }
+      // Set/refresh cookie for 30 days
+      const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+      document.cookie = `gl_visitor_id=${visitorId}; expires=${expires}; path=/; SameSite=Lax`;
+
+      // 2. Client-side dedup: skip API call if already tracked today
+      const today = new Date().toISOString().slice(0, 10);
+      const lastTracked = localStorage.getItem("gl_visit_date");
+      if (lastTracked === today) {
+        // Still fetch the count without inserting
+        try {
+          const { data, error } = await supabase.functions.invoke("track-visit", {
+            body: { visitor_id: visitorId },
+          });
+          if (!error && data) {
+            setVisitorCount(data.count);
+            const d = new Date(data.date + "T00:00:00");
+            setVisitDate(d.toLocaleDateString("cs-CZ", { day: "numeric", month: "numeric", year: "numeric" }));
+          }
+        } catch (e) {
+          console.error("Visit tracking error:", e);
+        }
+        return;
+      }
+
+      // 3. First visit today — track it
       try {
         const { data, error } = await supabase.functions.invoke("track-visit", {
           body: { visitor_id: visitorId },
         });
         if (!error && data) {
           setVisitorCount(data.count);
-          // Format date to Czech
           const d = new Date(data.date + "T00:00:00");
           setVisitDate(d.toLocaleDateString("cs-CZ", { day: "numeric", month: "numeric", year: "numeric" }));
+          localStorage.setItem("gl_visit_date", today);
         }
       } catch (e) {
         console.error("Visit tracking error:", e);
