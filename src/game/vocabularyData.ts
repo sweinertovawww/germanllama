@@ -150,8 +150,13 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Verarbeitung?", options: ["der", "die", "das"], correct: 1, translation: "zpracování", profession: "truhlář" },
   { text: "Jaký člen má Kanten?", options: ["der", "die", "das"], correct: 1, translation: "hrany", profession: "truhlář" },
   { text: "Jaký člen má Säge?", options: ["der", "die", "das"], correct: 1, translation: "pila", profession: "truhlář" },
-  { text: "Jaký člen má Leim?", options: ["der", "die", "das"], correct: 0, translation: "lepidlo", profession: "truhlář" },
-  // === ZEDNÍK ===
+   { text: "Jaký člen má Leim?", options: ["der", "die", "das"], correct: 0, translation: "lepidlo", profession: "truhlář" },
+   // === AUTOMECHANIK ===
+   { text: "Jaký člen má Motor?", options: ["der", "die", "das"], correct: 0, translation: "motor", profession: "automechanik" },
+   { text: "Jaký člen má Bremse?", options: ["der", "die", "das"], correct: 1, translation: "brzda", profession: "automechanik" },
+   { text: "Jaký člen má Reifen?", options: ["der", "die", "das"], correct: 0, translation: "pneumatika", profession: "automechanik" },
+   { text: "Jaký člen má Werkzeug?", options: ["der", "die", "das"], correct: 2, translation: "nářadí", profession: "automechanik" },
+   // === ZEDNÍK ===
   { text: "Jaký člen má Gerüst?", options: ["der", "die", "das"], correct: 2, translation: "lešení", profession: "zedník" },
   { text: "Jaký člen má Zement?", options: ["der", "die", "das"], correct: 0, translation: "cement", profession: "zedník" },
   { text: "Jaký člen má Pläne?", options: ["der", "die", "das"], correct: 1, translation: "plány", profession: "zedník" },
