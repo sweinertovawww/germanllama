@@ -64,9 +64,6 @@ const Index = () => {
           <p className="text-lg sm:text-2xl text-white font-body font-bold max-w-2xl mx-auto leading-relaxed drop-shadow-md">
             Platforma pro samouky němčiny
           </p>
-          <p className="mt-3 text-sm text-white/80 drop-shadow">
-            Pro úroveň A2+ · Ideální pro práci v Německu
-          </p>
         </div>
       </header>
 
