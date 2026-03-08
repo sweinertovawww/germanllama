@@ -1122,7 +1122,9 @@ const LlamaGame = () => {
                 </button>
               </div>
               {fillResult === "correct" && (
-                <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>✓ Správně! +1 bod</p>
+                <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
+                  ✓ Správně! ({currentFillQuestion.answer}) +1 bod
+                </p>
               )}
               {fillResult === "wrong" && (
                 <p className="font-game text-xs text-destructive mt-3">
