@@ -63,14 +63,14 @@
   }
   30% {
     opacity: 1;
-    transform: translate(-50%, -50%) translate(var(--tw-translate-x, 0), var(--tw-translate-y, 0)) scale(1.2);
+    transform: translate(-50%, -50%) translate(var(--sp-x, 0), var(--sp-y, 0)) scale(1.2);
   }
   60% {
     opacity: 0.6;
-    transform: translate(-50%, -50%) translate(var(--tw-translate-x, 0), var(--tw-translate-y, 0)) scale(0.8);
+    transform: translate(-50%, -50%) translate(var(--sp-x, 0), var(--sp-y, 0)) scale(0.8);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) translate(var(--tw-translate-x, 0), var(--tw-translate-y, 0)) scale(0.3);
+    transform: translate(-50%, -50%) scale(0.3);
   }
 }

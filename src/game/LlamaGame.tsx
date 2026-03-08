@@ -452,8 +452,9 @@ const ShareButtons = ({ score, level }: { score: number; level: number }) => {
               key={i}
               className="absolute left-1/2 top-1/2 text-xs pointer-events-none"
               style={{
+                ["--sp-x" as string]: `${x}px`,
+                ["--sp-y" as string]: `${y}px`,
                 animation: `sparkle-burst 1.6s ease-in-out ${sp.delay} infinite`,
-                transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
               }}
             >
               ✨
