@@ -4,6 +4,7 @@ import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
 import { Gamepad2, Layers, Brain, PuzzleIcon, Instagram, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const [visitDate, setVisitDate] = useState<string>("");
+  const [privacyOpen, setPrivacyOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -225,16 +227,50 @@ const Layout = ({ children }: LayoutProps) => {
         {children}
       </main>
 
+      {/* Privacy Modal */}
+      <Dialog open={privacyOpen} onOpenChange={setPrivacyOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-game text-sm sm:text-base text-foreground">
+              🦙 Ochrana soukromí u Germanllama
+            </DialogTitle>
+          </DialogHeader>
+          <div className="font-body text-sm text-muted-foreground space-y-3">
+            <p>Vaše soukromí je pro nás důležité. Neukládáme žádné citlivé údaje ani e-maily.</p>
+            <p className="font-semibold text-foreground">Ukládáme pouze:</p>
+            <ol className="list-decimal list-inside space-y-1.5 pl-1">
+              <li>Vaše herní jméno (pro tabulku výsledků)</li>
+              <li>Vybranou profesi (pro vaše pohodlí)</li>
+              <li>Anonymní ID návštěvníka (abychom věděli, kolik lidí se s námi učí)</li>
+            </ol>
+            <p>Žádná data nepředáváme třetím stranám.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Footer */}
       <footer className="border-t border-border bg-foreground text-primary-foreground">
         <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
+          {/* Privacy strip */}
+          <div className="text-center mb-4 pb-4 border-b border-primary-foreground/10">
+            <p className="font-body text-sm text-primary-foreground/80 mb-1">
+              🦙 Moje lama nejí sušenky (cookies), jen je používá k tomu, aby si pamatovala tvé jméno a skóre!
+            </p>
+            <p className="font-body text-[11px] text-primary-foreground/40">
+              Tento web používá pouze nezbytné technické cookies a místní úložiště pro správné fungování her a anonymní statistiky návštěvnosti.
+              {" "}
+              <button
+                onClick={() => setPrivacyOpen(true)}
+                className="underline underline-offset-2 text-primary-foreground/60 hover:text-accent transition-colors"
+              >
+                soukromí
+              </button>
+            </p>
+          </div>
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
             <div className="flex flex-col items-center sm:items-start gap-1">
               <p className="text-xs text-primary-foreground/60 text-center sm:text-left">
                 © 2026 Germanllama.com · Všechna práva vyhrazena.
-              </p>
-              <p className="text-[10px] text-primary-foreground/40 text-center sm:text-left">
-                🍪 Tento web používá nezbytné technické cookies pro správné fungování statistik.
               </p>
             </div>
             <div className="flex items-center gap-4">
