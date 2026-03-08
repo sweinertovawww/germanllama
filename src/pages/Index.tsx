@@ -63,7 +63,7 @@ const Index = () => {
               Pravidla Hry
             </h2>
           </div>
-          <div className="bg-card rounded-b-2xl border border-t-0 border-border px-6 sm:px-8 py-4 shadow-sm">
+          <div className="bg-muted rounded-b-2xl border border-t-0 border-border px-6 sm:px-8 py-4 shadow-sm">
             <div className="space-y-2.5">
               <RuleItem
                 icon={<ArrowUp className="w-6 h-6 text-primary" />}
