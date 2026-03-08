@@ -340,7 +340,15 @@ export const FILL_QUESTIONS: FillQuestion[] = [
    { sentence: "Die Deadline ist morgen ___.", answer: "Mittag", translation: "Termín (deadline) je zítra v poledne.", profession: "obecné" },
    { sentence: "Vielen Dank für die gute ___.", answer: "Zusammenarbeit", translation: "Děkuji moc za dobrou spolupráci.", profession: "obecné" },
   { sentence: "Wo ___ ich das Dokument?", answer: "finde", translation: "Kde najdu ten dokument?", profession: "kancelář" },
-  // === TRUHLÁŘ ===
+   { sentence: "___ wir zusammen essen?", answer: "Gehen", translation: "Půjdeme spolu na oběd?", profession: "kancelář" },
+   { sentence: "Wann hast du ___?", answer: "Pause", translation: "Kdy máš dneska pauzu?", profession: "kancelář" },
+   { sentence: "Hast du den Chef ___?", answer: "gesprochen", translation: "Už jsi mluvil se šéfem?", profession: "kancelář" },
+   { sentence: "Ich ___ jetzt E-Mails.", answer: "schreibe", translation: "Teď píšu e-maily.", profession: "kancelář" },
+   { sentence: "___ du das Dokument?", answer: "Druckst", translation: "Vytiskneš ten dokument?", profession: "kancelář" },
+   { sentence: "Ich brauche einen ___.", answer: "Termin", translation: "Potřebuji si domluvit termín.", profession: "kancelář" },
+   { sentence: "Das Meeting ___ sofort.", answer: "beginnt", translation: "Ta schůzka hned začíná.", profession: "kancelář" },
+   { sentence: "Kannst du mir ___?", answer: "helfen", translation: "Můžeš mi prosím pomoct?", profession: "kancelář" },
+   // === TRUHLÁŘ ===
   { sentence: "Dieses Holz ist zu ___ für die Verarbeitung.", answer: "feucht", translation: "Toto dřevo je příliš vlhké na zpracování.", profession: "truhlář" },
   { sentence: "Ich muss die Kanten noch ___.", answer: "schleifen", translation: "Musím ještě zbrousit hrany.", profession: "truhlář" },
   { sentence: "Wo ist die ___ und der Leim?", answer: "Säge", translation: "Kde je pila a lepidlo?", profession: "truhlář" },
