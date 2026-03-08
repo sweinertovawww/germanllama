@@ -35,6 +35,7 @@ interface SentencePair {
   start: string;
   end: string;
   matched: boolean;
+  profession: string;
 }
 
 function splitSentence(sentence: string): { start: string; end: string } {
