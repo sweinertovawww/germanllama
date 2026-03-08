@@ -416,6 +416,17 @@ const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obs
   ctx.fillText(`${g.score}`, CANVAS_WIDTH - 100, 30);
 };
 
+const sparklePositions = [
+  { angle: 0, delay: "0s" },
+  { angle: 45, delay: "0.15s" },
+  { angle: 90, delay: "0.3s" },
+  { angle: 135, delay: "0.45s" },
+  { angle: 180, delay: "0.6s" },
+  { angle: 225, delay: "0.75s" },
+  { angle: 270, delay: "0.9s" },
+  { angle: 315, delay: "1.05s" },
+];
+
 const ShareButtons = ({ score, level }: { score: number; level: number }) => {
   const [copied, setCopied] = useState(false);
   const shareText = `Právě jsem vyskákal ${score} bodů (Level ${level}) v němčině na Germanllama.com! 🦙🇩🇪`;
@@ -428,15 +439,35 @@ const ShareButtons = ({ score, level }: { score: number; level: number }) => {
   };
 
   return (
-    <div className="bg-share-bg rounded-2xl shadow-lg p-6 w-full max-w-xs flex flex-col items-center gap-3">
+    <div className="bg-share-bg rounded-2xl shadow-lg p-6 w-full max-w-xs flex flex-col items-center gap-3 animate-fade-in">
       <span className="font-game text-sm text-foreground text-center">📣 Sdílej výsledek</span>
-      <button
-        onClick={handleCopy}
-        className="flex items-center gap-2 font-game text-xs px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
-      >
-        {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-        {copied ? "Zkopírováno!" : "Kopírovat"}
-      </button>
+      <div className="relative">
+        {/* Sparkle particles */}
+        {sparklePositions.map((sp, i) => {
+          const rad = (sp.angle * Math.PI) / 180;
+          const x = Math.cos(rad) * 38;
+          const y = Math.sin(rad) * 38;
+          return (
+            <span
+              key={i}
+              className="absolute left-1/2 top-1/2 text-xs pointer-events-none"
+              style={{
+                animation: `sparkle-burst 1.6s ease-in-out ${sp.delay} infinite`,
+                transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
+              }}
+            >
+              ✨
+            </span>
+          );
+        })}
+        <button
+          onClick={handleCopy}
+          className="relative z-10 flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
+        >
+          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+          {copied ? "Zkopírováno!" : "Kopírovat"}
+        </button>
+      </div>
     </div>
   );
 };
