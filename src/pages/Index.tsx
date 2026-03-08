@@ -167,12 +167,12 @@ const Index = () => {
   );
 };
 
-function RuleCard({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
+function RuleItem({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
   return (
-    <div className="flex items-start gap-3 bg-card rounded-xl border border-border p-4 shadow-sm">
-      <div className="mt-0.5 shrink-0">{icon}</div>
+    <div className="flex items-start gap-4">
+      <div className="mt-1 shrink-0">{icon}</div>
       <div>
-        <h3 className="font-body font-bold text-foreground text-sm mb-1">{title}</h3>
+        <h3 className="font-body font-bold text-foreground">{title}</h3>
         <p className="font-body text-muted-foreground text-sm leading-relaxed">{text}</p>
       </div>
     </div>
