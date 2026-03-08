@@ -103,10 +103,9 @@ const Layout = ({ children }: LayoutProps) => {
             </span>
           )}
         </div>
-            </button>
-          </div>
-        )}
       </nav>
+      {/* Spacer for fixed nav */}
+      <div className="h-[88px] sm:h-[120px] md:h-[100px]" />
 
       {/* Hero Section */}
       <header className="relative overflow-hidden bg-primary/10" style={{ backgroundImage: `url(${heroBackground})`, backgroundSize: 'cover', backgroundPosition: 'center 40%' }}>
