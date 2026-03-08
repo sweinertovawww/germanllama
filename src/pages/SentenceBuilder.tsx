@@ -52,7 +52,7 @@ function buildRound(source = FILL_QUESTIONS): SentencePair[] {
   return selected.map((q, i) => {
     const full = q.sentence.replace("___", q.answer);
     const { start, end } = splitSentence(full);
-    return { id: i, fullGerman: full, translation: q.translation, start, end, matched: false };
+    return { id: i, fullGerman: full, translation: q.translation, start, end, matched: false, profession: q.profession };
   });
 }
 
