@@ -1,7 +1,9 @@
 import { useState, useMemo, useCallback } from "react";
 import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
-import { getAllFlashCards, type FlashCard } from "@/game/vocabularyData";
+import { getAllFlashCards, filterByProfession, type FlashCard } from "@/game/vocabularyData";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
+import { useProfessionFilter } from "@/hooks/useProfessionFilter";
+import ProfessionFilter from "@/components/ProfessionFilter";
 
 function shuffleArray<T>(arr: T[]): T[] {
   const shuffled = [...arr];
