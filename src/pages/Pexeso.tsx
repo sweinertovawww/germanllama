@@ -275,7 +275,7 @@ const Pexeso = () => {
                         const newCompleted = completedGames + 1;
                         const newPairs = totalMatchedPairs + totalPairs;
                         navigator.clipboard.writeText(
-                          `V pexesu na https://www.google.com/search?q=Germanllama.com jsem našel už ${newPairs} dvojic a dokončil ${newCompleted} kol! Zkus to taky 🦙`
+                          `V pexesu na https://www.germanllama.com jsem našel už ${newPairs} dvojic a dokončil ${newCompleted} kol! Zkus to taky 🦙`
                         );
                         setCopied(true);
                         setTimeout(() => setCopied(false), 2000);
