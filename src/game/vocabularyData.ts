@@ -163,7 +163,7 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Gerüst?", options: ["der", "die", "das"], correct: 2, translation: "lešení", profession: "zedník" },
   { text: "Jaký člen má Zement?", options: ["der", "die", "das"], correct: 0, translation: "cement", profession: "zedník" },
   { text: "Jaký člen má Pläne?", options: ["der", "die", "das"], correct: 1, translation: "plány", profession: "zedník" },
-  { text: "Jaký člen má Erdgeschoss?", options: ["der", "die", "das"], correct: 2, translation: "přízemí", profession: "zedník" },
+  { text: "Jaký člen má Erdgeschoss?", options: ["der", "die", "das"], correct: 2, translation: "přízemí", profession: "obecné" },
   { text: "Jaký člen má Mörtel?", options: ["der", "die", "das"], correct: 0, translation: "malta", profession: "zedník" },
   { text: "Jaký člen má Mauer?", options: ["der", "die", "das"], correct: 1, translation: "zeď", profession: "zedník" },
    { text: "Jaký člen má Baustelle?", options: ["der", "die", "das"], correct: 1, translation: "stavba (místo)", profession: "zedník" },
