@@ -518,7 +518,7 @@ const LlamaGame = () => {
     const count = addDailyPlayer(playerName.trim());
     setDailyPlayerCount(count);
     setGameState("playing");
-  }, [playerName]);
+  }, [playerName, filteredQuestions, filteredFill]);
 
   const triggerQuiz = useCallback(() => {
     const q = shuffledQuestionsRef.current[questionIndexRef.current % shuffledQuestionsRef.current.length];

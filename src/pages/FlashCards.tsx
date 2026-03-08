@@ -27,7 +27,10 @@ const FlashCards = () => {
   const [flipped, setFlipped] = useState(false);
 
   const startGame = useCallback(() => {
-    const filtered = filterByProfession(allCardsRaw, profFilter.selected);
+    let filtered = filterByProfession(allCardsRaw, profFilter.selected);
+    if (filtered.length === 0) {
+      filtered = allCardsRaw.filter(c => c.profession === "obecné");
+    }
     setCards(shuffleArray(filtered));
     setCurrentIndex(0);
     setFlipped(false);
