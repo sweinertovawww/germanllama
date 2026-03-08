@@ -240,7 +240,6 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Staub?", options: ["der", "die", "das"], correct: 0, translation: "prach", profession: "uklízečka" },
   { text: "Jaký člen má Müll?", options: ["der", "die", "das"], correct: 0, translation: "odpadky", profession: "uklízečka" },
   { text: "Jaký člen má Mülltonne?", options: ["der", "die", "das"], correct: 1, translation: "popelnice", profession: "uklízečka" },
-  { text: "Jaký člen má Fensterleder?", options: ["der", "die", "das"], correct: 2, translation: "jelenice na okna", profession: "uklízečka" },
   { text: "Jaký člen má Schwamm?", options: ["der", "die", "das"], correct: 0, translation: "houbička", profession: "uklízečka" },
   { text: "Jaký člen má Waschbecken?", options: ["der", "die", "das"], correct: 2, translation: "umyvadlo", profession: "uklízečka" },
   { text: "Jaký člen má Toilette?", options: ["der", "die", "das"], correct: 1, translation: "toaleta", profession: "uklízečka" },
