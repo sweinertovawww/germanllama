@@ -46,8 +46,8 @@ function splitSentence(sentence: string): { start: string; end: string } {
   };
 }
 
-function buildRound(): SentencePair[] {
-  const selected = shuffleArray(FILL_QUESTIONS).slice(0, SENTENCES_PER_ROUND);
+function buildRound(source = FILL_QUESTIONS): SentencePair[] {
+  const selected = shuffleArray(source).slice(0, SENTENCES_PER_ROUND);
   return selected.map((q, i) => {
     const full = q.sentence.replace("___", q.answer);
     const { start, end } = splitSentence(full);
