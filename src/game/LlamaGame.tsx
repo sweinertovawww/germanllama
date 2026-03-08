@@ -947,6 +947,7 @@ const LlamaGame = () => {
               <p className="font-game text-xs sm:text-sm text-card-foreground mb-3 sm:mb-4 leading-relaxed">
                 {currentQuestion.text}
               </p>
+              <span className="font-game text-[7px] text-muted-foreground/60 block mb-2">[{currentQuestion.profession}]</span>
 
               {/* Phase 1: Article selection */}
               {quizPhase === "article" && (
