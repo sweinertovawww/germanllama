@@ -21,7 +21,7 @@ const Index = () => {
             <img
               src={germanLlamaLogo}
               alt="GermanLlama logo"
-              className="w-16 h-16 rounded-lg"
+              className="w-20 h-20 rounded-lg"
             />
             <span className="font-body font-bold text-2xl text-foreground">
               Germanllama.com
