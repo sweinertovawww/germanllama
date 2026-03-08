@@ -422,6 +422,12 @@ export const FILL_QUESTIONS: FillQuestion[] = [
    { sentence: "Ich muss das ___ wechseln.", answer: "Öl", translation: "Musím vyměnit olej.", profession: "automechanik" },
    { sentence: "Die Batterie ist ___.", answer: "leer", translation: "Baterie je vybitá.", profession: "automechanik" },
    { sentence: "Können Sie den ___ prüfen?", answer: "Reifendruck", translation: "Můžete zkontrolovat tlak v pneumatikách?", profession: "automechanik" },
+   // === ZAHRADNÍK ===
+   { sentence: "Ich muss die Pflanzen ___.", answer: "gießen", translation: "Musím zalít rostliny.", profession: "zahradník" },
+   { sentence: "Wir ___ heute die Hecke.", answer: "schneiden", translation: "Dnes stříháme živý plot.", profession: "zahradník" },
+   { sentence: "Der Rasen muss ___ werden.", answer: "gemäht", translation: "Trávník se musí posekat.", profession: "zahradník" },
+   { sentence: "Haben Sie ___ für die Rosen?", answer: "Dünger", translation: "Máte hnojivo na růže?", profession: "zahradník" },
+   { sentence: "Ich ___ einen neuen Baum im Garten.", answer: "pflanze", translation: "Sázím na zahradě nový strom.", profession: "zahradník" },
 ];
 
 // Helper to extract German word from question text
