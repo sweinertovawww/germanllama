@@ -16,14 +16,14 @@ const Index = () => {
     <div className="flex flex-col min-h-[100dvh] bg-background">
       {/* Navigation */}
       <nav className="w-full bg-card/80 backdrop-blur-sm border-b border-border sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative">
-          <div className="flex items-center gap-3">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between relative">
+          <div className="flex items-center gap-4">
             <img
               src={germanLlamaLogo}
               alt="GermanLlama logo"
-              className="w-10 h-10 rounded-lg"
+              className="w-14 h-14 rounded-lg"
             />
-            <span className="font-body font-bold text-lg text-foreground">
+            <span className="font-body font-bold text-xl text-foreground">
               Germanllama.com
             </span>
           </div>
