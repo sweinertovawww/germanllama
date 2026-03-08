@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { FILL_QUESTIONS } from "@/game/vocabularyData";
-import { Copy, Check, ChevronDown, ChevronUp, ArrowRight, GripVertical } from "lucide-react";
+import { Copy, Check, ArrowRight, GripVertical, PuzzleIcon } from "lucide-react";
 import {
   DndContext,
   DragOverlay,
