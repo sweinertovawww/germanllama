@@ -74,3 +74,18 @@
     transform: translate(-50%, -50%) scale(0.3);
   }
 }
+
+@keyframes sparkle-float {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) translateY(-6px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.4) translateY(0);
+  }
+}
