@@ -566,3 +566,48 @@ die Rohrbegleitheizung;ohřev potrubí;systemy_pro_haseni
 der Heizkreis;topný okruh;systemy_pro_haseni
 das Eingangsmodul;vstupní modul;systemy_pro_haseni
 das Ausgangsmodul;výstupní modul;systemy_pro_haseni
+die Flaschenbatterie;lahvová baterie;systemy_pro_haseni
+die Löschmittelflaschen;láhve s hasivem;systemy_pro_haseni
+das Sammelrohr;sběrné potrubí;systemy_pro_haseni
+die Wiegeeinrichtung;vážicí zařízení;systemy_pro_haseni
+die Steuerflaschen;kontrolní lahve;systemy_pro_haseni
+das Verteilerrohr;rozdělovač / rozdělovací potrubí;systemy_pro_haseni
+das Sicherheitsventil;bezpečnostní ventil;systemy_pro_haseni
+das Bereichsventil;sekční ventil;systemy_pro_haseni
+das Richtungsventil;směrový ventil;systemy_pro_haseni
+der Druckkompensator;kompenzátor tlaku;systemy_pro_haseni
+das Auslösegewicht;spouštěcí hmotnost;systemy_pro_haseni
+die Blockiereinrichtung;blokovací zařízení;systemy_pro_haseni
+die Verzögerungseinrichtung;zpožďovací zařízení;systemy_pro_haseni
+das Wechselrückschlagventil;střídavý zpětný ventil;systemy_pro_haseni
+der Schmutzfänger;lapač nečistot;systemy_pro_haseni
+die Schleichgassicherung;ochrana proti úniku plynu;systemy_pro_haseni
+das Seilzugsystem;kabelový systém / lankový systém;systemy_pro_haseni
+das Thermotrennglied;tepelný izolátor;systemy_pro_haseni
+der pneumatische Wärmefühler;pneumatický tepelný senzor;systemy_pro_haseni
+das Makrofon;siréna / makrofon;systemy_pro_haseni
+das Alarmsteuergerät;poplachová řídicí jednotka;systemy_pro_haseni
+die pneumatische Türentriegelung;pneumatické odblokování dveří;systemy_pro_haseni
+die elektrische Hupe;elektrická houkačka;systemy_pro_haseni
+die Blitzleuchte;blikající maják;systemy_pro_haseni
+der Niederdruckbehälter;nízkotlaká nádrž;systemy_pro_haseni
+das Kühlaggregat;chladicí jednotka;systemy_pro_haseni
+die Befülleinrichtung;plnicí zařízení;systemy_pro_haseni
+die Sicherheitsabsperrarmatur;bezpečnostní uzavírací ventil;systemy_pro_haseni
+das Doppelsicherheitsventil;dvojitý pojistný ventil;systemy_pro_haseni
+der elektrische Schaltschrank;elektrický rozvaděč;systemy_pro_haseni
+die Hauptabsperrarmatur;hlavní uzavírací ventil;systemy_pro_haseni
+das Vorsteuerventil;předstihový řídicí ventil;systemy_pro_haseni
+die Odorierungseinrichtung;odorizační zařízení;systemy_pro_haseni
+die Servoventileinheit;jednotka servoventilu;systemy_pro_haseni
+das Entlüftungsventil;odvzdušňovací ventil;systemy_pro_haseni
+das Rückschlagventil;zpětná klapka;systemy_pro_haseni
+die exzentrische Klappe;excentrická klapka;systemy_pro_haseni
+die Türen und Tore;dveře a brány;systemy_pro_haseni
+das Branderkennungselement;prvek detekce požáru;systemy_pro_haseni
+die BMZ Požární ústředna;požární ústředna (BMZ);systemy_pro_haseni
+die elektrische Steuereinrichtung;elektrická řídicí jednotka;systemy_pro_haseni
+die Energieversorgung;dodávka energie / napájení;systemy_pro_haseni
+die Warnschilder;výstražné značení;systemy_pro_haseni
+die akustische Alarmierung;akustický poplašný systém;systemy_pro_haseni
+die optische Alarmierung;optický poplašný systém;systemy_pro_haseni
