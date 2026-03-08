@@ -883,7 +883,9 @@ const LlamaGame = () => {
         🦙 GermanLlama.com
       </h1>
 
-      <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
+      {gameState === "idle" && (
+        <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
+      )}
 
       <div
         ref={containerRef}

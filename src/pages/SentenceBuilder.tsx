@@ -146,15 +146,29 @@ const SentenceBuilder = () => {
   const isMobile = useIsMobile();
   const profFilter = useProfessionFilter();
   const filteredQuestions = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
-  const [pairs, setPairs] = useState<SentencePair[]>(() => buildRound(filteredQuestions));
+  const [inLobby, setInLobby] = useState(true);
+  const [pairs, setPairs] = useState<SentencePair[]>([]);
   const [score, setScore] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [completedRounds, setCompletedRounds] = useState(0);
   const [copied, setCopied] = useState(false);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
   const [overSlotId, setOverSlotId] = useState<string | null>(null);
-  // Tap-to-select state (mobile fallback)
   const [selectedEndId, setSelectedEndId] = useState<number | null>(null);
+
+  const startGame = useCallback(() => {
+    setPairs(buildRound(filteredQuestions));
+    setScore(0);
+    setSelectedEndId(null);
+    setInLobby(false);
+  }, [filteredQuestions]);
+
+  const goToLobby = useCallback(() => {
+    setInLobby(true);
+    setPairs([]);
+    setScore(0);
+    setSelectedEndId(null);
+  }, []);
 
   const availableEnds = useMemo(() => {
     const matched = new Set(pairs.filter((p) => p.matched).map((p) => p.id));
@@ -277,8 +291,20 @@ const SentenceBuilder = () => {
         </div>
       </section>
 
-      <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
-
+      {inLobby ? (
+        <section className="px-3 sm:px-4 pb-8">
+          <div className="max-w-4xl mx-auto flex flex-col items-center gap-4">
+            <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
+            <button
+              onClick={startGame}
+              className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg"
+            >
+              🎮 START HRY
+            </button>
+          </div>
+        </section>
+      ) : (
+      <>
       {/* Game Area */}
       <section className="px-3 sm:px-4 pb-8">
         <div className="max-w-4xl mx-auto">
@@ -287,9 +313,17 @@ const SentenceBuilder = () => {
             <span className="font-game text-[10px] sm:text-xs text-muted-foreground">
               Kolo: {completedRounds + 1}
             </span>
-            <span className="font-game text-[10px] sm:text-xs text-foreground">
-              ✅ {score}/{SENTENCES_PER_ROUND}
-            </span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={goToLobby}
+                className="font-game text-[10px] sm:text-xs border border-border text-muted-foreground px-2.5 py-1 rounded-lg hover:text-foreground hover:border-primary/50 transition-colors"
+              >
+                ← Změnit obor
+              </button>
+              <span className="font-game text-[10px] sm:text-xs text-foreground">
+                ✅ {score}/{SENTENCES_PER_ROUND}
+              </span>
+            </div>
           </div>
 
           <DndContext
@@ -413,16 +447,26 @@ const SentenceBuilder = () => {
                 </div>
               </div>
 
-              <button
-                onClick={handleNextRound}
-                className="font-game text-xs px-6 py-3 rounded-xl bg-accent text-accent-foreground hover:scale-105 transition-transform shadow-md"
-              >
-                Další věty →
-              </button>
+              <div className="flex items-center justify-center gap-3 flex-wrap">
+                <button
+                  onClick={handleNextRound}
+                  className="font-game text-xs px-6 py-3 rounded-xl bg-accent text-accent-foreground hover:scale-105 transition-transform shadow-md"
+                >
+                  Další věty →
+                </button>
+                <button
+                  onClick={goToLobby}
+                  className="font-game text-xs border-2 border-border text-muted-foreground px-5 py-2.5 rounded-xl hover:border-primary/50 hover:text-foreground transition-colors"
+                >
+                  Změnit obor
+                </button>
+              </div>
             </div>
           )}
         </div>
       </section>
+      </>
+      )}
     </>
   );
 };
