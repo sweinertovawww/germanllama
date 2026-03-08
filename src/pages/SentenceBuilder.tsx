@@ -291,8 +291,20 @@ const SentenceBuilder = () => {
         </div>
       </section>
 
-      <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
-
+      {inLobby ? (
+        <section className="px-3 sm:px-4 pb-8">
+          <div className="max-w-4xl mx-auto flex flex-col items-center gap-4">
+            <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
+            <button
+              onClick={startGame}
+              className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg"
+            >
+              🎮 START HRY
+            </button>
+          </div>
+        </section>
+      ) : (
+      <>
       {/* Game Area */}
       <section className="px-3 sm:px-4 pb-8">
         <div className="max-w-4xl mx-auto">
@@ -301,9 +313,17 @@ const SentenceBuilder = () => {
             <span className="font-game text-[10px] sm:text-xs text-muted-foreground">
               Kolo: {completedRounds + 1}
             </span>
-            <span className="font-game text-[10px] sm:text-xs text-foreground">
-              ✅ {score}/{SENTENCES_PER_ROUND}
-            </span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={goToLobby}
+                className="font-game text-[10px] sm:text-xs border border-border text-muted-foreground px-2.5 py-1 rounded-lg hover:text-foreground hover:border-primary/50 transition-colors"
+              >
+                ← Změnit obor
+              </button>
+              <span className="font-game text-[10px] sm:text-xs text-foreground">
+                ✅ {score}/{SENTENCES_PER_ROUND}
+              </span>
+            </div>
           </div>
 
           <DndContext
