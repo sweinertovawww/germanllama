@@ -948,8 +948,7 @@ const LlamaGame = () => {
         {/* Lobby overlay — floating above the canvas */}
         {inLobby && (
           <div
-            className="absolute inset-0 z-30 flex flex-col items-center justify-center rounded-lg sm:rounded-xl"
-            style={{ backgroundColor: "hsla(var(--foreground) / 0.25)", backdropFilter: "blur(2px)" }}
+            className="absolute inset-0 z-30 flex flex-col items-center justify-center rounded-lg sm:rounded-xl bg-background/40 backdrop-blur-sm"
           >
             <div className="flex flex-col items-center gap-3 px-4 py-4 max-w-[95%] overflow-y-auto max-h-full">
               <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
