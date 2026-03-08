@@ -1154,6 +1154,11 @@ const LlamaGame = () => {
         </div>
       </div>
 
+      {/* Share buttons - visible on game over */}
+      {gameState === "gameover" && score > 0 && (
+        <ShareButtons score={score} level={level} />
+      )}
+
       <button
         onClick={() => {
           if (gameState === "playing") jump();
