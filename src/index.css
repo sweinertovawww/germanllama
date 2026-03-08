@@ -75,6 +75,26 @@
   }
 }
 
+@keyframes game-over-flash {
+  0% { opacity: 0; }
+  30% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+  100% { opacity: 0.6; }
+}
+
+@keyframes retry-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 4px 20px hsla(168, 72%, 40%, 0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 4px 30px hsla(168, 72%, 40%, 0.6), 0 0 40px hsla(168, 72%, 40%, 0.3); }
+}
+
+.animate-game-over-flash {
+  animation: game-over-flash 0.6s ease-out forwards;
+}
+
+.animate-retry-pulse {
+  animation: retry-pulse 2s ease-in-out infinite;
+}
+
 @keyframes sparkle-float {
   0% {
     opacity: 0;
