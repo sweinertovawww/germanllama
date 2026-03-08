@@ -1164,8 +1164,7 @@ const LlamaGame = () => {
         </div>
       )}
 
-      {/* Share buttons - visible on game over */}
-      {gameState === "over" && score > 0 && (
+      {!inLobby && gameState === "over" && score > 0 && (
         <ShareButtons score={score} level={level} />
       )}
 
