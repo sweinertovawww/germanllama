@@ -858,7 +858,7 @@ const LlamaGame = () => {
     return () => cancelAnimationFrame(animId);
   }, [gameState, triggerQuiz, triggerStarQuiz]);
 
-  // Draw idle/game over screen
+  // Draw idle/lobby scene (static background with llama)
   useEffect(() => {
     if (gameState === "playing" || gameState === "quiz" || gameState === "starQuiz") return;
     const canvas = canvasRef.current;
@@ -867,18 +867,8 @@ const LlamaGame = () => {
     if (!ctx) return;
 
     drawScene(ctx, { groundOffset: 0, obstacles: [], stars: [], sombreros: [], wolves: [], llamaY: GROUND_Y, frameCount: 0, score: 0 });
-
-    ctx.fillStyle = "#2a1a0a";
-    ctx.font = "20px 'Press Start 2P', monospace";
-    ctx.textAlign = "center";
-
-    if (gameState === "idle") {
-      ctx.fillText("Llama Run", CANVAS_WIDTH / 2, 80);
-      ctx.font = "10px 'Press Start 2P', monospace";
-      ctx.fillText("Zadej jméno a stiskni START", CANVAS_WIDTH / 2, 120);
-    }
     ctx.textAlign = "start";
-  }, [gameState, score, highScore]);
+  }, [gameState, score, highScore, inLobby]);
 
   const totalTrophies = Math.floor(score / 10);
   const level = Math.floor(totalTrophies / 10) + 1;
