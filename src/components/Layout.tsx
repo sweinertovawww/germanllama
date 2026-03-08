@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
-import { Gamepad2, Layers, Brain, PuzzleIcon, Instagram, Menu, X } from "lucide-react";
+import { Gamepad2, Layers, Brain, PuzzleIcon, Instagram, Menu, X, Users } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,10 +11,36 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
+  const [visitDate, setVisitDate] = useState<string>("");
   const navigate = useNavigate();
   const location = useLocation();
 
   const activeTab = location.pathname === "/flashcards" ? "flash-cards" : location.pathname === "/pexeso" ? "pexeso" : location.pathname === "/skladani-vet" ? "sentence-builder" : "llama-run";
+
+  useEffect(() => {
+    const trackVisit = async () => {
+      let visitorId = localStorage.getItem("gl_visitor_id");
+      if (!visitorId) {
+        visitorId = crypto.randomUUID();
+        localStorage.setItem("gl_visitor_id", visitorId);
+      }
+      try {
+        const { data, error } = await supabase.functions.invoke("track-visit", {
+          body: { visitor_id: visitorId },
+        });
+        if (!error && data) {
+          setVisitorCount(data.count);
+          // Format date to Czech
+          const d = new Date(data.date + "T00:00:00");
+          setVisitDate(d.toLocaleDateString("cs-CZ", { day: "numeric", month: "numeric", year: "numeric" }));
+        }
+      } catch (e) {
+        console.error("Visit tracking error:", e);
+      }
+    };
+    trackVisit();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
@@ -37,6 +64,12 @@ const Layout = ({ children }: LayoutProps) => {
             <span className="font-body text-sm text-foreground">
               Platforma pro samouky němčiny
             </span>
+            {visitorCount !== null && (
+              <span className="flex items-center gap-1.5 font-body text-xs text-muted-foreground mt-1">
+                <Users className="w-3.5 h-3.5" />
+                Počet samouků na webu dnes ({visitDate}): {visitorCount}
+              </span>
+            )}
           </div>
           <div className="hidden sm:flex items-center gap-6">
             <button
@@ -63,6 +96,12 @@ const Layout = ({ children }: LayoutProps) => {
               <span className="font-body text-xs text-foreground">
                 Platforma pro samouky němčiny
               </span>
+              {visitorCount !== null && (
+                <span className="flex items-center gap-1 font-body text-[10px] text-muted-foreground mt-1">
+                  <Users className="w-3 h-3" />
+                  Počet samouků na webu dnes ({visitDate}): {visitorCount}
+                </span>
+              )}
             </div>
             <button
               onClick={() => { navigate("/kontakt"); setMenuOpen(false); }}

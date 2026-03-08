@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      daily_visits: {
+        Row: {
+          created_at: string
+          id: string
+          visit_date: string
+          visitor_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          visit_date?: string
+          visitor_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          visit_date?: string
+          visitor_id?: string
+        }
+        Relationships: []
+      }
       feedback: {
         Row: {
           created_at: string
