@@ -1221,32 +1221,34 @@ const LlamaGame = () => {
         )}
       </div>
 
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex gap-4 sm:gap-8 font-game text-xs sm:text-sm">
-          <span className="text-muted-foreground">
-            Skóre: <span className="text-foreground">{score}</span>
-          </span>
-          <span className="text-muted-foreground">
-            Nejlepší: <span className="text-primary">{highScore}</span>
-          </span>
-        </div>
-        <div className="flex gap-4 sm:gap-6 font-game text-xs items-center">
-          <span className="text-muted-foreground">
-            🏆 {"🏆".repeat(trophiesInLevel)}{"◦".repeat(10 - trophiesInLevel)} <span className="text-foreground">{totalTrophies}</span>
-          </span>
-          <span className="text-muted-foreground">
-            ⭐ Level: <span className="text-primary">{level}</span>
-          </span>
-        </div>
-        {dailyBest && (
-          <div className="font-game text-xs text-muted-foreground">
-            🏆 Dnes nejlepší: <span className="text-primary">{dailyBest.name}</span> — <span className="text-foreground">{dailyBest.score} b.</span>
+      {gameState !== "over" && (
+        <div className="flex flex-col items-center gap-2">
+          <div className="flex gap-4 sm:gap-8 font-game text-xs sm:text-sm">
+            <span className="text-muted-foreground">
+              Skóre: <span className="text-foreground">{score}</span>
+            </span>
+            <span className="text-muted-foreground">
+              Nejlepší: <span className="text-primary">{highScore}</span>
+            </span>
           </div>
-        )}
-        <div className="font-game text-xs text-muted-foreground">
-          👥 Hráči dnes: <span className="text-foreground">{dailyPlayerCount}</span>
+          <div className="flex gap-4 sm:gap-6 font-game text-xs items-center">
+            <span className="text-muted-foreground">
+              🏆 {"🏆".repeat(trophiesInLevel)}{"◦".repeat(10 - trophiesInLevel)} <span className="text-foreground">{totalTrophies}</span>
+            </span>
+            <span className="text-muted-foreground">
+              ⭐ Level: <span className="text-primary">{level}</span>
+            </span>
+          </div>
+          {dailyBest && (
+            <div className="font-game text-xs text-muted-foreground">
+              🏆 Dnes nejlepší: <span className="text-primary">{dailyBest.name}</span> — <span className="text-foreground">{dailyBest.score} b.</span>
+            </div>
+          )}
+          <div className="font-game text-xs text-muted-foreground">
+            👥 Hráči dnes: <span className="text-foreground">{dailyPlayerCount}</span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Share buttons - visible on game over */}
       {gameState === "over" && score > 0 && (
