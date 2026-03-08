@@ -84,7 +84,7 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Tab Navigation */}
       <section className="bg-card border-b border-border">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
             <button
               onClick={() => navigate("/")}
               className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-200 border-2 ${
