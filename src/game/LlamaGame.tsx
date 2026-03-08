@@ -495,10 +495,10 @@ const LlamaGame = () => {
     g.groundOffset = 0;
     questionIndexRef.current = 0;
     fillIndexRef.current = 0;
-    const lamaQ = QUESTIONS.find(q => q.text.includes("Lama"))!;
-    const rest = QUESTIONS.filter(q => !q.text.includes("Lama")).sort(() => Math.random() - 0.5);
-    shuffledQuestionsRef.current = [lamaQ, ...rest];
-    shuffledFillRef.current = [...FILL_QUESTIONS].sort(() => Math.random() - 0.5);
+    const lamaQ = filteredQuestions.find(q => q.text.includes("Lama"));
+    const rest = filteredQuestions.filter(q => !q.text.includes("Lama")).sort(() => Math.random() - 0.5);
+    shuffledQuestionsRef.current = lamaQ ? [lamaQ, ...rest] : rest;
+    shuffledFillRef.current = [...filteredFill].sort(() => Math.random() - 0.5);
     setScore(0);
     setCurrentQuestion(null);
     setCurrentFillQuestion(null);
