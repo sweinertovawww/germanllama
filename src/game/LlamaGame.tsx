@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Share2, Facebook, Linkedin, MessageSquare, Copy, Check } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
