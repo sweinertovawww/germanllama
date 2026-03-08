@@ -155,50 +155,37 @@ const SentenceBuilder = () => {
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
   const [overSlotId, setOverSlotId] = useState<string | null>(null);
   const [selectedEndId, setSelectedEndId] = useState<number | null>(null);
-  const [usedIndices, setUsedIndices] = useState<Set<number>>(new Set());
 
-  // Build a round from filtered questions, avoiding recently used sentences
-  const buildNextRound = useCallback((questions: typeof FILL_QUESTIONS, used: Set<number>): { pairs: SentencePair[]; newUsed: Set<number> } => {
-    let available = questions.filter((_, i) => !used.has(i));
-    let newUsed = new Set(used);
+  // Queue-based approach: a ref holds a pre-shuffled queue of all sentences.
+  // Each round pops SENTENCES_PER_ROUND from the front. When exhausted, reshuffle.
+  const queueRef = useRef<typeof FILL_QUESTIONS>([]);
 
-    // If not enough unseen sentences, reset the pool
-    if (available.length < SENTENCES_PER_ROUND) {
-      newUsed = new Set();
-      available = [...questions];
+  const popRound = useCallback(() => {
+    // If queue doesn't have enough, reshuffle the full pool
+    if (queueRef.current.length < SENTENCES_PER_ROUND) {
+      queueRef.current = shuffleArray(filteredQuestions);
     }
-
-    const shuffled = shuffleArray(available.map((q, i) => ({ q, origIdx: questions.indexOf(q) })));
-    const selected = shuffled.slice(0, SENTENCES_PER_ROUND);
-
-    selected.forEach(s => newUsed.add(s.origIdx));
-
-    const builtPairs = selected.map(({ q }, i) => {
-      const full = q.sentence.replace("___", q.answer);
-      const { start, end } = splitSentence(full);
-      return { id: i, fullGerman: full, translation: q.translation, start, end, matched: false, profession: q.profession };
-    });
-
-    return { pairs: builtPairs, newUsed };
-  }, []);
+    const batch = queueRef.current.splice(0, SENTENCES_PER_ROUND);
+    return makePairs(batch);
+  }, [filteredQuestions]);
 
   const startGame = useCallback(() => {
-    const { pairs: newPairs, newUsed } = buildNextRound(filteredQuestions, new Set());
-    setPairs(newPairs);
-    setUsedIndices(newUsed);
+    // Fresh shuffle of the entire pool
+    queueRef.current = shuffleArray(filteredQuestions);
+    setPairs(popRound());
     setScore(0);
     setTotalScore(0);
     setCompletedRounds(0);
     setSelectedEndId(null);
     setInLobby(false);
-  }, [filteredQuestions, buildNextRound]);
+  }, [filteredQuestions, popRound]);
 
   const goToLobby = useCallback(() => {
     setInLobby(true);
     setPairs([]);
     setScore(0);
     setSelectedEndId(null);
-    setUsedIndices(new Set());
+    queueRef.current = [];
   }, []);
 
   const availableEnds = useMemo(() => {
@@ -267,15 +254,11 @@ const SentenceBuilder = () => {
   );
 
   const handleNextRound = () => {
-    const newTotalScore = totalScore + score;
-    const newRounds = completedRounds + 1;
-    setTotalScore(newTotalScore);
-    setCompletedRounds(newRounds);
+    setTotalScore(prev => prev + score);
+    setCompletedRounds(prev => prev + 1);
     setScore(0);
     setSelectedEndId(null);
-    const { pairs: newPairs, newUsed } = buildNextRound(filteredQuestions, usedIndices);
-    setPairs(newPairs);
-    setUsedIndices(newUsed);
+    setPairs(popRound());
   };
 
   const handleCopy = () => {
