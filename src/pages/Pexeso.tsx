@@ -28,8 +28,8 @@ function shuffleArray<T>(arr: T[]): T[] {
 
 const MAX_FLIPS = 3;
 
-function buildCards(pairCount: number): MemoryCard[] {
-  let allCards = getAllFlashCards();
+function buildCards(pairCount: number, professions: import("@/game/vocabularyData").Profession[] = []): MemoryCard[] {
+  let allCards = filterByProfession(getAllFlashCards(), professions);
   if (!allCards || allCards.length === 0) {
     allCards = [
       { german: "der Hund", czech: "pes", type: "noun", profession: "obecné" },
