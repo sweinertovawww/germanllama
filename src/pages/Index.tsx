@@ -49,7 +49,7 @@ const Index = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="relative overflow-hidden bg-primary/10" style={{ backgroundImage: `url(${heroBackground})`, backgroundSize: 'cover', backgroundPosition: 'center 70%' }}>
+      <header className="relative overflow-hidden bg-primary/10" style={{ backgroundImage: `url(${heroBackground})`, backgroundSize: 'cover', backgroundPosition: 'center 40%' }}>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
         <div className="relative max-w-4xl mx-auto px-4 pt-32 pb-36 sm:pt-48 sm:pb-52 text-center">
         </div>
