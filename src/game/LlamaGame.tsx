@@ -1132,7 +1132,8 @@ const LlamaGame = () => {
             </div>
           </div>
         )}
-      </div>
+        </div>{/* close container */}
+      </div>{/* close relative */}
 
       {!inLobby && gameState !== "over" && (
         <div className="flex flex-col items-center gap-2">
