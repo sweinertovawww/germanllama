@@ -1,8 +1,10 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
-import { getAllFlashCards, FlashCard } from "@/game/vocabularyData";
+import { getAllFlashCards, FlashCard, filterByProfession } from "@/game/vocabularyData";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import { Brain, RotateCcw, Trophy, Skull, Copy, Check } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useProfessionFilter } from "@/hooks/useProfessionFilter";
+import ProfessionFilter from "@/components/ProfessionFilter";
 
 interface MemoryCard {
   id: number;
