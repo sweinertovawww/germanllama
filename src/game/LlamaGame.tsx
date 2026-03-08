@@ -920,6 +920,16 @@ const LlamaGame = () => {
   }, [playerName, filteredQuestions, filteredFill]);
 
   const goToLobby = useCallback(() => {
+    // Preserve playerName so it's pre-filled after profession change
+    setInLobby(true);
+    setNameEntry(false);
+    setScore(0);
+    setGameState("idle");
+  }, []);
+
+  const newPlayer = useCallback(() => {
+    setPlayerName("");
+    localStorage.removeItem("llama-player-name");
     setInLobby(true);
     setNameEntry(false);
     setScore(0);
