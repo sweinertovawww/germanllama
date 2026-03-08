@@ -310,7 +310,7 @@ export const FILL_QUESTIONS: FillQuestion[] = [
   { sentence: "Das ist ein technisches ___.", answer: "Problem", translation: "To je technický problém.", profession: "obecné" },
   { sentence: "Ich ___ mich später bei Ihnen.", answer: "melde", translation: "Ozvu se Vám později.", profession: "obecné" },
   { sentence: "Die Maschine muss sofort ___ werden.", answer: "gestoppt", translation: "Ten stroj se musí okamžitě zastavit.", profession: "obecné" },
-  { sentence: "___ das Teil auf das Förderband.", answer: "Leg", translation: "Polož ten díl na dopravní pás.", profession: "obecné" },
+  { sentence: "___ das Teil auf das Förderband.", answer: "Leg", translation: "Polož ten díl na výrobní pás.", profession: "obecné" },
   { sentence: "Wir müssen die ___ pro Stunde einhalten.", answer: "Quote", translation: "Musíme dodržet kvótu za hodinu.", profession: "obecné" },
   { sentence: "Wir arbeiten im ___.", answer: "Schichtbetrieb", translation: "Pracujeme na směny.", profession: "obecné" },
   { sentence: "Ist die Schutzkleidung ___?", answer: "obligatorisch", translation: "Je ochranný oděv povinný?", profession: "obecné" },
