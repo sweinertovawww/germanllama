@@ -125,8 +125,8 @@ const Index = () => {
       </section>
 
       {/* Game Section */}
-      <section id="game-section" className="flex-1 bg-background">
-        <div className="flex flex-col items-center justify-start py-2 sm:py-8 px-1 sm:px-2">
+      <section id="game-section" className="bg-background">
+        <div className="flex flex-col items-center justify-start py-2 sm:py-4 px-1 sm:px-2">
           <LlamaGame />
         </div>
       </section>
