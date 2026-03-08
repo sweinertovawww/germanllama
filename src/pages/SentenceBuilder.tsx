@@ -277,6 +277,8 @@ const SentenceBuilder = () => {
         </div>
       </section>
 
+      <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
+
       {/* Game Area */}
       <section className="px-3 sm:px-4 pb-8">
         <div className="max-w-4xl mx-auto">
