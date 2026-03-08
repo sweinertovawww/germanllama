@@ -345,9 +345,9 @@ export const FILL_QUESTIONS: FillQuestion[] = [
    { sentence: "Hast du den Chef ___?", answer: "angesprochen", translation: "Oslovil jsi šéfa?", profession: "kancelář" },
    { sentence: "Ich ___ jetzt E-Mails.", answer: "schreibe", translation: "Teď píšu e-maily.", profession: "kancelář" },
    { sentence: "___ du das Dokument?", answer: "Druckst", translation: "Vytiskneš ten dokument?", profession: "kancelář" },
-   { sentence: "Ich brauche einen ___.", answer: "Termin", translation: "Potřebuji si domluvit termín.", profession: "kancelář" },
-   { sentence: "Das Meeting ___ sofort.", answer: "beginnt", translation: "Ta schůzka hned začíná.", profession: "kancelář" },
-   { sentence: "Kannst du mir ___?", answer: "helfen", translation: "Můžeš mi prosím pomoct?", profession: "kancelář" },
+   { sentence: "Ich brauche einen ___.", answer: "Termin", translation: "Potřebuji termín.", profession: "kancelář" },
+   { sentence: "Das Meeting ___ sofort.", answer: "beginnt", translation: "Schůzka začíná hned.", profession: "kancelář" },
+   { sentence: "Kannst du mir ___?", answer: "helfen", translation: "Můžeš mi pomoct?", profession: "kancelář" },
    // === TRUHLÁŘ ===
   { sentence: "Dieses Holz ist zu ___ für die Verarbeitung.", answer: "feucht", translation: "Toto dřevo je příliš vlhké na zpracování.", profession: "truhlář" },
   { sentence: "Ich muss die Kanten noch ___.", answer: "schleifen", translation: "Musím ještě zbrousit hrany.", profession: "truhlář" },
