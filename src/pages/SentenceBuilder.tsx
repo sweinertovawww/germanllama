@@ -231,7 +231,7 @@ const SentenceBuilder = () => {
     setCompletedRounds(newRounds);
     setScore(0);
     setSelectedEndId(null);
-    setPairs(buildRound());
+    setPairs(buildRound(filteredQuestions));
   };
 
   const handleCopy = () => {
