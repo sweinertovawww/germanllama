@@ -39,14 +39,12 @@ const Layout = ({ children }: LayoutProps) => {
             </span>
           </div>
           <div className="hidden sm:flex items-center gap-6">
-            <a
-              href="https://www.instagram.com/playgermanllama/"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => navigate("/kontakt")}
               className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors"
             >
               Kontakt
-            </a>
+            </button>
           </div>
           <button
             className="sm:hidden p-2 text-foreground"
@@ -66,14 +64,12 @@ const Layout = ({ children }: LayoutProps) => {
                 Platforma pro samouky němčiny
               </span>
             </div>
-            <a
-              href="https://www.instagram.com/playgermanllama/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-center font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors"
+            <button
+              onClick={() => { navigate("/kontakt"); setMenuOpen(false); }}
+              className="block w-full text-center font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors"
             >
               Kontakt
-            </a>
+            </button>
           </div>
         )}
       </nav>
