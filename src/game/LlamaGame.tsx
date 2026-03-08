@@ -930,22 +930,12 @@ const LlamaGame = () => {
     <div className="flex flex-col items-center gap-2 sm:gap-6 w-full max-w-[800px] mx-auto">
 
       {inLobby ? (
-        /* === LOBBY — identical layout to Flash Cards === */
+        /* === LOBBY — Phase 1: profession selection === */
         <div className="flex flex-col items-center gap-4">
           <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
-          <input
-            type="text"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter" && playerName.trim()) { (e.target as HTMLInputElement).blur(); enterGame(); } }}
-            placeholder="Tvoje jméno..."
-            maxLength={20}
-            className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-40 sm:w-56 text-center"
-          />
           <button
-            onClick={enterGame}
-            disabled={!playerName.trim()}
-            className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg flex items-center gap-2 disabled:opacity-50"
+            onClick={goToNameEntry}
+            className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg flex items-center gap-2"
           >
             <Gamepad2 className="w-5 h-5" />
             START HRY
