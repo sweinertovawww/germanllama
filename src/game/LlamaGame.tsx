@@ -439,10 +439,30 @@ const ShareButtons = ({ score, level }: { score: number; level: number }) => {
   };
 
   return (
-    <div className="bg-share-bg rounded-2xl shadow-lg p-6 w-full max-w-xs flex flex-col items-center gap-3 animate-fade-in">
-      <span className="font-game text-sm text-foreground text-center">📣 Sdílej výsledek</span>
+    <div className="bg-share-bg rounded-2xl shadow-lg p-6 w-full max-w-xs flex flex-col items-center gap-3 animate-fade-in relative overflow-hidden">
+      {/* Section-wide sparkles */}
+      {Array.from({ length: 20 }).map((_, i) => {
+        const left = Math.random() * 100;
+        const top = Math.random() * 100;
+        const delay = (Math.random() * 2).toFixed(2);
+        const size = Math.random() > 0.5 ? "text-sm" : "text-xs";
+        return (
+          <span
+            key={`bg-${i}`}
+            className={`absolute ${size} pointer-events-none`}
+            style={{
+              left: `${left}%`,
+              top: `${top}%`,
+              animation: `sparkle-float 2s ease-in-out ${delay}s infinite`,
+            }}
+          >
+            ✨
+          </span>
+        );
+      })}
+      <span className="relative z-10 font-game text-sm text-foreground text-center">📣 Sdílej výsledek</span>
       <div className="relative">
-        {/* Sparkle particles */}
+        {/* Button sparkles */}
         {sparklePositions.map((sp, i) => {
           const rad = (sp.angle * Math.PI) / 180;
           const x = Math.cos(rad) * 38;
