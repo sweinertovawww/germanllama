@@ -1,10 +1,10 @@
-export type Profession = "obecné" | "truhlář" | "zedník" | "instalatér" | "elektrikář" | "číšník" | "kuchař" | "pokladní" | "uklízečka" | "sestřička" | "kancelář" | "automechanik";
+export type Profession = "obecné" | "truhlář" | "zedník" | "instalatér" | "elektrikář" | "číšník" | "kuchař" | "pokladní" | "uklízečka" | "sestřička" | "kancelář" | "automechanik" | "zahradník";
 
 export interface ProfessionInfo {
   id: Profession;
   label: string;
   emoji: string;
-  group: "řemesla" | "gastro" | "zdravotnictví" | "obchod" | "úklid" | "kancelář" | "obecné" | "doprava";
+  group: "řemesla" | "gastro" | "zdravotnictví" | "obchod" | "úklid" | "kancelář" | "obecné" | "doprava" | "zemědělství";
 }
 
 export const PROFESSION_LIST: ProfessionInfo[] = [
@@ -19,6 +19,7 @@ export const PROFESSION_LIST: ProfessionInfo[] = [
   { id: "sestřička", label: "Sestřička", emoji: "🏥", group: "zdravotnictví" },
   { id: "uklízečka", label: "Uklízečka", emoji: "🧹", group: "úklid" },
   { id: "automechanik", label: "Automechanik", emoji: "🚗", group: "doprava" },
+  { id: "zahradník", label: "Zahradník", emoji: "🌱", group: "zemědělství" },
 ];
 
 export interface Question {
@@ -44,9 +45,9 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Katze?", options: ["der", "die", "das"], correct: 1, translation: "kočka", profession: "obecné" },
   { text: "Jaký člen má Buch?", options: ["der", "die", "das"], correct: 2, translation: "kniha", profession: "obecné" },
   { text: "Jaký člen má Tisch?", options: ["der", "die", "das"], correct: 0, translation: "stůl", profession: "obecné" },
-  { text: "Jaký člen má Blume?", options: ["der", "die", "das"], correct: 1, translation: "květina", profession: "obecné" },
+  { text: "Jaký člen má Blume?", options: ["der", "die", "das"], correct: 1, translation: "květina", profession: "zahradník" },
   { text: "Jaký člen má Auto?", options: ["der", "die", "das"], correct: 2, translation: "auto", profession: "automechanik" },
-  { text: "Jaký člen má Baum?", options: ["der", "die", "das"], correct: 0, translation: "strom", profession: "obecné" },
+  { text: "Jaký člen má Baum?", options: ["der", "die", "das"], correct: 0, translation: "strom", profession: "zahradník" },
   { text: "Jaký člen má Schule?", options: ["der", "die", "das"], correct: 1, translation: "škola", profession: "obecné" },
   // === KANCELÁŘ ===
   { text: "Jaký člen má Schreibtisch?", options: ["der", "die", "das"], correct: 0, translation: "psací stůl", profession: "kancelář" },
@@ -163,8 +164,14 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Erdgeschoss?", options: ["der", "die", "das"], correct: 2, translation: "přízemí", profession: "zedník" },
   { text: "Jaký člen má Mörtel?", options: ["der", "die", "das"], correct: 0, translation: "malta", profession: "zedník" },
   { text: "Jaký člen má Mauer?", options: ["der", "die", "das"], correct: 1, translation: "zeď", profession: "zedník" },
-  { text: "Jaký člen má Baustelle?", options: ["der", "die", "das"], correct: 1, translation: "stavba (místo)", profession: "zedník" },
-  // === SESTŘIČKA ===
+   { text: "Jaký člen má Baustelle?", options: ["der", "die", "das"], correct: 1, translation: "stavba (místo)", profession: "zedník" },
+   // === ZAHRADNÍK ===
+   { text: "Jaký člen má Schaufel?", options: ["der", "die", "das"], correct: 1, translation: "lopata", profession: "zahradník" },
+   { text: "Jaký člen má Gießkanne?", options: ["der", "die", "das"], correct: 1, translation: "konve", profession: "zahradník" },
+   { text: "Jaký člen má Rasenmäher?", options: ["der", "die", "das"], correct: 0, translation: "sekačka na trávu", profession: "zahradník" },
+   { text: "Jaký člen má Erde?", options: ["der", "die", "das"], correct: 1, translation: "hlína / zemina", profession: "zahradník" },
+   { text: "Jaký člen má Zaun?", options: ["der", "die", "das"], correct: 0, translation: "plot", profession: "zahradník" },
+   // === SESTŘIČKA ===
   { text: "Jaký člen má Patient?", options: ["der", "die", "das"], correct: 0, translation: "pacient", profession: "sestřička" },
   { text: "Jaký člen má Fieber?", options: ["der", "die", "das"], correct: 2, translation: "teplota / horečka", profession: "sestřička" },
   { text: "Jaký člen má Medikamente?", options: ["der", "die", "das"], correct: 1, translation: "léky", profession: "sestřička" },
@@ -415,6 +422,12 @@ export const FILL_QUESTIONS: FillQuestion[] = [
    { sentence: "Ich muss das ___ wechseln.", answer: "Öl", translation: "Musím vyměnit olej.", profession: "automechanik" },
    { sentence: "Die Batterie ist ___.", answer: "leer", translation: "Baterie je vybitá.", profession: "automechanik" },
    { sentence: "Können Sie den ___ prüfen?", answer: "Reifendruck", translation: "Můžete zkontrolovat tlak v pneumatikách?", profession: "automechanik" },
+   // === ZAHRADNÍK ===
+   { sentence: "Ich muss die Pflanzen ___.", answer: "gießen", translation: "Musím zalít rostliny.", profession: "zahradník" },
+   { sentence: "Wir ___ heute die Hecke.", answer: "schneiden", translation: "Dnes stříháme živý plot.", profession: "zahradník" },
+   { sentence: "Der Rasen muss ___ werden.", answer: "gemäht", translation: "Trávník se musí posekat.", profession: "zahradník" },
+   { sentence: "Haben Sie ___ für die Rosen?", answer: "Dünger", translation: "Máte hnojivo na růže?", profession: "zahradník" },
+   { sentence: "Ich ___ einen neuen Baum im Garten.", answer: "pflanze", translation: "Sázím na zahradě nový strom.", profession: "zahradník" },
 ];
 
 // Helper to extract German word from question text

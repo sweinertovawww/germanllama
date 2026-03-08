@@ -5,9 +5,9 @@ der Hund;pes;obecné
 die Katze;kočka;obecné
 das Buch;kniha;obecné
 der Tisch;stůl;obecné
-die Blume;květina;obecné
+die Blume;květina;zahradník
 das Auto;auto;automechanik
-der Baum;strom;obecné
+der Baum;strom;zahradník
 die Schule;škola;obecné
 der Schreibtisch;psací stůl;kancelář
 der Stuhl;židle;kancelář
@@ -352,3 +352,14 @@ das Werkzeug;nářadí;automechanik
 Ich muss das Öl wechseln.;Musím vyměnit olej.;automechanik
 Die Batterie ist leer.;Baterie je vybitá.;automechanik
 Können Sie den Reifendruck prüfen?;Můžete zkontrolovat tlak v pneumatikách?;automechanik
+der Baum;strom;zahradník
+die Schaufel;lopata;zahradník
+die Gießkanne;konve;zahradník
+der Rasenmäher;sekačka na trávu;zahradník
+die Erde;hlína / zemina;zahradník
+der Zaun;plot;zahradník
+Ich muss die Pflanzen gießen.;Musím zalít rostliny.;zahradník
+Wir schneiden heute die Hecke.;Dnes stříháme živý plot.;zahradník
+Der Rasen muss gemäht werden.;Trávník se musí posekat.;zahradník
+Haben Sie Dünger für die Rosen?;Máte hnojivo na růže?;zahradník
+Ich pflanze einen neuen Baum im Garten.;Sázím na zahradě nový strom.;zahradník
