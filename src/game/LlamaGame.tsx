@@ -858,7 +858,7 @@ const LlamaGame = () => {
     return () => cancelAnimationFrame(animId);
   }, [gameState, triggerQuiz, triggerStarQuiz]);
 
-  // Draw idle/game over screen
+  // Draw idle/lobby scene (static background with llama)
   useEffect(() => {
     if (gameState === "playing" || gameState === "quiz" || gameState === "starQuiz") return;
     const canvas = canvasRef.current;
@@ -867,55 +867,61 @@ const LlamaGame = () => {
     if (!ctx) return;
 
     drawScene(ctx, { groundOffset: 0, obstacles: [], stars: [], sombreros: [], wolves: [], llamaY: GROUND_Y, frameCount: 0, score: 0 });
-
-    ctx.fillStyle = "#2a1a0a";
-    ctx.font = "20px 'Press Start 2P', monospace";
-    ctx.textAlign = "center";
-
-    if (gameState === "idle") {
-      ctx.fillText("Llama Run", CANVAS_WIDTH / 2, 80);
-      ctx.font = "10px 'Press Start 2P', monospace";
-      ctx.fillText("Zadej jméno a stiskni START", CANVAS_WIDTH / 2, 120);
-    }
     ctx.textAlign = "start";
-  }, [gameState, score, highScore]);
+  }, [gameState, score, highScore, inLobby]);
 
   const totalTrophies = Math.floor(score / 10);
   const level = Math.floor(totalTrophies / 10) + 1;
   const trophiesInLevel = totalTrophies % 10;
 
   const enterGame = useCallback(() => {
+    if (!playerName.trim()) return;
     setInLobby(false);
+    // Directly start playing — no idle screen
+    playerNameRef.current = playerName.trim();
+    const g = gameRef.current;
+    g.llamaY = GROUND_Y;
+    g.velocityY = 0;
+    g.isJumping = false;
+    g.obstacles = [];
+    g.stars = [];
+    g.sombreros = [];
+    g.wolves = [];
+    g.starTimer = 0;
+    g.sombreroTimer = 0;
+    g.wolfTimer = 0;
+    g.frameCount = 0;
+    g.speed = GAME_SPEED_INITIAL;
+    g.score = 0;
+    g.groundOffset = 0;
+    questionIndexRef.current = 0;
+    fillIndexRef.current = 0;
+    const lamaQ = filteredQuestions.find(q => q.text.includes("Lama"));
+    const rest = filteredQuestions.filter(q => !q.text.includes("Lama")).sort(() => Math.random() - 0.5);
+    shuffledQuestionsRef.current = lamaQ ? [lamaQ, ...rest] : rest;
+    shuffledFillRef.current = [...filteredFill].sort(() => Math.random() - 0.5);
     setScore(0);
-    setPlayerName("");
-    setGameState("idle");
-  }, []);
+    setCurrentQuestion(null);
+    setCurrentFillQuestion(null);
+    setFillInput("");
+    setFillResult(null);
+    setQuizPhase("article");
+    setTranslationInput("");
+    setTranslationResult(null);
+    setArticleResult(null);
+    const count = addDailyPlayer(playerName.trim());
+    setDailyPlayerCount(count);
+    setGameState("playing");
+  }, [playerName, filteredQuestions, filteredFill]);
 
   const goToLobby = useCallback(() => {
     setInLobby(true);
     setScore(0);
-    setPlayerName("");
     setGameState("idle");
   }, []);
 
   return (
     <div className="flex flex-col items-center gap-2 sm:gap-6 w-full max-w-[800px] mx-auto">
-
-      {inLobby ? (
-        /* === LOBBY === */
-        <div className="flex flex-col items-center gap-4 py-4">
-          <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
-          <button
-            onClick={enterGame}
-            className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg flex items-center gap-2"
-          >
-            <Gamepad2 className="w-5 h-5" />
-            START HRY
-          </button>
-        </div>
-      ) : (
-      /* === GAME === */
-      <>
 
       <div
         ref={containerRef}
@@ -937,38 +943,40 @@ const LlamaGame = () => {
           }}
         />
 
+        {/* Lobby overlay — transparent, floating over the canvas */}
+        {inLobby && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-foreground/30 backdrop-blur-[2px]">
+            <div className="flex flex-col items-center gap-3 px-4 py-6 max-w-[95%]">
+              <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
+              <input
+                type="text"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter" && playerName.trim()) { (e.target as HTMLInputElement).blur(); enterGame(); } }}
+                placeholder="Tvoje jméno..."
+                maxLength={20}
+                className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-40 sm:w-56 text-center"
+              />
+              <button
+                onClick={enterGame}
+                disabled={!playerName.trim()}
+                className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg flex items-center gap-2 disabled:opacity-50"
+              >
+                <Gamepad2 className="w-5 h-5" />
+                START HRY
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Exit button during play or quiz */}
-        {(gameState === "playing" || gameState === "quiz" || gameState === "starQuiz") && (
+        {!inLobby && (gameState === "playing" || gameState === "quiz" || gameState === "starQuiz") && (
           <button
             onClick={exitGame}
             className="absolute top-2 right-2 font-game text-xs px-3 py-1 rounded bg-destructive/80 text-destructive-foreground hover:bg-destructive transition-colors z-20"
           >
             Exit
           </button>
-        )}
-
-        {/* Name input overlay on idle */}
-        {gameState === "idle" && (
-          <div className="absolute inset-0 flex items-center justify-center" style={{ paddingTop: `${60 * scale}px` }}>
-            <div className="flex flex-col items-center gap-2 sm:gap-3">
-              <input
-                type="text"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") { (e.target as HTMLInputElement).blur(); startGame(); } }}
-                placeholder="Tvoje jméno..."
-                maxLength={20}
-                className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-40 sm:w-56 text-center"
-              />
-              <button
-                onClick={() => { document.activeElement instanceof HTMLElement && document.activeElement.blur(); startGame(); }}
-                disabled={!playerName.trim()}
-                className="font-game text-xs px-6 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50"
-              >
-                START
-              </button>
-            </div>
-          </div>
         )}
         {/* Quiz overlay */}
         {gameState === "quiz" && currentQuestion && (
@@ -1127,7 +1135,7 @@ const LlamaGame = () => {
         )}
       </div>
 
-      {gameState !== "over" && (
+      {!inLobby && gameState !== "over" && (
         <div className="flex flex-col items-center gap-2">
           <div className="flex gap-4 sm:gap-8 font-game text-xs sm:text-sm">
             <span className="text-muted-foreground">
@@ -1156,20 +1164,21 @@ const LlamaGame = () => {
         </div>
       )}
 
-      {/* Share buttons - visible on game over */}
-      {gameState === "over" && score > 0 && (
+      {!inLobby && gameState === "over" && score > 0 && (
         <ShareButtons score={score} level={level} />
       )}
 
-      <button
-        onClick={() => {
-          if (gameState === "playing") jump();
-          else if (gameState !== "quiz" && gameState !== "starQuiz") startGame();
-        }}
-        className="bg-primary text-primary-foreground font-game text-sm w-full max-w-xs py-5 rounded-xl hover:opacity-90 transition-opacity md:hidden active:scale-95 touch-manipulation shadow-md"
-      >
-        ↑ SKOK
-      </button>
+      {!inLobby && (
+        <button
+          onClick={() => {
+            if (gameState === "playing") jump();
+            else if (gameState !== "quiz" && gameState !== "starQuiz") startGame();
+          }}
+          className="bg-primary text-primary-foreground font-game text-sm w-full max-w-xs py-5 rounded-xl hover:opacity-90 transition-opacity md:hidden active:scale-95 touch-manipulation shadow-md"
+        >
+          ↑ SKOK
+        </button>
+      )}
 
       <p className="text-muted-foreground text-xs sm:text-sm hidden sm:block">
         Použij <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">↑</kbd> nebo{" "}
@@ -1201,8 +1210,8 @@ const LlamaGame = () => {
           </table>
         </div>
 
-      {/* Změnit obor button */}
-      {gameState === "idle" && (
+      {/* Změnit obor button - only when not in lobby and game is idle/over */}
+      {!inLobby && gameState === "over" && (
         <button
           onClick={goToLobby}
           className="font-game text-[10px] sm:text-xs border border-border text-muted-foreground px-2.5 py-1 rounded-lg hover:text-foreground hover:border-primary/50 transition-colors flex items-center gap-1"
@@ -1210,8 +1219,6 @@ const LlamaGame = () => {
           <ArrowLeft className="w-3 h-3" />
           Změnit obor
         </button>
-      )}
-      </>
       )}
     </div>
   );
