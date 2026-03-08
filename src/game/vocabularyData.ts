@@ -344,7 +344,6 @@ export const FILL_QUESTIONS: FillQuestion[] = [
   { sentence: "Suchen Sie ein bestimmtes ___?", answer: "Produkt", translation: "Hledáte nějaký konkrétní produkt?" },
   { sentence: "Die Pfandflaschen können Sie dort ___.", answer: "abgeben", translation: "Zálohované láhve můžete odevzdat tamto." },
   { sentence: "Haben Sie noch ___?", answer: "Kleingeld", translation: "Máte ještě drobné?" },
-  { sentence: "Das Angebot ___ nur bis Samstag.", answer: "gilt", translation: "Tato nabídka platí jen do soboty." },
    { sentence: "Das Angebot ___ nur bis Samstag.", answer: "gilt", translation: "Tato nabídka platí jen do soboty." },
    { sentence: "Entschuldigung, wo finde ich das ___?", answer: "Waschmittel", translation: "Omlouvám se, kde najdu prací prášek?" },
    { sentence: "Ich fange heute im ersten ___ an.", answer: "Stock", translation: "Dnes začnu v prvním patře." },
