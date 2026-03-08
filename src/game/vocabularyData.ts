@@ -13,6 +13,7 @@ export const PROFESSION_LIST: ProfessionInfo[] = [
   { id: "elektrikář", label: "Elektrikář", emoji: "⚡", group: "řemesla" },
   { id: "gastro", label: "Gastro", emoji: "🍽️", group: "gastro" },
   { id: "instalatér", label: "Instalatér", emoji: "🔧", group: "řemesla" },
+  { id: "kadeřník", label: "Kadeřník", emoji: "✂️", group: "řemesla" },
   { id: "kancelář", label: "Kancelář", emoji: "🏢", group: "kancelář" },
   { id: "pokladní", label: "Pokladní", emoji: "🛒", group: "obchod" },
   { id: "sestřička", label: "Sestřička", emoji: "🏥", group: "zdravotnictví" },
