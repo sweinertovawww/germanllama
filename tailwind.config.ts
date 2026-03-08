@@ -53,6 +53,7 @@ export default {
         },
         ground: "hsl(var(--ground-color))",
         sky: "hsl(var(--sky-color))",
+        "share-bg": "hsl(var(--share-bg))",
       },
       borderRadius: {
         lg: "var(--radius)",
