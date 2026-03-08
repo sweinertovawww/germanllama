@@ -73,6 +73,9 @@ const Pexeso = () => {
   const [checking, setChecking] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [won, setWon] = useState(false);
+  const [completedGames, setCompletedGames] = useState(0);
+  const [totalMatchedPairs, setTotalMatchedPairs] = useState(0);
+  const [copied, setCopied] = useState(false);
 
   // Rebuild when pairCount changes (resize)
   useEffect(() => {
