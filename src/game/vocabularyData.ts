@@ -138,7 +138,7 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Zeit?", options: ["der", "die", "das"], correct: 1, translation: "čas", profession: "obecné" },
   { text: "Jaký člen má Maschine?", options: ["der", "die", "das"], correct: 1, translation: "stroj", profession: "obecné" },
   { text: "Jaký člen má Teil?", options: ["der", "die", "das"], correct: 2, translation: "díl / součástka", profession: "obecné" },
-  { text: "Jaký člen má Förderband?", options: ["der", "die", "das"], correct: 2, translation: "dopravní pás", profession: "obecné" },
+  { text: "Jaký člen má Förderband?", options: ["der", "die", "das"], correct: 2, translation: "výrobní pás", profession: "obecné" },
   { text: "Jaký člen má Quote?", options: ["der", "die", "das"], correct: 1, translation: "kvóta", profession: "obecné" },
   { text: "Jaký člen má Stunde?", options: ["der", "die", "das"], correct: 1, translation: "hodina", profession: "obecné" },
   { text: "Jaký člen má Schichtbetrieb?", options: ["der", "die", "das"], correct: 0, translation: "směnný provoz", profession: "obecné" },
