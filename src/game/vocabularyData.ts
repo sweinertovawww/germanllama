@@ -567,7 +567,7 @@ export const FILL_QUESTIONS: FillQuestion[] = [
     { sentence: "Der ___ steht Ihnen.", answer: "Haarschnitt", translation: "Ten sestřih Vám sluší.", profession: "kadeřník" },
       { sentence: "Ich ___ Ihre Haare.", answer: "kämme", translation: "Češu Vám vlasy.", profession: "kadeřník" },
    // === POŽÁRNÍ SYSTÉMY ===
-   { sentence: "Wir müssen eine ___ machen.", answer: "Revision", translation: "Musím udělat revizi.", profession: "pozarni_systemy" },
+   { sentence: "Wir müssen die ___ durchführen.", answer: "Wartung", translation: "Musíme provést údržbu.", profession: "pozarni_systemy" },
    { sentence: "Wir haben heute ___.", answer: "Notdienst", translation: "Máme dnes pohotovost.", profession: "pozarni_systemy" },
    { sentence: "Der Kunde hat eine ___.", answer: "Störung", translation: "Zákazník má poruchu.", profession: "pozarni_systemy" },
    { sentence: "Ein Sprinkler ist ___.", answer: "defekt", translation: "Jeden sprinkler je nefunkční.", profession: "pozarni_systemy" },
