@@ -55,6 +55,9 @@ const FlashCards = () => {
               <p className="font-body text-muted-foreground text-xs sm:text-sm leading-relaxed">
                 Přelož si slovíčko nebo větu a poté otoč kliknutím na kartičku pro kontrolu.
               </p>
+              <p className="font-body text-muted-foreground text-xs sm:text-sm leading-relaxed mt-1">
+                Slovíčka a věty ve Flash Cards se objevují i ve hře Llama Run. Čím víc se jich naučíš – tím více nasbíráš bodů ve hře. 😉
+              </p>
             </div>
           </div>
         </div>
