@@ -50,7 +50,7 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Blume?", options: ["der", "die", "das"], correct: 1, translation: "květina", profession: "zahradník" },
   { text: "Jaký člen má Auto?", options: ["der", "die", "das"], correct: 2, translation: "auto", profession: "automechanik" },
   { text: "Jaký člen má Baum?", options: ["der", "die", "das"], correct: 0, translation: "strom", profession: "zahradník" },
-  { text: "Jaký člen má Schule?", options: ["der", "die", "das"], correct: 1, translation: "škola", profession: "obecné" },
+  { text: "Jaký člen má Schule?", options: ["der", "die", "das"], correct: 1, translation: "škola", profession: "učitel" },
   // === KANCELÁŘ ===
   { text: "Jaký člen má Schreibtisch?", options: ["der", "die", "das"], correct: 0, translation: "psací stůl", profession: "kancelář" },
   { text: "Jaký člen má Stuhl?", options: ["der", "die", "das"], correct: 0, translation: "židle", profession: "kancelář" },
