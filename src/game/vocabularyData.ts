@@ -8,18 +8,19 @@ export interface ProfessionInfo {
 }
 
 export const PROFESSION_LIST: ProfessionInfo[] = [
-  { id: "kancelář", label: "Kancelář", emoji: "🏢", group: "kancelář" },
-  { id: "truhlář", label: "Truhlář", emoji: "🪚", group: "řemesla" },
-  { id: "zedník", label: "Zedník", emoji: "🧱", group: "řemesla" },
-  { id: "instalatér", label: "Instalatér", emoji: "🔧", group: "řemesla" },
-  { id: "elektrikář", label: "Elektrikář", emoji: "⚡", group: "řemesla" },
-  { id: "kuchař", label: "Kuchař", emoji: "👨‍🍳", group: "gastro" },
+  { id: "obecné", label: "Obecné", emoji: "📚", group: "obecné" },
+  { id: "automechanik", label: "Automechanik", emoji: "🚗", group: "doprava" },
   { id: "číšník", label: "Číšník", emoji: "🍽️", group: "gastro" },
+  { id: "elektrikář", label: "Elektrikář", emoji: "⚡", group: "řemesla" },
+  { id: "instalatér", label: "Instalatér", emoji: "🔧", group: "řemesla" },
+  { id: "kancelář", label: "Kancelář", emoji: "🏢", group: "kancelář" },
+  { id: "kuchař", label: "Kuchař", emoji: "👨‍🍳", group: "gastro" },
   { id: "pokladní", label: "Pokladní", emoji: "🛒", group: "obchod" },
   { id: "sestřička", label: "Sestřička", emoji: "🏥", group: "zdravotnictví" },
+  { id: "truhlář", label: "Truhlář", emoji: "🪚", group: "řemesla" },
   { id: "uklízečka", label: "Uklízečka", emoji: "🧹", group: "úklid" },
-  { id: "automechanik", label: "Automechanik", emoji: "🚗", group: "doprava" },
   { id: "zahradník", label: "Zahradník", emoji: "🌱", group: "zemědělství" },
+  { id: "zedník", label: "Zedník", emoji: "🧱", group: "řemesla" },
 ];
 
 export interface Question {
