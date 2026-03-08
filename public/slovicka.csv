@@ -8,7 +8,7 @@ der Tisch;stůl;obecné
 die Blume;květina;zahradník
 das Auto;auto;automechanik
 der Baum;strom;zahradník
-die Schule;škola;obecné
+die Schule;škola;učitel
 der Schreibtisch;psací stůl;kancelář
 der Stuhl;židle;kancelář
 der Computer;počítač;kancelář
@@ -29,26 +29,26 @@ die Besprechung;porada;kancelář
 das Notebook;notebook;kancelář
 der Papierkorb;koš;kancelář
 das Whiteboard;tabule;kancelář
-der Chef;šéf;kancelář
+der Chef;šéf;obecné
 die Kollegin;kolegyně;kancelář
 der Kollege;kolega;kancelář
 das Meeting;schůzka;kancelář
 der Projektor;projektor;kancelář
 die Präsentation;prezentace;kancelář
-die Einladung;pozvánka;kancelář
-der Termin;termín;kancelář
+die Einladung;pozvánka;obecné
+der Termin;termín;obecné
 das Homeoffice;home office;kancelář
-die Entscheidung;rozhodnutí;kancelář
-das Projekt;projekt;kancelář
-die Priorität;priorita;kancelář
-das Feedback;zpětná vazba;kancelář
+die Entscheidung;rozhodnutí;obecné
+das Projekt;projekt;obecné
+die Priorität;priorita;obecné
+das Feedback;zpětná vazba;obecné
 der Entwurf;návrh;kancelář
 der Status;stav;kancelář
-die Kosten;náklady;kancelář
-das Team;tým;kancelář
+die Kosten;náklady;obecné
+das Team;tým;obecné
 die Unterlagen;podklady;kancelář
-die Deadline;termín (uzávěrka);kancelář
-die Zusammenarbeit;spolupráce;kancelář
+die Deadline;termín (uzávěrka);obecné
+die Zusammenarbeit;spolupráce;obecné
 die Pause;přestávka;obecné
 die Kantine;jídelna;obecné
 der Schrank;skříň;obecné
@@ -112,7 +112,7 @@ der Leim;lepidlo;truhlář
 das Gerüst;lešení;zedník
 der Zement;cement;zedník
 die Pläne;plány;zedník
-das Erdgeschoss;přízemí;zedník
+das Erdgeschoss;přízemí;obecné
 der Mörtel;malta;zedník
 die Mauer;zeď;zedník
 die Baustelle;stavba (místo);zedník

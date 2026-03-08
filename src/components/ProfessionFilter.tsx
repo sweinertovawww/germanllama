@@ -10,6 +10,7 @@ const GROUP_COLORS: Record<string, string> = {
   obecné: "hsl(210 10% 50%)",
   doprava: "hsl(280 65% 50%)",
   zemědělství: "hsl(90 70% 45%)",
+  vzdělání: "hsl(260 70% 50%)",
 };
 
 interface ProfessionFilterProps {
