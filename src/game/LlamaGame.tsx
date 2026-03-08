@@ -1168,15 +1168,17 @@ const LlamaGame = () => {
         <ShareButtons score={score} level={level} />
       )}
 
-      <button
-        onClick={() => {
-          if (gameState === "playing") jump();
-          else if (gameState !== "quiz" && gameState !== "starQuiz") startGame();
-        }}
-        className="bg-primary text-primary-foreground font-game text-sm w-full max-w-xs py-5 rounded-xl hover:opacity-90 transition-opacity md:hidden active:scale-95 touch-manipulation shadow-md"
-      >
-        ↑ SKOK
-      </button>
+      {!inLobby && (
+        <button
+          onClick={() => {
+            if (gameState === "playing") jump();
+            else if (gameState !== "quiz" && gameState !== "starQuiz") startGame();
+          }}
+          className="bg-primary text-primary-foreground font-game text-sm w-full max-w-xs py-5 rounded-xl hover:opacity-90 transition-opacity md:hidden active:scale-95 touch-manipulation shadow-md"
+        >
+          ↑ SKOK
+        </button>
+      )}
 
       <p className="text-muted-foreground text-xs sm:text-sm hidden sm:block">
         Použij <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">↑</kbd> nebo{" "}
