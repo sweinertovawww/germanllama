@@ -614,19 +614,34 @@ export function getAllFlashCards(): FlashCard[] {
   return [...nounCards, ...sentenceCards];
 }
 
-/** Smart translation check: accepts any single word/variant from slash-separated alternatives. Case-insensitive. */
+/** Smart translation check: case-insensitive, trims whitespace.
+ * - Slash-separated variants: any single variant or keyword (≥3 chars) is accepted.
+ * - Word-order flexibility: for multi-word terms without slashes, reversed word order is also accepted.
+ */
 export function isTranslationCorrect(input: string, expected: string): boolean {
-  const normalizedInput = input.trim().toLowerCase();
-  const normalizedExpected = expected.trim().toLowerCase();
+  const normalizedInput = input.trim().toLowerCase().replace(/\s+/g, " ");
+  const normalizedExpected = expected.trim().toLowerCase().replace(/\s+/g, " ");
   // Exact match
   if (normalizedInput === normalizedExpected) return true;
+  // Reversed word order (e.g. "testovací sprinkler" ↔ "sprinkler testovací")
+  const inputWords = normalizedInput.split(" ");
+  const expectedWords = normalizedExpected.split(" ");
+  if (inputWords.length >= 2 && inputWords.length === expectedWords.length &&
+      inputWords.slice().sort().join(" ") === expectedWords.slice().sort().join(" ")) {
+    return true;
+  }
   // Split by "/" and check each variant
   const variants = normalizedExpected.split("/").map(v => v.trim()).filter(Boolean);
   for (const variant of variants) {
     if (normalizedInput === variant) return true;
-    // Also check individual words within each variant
-    const words = variant.split(/\s+/);
-    if (words.some(w => w === normalizedInput && w.length >= 3)) return true;
+    // Reversed word order within variant
+    const varWords = variant.split(" ");
+    if (inputWords.length >= 2 && inputWords.length === varWords.length &&
+        inputWords.slice().sort().join(" ") === varWords.slice().sort().join(" ")) {
+      return true;
+    }
+    // Single keyword match (≥3 chars)
+    if (varWords.some(w => w === normalizedInput && w.length >= 3)) return true;
   }
   return false;
 }
