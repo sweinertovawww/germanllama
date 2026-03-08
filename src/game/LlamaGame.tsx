@@ -878,12 +878,38 @@ const LlamaGame = () => {
   const level = Math.floor(totalTrophies / 10) + 1;
   const trophiesInLevel = totalTrophies % 10;
 
+  const enterGame = useCallback(() => {
+    setInLobby(false);
+    setScore(0);
+    setPlayerName("");
+    setGameState("idle");
+  }, []);
+
+  const goToLobby = useCallback(() => {
+    setInLobby(true);
+    setScore(0);
+    setPlayerName("");
+    setGameState("idle");
+  }, []);
+
   return (
     <div className="flex flex-col items-center gap-2 sm:gap-6 w-full max-w-[800px] mx-auto">
 
-      {gameState === "idle" && (
-        <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
-      )}
+      {inLobby ? (
+        /* === LOBBY === */
+        <div className="flex flex-col items-center gap-4 py-4">
+          <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
+          <button
+            onClick={enterGame}
+            className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg flex items-center gap-2"
+          >
+            <Gamepad2 className="w-5 h-5" />
+            START HRY
+          </button>
+        </div>
+      ) : (
+      /* === GAME === */
+      <>
 
       <div
         ref={containerRef}
