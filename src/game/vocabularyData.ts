@@ -446,6 +446,15 @@ export const FILL_QUESTIONS: FillQuestion[] = [
    { sentence: "Den ___ kurz reparieren.", answer: "Lichtschalter", translation: "Krátce opravit vypínač.", profession: "elektrikář" },
    { sentence: "Den ___ genau lesen.", answer: "Schaltplan", translation: "Přesně číst schéma zapojení.", profession: "elektrikář" },
    { sentence: "Einen ___ sicher vermeiden.", answer: "Kurzschluss", translation: "Bezpečně zabránit zkratu.", profession: "elektrikář" },
+   // === INSTALATÉR ===
+   { sentence: "Ich ___ das Rohr.", answer: "repariere", translation: "Opravuji to potrubí.", profession: "instalatér" },
+   { sentence: "Ich ___ den Wasserhahn.", answer: "tausche", translation: "Vyměňuji vodovodní kohoutek.", profession: "instalatér" },
+   { sentence: "Ich ___ die Verbindung.", answer: "dichte", translation: "Těsním ten spoj.", profession: "instalatér" },
+   { sentence: "Ich ___ den Abfluss.", answer: "reinige", translation: "Čistím ten odpad.", profession: "instalatér" },
+   { sentence: "Ich ___ eine Heizung.", answer: "installiere", translation: "Instaluji topení.", profession: "instalatér" },
+   { sentence: "Ich ___ das Becken.", answer: "schließe", translation: "Zapojuji to umyvadlo.", profession: "instalatér" },
+   { sentence: "Ich ___ das Wasser.", answer: "stoppe", translation: "Zastavuji tu vodu.", profession: "instalatér" },
+   { sentence: "Ich ___ den Wasserdruck.", answer: "prüfe", translation: "Kontroluji tlak vody.", profession: "instalatér" },
    // === ZAHRADNÍK ===
    { sentence: "Ich muss die Pflanzen ___.", answer: "gießen", translation: "Musím zalít rostliny.", profession: "zahradník" },
    { sentence: "Wir ___ heute die Hecke.", answer: "schneiden", translation: "Dnes stříháme živý plot.", profession: "zahradník" },
