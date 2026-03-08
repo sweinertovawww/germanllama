@@ -875,16 +875,48 @@ const LlamaGame = () => {
   const trophiesInLevel = totalTrophies % 10;
 
   const enterGame = useCallback(() => {
+    if (!playerName.trim()) return;
     setInLobby(false);
+    // Directly start playing — no idle screen
+    playerNameRef.current = playerName.trim();
+    const g = gameRef.current;
+    g.llamaY = GROUND_Y;
+    g.velocityY = 0;
+    g.isJumping = false;
+    g.obstacles = [];
+    g.stars = [];
+    g.sombreros = [];
+    g.wolves = [];
+    g.starTimer = 0;
+    g.sombreroTimer = 0;
+    g.wolfTimer = 0;
+    g.frameCount = 0;
+    g.speed = GAME_SPEED_INITIAL;
+    g.score = 0;
+    g.groundOffset = 0;
+    questionIndexRef.current = 0;
+    fillIndexRef.current = 0;
+    const lamaQ = filteredQuestions.find(q => q.text.includes("Lama"));
+    const rest = filteredQuestions.filter(q => !q.text.includes("Lama")).sort(() => Math.random() - 0.5);
+    shuffledQuestionsRef.current = lamaQ ? [lamaQ, ...rest] : rest;
+    shuffledFillRef.current = [...filteredFill].sort(() => Math.random() - 0.5);
     setScore(0);
-    setPlayerName("");
-    setGameState("idle");
-  }, []);
+    setCurrentQuestion(null);
+    setCurrentFillQuestion(null);
+    setFillInput("");
+    setFillResult(null);
+    setQuizPhase("article");
+    setTranslationInput("");
+    setTranslationResult(null);
+    setArticleResult(null);
+    const count = addDailyPlayer(playerName.trim());
+    setDailyPlayerCount(count);
+    setGameState("playing");
+  }, [playerName, filteredQuestions, filteredFill]);
 
   const goToLobby = useCallback(() => {
     setInLobby(true);
     setScore(0);
-    setPlayerName("");
     setGameState("idle");
   }, []);
 
