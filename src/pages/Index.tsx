@@ -23,9 +23,15 @@ const Index = () => {
               alt="GermanLlama logo"
               className="w-10 h-10 rounded-lg"
             />
-            <span className="font-body font-bold text-lg text-foreground">
-              Germanllama.com
-            </span>
+            <div className="flex flex-col">
+              <span className="font-game text-sm sm:text-base text-foreground leading-tight">
+                Němčina do práce{" "}
+                <span className="text-accent">hravě!</span>
+              </span>
+              <span className="font-body text-xs sm:text-sm text-muted-foreground">
+                Platforma pro samouky němčiny
+              </span>
+            </div>
           </div>
           <div className="hidden sm:flex items-center gap-6">
             <a
@@ -44,13 +50,6 @@ const Index = () => {
       <header className="relative overflow-hidden bg-primary/10" style={{ backgroundImage: `url(${heroBackground})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent" />
         <div className="relative max-w-4xl mx-auto px-4 pt-16 pb-20 sm:pt-24 sm:pb-28 text-center">
-          <h1 className="font-game text-xl sm:text-3xl text-white mb-3 leading-tight drop-shadow-lg">
-            Němčina do práce{" "}
-            <span className="text-accent">hravě!</span>
-          </h1>
-          <p className="text-lg sm:text-2xl text-white font-body font-bold max-w-2xl mx-auto leading-relaxed drop-shadow-md">
-            Platforma pro samouky němčiny
-          </p>
         </div>
       </header>
 
