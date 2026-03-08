@@ -32,11 +32,11 @@ function buildCards(pairCount: number): MemoryCard[] {
   let allCards = getAllFlashCards();
   if (!allCards || allCards.length === 0) {
     allCards = [
-      { german: "der Hund", czech: "pes", type: "noun" },
-      { german: "die Katze", czech: "kočka", type: "noun" },
-      { german: "das Haus", czech: "dům", type: "noun" },
-      { german: "der Tisch", czech: "stůl", type: "noun" },
-      { german: "die Blume", czech: "květina", type: "noun" },
+      { german: "der Hund", czech: "pes", type: "noun", profession: "obecné" },
+      { german: "die Katze", czech: "kočka", type: "noun", profession: "obecné" },
+      { german: "das Haus", czech: "dům", type: "noun", profession: "obecné" },
+      { german: "der Tisch", czech: "stůl", type: "noun", profession: "obecné" },
+      { german: "die Blume", czech: "květina", type: "noun", profession: "obecné" },
     ];
   }
   const selected = shuffleArray(allCards).slice(0, pairCount);
