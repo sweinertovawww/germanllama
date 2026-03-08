@@ -1006,16 +1006,6 @@ const LlamaGame = () => {
       ctx.fillText("Llama Run", CANVAS_WIDTH / 2, 80);
       ctx.font = "10px 'Press Start 2P', monospace";
       ctx.fillText("Zadej jméno a stiskni START", CANVAS_WIDTH / 2, 120);
-    } else {
-      const t = Math.floor(score / 10);
-      const l = Math.floor(t / 10) + 1;
-      ctx.fillText("GAME OVER", CANVAS_WIDTH / 2, 80);
-      ctx.font = "12px 'Press Start 2P', monospace";
-      ctx.fillText(`Skóre: ${score}`, CANVAS_WIDTH / 2, 110);
-      ctx.fillText(`Nejlepší: ${highScore}`, CANVAS_WIDTH / 2, 135);
-      ctx.font = "10px 'Press Start 2P', monospace";
-      ctx.fillText(`🏆 ${t}  ⭐ Level ${l}`, CANVAS_WIDTH / 2, 165);
-      ctx.fillText("Stiskni ↑ pro restart", CANVAS_WIDTH / 2, 195);
     }
     ctx.textAlign = "start";
   }, [gameState, score, highScore]);
