@@ -421,3 +421,19 @@ der Haarschnitt;střih;kadeřník
 der Umhang;přehoz / pláštěnka;kadeřník
 die Bürste;kartáč;kadeřník
 das Handtuch;ručník;kadeřník
+die Sprinkleranlage;sprinklerový systém;pozarni_systemy
+die Löschanlage;hasicí systém;pozarni_systemy
+die Brandmeldeanlage;požární hlásič;pozarni_systemy
+die Rohrleitung;potrubí;pozarni_systemy
+die Pumpe;pumpa;pozarni_systemy
+die Dieselpumpe;dieselová pumpa;pozarni_systemy
+die Elektropumpe;elektrická pumpa;pozarni_systemy
+die Nassanlage;mokrá stanice;pozarni_systemy
+die Trockenanlage;suchá stanice;pozarni_systemy
+der Behälter;nádoba / zásobník;pozarni_systemy
+das Ventil;ventil;pozarni_systemy
+der Hydrant;hydrant;pozarni_systemy
+das Rückschlagventil;zpětný ventil;pozarni_systemy
+der Druckmesser;tlakoměr;pozarni_systemy
+die Steuerung;řídicí jednotka;pozarni_systemy
+der Alarm;alarm;pozarni_systemy

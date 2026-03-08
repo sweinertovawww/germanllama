@@ -1,4 +1,4 @@
-export type Profession = "obecné" | "truhlář" | "zedník" | "instalatér" | "elektrikář" | "gastro" | "pokladní" | "uklízečka" | "sestřička" | "kancelář" | "automechanik" | "zahradník" | "učitel" | "kadeřník";
+export type Profession = "obecné" | "truhlář" | "zedník" | "instalatér" | "elektrikář" | "gastro" | "pokladní" | "uklízečka" | "sestřička" | "kancelář" | "automechanik" | "zahradník" | "učitel" | "kadeřník" | "pozarni_systemy";
 
 export interface ProfessionInfo {
   id: Profession;
@@ -16,6 +16,7 @@ export const PROFESSION_LIST: ProfessionInfo[] = [
   { id: "kadeřník", label: "Kadeřník", emoji: "✂️", group: "řemesla" },
   { id: "kancelář", label: "Kancelář", emoji: "🏢", group: "kancelář" },
   { id: "pokladní", label: "Pokladní", emoji: "🛒", group: "obchod" },
+  { id: "pozarni_systemy", label: "Systémy pro hasení", emoji: "🚒", group: "řemesla" },
   { id: "sestřička", label: "Sestřička", emoji: "🏥", group: "zdravotnictví" },
   { id: "truhlář", label: "Truhlář", emoji: "🪚", group: "řemesla" },
   { id: "učitel", label: "Učitel", emoji: "👨‍🏫", group: "vzdělání" },
@@ -260,7 +261,24 @@ export const QUESTIONS: Question[] = [
    { text: "Jaký člen má Haarschnitt?", options: ["der", "die", "das"], correct: 0, translation: "střih", profession: "kadeřník" },
    { text: "Jaký člen má Umhang?", options: ["der", "die", "das"], correct: 0, translation: "přehoz / pláštěnka", profession: "kadeřník" },
    { text: "Jaký člen má Bürste?", options: ["der", "die", "das"], correct: 1, translation: "kartáč", profession: "kadeřník" },
-   { text: "Jaký člen má Handtuch?", options: ["der", "die", "das"], correct: 2, translation: "ručník", profession: "kadeřník" },
+    { text: "Jaký člen má Handtuch?", options: ["der", "die", "das"], correct: 2, translation: "ručník", profession: "kadeřník" },
+    // === SYSTÉMY PRO HASENÍ ===
+    { text: "Jaký člen má Sprinkleranlage?", options: ["der", "die", "das"], correct: 1, translation: "sprinklerový systém", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Löschanlage?", options: ["der", "die", "das"], correct: 1, translation: "hasicí systém", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Brandmeldeanlage?", options: ["der", "die", "das"], correct: 1, translation: "požární hlásič", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Rohrleitung?", options: ["der", "die", "das"], correct: 1, translation: "potrubí", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Pumpe?", options: ["der", "die", "das"], correct: 1, translation: "pumpa", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Dieselpumpe?", options: ["der", "die", "das"], correct: 1, translation: "dieselová pumpa", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Elektropumpe?", options: ["der", "die", "das"], correct: 1, translation: "elektrická pumpa", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Nassanlage?", options: ["der", "die", "das"], correct: 1, translation: "mokrá stanice", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Trockenanlage?", options: ["der", "die", "das"], correct: 1, translation: "suchá stanice", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Behälter?", options: ["der", "die", "das"], correct: 0, translation: "nádoba / zásobník", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Ventil?", options: ["der", "die", "das"], correct: 2, translation: "ventil", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Hydrant?", options: ["der", "die", "das"], correct: 0, translation: "hydrant", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Rückschlagventil?", options: ["der", "die", "das"], correct: 2, translation: "zpětný ventil", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Druckmesser?", options: ["der", "die", "das"], correct: 0, translation: "tlakoměr", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Steuerung?", options: ["der", "die", "das"], correct: 1, translation: "řídicí jednotka", profession: "pozarni_systemy" },
+    { text: "Jaký člen má Alarm?", options: ["der", "die", "das"], correct: 0, translation: "alarm", profession: "pozarni_systemy" },
 ];
 
 export const FILL_QUESTIONS: FillQuestion[] = [
@@ -489,8 +507,9 @@ export const FILL_QUESTIONS: FillQuestion[] = [
     { sentence: "Ich ___ nur Spitzen.", answer: "schneide", translation: "Stříhám jen konečky.", profession: "kadeřník" },
     { sentence: "Soll ich ___ benutzen?", answer: "Gel", translation: "Mám použít gel?", profession: "kadeřník" },
     { sentence: "Der ___ steht Ihnen.", answer: "Haarschnitt", translation: "Ten sestřih Vám sluší.", profession: "kadeřník" },
-    { sentence: "Ich ___ Ihre Haare.", answer: "kämme", translation: "Češu Vám vlasy.", profession: "kadeřník" },
+      { sentence: "Ich ___ Ihre Haare.", answer: "kämme", translation: "Češu Vám vlasy.", profession: "kadeřník" },
 ];
+
 
 // Helper to extract German word from question text
 function extractGermanWord(q: Question): string {
