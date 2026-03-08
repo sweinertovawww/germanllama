@@ -421,6 +421,7 @@ const saveToLeaderboardDB = async (name: string, score: number) => {
 const LlamaGame = () => {
   const profFilter = useProfessionFilter();
   const [inLobby, setInLobby] = useState(true);
+  const [nameEntry, setNameEntry] = useState(false);
   const filteredQuestions = useMemo(() => {
     const result = filterByProfession(QUESTIONS, profFilter.selected);
     return result.length > 0 ? result : QUESTIONS.filter(q => q.profession === "obecné");
@@ -868,16 +869,20 @@ const LlamaGame = () => {
 
     drawScene(ctx, { groundOffset: 0, obstacles: [], stars: [], sombreros: [], wolves: [], llamaY: GROUND_Y, frameCount: 0, score: 0 });
     ctx.textAlign = "start";
-  }, [gameState, score, highScore, inLobby]);
+  }, [gameState, score, highScore, inLobby, nameEntry]);
 
   const totalTrophies = Math.floor(score / 10);
   const level = Math.floor(totalTrophies / 10) + 1;
   const trophiesInLevel = totalTrophies % 10;
 
+  const goToNameEntry = useCallback(() => {
+    setInLobby(false);
+    setNameEntry(true);
+  }, []);
+
   const enterGame = useCallback(() => {
     if (!playerName.trim()) return;
-    setInLobby(false);
-    // Directly start playing — no idle screen
+    setNameEntry(false);
     playerNameRef.current = playerName.trim();
     const g = gameRef.current;
     g.llamaY = GROUND_Y;
@@ -916,6 +921,7 @@ const LlamaGame = () => {
 
   const goToLobby = useCallback(() => {
     setInLobby(true);
+    setNameEntry(false);
     setScore(0);
     setGameState("idle");
   }, []);
@@ -924,22 +930,12 @@ const LlamaGame = () => {
     <div className="flex flex-col items-center gap-2 sm:gap-6 w-full max-w-[800px] mx-auto">
 
       {inLobby ? (
-        /* === LOBBY — identical layout to Flash Cards === */
+        /* === LOBBY — Phase 1: profession selection === */
         <div className="flex flex-col items-center gap-4">
           <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
-          <input
-            type="text"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter" && playerName.trim()) { (e.target as HTMLInputElement).blur(); enterGame(); } }}
-            placeholder="Tvoje jméno..."
-            maxLength={20}
-            className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-40 sm:w-56 text-center"
-          />
           <button
-            onClick={enterGame}
-            disabled={!playerName.trim()}
-            className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg flex items-center gap-2 disabled:opacity-50"
+            onClick={goToNameEntry}
+            className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg flex items-center gap-2"
           >
             <Gamepad2 className="w-5 h-5" />
             START HRY
@@ -969,7 +965,34 @@ const LlamaGame = () => {
           />
 
         {/* Exit button during play or quiz */}
-        {!inLobby && (gameState === "playing" || gameState === "quiz" || gameState === "starQuiz") && (
+        {/* Phase 2: Name entry overlay */}
+        {nameEntry && (
+          <div className="absolute inset-0 z-30 flex items-center justify-center bg-foreground/40 backdrop-blur-[2px]">
+            <div className="bg-card/95 rounded-2xl p-6 sm:p-8 shadow-2xl border-2 border-primary flex flex-col items-center gap-4 max-w-[90%] sm:max-w-xs">
+              <p className="font-game text-sm sm:text-base text-foreground">🦙 Zadej své jméno</p>
+              <input
+                type="text"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter" && playerName.trim()) { (e.target as HTMLInputElement).blur(); enterGame(); } }}
+                placeholder="Tvoje jméno..."
+                maxLength={20}
+                autoFocus
+                className="font-game text-xs sm:text-sm px-4 py-2.5 rounded-xl border-2 border-primary/40 bg-card text-card-foreground focus:border-primary focus:outline-none w-full text-center"
+              />
+              <button
+                onClick={enterGame}
+                disabled={!playerName.trim()}
+                className="font-game text-sm px-8 py-2.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-md disabled:opacity-50"
+              >
+                START
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Exit button during play or quiz */}
+        {!inLobby && !nameEntry && (gameState === "playing" || gameState === "quiz" || gameState === "starQuiz") && (
           <button
             onClick={exitGame}
             className="absolute top-2 right-2 font-game text-xs px-3 py-1 rounded bg-destructive/80 text-destructive-foreground hover:bg-destructive transition-colors z-20"
