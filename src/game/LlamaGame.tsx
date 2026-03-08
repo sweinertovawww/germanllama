@@ -460,7 +460,7 @@ const ShareButtons = ({ score, level }: { score: number; level: number }) => {
           </span>
         );
       })}
-      <span className="relative z-10 font-game text-sm text-foreground text-center">📣 Sdílej výsledek</span>
+      <span className="relative z-10 font-game text-sm text-foreground text-center">📣 Pochlub se a sdílej výsledek 🤩</span>
       <div className="relative">
         {/* Button sparkles */}
         {sparklePositions.map((sp, i) => {
