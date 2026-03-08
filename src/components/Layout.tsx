@@ -10,7 +10,7 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const [visitDate, setVisitDate] = useState<string>("");
   const navigate = useNavigate();
