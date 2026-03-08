@@ -45,6 +45,14 @@ const App = () => (
           }
         />
         <Route
+          path="/skladani-vet"
+          element={
+            <Layout>
+              <SentenceBuilder />
+            </Layout>
+          }
+        />
+        <Route
           path="/kontakt"
           element={
             <Layout>

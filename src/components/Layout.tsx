@@ -139,6 +139,24 @@ const Layout = ({ children }: LayoutProps) => {
                 </span>
               </div>
             </button>
+            <button
+              onClick={() => navigate("/skladani-vet")}
+              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-200 border-2 ${
+                activeTab === "sentence-builder"
+                  ? "bg-primary text-primary-foreground border-primary shadow-lg scale-[1.02]"
+                  : "bg-muted text-muted-foreground border-border hover:border-primary/40 hover:bg-muted/80"
+              }`}
+            >
+              <PuzzleIcon className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "sentence-builder" ? "text-primary-foreground" : "text-primary"}`} />
+              <div className="text-left">
+                <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "sentence-builder" ? "text-primary-foreground" : "text-foreground"}`}>
+                  Skládání vět
+                </span>
+                <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "sentence-builder" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                  Přiřaď konce vět
+                </span>
+              </div>
+            </button>
           </div>
         </div>
       </section>
