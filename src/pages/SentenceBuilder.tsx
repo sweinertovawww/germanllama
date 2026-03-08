@@ -146,15 +146,29 @@ const SentenceBuilder = () => {
   const isMobile = useIsMobile();
   const profFilter = useProfessionFilter();
   const filteredQuestions = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
-  const [pairs, setPairs] = useState<SentencePair[]>(() => buildRound(filteredQuestions));
+  const [inLobby, setInLobby] = useState(true);
+  const [pairs, setPairs] = useState<SentencePair[]>([]);
   const [score, setScore] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [completedRounds, setCompletedRounds] = useState(0);
   const [copied, setCopied] = useState(false);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
   const [overSlotId, setOverSlotId] = useState<string | null>(null);
-  // Tap-to-select state (mobile fallback)
   const [selectedEndId, setSelectedEndId] = useState<number | null>(null);
+
+  const startGame = useCallback(() => {
+    setPairs(buildRound(filteredQuestions));
+    setScore(0);
+    setSelectedEndId(null);
+    setInLobby(false);
+  }, [filteredQuestions]);
+
+  const goToLobby = useCallback(() => {
+    setInLobby(true);
+    setPairs([]);
+    setScore(0);
+    setSelectedEndId(null);
+  }, []);
 
   const availableEnds = useMemo(() => {
     const matched = new Set(pairs.filter((p) => p.matched).map((p) => p.id));
