@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Copy, Check, ArrowLeft, Gamepad2 } from "lucide-react";
-import { QUESTIONS, FILL_QUESTIONS, filterByProfession, type Question, type FillQuestion } from "./vocabularyData";
+import { QUESTIONS, FILL_QUESTIONS, filterByProfession, isTranslationCorrect, type Question, type FillQuestion } from "./vocabularyData";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
 
