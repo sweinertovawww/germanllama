@@ -6,7 +6,7 @@ die Katze;kočka;obecné
 das Buch;kniha;obecné
 der Tisch;stůl;obecné
 die Blume;květina;obecné
-das Auto;auto;obecné
+das Auto;auto;automechanik
 der Baum;strom;obecné
 die Schule;škola;obecné
 der Schreibtisch;psací stůl;kancelář
@@ -345,3 +345,10 @@ Ich habe den Staub auf den Regalen gewischt.;Utřel(a) jsem prach na regálech.;
 Das Waschbecken ist leider verstopft.;Umyvadlo je bohužel ucpané.;uklízečka
 Wir brauchen mehr Seife und Toilettenpapier.;Potřebujeme víc mýdla a toaletního papíru.;uklízečka
 Haben Sie noch spezielle Wünsche für heute?;Máte pro dnešek ještě nějaká speciální přání?;uklízečka
+der Motor;motor;automechanik
+die Bremse;brzda;automechanik
+der Reifen;pneumatika;automechanik
+das Werkzeug;nářadí;automechanik
+Ich muss das Öl wechseln.;Musím vyměnit olej.;automechanik
+Die Batterie ist leer.;Baterie je vybitá.;automechanik
+Können Sie den Reifendruck prüfen?;Můžete zkontrolovat tlak v pneumatikách?;automechanik

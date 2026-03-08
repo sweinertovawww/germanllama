@@ -1,10 +1,10 @@
-export type Profession = "obecné" | "truhlář" | "zedník" | "instalatér" | "elektrikář" | "číšník" | "kuchař" | "pokladní" | "uklízečka" | "sestřička" | "kancelář";
+export type Profession = "obecné" | "truhlář" | "zedník" | "instalatér" | "elektrikář" | "číšník" | "kuchař" | "pokladní" | "uklízečka" | "sestřička" | "kancelář" | "automechanik";
 
 export interface ProfessionInfo {
   id: Profession;
   label: string;
   emoji: string;
-  group: "řemesla" | "gastro" | "zdravotnictví" | "obchod" | "úklid" | "kancelář" | "obecné";
+  group: "řemesla" | "gastro" | "zdravotnictví" | "obchod" | "úklid" | "kancelář" | "obecné" | "doprava";
 }
 
 export const PROFESSION_LIST: ProfessionInfo[] = [
@@ -18,6 +18,7 @@ export const PROFESSION_LIST: ProfessionInfo[] = [
   { id: "pokladní", label: "Pokladní", emoji: "🛒", group: "obchod" },
   { id: "sestřička", label: "Sestřička", emoji: "🏥", group: "zdravotnictví" },
   { id: "uklízečka", label: "Uklízečka", emoji: "🧹", group: "úklid" },
+  { id: "automechanik", label: "Automechanik", emoji: "🚗", group: "doprava" },
 ];
 
 export interface Question {
@@ -44,7 +45,7 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Buch?", options: ["der", "die", "das"], correct: 2, translation: "kniha", profession: "obecné" },
   { text: "Jaký člen má Tisch?", options: ["der", "die", "das"], correct: 0, translation: "stůl", profession: "obecné" },
   { text: "Jaký člen má Blume?", options: ["der", "die", "das"], correct: 1, translation: "květina", profession: "obecné" },
-  { text: "Jaký člen má Auto?", options: ["der", "die", "das"], correct: 2, translation: "auto", profession: "obecné" },
+  { text: "Jaký člen má Auto?", options: ["der", "die", "das"], correct: 2, translation: "auto", profession: "automechanik" },
   { text: "Jaký člen má Baum?", options: ["der", "die", "das"], correct: 0, translation: "strom", profession: "obecné" },
   { text: "Jaký člen má Schule?", options: ["der", "die", "das"], correct: 1, translation: "škola", profession: "obecné" },
   // === KANCELÁŘ ===
@@ -149,8 +150,13 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Verarbeitung?", options: ["der", "die", "das"], correct: 1, translation: "zpracování", profession: "truhlář" },
   { text: "Jaký člen má Kanten?", options: ["der", "die", "das"], correct: 1, translation: "hrany", profession: "truhlář" },
   { text: "Jaký člen má Säge?", options: ["der", "die", "das"], correct: 1, translation: "pila", profession: "truhlář" },
-  { text: "Jaký člen má Leim?", options: ["der", "die", "das"], correct: 0, translation: "lepidlo", profession: "truhlář" },
-  // === ZEDNÍK ===
+   { text: "Jaký člen má Leim?", options: ["der", "die", "das"], correct: 0, translation: "lepidlo", profession: "truhlář" },
+   // === AUTOMECHANIK ===
+   { text: "Jaký člen má Motor?", options: ["der", "die", "das"], correct: 0, translation: "motor", profession: "automechanik" },
+   { text: "Jaký člen má Bremse?", options: ["der", "die", "das"], correct: 1, translation: "brzda", profession: "automechanik" },
+   { text: "Jaký člen má Reifen?", options: ["der", "die", "das"], correct: 0, translation: "pneumatika", profession: "automechanik" },
+   { text: "Jaký člen má Werkzeug?", options: ["der", "die", "das"], correct: 2, translation: "nářadí", profession: "automechanik" },
+   // === ZEDNÍK ===
   { text: "Jaký člen má Gerüst?", options: ["der", "die", "das"], correct: 2, translation: "lešení", profession: "zedník" },
   { text: "Jaký člen má Zement?", options: ["der", "die", "das"], correct: 0, translation: "cement", profession: "zedník" },
   { text: "Jaký člen má Pläne?", options: ["der", "die", "das"], correct: 1, translation: "plány", profession: "zedník" },
@@ -404,7 +410,11 @@ export const FILL_QUESTIONS: FillQuestion[] = [
   { sentence: "Ich habe den ___ auf den Regalen gewischt.", answer: "Staub", translation: "Utřel(a) jsem prach na regálech.", profession: "uklízečka" },
   { sentence: "Das ___ ist leider verstopft.", answer: "Waschbecken", translation: "Umyvadlo je bohužel ucpané.", profession: "uklízečka" },
   { sentence: "Wir brauchen mehr ___ und Toilettenpapier.", answer: "Seife", translation: "Potřebujeme víc mýdla a toaletního papíru.", profession: "uklízečka" },
-  { sentence: "Haben Sie noch spezielle ___ für heute?", answer: "Wünsche", translation: "Máte pro dnešek ještě nějaká speciální přání?", profession: "uklízečka" },
+   { sentence: "Haben Sie noch spezielle ___ für heute?", answer: "Wünsche", translation: "Máte pro dnešek ještě nějaká speciální přání?", profession: "uklízečka" },
+   // === AUTOMECHANIK ===
+   { sentence: "Ich muss das ___ wechseln.", answer: "Öl", translation: "Musím vyměnit olej.", profession: "automechanik" },
+   { sentence: "Die Batterie ist ___.", answer: "leer", translation: "Baterie je vybitá.", profession: "automechanik" },
+   { sentence: "Können Sie den ___ prüfen?", answer: "Reifendruck", translation: "Můžete zkontrolovat tlak v pneumatikách?", profession: "automechanik" },
 ];
 
 // Helper to extract German word from question text
