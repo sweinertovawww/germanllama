@@ -12,11 +12,33 @@ function shuffleArray<T>(arr: T[]): T[] {
   return shuffled;
 }
 
+type Category = "mix" | "nouns" | "sentences";
+
 const FlashCards = () => {
   const allCards = useMemo(() => getAllFlashCards(), []);
+  const [category, setCategory] = useState<Category>("mix");
   const [cards, setCards] = useState<FlashCard[]>(allCards);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
+
+  const filteredByCategory = useCallback(
+    (cat: Category) => {
+      if (cat === "nouns") return allCards.filter((c) => c.type === "noun");
+      if (cat === "sentences") return allCards.filter((c) => c.type === "sentence");
+      return allCards;
+    },
+    [allCards]
+  );
+
+  const handleCategoryChange = useCallback(
+    (cat: Category) => {
+      setCategory(cat);
+      setFlipped(false);
+      setCards(filteredByCategory(cat));
+      setCurrentIndex(0);
+    },
+    [filteredByCategory]
+  );
 
   const card = cards[currentIndex];
 
