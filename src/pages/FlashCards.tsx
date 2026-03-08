@@ -83,6 +83,8 @@ const FlashCards = () => {
           </div>
         </div>
 
+        <ProfessionFilter selected={profFilter.selected} onToggle={(p) => { profFilter.toggle(p); setFlipped(false); setCurrentIndex(0); }} onSelectAll={() => { profFilter.selectAll(); setFlipped(false); setCurrentIndex(0); }} isAllSelected={profFilter.isAllSelected} />
+
         {/* Category filter */}
         <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-4 sm:mb-6">
           {([
