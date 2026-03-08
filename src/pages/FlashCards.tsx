@@ -12,11 +12,33 @@ function shuffleArray<T>(arr: T[]): T[] {
   return shuffled;
 }
 
+type Category = "mix" | "nouns" | "sentences";
+
 const FlashCards = () => {
   const allCards = useMemo(() => getAllFlashCards(), []);
+  const [category, setCategory] = useState<Category>("mix");
   const [cards, setCards] = useState<FlashCard[]>(allCards);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
+
+  const filteredByCategory = useCallback(
+    (cat: Category) => {
+      if (cat === "nouns") return allCards.filter((c) => c.type === "noun");
+      if (cat === "sentences") return allCards.filter((c) => c.type === "sentence");
+      return allCards;
+    },
+    [allCards]
+  );
+
+  const handleCategoryChange = useCallback(
+    (cat: Category) => {
+      setCategory(cat);
+      setFlipped(false);
+      setCards(filteredByCategory(cat));
+      setCurrentIndex(0);
+    },
+    [filteredByCategory]
+  );
 
   const card = cards[currentIndex];
 
@@ -32,9 +54,9 @@ const FlashCards = () => {
 
   const handleShuffle = useCallback(() => {
     setFlipped(false);
-    setCards(shuffleArray(allCards));
+    setCards(shuffleArray(filteredByCategory(category)));
     setCurrentIndex(0);
-  }, [allCards]);
+  }, [filteredByCategory, category]);
 
   return (
     <section className="py-4 sm:py-8 px-3 sm:px-4">
@@ -60,6 +82,27 @@ const FlashCards = () => {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Category filter */}
+        <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-4 sm:mb-6">
+          {([
+            { key: "nouns" as Category, label: "Slovíčka" },
+            { key: "sentences" as Category, label: "Věty / Fráze" },
+            { key: "mix" as Category, label: "Mix" },
+          ]).map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => handleCategoryChange(key)}
+              className={`font-body font-semibold text-[11px] sm:text-xs px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border transition-all active:scale-95 ${
+                category === key
+                  ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                  : "bg-card text-muted-foreground border-border hover:border-primary/40 hover:text-foreground"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
         {/* Card */}
