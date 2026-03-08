@@ -1219,6 +1219,8 @@ const LlamaGame = () => {
           Změnit obor
         </button>
       )}
+      </>
+      )}
     </div>
   );
 };
