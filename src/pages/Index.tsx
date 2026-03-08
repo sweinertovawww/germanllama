@@ -2,6 +2,7 @@ import { useState } from "react";
 import LlamaGame from "@/game/LlamaGame";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
+import sombreroIcon from "@/assets/sombrero-icon.png";
 
 import {
   Gamepad2,
@@ -89,7 +90,7 @@ const Index = () => {
                 text="Překládej slovíčka (použij diakritiku) a urči správný člen (der, die, das)."
               />
               <RuleItem
-                icon={<span className="text-2xl">👒</span>}
+                icon={<img src={sombreroIcon} alt="Sombréro" className="w-7 h-7" />}
                 title="Sbírej sombréra"
                 text="Přidají ti body navíc"
               />
