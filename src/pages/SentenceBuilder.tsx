@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
-import { FILL_QUESTIONS } from "@/game/vocabularyData";
+import { FILL_QUESTIONS, filterByProfession } from "@/game/vocabularyData";
+import { useProfessionFilter } from "@/hooks/useProfessionFilter";
+import ProfessionFilter from "@/components/ProfessionFilter";
 import { Copy, Check, ArrowRight, GripVertical, PuzzleIcon } from "lucide-react";
 import {
   DndContext,
