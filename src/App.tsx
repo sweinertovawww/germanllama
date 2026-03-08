@@ -31,10 +31,18 @@ const App = () => (
             element={
               <Layout>
                 <FlashCards />
-              </Layout>
-            }
-          />
-          <Route path="*" element={<NotFound />} />
+            </Layout>
+          }
+        />
+        <Route
+          path="/pexeso"
+          element={
+            <Layout>
+              <Pexeso />
+            </Layout>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
