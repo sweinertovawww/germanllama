@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Shuffle, BookOpen } from "lucide-react";
+import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
 import { getAllFlashCards, type FlashCard } from "@/game/vocabularyData";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 
@@ -17,7 +17,7 @@ type Category = "mix" | "nouns" | "sentences";
 const FlashCards = () => {
   const allCards = useMemo(() => getAllFlashCards(), []);
   const [category, setCategory] = useState<Category>("mix");
-  const [cards, setCards] = useState<FlashCard[]>(allCards);
+  const [cards, setCards] = useState<FlashCard[]>(() => shuffleArray(allCards));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
@@ -34,7 +34,7 @@ const FlashCards = () => {
     (cat: Category) => {
       setCategory(cat);
       setFlipped(false);
-      setCards(filteredByCategory(cat));
+      setCards(shuffleArray(filteredByCategory(cat)));
       setCurrentIndex(0);
     },
     [filteredByCategory]
@@ -52,11 +52,6 @@ const FlashCards = () => {
     setCurrentIndex((i) => (i - 1 + cards.length) % cards.length);
   }, [cards.length]);
 
-  const handleShuffle = useCallback(() => {
-    setFlipped(false);
-    setCards(shuffleArray(filteredByCategory(category)));
-    setCurrentIndex(0);
-  }, [filteredByCategory, category]);
 
   return (
     <section className="py-4 sm:py-8 px-3 sm:px-4">
@@ -169,24 +164,17 @@ const FlashCards = () => {
           </p>
 
           {/* Controls */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center justify-center gap-3 sm:gap-4">
             <button
               onClick={goPrev}
-              className="flex items-center gap-1 font-body font-semibold text-xs sm:text-sm px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl border-2 border-border bg-card text-foreground hover:border-primary/50 hover:bg-muted active:scale-95 transition-all"
+              className="flex items-center gap-1 font-body font-semibold text-xs sm:text-sm px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-border bg-card text-foreground hover:border-primary/50 hover:bg-muted active:scale-95 transition-all"
             >
               <ChevronLeft className="w-4 h-4" />
               Předchozí
             </button>
             <button
-              onClick={handleShuffle}
-              className="flex items-center gap-1 font-body font-semibold text-xs sm:text-sm px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl border-2 border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 active:scale-95 transition-all"
-            >
-              <Shuffle className="w-4 h-4" />
-              Náhodné
-            </button>
-            <button
               onClick={goNext}
-              className="flex items-center gap-1 font-body font-semibold text-xs sm:text-sm px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl border-2 border-border bg-card text-foreground hover:border-primary/50 hover:bg-muted active:scale-95 transition-all"
+              className="flex items-center gap-1 font-body font-semibold text-xs sm:text-sm px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-border bg-card text-foreground hover:border-primary/50 hover:bg-muted active:scale-95 transition-all"
             >
               Další
               <ChevronRight className="w-4 h-4" />
