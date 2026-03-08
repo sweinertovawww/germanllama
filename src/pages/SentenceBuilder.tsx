@@ -447,12 +447,20 @@ const SentenceBuilder = () => {
                 </div>
               </div>
 
-              <button
-                onClick={handleNextRound}
-                className="font-game text-xs px-6 py-3 rounded-xl bg-accent text-accent-foreground hover:scale-105 transition-transform shadow-md"
-              >
-                Další věty →
-              </button>
+              <div className="flex items-center justify-center gap-3 flex-wrap">
+                <button
+                  onClick={handleNextRound}
+                  className="font-game text-xs px-6 py-3 rounded-xl bg-accent text-accent-foreground hover:scale-105 transition-transform shadow-md"
+                >
+                  Další věty →
+                </button>
+                <button
+                  onClick={goToLobby}
+                  className="font-game text-xs border-2 border-border text-muted-foreground px-5 py-2.5 rounded-xl hover:border-primary/50 hover:text-foreground transition-colors"
+                >
+                  Změnit obor
+                </button>
+              </div>
             </div>
           )}
         </div>
