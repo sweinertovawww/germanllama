@@ -4,7 +4,7 @@ export interface ProfessionInfo {
   id: Profession;
   label: string;
   emoji: string;
-  group: "řemesla" | "gastro" | "zdravotnictví" | "obchod" | "úklid" | "kancelář" | "obecné";
+  group: "řemesla" | "gastro" | "zdravotnictví" | "obchod" | "úklid" | "kancelář" | "obecné" | "doprava";
 }
 
 export const PROFESSION_LIST: ProfessionInfo[] = [
