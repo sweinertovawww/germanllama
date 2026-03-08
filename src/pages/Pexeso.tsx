@@ -69,8 +69,9 @@ function buildCards(pairCount: number): MemoryCard[] {
 const Pexeso = () => {
   const isMobile = useIsMobile();
   const pairCount = 5;
+  const profFilter = useProfessionFilter();
 
-  const [cards, setCards] = useState<MemoryCard[]>(() => buildCards(pairCount));
+  const [cards, setCards] = useState<MemoryCard[]>(() => buildCards(pairCount, profFilter.selected));
   const [selected, setSelected] = useState<number[]>([]);
   const [checking, setChecking] = useState(false);
   const [gameOver, setGameOver] = useState(false);
