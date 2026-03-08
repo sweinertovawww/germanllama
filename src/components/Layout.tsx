@@ -64,6 +64,12 @@ const Layout = ({ children }: LayoutProps) => {
             <span className="font-body text-sm text-foreground">
               Platforma pro samouky němčiny
             </span>
+            {visitorCount !== null && (
+              <span className="flex items-center gap-1.5 font-body text-xs text-muted-foreground mt-1">
+                <Users className="w-3.5 h-3.5" />
+                Počet samouků na webu dnes ({visitDate}): {visitorCount}
+              </span>
+            )}
           </div>
           <div className="hidden sm:flex items-center gap-6">
             <button
