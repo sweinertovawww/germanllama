@@ -1209,8 +1209,8 @@ const LlamaGame = () => {
           </table>
         </div>
 
-      {/* Změnit obor button */}
-      {gameState === "idle" && (
+      {/* Změnit obor button - only when not in lobby and game is idle/over */}
+      {!inLobby && gameState === "over" && (
         <button
           onClick={goToLobby}
           className="font-game text-[10px] sm:text-xs border border-border text-muted-foreground px-2.5 py-1 rounded-lg hover:text-foreground hover:border-primary/50 transition-colors flex items-center gap-1"
@@ -1218,8 +1218,6 @@ const LlamaGame = () => {
           <ArrowLeft className="w-3 h-3" />
           Změnit obor
         </button>
-      )}
-      </>
       )}
     </div>
   );
