@@ -354,7 +354,7 @@ export const FILL_QUESTIONS: FillQuestion[] = [
   { sentence: "Tragen Sie auf der Baustelle immer einen ___.", answer: "Helm", translation: "Na stavbě noste vždy helmu.", profession: "zedník" },
   { sentence: "Wir bauen heute das ___ auf.", answer: "Gerüst", translation: "Dnes stavíme lešení.", profession: "zedník" },
   { sentence: "Der Zement muss noch zwei Stunden ___.", answer: "trocknen", translation: "Cement musí ještě dvě hodiny schnout.", profession: "zedník" },
-  { sentence: "Wo sind die Pläne für das ___?", answer: "Erdgeschoss", translation: "Kde jsou plány pro přízemí?", profession: "zedník" },
+  { sentence: "Wo sind die Pláne für das ___?", answer: "Erdgeschoss", translation: "Kde jsou plány pro přízemí?", profession: "obecné" },
   { sentence: "___ Sie mir bitte den Hammer.", answer: "Geben", translation: "Dejte mi prosím to kladivo.", profession: "zedník" },
   // === SESTŘIČKA ===
   { sentence: "Ich muss Ihnen Blut ___.", answer: "abnehmen", translation: "Musím vám odebrat krev.", profession: "sestřička" },
