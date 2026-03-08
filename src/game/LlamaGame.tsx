@@ -416,6 +416,90 @@ const drawScene = (ctx: CanvasRenderingContext2D, g: { groundOffset: number; obs
   ctx.fillText(`${g.score}`, CANVAS_WIDTH - 100, 30);
 };
 
+const ShareButtons = ({ score, level }: { score: number; level: number }) => {
+  const [copied, setCopied] = useState(false);
+  const shareText = `Právě jsem vyskákal ${score} bodů (Level ${level}) v němčině na Germanllama.com! 🦙🇩🇪`;
+  const shareUrl = "https://germanllama.lovable.app";
+
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "GermanLlama", text: shareText, url: shareUrl });
+      } catch {}
+    }
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+  const smsUrl = `sms:?body=${encodeURIComponent(`${shareText} ${shareUrl}`)}`;
+
+  const canNativeShare = typeof navigator !== "undefined" && !!navigator.share;
+
+  return (
+    <div className="flex flex-col items-center gap-2 w-full max-w-xs">
+      <span className="font-game text-xs text-muted-foreground">📣 Sdílej výsledek:</span>
+
+      {/* Mobile: native share */}
+      {canNativeShare && (
+        <button
+          onClick={handleNativeShare}
+          className="flex items-center gap-2 font-game text-xs px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity md:hidden"
+        >
+          <Share2 className="w-4 h-4" /> Sdílet
+        </button>
+      )}
+
+      {/* Desktop: direct share buttons */}
+      <div className="hidden md:flex gap-2">
+        <a
+          href={fbUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 font-game text-xs px-3 py-2 rounded-lg bg-[#1877F2] text-white hover:opacity-90 transition-opacity"
+        >
+          <Facebook className="w-4 h-4" /> Facebook
+        </a>
+        <a
+          href={linkedinUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 font-game text-xs px-3 py-2 rounded-lg bg-[#0A66C2] text-white hover:opacity-90 transition-opacity"
+        >
+          <Linkedin className="w-4 h-4" /> LinkedIn
+        </a>
+        <a
+          href={smsUrl}
+          className="flex items-center gap-1.5 font-game text-xs px-3 py-2 rounded-lg bg-accent text-accent-foreground hover:opacity-90 transition-opacity"
+        >
+          <MessageSquare className="w-4 h-4" /> Zpráva
+        </a>
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-1.5 font-game text-xs px-3 py-2 rounded-lg bg-muted text-foreground hover:opacity-90 transition-opacity"
+        >
+          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+          {copied ? "Zkopírováno!" : "Kopírovat"}
+        </button>
+      </div>
+
+      {/* Mobile fallback: also show copy */}
+      <button
+        onClick={handleCopy}
+        className="flex items-center gap-1.5 font-game text-xs px-3 py-2 rounded-lg bg-muted text-foreground hover:opacity-90 transition-opacity md:hidden"
+      >
+        {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+        {copied ? "Zkopírováno!" : "Kopírovat text"}
+      </button>
+    </div>
+  );
+};
+
 interface DailyEntry {
   name: string;
   score: number;
