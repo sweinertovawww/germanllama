@@ -113,7 +113,6 @@ const SentenceBuilder = () => {
   const [totalScore, setTotalScore] = useState(0);
   const [completedRounds, setCompletedRounds] = useState(0);
   const [copied, setCopied] = useState(false);
-  const [overSlotId, setOverSlotId] = useState<string | null>(null);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
   const [overSlotId, setOverSlotId] = useState<string | null>(null);
 
