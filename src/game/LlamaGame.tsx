@@ -421,8 +421,14 @@ const saveToLeaderboardDB = async (name: string, score: number) => {
 const LlamaGame = () => {
   const profFilter = useProfessionFilter();
   const [inLobby, setInLobby] = useState(true);
-  const filteredQuestions = useMemo(() => filterByProfession(QUESTIONS, profFilter.selected), [profFilter.selected]);
-  const filteredFill = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
+  const filteredQuestions = useMemo(() => {
+    const result = filterByProfession(QUESTIONS, profFilter.selected);
+    return result.length > 0 ? result : QUESTIONS.filter(q => q.profession === "obecné");
+  }, [profFilter.selected]);
+  const filteredFill = useMemo(() => {
+    const result = filterByProfession(FILL_QUESTIONS, profFilter.selected);
+    return result.length > 0 ? result : FILL_QUESTIONS.filter(q => q.profession === "obecné");
+  }, [profFilter.selected]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -512,7 +518,7 @@ const LlamaGame = () => {
     const count = addDailyPlayer(playerName.trim());
     setDailyPlayerCount(count);
     setGameState("playing");
-  }, [playerName]);
+  }, [playerName, filteredQuestions, filteredFill]);
 
   const triggerQuiz = useCallback(() => {
     const q = shuffledQuestionsRef.current[questionIndexRef.current % shuffledQuestionsRef.current.length];
