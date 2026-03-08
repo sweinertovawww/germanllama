@@ -35,20 +35,20 @@ der Kollege;kolega;kancelář
 das Meeting;schůzka;kancelář
 der Projektor;projektor;kancelář
 die Präsentation;prezentace;kancelář
-die Einladung;pozvánka;kancelář
-der Termin;termín;kancelář
+die Einladung;pozvánka;obecné
+der Termin;termín;obecné
 das Homeoffice;home office;kancelář
-die Entscheidung;rozhodnutí;kancelář
-das Projekt;projekt;kancelář
-die Priorität;priorita;kancelář
-das Feedback;zpětná vazba;kancelář
+die Entscheidung;rozhodnutí;obecné
+das Projekt;projekt;obecné
+die Priorität;priorita;obecné
+das Feedback;zpětná vazba;obecné
 der Entwurf;návrh;kancelář
 der Status;stav;kancelář
-die Kosten;náklady;kancelář
-das Team;tým;kancelář
+die Kosten;náklady;obecné
+das Team;tým;obecné
 die Unterlagen;podklady;kancelář
-die Deadline;termín (uzávěrka);kancelář
-die Zusammenarbeit;spolupráce;kancelář
+die Deadline;termín (uzávěrka);obecné
+die Zusammenarbeit;spolupráce;obecné
 die Pause;přestávka;obecné
 die Kantine;jídelna;obecné
 der Schrank;skříň;obecné
