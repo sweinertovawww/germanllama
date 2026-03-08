@@ -869,7 +869,7 @@ const LlamaGame = () => {
 
     drawScene(ctx, { groundOffset: 0, obstacles: [], stars: [], sombreros: [], wolves: [], llamaY: GROUND_Y, frameCount: 0, score: 0 });
     ctx.textAlign = "start";
-  }, [gameState, score, highScore, inLobby]);
+  }, [gameState, score, highScore, inLobby, nameEntry]);
 
   const totalTrophies = Math.floor(score / 10);
   const level = Math.floor(totalTrophies / 10) + 1;
