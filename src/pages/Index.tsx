@@ -2,6 +2,7 @@ import { useState } from "react";
 import LlamaGame from "@/game/LlamaGame";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
+import sombreroIcon from "@/assets/sombrero-icon.png";
 
 import {
   Gamepad2,
