@@ -54,9 +54,9 @@ const FlashCards = () => {
 
   const handleShuffle = useCallback(() => {
     setFlipped(false);
-    setCards(shuffleArray(allCards));
+    setCards(shuffleArray(filteredByCategory(category)));
     setCurrentIndex(0);
-  }, [allCards]);
+  }, [filteredByCategory, category]);
 
   return (
     <section className="py-4 sm:py-8 px-3 sm:px-4">
