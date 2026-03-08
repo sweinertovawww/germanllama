@@ -15,6 +15,7 @@ interface MemoryCard {
   matched: boolean;
   flipCount: number;
   locked: boolean;
+  profession: string;
 }
 
 function shuffleArray<T>(arr: T[]): T[] {
