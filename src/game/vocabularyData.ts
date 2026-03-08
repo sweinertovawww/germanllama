@@ -312,6 +312,21 @@ export const FILL_QUESTIONS: FillQuestion[] = [
   { sentence: "Ist in diesem Gericht ___ enthalten?", answer: "Knoblauch", translation: "Je v tomto jídle obsažen česnek?" },
   { sentence: "Wir haben heute eine Empfehlung vom ___.", answer: "Küchenchef", translation: "Dnes máme doporučení od šéfkuchaře." },
   { sentence: "Ich nehme die ___ auf.", answer: "Getränkebestellung", translation: "Přijmu objednávku na nápoje." },
+  { sentence: "Guten Tag, haben Sie eine ___?", answer: "Kundenkarte", translation: "Dobrý den, máte zákaznickou kartu?" },
+  { sentence: "Das macht zusammen ___ Euro.", answer: "achtundzwanzig", translation: "Dělí to dohromady dvacet osm euro." },
+  { sentence: "___ Sie bar oder mit Karte?", answer: "Zahlen", translation: "Platíte hotově, nebo kartou?" },
+  { sentence: "Brauchen Sie den ___?", answer: "Kassenbon", translation: "Potřebujete účtenku?" },
+  { sentence: "Obst und Gemüse müssen Sie dort ___.", answer: "abwiegen", translation: "Ovoce a zeleninu musíte zvážit tamto." },
+  { sentence: "Können Sie bitte eine zweite Kasse ___?", answer: "öffnen", translation: "Můžete prosím otevřít druhou pokladnu?" },
+  { sentence: "Dieses Produkt ist leider ___.", answer: "ausverkauft", translation: "Tento produkt je bohužel vyprodaný." },
+  { sentence: "Das Mindesthaltbarkeitsdatum ist ___.", answer: "abgelaufen", translation: "Datum minimální trvanlivosti vypršelo." },
+  { sentence: "Vorsicht, der Boden ist frisch ___.", answer: "gewischt", translation: "Pozor, podlaha je čerstvě vytřená." },
+  { sentence: "Wir müssen die Regale neu ___.", answer: "auffüllen", translation: "Musíme znovu doplnit regály." },
+  { sentence: "Suchen Sie ein bestimmtes ___?", answer: "Produkt", translation: "Hledáte nějaký konkrétní produkt?" },
+  { sentence: "Die Pfandflaschen können Sie dort ___.", answer: "abgeben", translation: "Zálohované láhve můžete odevzdat tamto." },
+  { sentence: "Haben Sie noch ___?", answer: "Kleingeld", translation: "Máte ještě drobné?" },
+  { sentence: "Das Angebot ___ nur bis Samstag.", answer: "gilt", translation: "Tato nabídka platí jen do soboty." },
+  { sentence: "Entschuldigung, wo finde ich das ___?", answer: "Waschmittel", translation: "Omlouvám se, kde najdu prací prášek?" },
 ];
 
 // Helper to extract German word from question text
