@@ -420,6 +420,7 @@ const saveToLeaderboardDB = async (name: string, score: number) => {
 
 const LlamaGame = () => {
   const profFilter = useProfessionFilter();
+  const [inLobby, setInLobby] = useState(true);
   const filteredQuestions = useMemo(() => filterByProfession(QUESTIONS, profFilter.selected), [profFilter.selected]);
   const filteredFill = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
