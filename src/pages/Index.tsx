@@ -1,31 +1,17 @@
-import { useState } from "react";
+import React from "react";
 import LlamaGame from "@/game/LlamaGame";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
 import sombreroIcon from "@/assets/sombrero-icon.png";
 
 import {
-  Gamepad2,
   ArrowUp,
   Trophy,
   SkullIcon,
   Instagram,
-  Briefcase,
-  Smile,
-  RefreshCw,
-  Users,
 } from "lucide-react";
 
 const Index = () => {
-  const [showGame, setShowGame] = useState(false);
-
-  const scrollToGame = () => {
-    setShowGame(true);
-    setTimeout(() => {
-      document.getElementById("game-section")?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  };
-
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
       {/* Navigation */}
@@ -104,41 +90,11 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Proč GermanLlama? */}
-      <section className="bg-secondary/30 py-12 sm:py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-body font-bold text-xl sm:text-2xl text-foreground mb-10">
-            Proč Germanllama?
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-            <WhyCard icon={<Briefcase className="w-7 h-7" />} label="Práce" />
-            <WhyCard icon={<Smile className="w-7 h-7" />} label="Zábava" />
-            <WhyCard icon={<RefreshCw className="w-7 h-7" />} label="Flexibilita" />
-            <WhyCard icon={<Users className="w-7 h-7" />} label="Komunita" />
-          </div>
-        </div>
-      </section>
-
       {/* Game Section */}
       <section id="game-section" className="flex-1 bg-background">
-        {showGame ? (
-          <div className="flex flex-col items-center justify-start py-4 sm:py-8 px-2">
-            <LlamaGame />
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-16 sm:py-24 px-4 text-center">
-            <Gamepad2 className="w-12 h-12 text-muted-foreground/40 mb-4" />
-            <p className="text-muted-foreground font-body text-base">
-              Klikni na tlačítko výše a začni hrát!
-            </p>
-            <button
-              onClick={() => setShowGame(true)}
-              className="mt-4 text-primary font-body font-bold underline underline-offset-4 hover:text-primary/80 transition-colors"
-            >
-              Spustit hru
-            </button>
-          </div>
-        )}
+        <div className="flex flex-col items-center justify-start py-4 sm:py-8 px-2">
+          <LlamaGame />
+        </div>
       </section>
 
       {/* Footer */}
@@ -180,13 +136,5 @@ function RuleItem({ icon, title, text }: { icon: React.ReactNode; title: string;
   );
 }
 
-function WhyCard({ icon, label }: { icon: React.ReactNode; label: string }) {
-  return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="text-primary">{icon}</div>
-      <span className="font-body font-bold text-foreground text-sm">{label}</span>
-    </div>
-  );
-}
 
 export default Index;
