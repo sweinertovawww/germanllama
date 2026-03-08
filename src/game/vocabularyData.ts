@@ -249,7 +249,18 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Toilettenpapier?", options: ["der", "die", "das"], correct: 2, translation: "toaletní papír", profession: "uklízečka" },
   { text: "Jaký člen má Schmutz?", options: ["der", "die", "das"], correct: 0, translation: "špína", profession: "uklízečka" },
   { text: "Jaký člen má Besprechungsraum?", options: ["der", "die", "das"], correct: 0, translation: "jednací místnost", profession: "uklízečka" },
-  { text: "Jaký člen má Handschuhe?", options: ["der", "die", "das"], correct: 1, translation: "rukavice", profession: "uklízečka" },
+   { text: "Jaký člen má Handschuhe?", options: ["der", "die", "das"], correct: 1, translation: "rukavice", profession: "uklízečka" },
+   // === KADEŘNÍK ===
+   { text: "Jaký člen má Schere?", options: ["der", "die", "das"], correct: 1, translation: "nůžky", profession: "kadeřník" },
+   { text: "Jaký člen má Kamm?", options: ["der", "die", "das"], correct: 0, translation: "hřeben", profession: "kadeřník" },
+   { text: "Jaký člen má Föhn?", options: ["der", "die", "das"], correct: 0, translation: "fén", profession: "kadeřník" },
+   { text: "Jaký člen má Farbe?", options: ["der", "die", "das"], correct: 1, translation: "barva", profession: "kadeřník" },
+   { text: "Jaký člen má Shampoo?", options: ["der", "die", "das"], correct: 2, translation: "šampon", profession: "kadeřník" },
+   { text: "Jaký člen má Spiegel?", options: ["der", "die", "das"], correct: 0, translation: "zrcadlo", profession: "kadeřník" },
+   { text: "Jaký člen má Haarschnitt?", options: ["der", "die", "das"], correct: 0, translation: "střih", profession: "kadeřník" },
+   { text: "Jaký člen má Umhang?", options: ["der", "die", "das"], correct: 0, translation: "přehoz / pláštěnka", profession: "kadeřník" },
+   { text: "Jaký člen má Bürste?", options: ["der", "die", "das"], correct: 1, translation: "kartáč", profession: "kadeřník" },
+   { text: "Jaký člen má Handtuch?", options: ["der", "die", "das"], correct: 2, translation: "ručník", profession: "kadeřník" },
 ];
 
 export const FILL_QUESTIONS: FillQuestion[] = [
