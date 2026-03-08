@@ -13,7 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const activeTab = location.pathname === "/flashcards" ? "flash-cards" : location.pathname === "/pexeso" ? "pexeso" : "llama-run";
+  const activeTab = location.pathname === "/flashcards" ? "flash-cards" : location.pathname === "/pexeso" ? "pexeso" : location.pathname === "/skladani-vet" ? "sentence-builder" : "llama-run";
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
