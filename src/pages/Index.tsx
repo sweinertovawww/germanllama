@@ -5,27 +5,13 @@ import heroBackground from "@/assets/hero-background.jpg";
 import sombreroIcon from "@/assets/sombrero-icon.png";
 
 import {
-  Gamepad2,
   ArrowUp,
   Trophy,
   SkullIcon,
   Instagram,
-  Briefcase,
-  Smile,
-  RefreshCw,
-  Users,
 } from "lucide-react";
 
 const Index = () => {
-  const [showGame, setShowGame] = useState(false);
-
-  const scrollToGame = () => {
-    setShowGame(true);
-    setTimeout(() => {
-      document.getElementById("game-section")?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  };
-
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
       {/* Navigation */}
