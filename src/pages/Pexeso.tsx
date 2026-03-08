@@ -57,7 +57,7 @@ function buildCards(pairCount: number): MemoryCard[] {
 
 const Pexeso = () => {
   const isMobile = useIsMobile();
-  const pairCount = isMobile ? 6 : 10;
+  const pairCount = 5;
 
   const [cards, setCards] = useState<MemoryCard[]>(() => buildCards(pairCount));
   const [selected, setSelected] = useState<number[]>([]);
