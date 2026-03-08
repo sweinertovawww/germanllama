@@ -1135,7 +1135,7 @@ const LlamaGame = () => {
         )}
       </div>
 
-      {gameState !== "over" && (
+      {!inLobby && gameState !== "over" && (
         <div className="flex flex-col items-center gap-2">
           <div className="flex gap-4 sm:gap-8 font-game text-xs sm:text-sm">
             <span className="text-muted-foreground">
