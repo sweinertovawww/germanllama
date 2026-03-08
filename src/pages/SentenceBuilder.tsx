@@ -213,6 +213,15 @@ const SentenceBuilder = () => {
       {/* Game Area */}
       <section className="px-3 sm:px-4 pb-8">
         <div className="max-w-4xl mx-auto">
+          {/* Score */}
+          <div className="flex items-center justify-between mb-5 px-1">
+            <span className="font-game text-[10px] sm:text-xs text-muted-foreground">
+              Kolo: {completedRounds + 1}
+            </span>
+            <span className="font-game text-[10px] sm:text-xs text-foreground">
+              ✅ {score}/{SENTENCES_PER_ROUND}
+            </span>
+          </div>
 
         <DndContext
           sensors={sensors}
