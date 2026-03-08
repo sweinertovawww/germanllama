@@ -923,22 +923,6 @@ const LlamaGame = () => {
   return (
     <div className="flex flex-col items-center gap-2 sm:gap-6 w-full max-w-[800px] mx-auto">
 
-      {inLobby ? (
-        /* === LOBBY === */
-        <div className="flex flex-col items-center gap-4 py-4">
-          <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
-          <button
-            onClick={enterGame}
-            className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg flex items-center gap-2"
-          >
-            <Gamepad2 className="w-5 h-5" />
-            START HRY
-          </button>
-        </div>
-      ) : (
-      /* === GAME === */
-      <>
-
       <div
         ref={containerRef}
         className="relative rounded-lg sm:rounded-xl overflow-hidden shadow-lg border-2 border-border"
@@ -959,38 +943,40 @@ const LlamaGame = () => {
           }}
         />
 
+        {/* Lobby overlay — transparent, floating over the canvas */}
+        {inLobby && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-foreground/30 backdrop-blur-[2px]">
+            <div className="flex flex-col items-center gap-3 px-4 py-6 max-w-[95%]">
+              <ProfessionFilter selected={profFilter.selected} onToggle={profFilter.toggle} onSelectAll={profFilter.selectAll} isAllSelected={profFilter.isAllSelected} />
+              <input
+                type="text"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter" && playerName.trim()) { (e.target as HTMLInputElement).blur(); enterGame(); } }}
+                placeholder="Tvoje jméno..."
+                maxLength={20}
+                className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-40 sm:w-56 text-center"
+              />
+              <button
+                onClick={enterGame}
+                disabled={!playerName.trim()}
+                className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg flex items-center gap-2 disabled:opacity-50"
+              >
+                <Gamepad2 className="w-5 h-5" />
+                START HRY
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Exit button during play or quiz */}
-        {(gameState === "playing" || gameState === "quiz" || gameState === "starQuiz") && (
+        {!inLobby && (gameState === "playing" || gameState === "quiz" || gameState === "starQuiz") && (
           <button
             onClick={exitGame}
             className="absolute top-2 right-2 font-game text-xs px-3 py-1 rounded bg-destructive/80 text-destructive-foreground hover:bg-destructive transition-colors z-20"
           >
             Exit
           </button>
-        )}
-
-        {/* Name input overlay on idle */}
-        {gameState === "idle" && (
-          <div className="absolute inset-0 flex items-center justify-center" style={{ paddingTop: `${60 * scale}px` }}>
-            <div className="flex flex-col items-center gap-2 sm:gap-3">
-              <input
-                type="text"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") { (e.target as HTMLInputElement).blur(); startGame(); } }}
-                placeholder="Tvoje jméno..."
-                maxLength={20}
-                className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-40 sm:w-56 text-center"
-              />
-              <button
-                onClick={() => { document.activeElement instanceof HTMLElement && document.activeElement.blur(); startGame(); }}
-                disabled={!playerName.trim()}
-                className="font-game text-xs px-6 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50"
-              >
-                START
-              </button>
-            </div>
-          </div>
         )}
         {/* Quiz overlay */}
         {gameState === "quiz" && currentQuestion && (
