@@ -875,10 +875,14 @@ const LlamaGame = () => {
   const level = Math.floor(totalTrophies / 10) + 1;
   const trophiesInLevel = totalTrophies % 10;
 
+  const goToNameEntry = useCallback(() => {
+    setInLobby(false);
+    setNameEntry(true);
+  }, []);
+
   const enterGame = useCallback(() => {
     if (!playerName.trim()) return;
-    setInLobby(false);
-    // Directly start playing — no idle screen
+    setNameEntry(false);
     playerNameRef.current = playerName.trim();
     const g = gameRef.current;
     g.llamaY = GROUND_Y;
@@ -917,6 +921,7 @@ const LlamaGame = () => {
 
   const goToLobby = useCallback(() => {
     setInLobby(true);
+    setNameEntry(false);
     setScore(0);
     setGameState("idle");
   }, []);
