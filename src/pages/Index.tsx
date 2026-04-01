@@ -2,6 +2,8 @@ import React from "react";
 import LlamaGame from "@/game/LlamaGame";
 import sombreroIcon from "@/assets/sombrero-icon.png";
 import { ArrowUp, Trophy, SkullIcon } from "lucide-react";
+import SEOHead from "@/components/SEOHead";
+import GameSEOContent from "@/components/GameSEOContent";
 
 function RuleItem({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
   return (
