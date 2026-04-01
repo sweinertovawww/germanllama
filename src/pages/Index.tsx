@@ -69,12 +69,39 @@ const Index = () => {
         </div>
       </section>
 
+      {/* How to play details */}
+      <section className="py-4 sm:py-8 px-3 sm:px-4">
+        {/* ... keep existing code */}
+      </section>
+
       {/* Game Section */}
       <section id="game-section" className="bg-background">
         <div className="flex flex-col items-center justify-start py-2 sm:py-4 px-1 sm:px-2">
           <LlamaGame />
         </div>
       </section>
+
+      <GameSEOContent
+        title="Co se naučíš v Llama Run?"
+        intro="Llama Run je skákací hra, ve které procvičuješ německé členy (der, die, das) a slovíčka z různých profesí. Skákej přes překážky, odpovídej na otázky a sbírej body. Ideální pro úroveň A2+."
+        sampleWords={[
+          { german: "der Tisch", czech: "stůl" },
+          { german: "die Katze", czech: "kočka" },
+          { german: "das Haus", czech: "dům" },
+          { german: "der Hund", czech: "pes" },
+          { german: "die Blume", czech: "květina" },
+          { german: "das Buch", czech: "kniha" },
+          { german: "der Stuhl", czech: "židle" },
+          { german: "die Lampe", czech: "lampa" },
+          { german: "das Auto", czech: "auto" },
+          { german: "der Baum", czech: "strom" },
+        ]}
+        faqs={[
+          { q: "Jak se hraje Llama Run?", a: "Skákej šipkou nahoru nebo mezerníkem. Odpovídej na otázky o německých členech a překladech. Za správné odpovědi získáváš body." },
+          { q: "Pro koho je hra určena?", a: "Pro všechny, kdo se učí němčinu na úrovni A2 a výše. Ideální pro pracující v Německu a Rakousku." },
+          { q: "Je hra zdarma?", a: "Ano, hra je kompletně zdarma a bez registrace. Stačí vybrat profesi a začít hrát." },
+        ]}
+      />
     </>
   );
 };
