@@ -102,6 +102,12 @@ const Layout = ({ children }: LayoutProps) => {
           {/* Desktop: Kontakt */}
           <div className="hidden sm:flex items-center gap-6">
             <button
+              onClick={() => navigate("/nemcina-do-prace")}
+              className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors"
+            >
+              Profese
+            </button>
+            <button
               onClick={() => navigate("/kontakt")}
               className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors"
             >
