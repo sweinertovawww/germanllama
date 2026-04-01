@@ -184,7 +184,7 @@ const ProfessionLanding = () => {
             faqs={[
               { q: "Potřebuji se registrovat?", a: "Ne, všechny hry jsou zdarma a bez registrace. Stačí vybrat profesi a začít hrát." },
               { q: "Kolik času denně potřebuji?", a: "Stačí 10 minut denně. Pravidelnost je důležitější než délka učení." },
-              { q: `Kolik slovíček tu je pro profesi ${page.title.toLowerCase()}?`, a: `Aktuálně máme ${vocabItems.length || questionCount} slovíček a ${sentenceCount} vět pro tuto profesi.` },
+              { q: `Kolik slovíček tu je pro profesi ${page.title.toLowerCase()}?`, a: `Aktuálně máme ${totalVocab} slovíček a ${sentenceCount} vět pro tuto profesi.` },
             ]}
           />
         )}
