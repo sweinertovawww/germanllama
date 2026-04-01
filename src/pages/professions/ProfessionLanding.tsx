@@ -89,10 +89,12 @@ const ProfessionLanding = () => {
   if (!page) return <Navigate to="/nemcina-do-prace" replace />;
 
   const prof = PROFESSION_LIST.find(p => p.id === page.professionId);
+  const allCards = getAllFlashCards();
+  const profCards = allCards.filter(c => c.profession === page.professionId);
   const questionCount = QUESTIONS.filter(q => q.profession === page.professionId).length;
   const sentenceCount = FILL_QUESTIONS.filter(q => q.profession === page.professionId).length;
-  const vocabItems = VOCABULARY?.filter((v: any) => v.profession === page.professionId) || [];
-  const sampleWords = vocabItems.slice(0, 10).map((v: any) => ({ german: v.german, czech: v.czech }));
+  const sampleWords = profCards.slice(0, 10).map(v => ({ german: v.german, czech: v.czech }));
+  const totalVocab = profCards.length;
 
   const jsonLd = {
     "@context": "https://schema.org",
