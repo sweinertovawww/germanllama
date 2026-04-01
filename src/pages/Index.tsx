@@ -69,11 +69,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* How to play details */}
-      <section className="py-4 sm:py-8 px-3 sm:px-4">
-        {/* ... keep existing code */}
-      </section>
-
       {/* Game Section */}
       <section id="game-section" className="bg-background">
         <div className="flex flex-col items-center justify-start py-2 sm:py-4 px-1 sm:px-2">
