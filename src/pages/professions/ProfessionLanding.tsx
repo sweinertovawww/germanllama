@@ -1,7 +1,7 @@
 import { Link, useParams, Navigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import GameSEOContent from "@/components/GameSEOContent";
-import { PROFESSION_LIST, type Profession, QUESTIONS, FILL_QUESTIONS, VOCABULARY } from "@/game/vocabularyData";
+import { PROFESSION_LIST, type Profession, QUESTIONS, FILL_QUESTIONS, getAllFlashCards } from "@/game/vocabularyData";
 import { Gamepad2, Layers, Brain, PuzzleIcon } from "lucide-react";
 
 interface ProfessionPageData {
