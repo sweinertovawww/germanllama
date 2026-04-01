@@ -20,7 +20,21 @@ function RuleItem({ icon, title, text }: { icon: React.ReactNode; title: string;
 const Index = () => {
   return (
     <>
-      {/* How to play details */}
+      <SEOHead
+        title="Llama Run – němčina hrou | GermanLlama"
+        description="Skákej s lamou a uč se německá slovíčka a členy. Zábavná hra pro úroveň A2+. Zdarma a bez registrace."
+        canonical="/"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "VideoGame",
+          name: "Llama Run",
+          description: "Skákací hra pro učení německých slovíček a členů",
+          url: "https://germanllama.lovable.app/",
+          inLanguage: "cs",
+          genre: "Educational",
+          playMode: "SinglePlayer",
+        }}
+      />
       <section className="py-4 sm:py-8 px-3 sm:px-4">
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-t-2xl px-4 sm:px-8 py-2 sm:py-2.5 text-center">
