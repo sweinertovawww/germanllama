@@ -134,7 +134,7 @@ const ProfessionLanding = () => {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3 mb-8">
           <div className="bg-muted rounded-xl p-4 text-center border border-border">
-            <span className="font-game text-xl text-primary block">{sampleWords.length > 0 ? vocabItems.length : questionCount}</span>
+            <span className="font-game text-xl text-primary block">{totalVocab}</span>
             <span className="font-body text-xs text-muted-foreground">Slovíček</span>
           </div>
           <div className="bg-muted rounded-xl p-4 text-center border border-border">
