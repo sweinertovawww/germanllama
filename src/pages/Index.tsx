@@ -97,6 +97,69 @@ const Index = () => {
           { q: "Je hra zdarma?", a: "Ano, hra je kompletně zdarma a bez registrace. Stačí vybrat profesi a začít hrát." },
         ]}
       />
+
+      {/* SEO pillar content */}
+      <section className="max-w-4xl mx-auto px-4 py-6 sm:py-10 space-y-8 font-body text-muted-foreground text-sm sm:text-base leading-relaxed">
+        <div>
+          <h2 className="font-game text-lg sm:text-xl text-foreground mb-2">Němčina do práce pro Čechy v Německu (A2+)</h2>
+          <p>Pracuješ v Německu nebo v pohraničí a potřebuješ se domluvit v práci? Pokud už máš základy němčiny (úroveň A2 a výš), ale v reálné práci často tápeš, jsi na správném místě. GermanLlama ti pomůže zlepšit němčinu prakticky – bez zbytečné teorie a složitostí.</p>
+          <p className="mt-2">Zaměřujeme se na němčinu do práce, kterou skutečně využiješ každý den. Ať už pracuješ jako elektrikář, skladník, zedník, instalatér nebo v jiné řemeslné profesi, naučíš se slovíčka a věty, které potřebuješ při komunikaci s kolegy i zákazníky.</p>
+        </div>
+
+        <div>
+          <h3 className="font-game text-base text-foreground mb-2">Proč se pracovní němčina liší od školní?</h3>
+          <p>Možná už umíš základy – víš, co znamená „Haus" nebo „Auto". Jenže v práci potřebuješ něco jiného:</p>
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li>rozumět pokynům („Přines kabel", „Vyměň pojistku")</li>
+            <li>reagovat rychle</li>
+            <li>používat odborná slovíčka z tvé profese</li>
+            <li>zvládat jednoduché rozhovory v reálných situacích</li>
+          </ul>
+          <p className="mt-2">Právě na to se zaměřujeme. Učíš se němčinu tak, jak ji opravdu používají lidé v práci.</p>
+        </div>
+
+        <div>
+          <h3 className="font-game text-base text-foreground mb-2">Německá slovíčka pro řemeslné profese</h3>
+          <p>Na webu najdeš obsah rozdělený podle profesí. Můžeš si vybrat přesně to, co potřebuješ:</p>
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li>němčina pro elektrikáře</li>
+            <li>němčina pro skladníky</li>
+            <li>němčina pro zedníky</li>
+            <li>němčina pro instalatéry</li>
+            <li>a další</li>
+          </ul>
+          <p className="mt-2">Každá kategorie obsahuje praktická slovíčka, fráze a věty z reálného pracovního prostředí.</p>
+        </div>
+
+        <div>
+          <h3 className="font-game text-base text-foreground mb-2">Učení němčiny hrou – rychlejší výsledky</h3>
+          <p>Zapomeň na nudné biflování. U nás se učíš pomocí jednoduchých her:</p>
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            <li>kartičky (flash cards) pro rychlé zapamatování</li>
+            <li>pexeso pro trénink paměti</li>
+            <li>skládání vět pro praxi komunikace</li>
+            <li>Llama Run pro procvičení členů der, die, das</li>
+          </ul>
+          <p className="mt-2">Díky tomu si slovíčka zapamatuješ přirozeně a bez stresu.</p>
+        </div>
+
+        <div>
+          <h3 className="font-game text-base text-foreground mb-2">Pro koho je GermanLlama ideální?</h3>
+          <ul className="list-disc list-inside space-y-1">
+            <li>pro Čechy pracující v Německu</li>
+            <li>pro lidi žijící v pohraničí</li>
+            <li>pro samouky na úrovni A2 a výš</li>
+            <li>pro všechny, kdo chtějí mluvit německy v práci jistěji</li>
+          </ul>
+          <p className="mt-2">Pokud nechceš jen rozumět, ale opravdu mluvit, tohle je přesně pro tebe.</p>
+        </div>
+
+        <div>
+          <h3 className="font-game text-base text-foreground mb-2">Začni se učit němčinu hned</h3>
+          <p>Vyber si svou profesi a začni trénovat němčinu, kterou skutečně využiješ v práci. Stačí pár minut denně a uvidíš rychlé zlepšení.</p>
+          <p className="mt-2 text-foreground font-semibold">👉 Vyzkoušej GermanLlama 🦙 a posuň svou němčinu na další úroveň.</p>
+        </div>
+      </section>
     </>
   );
 };
