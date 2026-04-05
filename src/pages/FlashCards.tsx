@@ -177,22 +177,24 @@ const FlashCards = () => {
                     {/* Front */}
                     <div
                       className="absolute inset-0 rounded-2xl border-2 border-border bg-card shadow-lg flex flex-col items-center justify-center p-6 sm:p-8"
-                      style={{ backfaceVisibility: "hidden" }}
+                      style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
                     >
                       <img
                         src={germanLlamaLogo}
                         alt="GermanLlama"
                         className="absolute top-3 left-3 sm:top-4 sm:left-4 w-8 h-8 sm:w-10 sm:h-10 rounded-md opacity-60"
                       />
-                      <span className="text-[10px] sm:text-xs font-body text-muted-foreground mb-2 uppercase tracking-wider">
-                        {card.type === "noun" ? "Podstatné jméno" : "Věta"}
-                      </span>
-                      <p className={`font-body font-bold text-foreground text-center leading-relaxed break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`}>
-                        {card.german}
-                      </p>
-                      <span className="text-[10px] sm:text-xs font-body text-muted-foreground mt-4">
-                        Klikni pro otočení →
-                      </span>
+                      <div className="flex flex-col items-center gap-2 w-full">
+                        <span className="text-[10px] sm:text-xs font-body text-muted-foreground uppercase tracking-wider">
+                          {card.type === "noun" ? "Podstatné jméno" : "Věta"}
+                        </span>
+                        <p className={`font-body font-bold text-foreground text-center break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`} style={{ lineHeight: 1.5, marginBottom: "0.5em" }}>
+                          {card.german}
+                        </p>
+                        <span className="text-[10px] sm:text-xs font-body text-muted-foreground">
+                          Klikni pro otočení →
+                        </span>
+                      </div>
                     </div>
 
                     {/* Back */}
@@ -200,6 +202,7 @@ const FlashCards = () => {
                       className="absolute inset-0 rounded-2xl border-2 border-primary bg-primary/5 shadow-lg flex flex-col items-center justify-center p-6 sm:p-8"
                       style={{
                         backfaceVisibility: "hidden",
+                        WebkitBackfaceVisibility: "hidden",
                         transform: "rotateY(180deg)",
                       }}
                     >
@@ -208,12 +211,14 @@ const FlashCards = () => {
                         alt="GermanLlama"
                         className="absolute top-3 left-3 sm:top-4 sm:left-4 w-8 h-8 sm:w-10 sm:h-10 rounded-md opacity-60"
                       />
-                      <span className="text-[10px] sm:text-xs font-body text-primary mb-2 uppercase tracking-wider font-semibold">
-                        Překlad
-                      </span>
-                      <p className={`font-body font-bold text-foreground text-center leading-relaxed break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`}>
-                        {card.czech}
-                      </p>
+                      <div className="flex flex-col items-center gap-2 w-full">
+                        <span className="text-[10px] sm:text-xs font-body text-primary uppercase tracking-wider font-semibold">
+                          Překlad
+                        </span>
+                        <p className={`font-body font-bold text-foreground text-center break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`} style={{ lineHeight: 1.5, marginBottom: "0.5em" }}>
+                          {card.czech}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
