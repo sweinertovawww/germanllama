@@ -42,31 +42,24 @@ const NemcinaDoPrice = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
           {PROFESSION_LIST.filter(p => p.id !== "obecné").map((prof) => {
             const page = professionPages[prof.id];
-            const content = (
-              <div className="bg-card border border-border rounded-xl p-5 hover:border-primary/50 hover:shadow-md transition-all">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl">{prof.emoji}</span>
-                  <h2 className="font-game text-base text-foreground">{prof.label}</h2>
-                </div>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                  {page?.description || `Německá slovíčka a fráze pro profesi ${prof.label.toLowerCase()}.`}
-                </p>
-                {page && (
+            const slug = page?.slug || prof.id;
+            const href = `/nemcina-do-prace/${slug}`;
+            return (
+              <Link key={prof.id} to={href}>
+                <div className="bg-card border border-border rounded-xl p-5 hover:border-primary/50 hover:shadow-md transition-all h-full flex flex-col">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-2xl">{prof.emoji}</span>
+                    <h2 className="font-game text-base text-foreground">{prof.label}</h2>
+                  </div>
+                  <p className="font-body text-sm text-muted-foreground leading-relaxed flex-1">
+                    {page?.description || `Německá slovíčka a fráze pro profesi ${prof.label.toLowerCase()}.`}
+                  </p>
                   <span className="inline-flex items-center gap-1 mt-3 text-sm font-body text-primary font-semibold">
                     Zobrazit detail <ArrowRight className="w-4 h-4" />
                   </span>
-                )}
-              </div>
+                </div>
+              </Link>
             );
-
-            if (page) {
-              return (
-                <Link key={prof.id} to={`/nemcina-do-prace/${page.slug}`}>
-                  {content}
-                </Link>
-              );
-            }
-            return <div key={prof.id}>{content}</div>;
           })}
         </div>
 
