@@ -51,6 +51,56 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://germanllama.lovable.app/nemcina-do-prace/truhlar</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://germanllama.lovable.app/nemcina-do-prace/instalater</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://germanllama.lovable.app/nemcina-do-prace/elektrikar</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://germanllama.lovable.app/nemcina-do-prace/pokladni</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://germanllama.lovable.app/nemcina-do-prace/uklizecka</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://germanllama.lovable.app/nemcina-do-prace/kancelar</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://germanllama.lovable.app/nemcina-do-prace/zahradnik</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://germanllama.lovable.app/nemcina-do-prace/ucitel</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://germanllama.lovable.app/nemcina-do-prace/kadernik</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://germanllama.lovable.app/nemcina-do-prace/haseni</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://germanllama.lovable.app/kontakt</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>

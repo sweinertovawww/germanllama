@@ -4,11 +4,21 @@ import { PROFESSION_LIST } from "@/game/vocabularyData";
 import { Gamepad2, Layers, Brain, PuzzleIcon, ArrowRight } from "lucide-react";
 
 const professionPages: Record<string, { slug: string; description: string }> = {
+  obecné: { slug: "skladnik", description: "Základní slovíčka a fráze pro práci ve skladu." },
   automechanik: { slug: "automechanik", description: "Slovíčka a fráze pro práci v autoservisu a dílně." },
   zedník: { slug: "stavba", description: "Němčina na stavbě – materiály, nářadí, bezpečnost práce." },
   gastro: { slug: "gastro", description: "Objednávky, jídelní lístek, komunikace v kuchyni a restauraci." },
   sestřička: { slug: "sestra", description: "Komunikace s pacienty, lékaři a kolegy ve zdravotnictví." },
   pokladní: { slug: "pokladni", description: "Platby, reklamace a zákaznický servis německy." },
+  truhlář: { slug: "truhlar", description: "Slovíčka pro truhlářskou dílnu – dřevo, nástroje, povrchy." },
+  instalatér: { slug: "instalater", description: "Potrubí, ventily, topení – němčina pro instalatéry." },
+  elektrikář: { slug: "elektrikar", description: "Kabely, jističe, zásuvky – němčina pro elektrikáře." },
+  uklízečka: { slug: "uklizecka", description: "Čisticí prostředky, nástroje a pokyny pro úklid." },
+  kancelář: { slug: "kancelar", description: "E-maily, schůzky, telefonáty – němčina v kanceláři." },
+  zahradník: { slug: "zahradnik", description: "Rostliny, nářadí a komunikace se zákazníky." },
+  učitel: { slug: "ucitel", description: "Škola, vyučování a komunikace s rodiči německy." },
+  kadeřník: { slug: "kadernik", description: "Střih, barvení, péče – němčina pro kadeřníky." },
+  systemy_pro_haseni: { slug: "haseni", description: "Hasicí systémy, bezpečnost a odborné názvosloví." },
 };
 
 const NemcinaDoPrice = () => {
