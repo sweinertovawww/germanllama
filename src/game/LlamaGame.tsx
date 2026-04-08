@@ -418,10 +418,13 @@ const saveToLeaderboardDB = async (name: string, score: number) => {
   await supabase.from("leaderboard").insert({ name, score });
 };
 
+const isMobileDevice = () => window.innerWidth < 768;
+
 const LlamaGame = () => {
   const profFilter = useProfessionFilter();
   const [inLobby, setInLobby] = useState(true);
   const [nameEntry, setNameEntry] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const filteredQuestions = useMemo(() => {
     const result = filterByProfession(QUESTIONS, profFilter.selected);
     return result.length > 0 ? result : QUESTIONS.filter(q => q.profession === "obecné");
