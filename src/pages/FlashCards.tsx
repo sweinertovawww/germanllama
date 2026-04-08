@@ -164,20 +164,17 @@ const FlashCards = () => {
               <div className="flex flex-col items-center">
                 <div
                   className="w-full max-w-md aspect-[3/2] cursor-pointer mb-4 sm:mb-6"
-                  style={{ perspective: "1000px" }}
                   onClick={() => setFlipped((f) => !f)}
                 >
-                  <div
-                    className="relative w-full h-full transition-transform duration-500"
-                    style={{
-                      transformStyle: "preserve-3d",
-                      transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
-                    }}
-                  >
+                  <div className="relative w-full h-full">
                     {/* Front */}
                     <div
-                      className="absolute inset-0 rounded-2xl border-2 border-border bg-card shadow-lg flex flex-col items-center justify-center p-6 sm:p-8"
-                      style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
+                      className="absolute inset-0 rounded-2xl border-2 border-border bg-card shadow-lg flex flex-col items-center justify-center p-6 sm:p-8 transition-all duration-300"
+                      style={{
+                        display: flipped ? "none" : "flex",
+                        opacity: flipped ? 0 : 1,
+                        transform: flipped ? "scale(0.98)" : "scale(1)",
+                      }}
                     >
                       <img
                         src={germanLlamaLogo}
@@ -188,7 +185,10 @@ const FlashCards = () => {
                         <span className="text-[10px] sm:text-xs font-body text-muted-foreground uppercase tracking-wider">
                           {card.type === "noun" ? "Podstatné jméno" : "Věta"}
                         </span>
-                        <p className={`font-body font-bold text-foreground text-center break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`} style={{ lineHeight: 1.5, marginBottom: "0.5em" }}>
+                        <p
+                          className={`font-body font-bold text-foreground text-center break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`}
+                          style={{ lineHeight: 1.5, marginBottom: "0.5em" }}
+                        >
                           {card.german}
                         </p>
                         <span className="text-[10px] sm:text-xs font-body text-muted-foreground">
@@ -199,11 +199,11 @@ const FlashCards = () => {
 
                     {/* Back */}
                     <div
-                      className="absolute inset-0 rounded-2xl border-2 border-primary bg-primary/5 shadow-lg flex flex-col items-center justify-center p-6 sm:p-8"
+                      className="absolute inset-0 rounded-2xl border-2 border-primary bg-primary/5 shadow-lg flex flex-col items-center justify-center p-6 sm:p-8 transition-all duration-300"
                       style={{
-                        backfaceVisibility: "hidden",
-                        WebkitBackfaceVisibility: "hidden",
-                        transform: "rotateY(180deg)",
+                        display: flipped ? "flex" : "none",
+                        opacity: flipped ? 1 : 0,
+                        transform: flipped ? "scale(1)" : "scale(0.98)",
                       }}
                     >
                       <img
@@ -215,7 +215,10 @@ const FlashCards = () => {
                         <span className="text-[10px] sm:text-xs font-body text-primary uppercase tracking-wider font-semibold">
                           Překlad
                         </span>
-                        <p className={`font-body font-bold text-foreground text-center break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`} style={{ lineHeight: 1.5, marginBottom: "0.5em" }}>
+                        <p
+                          className={`font-body font-bold text-foreground text-center break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`}
+                          style={{ lineHeight: 1.5, marginBottom: "0.5em" }}
+                        >
                           {card.czech}
                         </p>
                       </div>
