@@ -995,8 +995,8 @@ const LlamaGame = () => {
     setGameState("idle");
   }, []);
 
-  return (
-    <div className="flex flex-col items-center gap-2 sm:gap-6 w-full max-w-[800px] mx-auto">
+  const gameContent = (
+    <div className={`flex flex-col items-center w-full ${isFullscreen ? 'gap-1' : 'gap-2 sm:gap-6'} ${isFullscreen ? '' : 'max-w-[800px] mx-auto'}`}>
 
       {inLobby ? (
         /* === LOBBY — Phase 1: profession selection === */
