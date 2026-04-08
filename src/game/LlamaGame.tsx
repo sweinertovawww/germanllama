@@ -418,10 +418,13 @@ const saveToLeaderboardDB = async (name: string, score: number) => {
   await supabase.from("leaderboard").insert({ name, score });
 };
 
+const isMobileDevice = () => window.innerWidth < 768;
+
 const LlamaGame = () => {
   const profFilter = useProfessionFilter();
   const [inLobby, setInLobby] = useState(true);
   const [nameEntry, setNameEntry] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const filteredQuestions = useMemo(() => {
     const result = filterByProfession(QUESTIONS, profFilter.selected);
     return result.length > 0 ? result : QUESTIONS.filter(q => q.profession === "obecné");
@@ -634,26 +637,82 @@ const LlamaGame = () => {
     fetchLeaderboard().then(setLeaderboard);
   }, []);
 
+  // Fullscreen mode management
+  useEffect(() => {
+    if (!inLobby && isMobileDevice()) {
+      setIsFullscreen(true);
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
+      document.body.style.touchAction = 'none';
+      document.body.style.overscrollBehavior = 'none';
+    } else {
+      setIsFullscreen(false);
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+      document.body.style.touchAction = '';
+      document.body.style.overscrollBehavior = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+      document.body.style.touchAction = '';
+      document.body.style.overscrollBehavior = '';
+    };
+  }, [inLobby]);
+
+  // Prevent iOS gestures (pinch zoom, double tap)
+  useEffect(() => {
+    if (!isFullscreen) return;
+    const preventGesture = (e: Event) => e.preventDefault();
+    const preventDblClick = (e: Event) => e.preventDefault();
+    document.addEventListener('gesturestart', preventGesture, { passive: false });
+    document.addEventListener('gesturechange', preventGesture, { passive: false });
+    document.addEventListener('gestureend', preventGesture, { passive: false });
+    document.addEventListener('dblclick', preventDblClick, { passive: false });
+    return () => {
+      document.removeEventListener('gesturestart', preventGesture);
+      document.removeEventListener('gesturechange', preventGesture);
+      document.removeEventListener('gestureend', preventGesture);
+      document.removeEventListener('dblclick', preventDblClick);
+    };
+  }, [isFullscreen]);
+
   // Responsive scaling - fit within viewport
   useEffect(() => {
     const updateScale = () => {
       const container = containerRef.current;
       if (!container) return;
-      const parentWidth = container.parentElement?.clientWidth || window.innerWidth;
-      const maxWidth = Math.min(parentWidth - 16, CANVAS_WIDTH);
-      const scaleByWidth = maxWidth / CANVAS_WIDTH;
 
-      // Calculate available height: viewport minus nav, title, jump button, margins
-      const navHeight = document.querySelector('nav')?.getBoundingClientRect().height || 0;
-      const availableHeight = window.innerHeight - navHeight - 140; // 140px for title + jump btn + gaps
-      const scaleByHeight = Math.max(0.3, availableHeight / CANVAS_HEIGHT);
-
-      setScale(Math.min(scaleByWidth, scaleByHeight));
+      if (isFullscreen) {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        // Reserve space for jump button (64px) and score bar (40px)
+        const reservedHeight = 110;
+        const availW = vw - 8;
+        const availH = vh - reservedHeight;
+        const scaleByWidth = availW / CANVAS_WIDTH;
+        const scaleByHeight = availH / CANVAS_HEIGHT;
+        setScale(Math.min(scaleByWidth, scaleByHeight));
+      } else {
+        const parentWidth = container.parentElement?.clientWidth || window.innerWidth;
+        const maxWidth = Math.min(parentWidth - 16, CANVAS_WIDTH);
+        const scaleByWidth = maxWidth / CANVAS_WIDTH;
+        const navHeight = document.querySelector('nav')?.getBoundingClientRect().height || 0;
+        const availableHeight = window.innerHeight - navHeight - 140;
+        const scaleByHeight = Math.max(0.3, availableHeight / CANVAS_HEIGHT);
+        setScale(Math.min(scaleByWidth, scaleByHeight));
+      }
     };
     updateScale();
     window.addEventListener("resize", updateScale);
     return () => window.removeEventListener("resize", updateScale);
-  }, []);
+  }, [isFullscreen]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -936,8 +995,8 @@ const LlamaGame = () => {
     setGameState("idle");
   }, []);
 
-  return (
-    <div className="flex flex-col items-center gap-2 sm:gap-6 w-full max-w-[800px] mx-auto">
+  const gameContent = (
+    <div className={`flex flex-col items-center w-full ${isFullscreen ? 'gap-1' : 'gap-2 sm:gap-6'} ${isFullscreen ? '' : 'max-w-[800px] mx-auto'}`}>
 
       {inLobby ? (
         /* === LOBBY — Phase 1: profession selection === */
@@ -1259,6 +1318,23 @@ const LlamaGame = () => {
       )}
     </div>
   );
+
+  if (isFullscreen) {
+    return (
+      <div
+        className="fixed inset-0 z-[100] bg-background flex items-center justify-center"
+        style={{ touchAction: 'none', overscrollBehavior: 'none' }}
+      >
+        <div className="w-full h-full max-w-[500px] flex flex-col items-center justify-center overflow-hidden"
+          style={{ aspectRatio: '9/16', maxHeight: '100dvh' }}
+        >
+          {gameContent}
+        </div>
+      </div>
+    );
+  }
+
+  return gameContent;
 };
 
 export default LlamaGame;
