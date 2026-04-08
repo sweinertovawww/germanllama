@@ -1318,6 +1318,23 @@ const LlamaGame = () => {
       )}
     </div>
   );
+
+  if (isFullscreen) {
+    return (
+      <div
+        className="fixed inset-0 z-[100] bg-background flex items-center justify-center"
+        style={{ touchAction: 'none', overscrollBehavior: 'none' }}
+      >
+        <div className="w-full h-full max-w-[500px] flex flex-col items-center justify-center overflow-hidden"
+          style={{ aspectRatio: '9/16', maxHeight: '100dvh' }}
+        >
+          {gameContent}
+        </div>
+      </div>
+    );
+  }
+
+  return gameContent;
 };
 
 export default LlamaGame;
