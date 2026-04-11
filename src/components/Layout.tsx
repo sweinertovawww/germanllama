@@ -235,7 +235,7 @@ const Layout = ({ children }: LayoutProps) => {
               <ArrowLeftRight className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "wortpaare" ? "text-primary-foreground" : "text-primary"}`} />
               <div className="text-left">
                 <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "wortpaare" ? "text-primary-foreground" : "text-foreground"}`}>
-                  Wortpaare
+                  Slovní páry
                 </span>
                 <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "wortpaare" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
                   Synonyma & antonyma
