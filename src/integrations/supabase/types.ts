@@ -77,6 +77,39 @@ export type Database = {
         }
         Relationships: []
       }
+      word_pairs: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          pair_type: string
+          translation_a: string
+          translation_b: string
+          word_a: string
+          word_b: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          pair_type: string
+          translation_a: string
+          translation_b: string
+          word_a: string
+          word_b: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          pair_type?: string
+          translation_a?: string
+          translation_b?: string
+          word_a?: string
+          word_b?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

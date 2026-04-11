@@ -11,6 +11,7 @@ import SentenceBuilder from "./pages/SentenceBuilder";
 import Kontakt from "./pages/Kontakt";
 import NotFound from "./pages/NotFound";
 import NemcinaDoPrice from "./pages/NemcinaDoPrice";
+import Wortpaare from "./pages/Wortpaare";
 import ProfessionLanding from "./pages/professions/ProfessionLanding";
 
 const queryClient = new QueryClient();
@@ -67,6 +68,14 @@ const App = () => (
             element={
               <Layout>
                 <ProfessionLanding />
+              </Layout>
+            }
+          />
+          <Route
+            path="/wortpaare"
+            element={
+              <Layout>
+                <Wortpaare />
               </Layout>
             }
           />
