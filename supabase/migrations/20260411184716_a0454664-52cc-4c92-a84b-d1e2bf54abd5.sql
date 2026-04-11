@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX idx_word_pairs_unique_pair ON public.word_pairs (LEAST(word_a, word_b), GREATEST(word_a, word_b));
