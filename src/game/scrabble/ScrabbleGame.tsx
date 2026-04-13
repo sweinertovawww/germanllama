@@ -1,7 +1,10 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { type Profession, PROFESSION_LIST } from "@/game/vocabularyData";
 import { generateCrossword, getWordsForProfession, type CrosswordData, type PlacedWord } from "./crosswordGenerator";
-import { Grid, Hash } from "lucide-react";
+import ScrabbleLobby from "./ScrabbleLobby";
+import ScrabbleGrid from "./ScrabbleGrid";
+import ScrabbleClues from "./ScrabbleClues";
+import ScrabbleTilePool from "./ScrabbleTilePool";
 
 function shuffle<T>(arr: T[]): T[] {
   const s = [...arr];
@@ -27,16 +30,38 @@ const GROUP_COLORS: Record<string, string> = {
 
 type GamePhase = "lobby" | "playing" | "victory";
 
+export interface TileItem {
+  letter: string;
+  id: number;
+}
+
 export default function ScrabbleGame() {
   const [phase, setPhase] = useState<GamePhase>("lobby");
   const [selectedProfessions, setSelectedProfessions] = useState<Profession[]>([]);
   const [crossword, setCrossword] = useState<CrosswordData | null>(null);
+
+  // Confirmed (correct) cells
   const [filledCells, setFilledCells] = useState<Record<string, string>>({});
-  const [selectedTile, setSelectedTile] = useState<number | null>(null);
-  const [highlightedWord, setHighlightedWord] = useState<number | null>(null);
-  const [shakingCell, setShakingCell] = useState<string | null>(null);
+  // Pending (typed but unvalidated) cells
+  const [pendingCells, setPendingCells] = useState<Record<string, string>>({});
+  // Which tiles from pool were used for pending cells (to return on backspace)
+  const [pendingTileIds, setPendingTileIds] = useState<Record<string, number>>({});
+
   const [completedWords, setCompletedWords] = useState<Set<number>>(new Set());
-  const [tilePool, setTilePool] = useState<{ letter: string; id: number }[]>([]);
+  const [tilePool, setTilePool] = useState<TileItem[]>([]);
+
+  // Active word tracking
+  const [activeWordNum, setActiveWordNum] = useState<number | null>(null);
+  const [cursorPos, setCursorPos] = useState<number>(0);
+  // For intersection toggle: H or V preference
+  const [lastClickedCell, setLastClickedCell] = useState<string | null>(null);
+  const [intersectionToggle, setIntersectionToggle] = useState<"H" | "V">("H");
+
+  const [shakingCells, setShakingCells] = useState<Set<string>>(new Set());
+  const [selectedTile, setSelectedTile] = useState<number | null>(null);
+
+  const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   const toggleProfession = useCallback((p: Profession) => {
     setSelectedProfessions(prev =>
@@ -44,35 +69,7 @@ export default function ScrabbleGame() {
     );
   }, []);
 
-  const startGame = useCallback(() => {
-    const words = getWordsForProfession(selectedProfessions);
-    if (words.length < 3) return;
-    const cw = generateCrossword(words, 7);
-    if (cw.placed.length < 2) return;
-    setCrossword(cw);
-    setFilledCells({});
-    setCompletedWords(new Set());
-    setSelectedTile(null);
-    setHighlightedWord(null);
-
-    // Build tile pool: all needed letters + distractors
-    const neededLetters: string[] = [];
-    for (const p of cw.placed) {
-      for (let i = 0; i < p.word.length; i++) {
-        const r = p.direction === "H" ? p.row : p.row + i;
-        const c = p.direction === "H" ? p.col + i : p.col;
-        const key = `${r}-${c}`;
-        // Only add if not an intersection letter already counted
-        if (!neededLetters.some((_, idx) => {
-          // Check if this cell is shared — we still need the letter once
-          return false;
-        })) {
-          neededLetters.push(p.word[i]);
-        }
-      }
-    }
-
-    // Deduplicate for intersections
+  const buildTilePool = useCallback((cw: CrosswordData): TileItem[] => {
     const cellLetters: Record<string, string> = {};
     for (const p of cw.placed) {
       for (let i = 0; i < p.word.length; i++) {
@@ -82,72 +79,32 @@ export default function ScrabbleGame() {
       }
     }
     const uniqueLetters = Object.values(cellLetters);
-
-    // Add 5 random distractors
     const alphabet = "ABCDEFGHIJKLMNOPRSTUVWZ";
     const distractors: string[] = [];
     for (let i = 0; i < 5; i++) {
       distractors.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
     }
-
-    const allTiles = shuffle([...uniqueLetters, ...distractors]).map((letter, id) => ({ letter, id }));
-    setTilePool(allTiles);
-    setPhase("playing");
-  }, [selectedProfessions]);
-
-  // Check if a word is complete
-  const checkWordCompletion = useCallback((filled: Record<string, string>, cw: CrosswordData) => {
-    const newCompleted = new Set<number>();
-    for (const p of cw.placed) {
-      let complete = true;
-      for (let i = 0; i < p.word.length; i++) {
-        const r = p.direction === "H" ? p.row : p.row + i;
-        const c = p.direction === "H" ? p.col + i : p.col;
-        if (filled[`${r}-${c}`] !== p.word[i]) {
-          complete = false;
-          break;
-        }
-      }
-      if (complete) newCompleted.add(p.number);
-    }
-    return newCompleted;
+    return shuffle([...uniqueLetters, ...distractors]).map((letter, id) => ({ letter, id }));
   }, []);
 
-  // Place a tile on a cell
-  const placeTile = useCallback((row: number, col: number) => {
-    if (!crossword || selectedTile === null) return;
-    const tile = tilePool.find(t => t.id === selectedTile);
-    if (!tile) return;
+  const startGame = useCallback(() => {
+    const words = getWordsForProfession(selectedProfessions);
+    if (words.length < 3) return;
+    const cw = generateCrossword(words, 7);
+    if (cw.placed.length < 2) return;
+    setCrossword(cw);
+    setFilledCells({});
+    setPendingCells({});
+    setPendingTileIds({});
+    setCompletedWords(new Set());
+    setSelectedTile(null);
+    setActiveWordNum(null);
+    setCursorPos(0);
+    setTilePool(buildTilePool(cw));
+    setPhase("playing");
+  }, [selectedProfessions, buildTilePool]);
 
-    const key = `${row}-${col}`;
-    if (filledCells[key]) return; // already filled
-
-    // Check if this cell belongs to any word and if the letter is correct
-    const expectedLetter = crossword.grid[row]?.[col];
-    if (!expectedLetter) return;
-
-    if (tile.letter === expectedLetter) {
-      const newFilled = { ...filledCells, [key]: tile.letter };
-      setFilledCells(newFilled);
-      setTilePool(prev => prev.filter(t => t.id !== selectedTile));
-      setSelectedTile(null);
-
-      const completed = checkWordCompletion(newFilled, crossword);
-      setCompletedWords(completed);
-
-      // Check victory
-      if (completed.size === crossword.placed.length) {
-        setTimeout(() => setPhase("victory"), 600);
-      }
-    } else {
-      // Wrong — shake
-      setShakingCell(key);
-      setTimeout(() => setShakingCell(null), 500);
-      setSelectedTile(null);
-    }
-  }, [crossword, selectedTile, tilePool, filledCells, checkWordCompletion]);
-
-  // Get cells for a word (for highlighting)
+  // Get cells for a placed word
   const getWordCells = useCallback((p: PlacedWord): string[] => {
     const cells: string[] = [];
     for (let i = 0; i < p.word.length; i++) {
@@ -158,14 +115,354 @@ export default function ScrabbleGame() {
     return cells;
   }, []);
 
-  const highlightedCells = useMemo(() => {
-    if (highlightedWord === null || !crossword) return new Set<string>();
-    const word = crossword.placed.find(p => p.number === highlightedWord);
-    if (!word) return new Set<string>();
-    return new Set(getWordCells(word));
-  }, [highlightedWord, crossword, getWordCells]);
+  const activeWord = useMemo(() => {
+    if (activeWordNum === null || !crossword) return null;
+    return crossword.placed.find(p => p.number === activeWordNum) ?? null;
+  }, [activeWordNum, crossword]);
 
-  // Get word number for a cell (first letter)
+  const activeWordCells = useMemo(() => {
+    if (!activeWord) return [];
+    return getWordCells(activeWord);
+  }, [activeWord, getWordCells]);
+
+  // Find first empty cell index in active word
+  const findFirstEmptyIndex = useCallback((cells: string[], filled: Record<string, string>, pending: Record<string, string>): number => {
+    for (let i = 0; i < cells.length; i++) {
+      if (!filled[cells[i]] && !pending[cells[i]]) return i;
+    }
+    return cells.length; // all filled
+  }, []);
+
+  // Check which words at a given cell
+  const getWordsAtCell = useCallback((cellKey: string): PlacedWord[] => {
+    if (!crossword) return [];
+    return crossword.placed.filter(p => {
+      const cells = getWordCells(p);
+      return cells.includes(cellKey);
+    });
+  }, [crossword, getWordCells]);
+
+  // Activate a word by clicking a cell
+  const handleCellClick = useCallback((row: number, col: number) => {
+    if (!crossword) return;
+    const key = `${row}-${col}`;
+    const letter = crossword.grid[row]?.[col];
+    if (!letter) return;
+
+    // If a tile is selected from pool, place it
+    if (selectedTile !== null) {
+      const tile = tilePool.find(t => t.id === selectedTile);
+      if (tile && !filledCells[key] && !pendingCells[key]) {
+        // Find which word this cell belongs to, place as pending
+        placePendingLetter(key, tile.letter, tile.id);
+      }
+      setSelectedTile(null);
+      return;
+    }
+
+    const wordsHere = getWordsAtCell(key);
+    if (wordsHere.length === 0) return;
+
+    if (wordsHere.length === 1) {
+      const w = wordsHere[0];
+      if (activeWordNum !== w.number) {
+        activateWord(w.number);
+      }
+    } else {
+      // Intersection: toggle between H and V
+      if (lastClickedCell === key) {
+        const newDir = intersectionToggle === "H" ? "V" : "H";
+        setIntersectionToggle(newDir);
+        const target = wordsHere.find(w => w.direction === newDir) ?? wordsHere[0];
+        activateWord(target.number);
+      } else {
+        const hWord = wordsHere.find(w => w.direction === "H");
+        const target = hWord ?? wordsHere[0];
+        setIntersectionToggle(target.direction);
+        activateWord(target.number);
+      }
+    }
+    setLastClickedCell(key);
+  }, [crossword, selectedTile, tilePool, filledCells, pendingCells, activeWordNum, lastClickedCell, intersectionToggle, getWordsAtCell]);
+
+  const activateWord = useCallback((wordNum: number) => {
+    setActiveWordNum(wordNum);
+    setCursorPos(0);
+    // Focus hidden input for mobile keyboard
+    setTimeout(() => hiddenInputRef.current?.focus(), 50);
+  }, []);
+
+  // Place a pending letter in a cell
+  const placePendingLetter = useCallback((cellKey: string, letter: string, tileId?: number) => {
+    setPendingCells(prev => ({ ...prev, [cellKey]: letter }));
+    if (tileId !== undefined) {
+      setPendingTileIds(prev => ({ ...prev, [cellKey]: tileId }));
+      setTilePool(prev => prev.filter(t => t.id !== tileId));
+    }
+  }, []);
+
+  // Validate active word when all cells are filled
+  const validateActiveWord = useCallback((word: PlacedWord, filled: Record<string, string>, pending: Record<string, string>) => {
+    const cells = getWordCells(word);
+    // Check if all cells have a letter (filled or pending)
+    const allFilled = cells.every(c => filled[c] || pending[c]);
+    if (!allFilled) return;
+
+    // Check correctness
+    let correct = true;
+    for (let i = 0; i < word.word.length; i++) {
+      const cellLetter = filled[cells[i]] || pending[cells[i]];
+      if (cellLetter !== word.word[i]) {
+        correct = false;
+        break;
+      }
+    }
+
+    if (correct) {
+      // Move pending to filled for this word's cells
+      const newFilled = { ...filled };
+      const newPending = { ...pending };
+      const newPendingIds = { ...pendingTileIds };
+      for (const c of cells) {
+        if (pending[c]) {
+          newFilled[c] = pending[c];
+          delete newPending[c];
+          delete newPendingIds[c];
+        }
+      }
+      setFilledCells(newFilled);
+      setPendingCells(newPending);
+      setPendingTileIds(newPendingIds);
+
+      // Mark completed
+      const newCompleted = new Set(completedWords);
+      newCompleted.add(word.number);
+
+      // Also check other words that may now be complete due to shared cells
+      if (crossword) {
+        for (const p of crossword.placed) {
+          if (newCompleted.has(p.number)) continue;
+          const wCells = getWordCells(p);
+          let allCorrect = true;
+          for (let i = 0; i < p.word.length; i++) {
+            if (newFilled[wCells[i]] !== p.word[i]) {
+              allCorrect = false;
+              break;
+            }
+          }
+          if (allCorrect) newCompleted.add(p.number);
+        }
+      }
+      setCompletedWords(newCompleted);
+
+      // Jump to next unfilled word
+      if (crossword && newCompleted.size < crossword.placed.length) {
+        const next = crossword.placed.find(p => !newCompleted.has(p.number));
+        if (next) {
+          setTimeout(() => activateWord(next.number), 300);
+        }
+      }
+
+      // Victory check
+      if (crossword && newCompleted.size === crossword.placed.length) {
+        setTimeout(() => setPhase("victory"), 600);
+      }
+    } else {
+      // Wrong: shake and clear pending cells for this word
+      const cellSet = new Set(cells.filter(c => pending[c]));
+      setShakingCells(cellSet);
+      setTimeout(() => {
+        setShakingCells(new Set());
+        // Clear pending and return tiles
+        const newPending = { ...pending };
+        const newPendingIds = { ...pendingTileIds };
+        const returnedTiles: TileItem[] = [];
+        for (const c of cells) {
+          if (pending[c] && !filled[c]) {
+            if (newPendingIds[c] !== undefined) {
+              returnedTiles.push({ letter: pending[c], id: newPendingIds[c] });
+              delete newPendingIds[c];
+            }
+            delete newPending[c];
+          }
+        }
+        setPendingCells(newPending);
+        setPendingTileIds(newPendingIds);
+        if (returnedTiles.length > 0) {
+          setTilePool(prev => [...prev, ...returnedTiles]);
+        }
+        setCursorPos(0);
+      }, 500);
+    }
+  }, [getWordCells, pendingTileIds, completedWords, crossword, activateWord]);
+
+  // Type a letter into the active word
+  const typeLetter = useCallback((letter: string) => {
+    if (!activeWord || !crossword) return;
+    const cells = activeWordCells;
+    const upperLetter = letter.toUpperCase();
+
+    // Find first empty cell
+    const emptyIdx = findFirstEmptyIndex(cells, filledCells, pendingCells);
+    if (emptyIdx >= cells.length) return; // word fully typed
+
+    // Skip cells that are already filled (confirmed from intersections)
+    let targetIdx = emptyIdx;
+    while (targetIdx < cells.length && filledCells[cells[targetIdx]]) {
+      targetIdx++;
+    }
+    if (targetIdx >= cells.length) return;
+
+    const cellKey = cells[targetIdx];
+
+    // Try to consume a matching tile from pool
+    const tileIdx = tilePool.findIndex(t => t.letter === upperLetter);
+    if (tileIdx !== -1) {
+      placePendingLetter(cellKey, upperLetter, tilePool[tileIdx].id);
+    } else {
+      // No matching tile — still allow typing
+      placePendingLetter(cellKey, upperLetter);
+    }
+    setCursorPos(targetIdx + 1);
+
+    // Check if word is now fully filled → validate
+    const newPending = { ...pendingCells, [cellKey]: upperLetter };
+    const allCellsFilled = cells.every(c => filledCells[c] || newPending[c]);
+    if (allCellsFilled) {
+      setTimeout(() => validateActiveWord(activeWord, filledCells, newPending), 100);
+    }
+  }, [activeWord, crossword, activeWordCells, filledCells, pendingCells, tilePool, findFirstEmptyIndex, placePendingLetter, validateActiveWord]);
+
+  // Backspace: remove last pending letter
+  const handleBackspace = useCallback(() => {
+    if (!activeWord) return;
+    const cells = activeWordCells;
+
+    // Find last pending cell (searching from end)
+    let lastPendingIdx = -1;
+    for (let i = cells.length - 1; i >= 0; i--) {
+      if (pendingCells[cells[i]] && !filledCells[cells[i]]) {
+        lastPendingIdx = i;
+        break;
+      }
+    }
+    if (lastPendingIdx === -1) return;
+
+    const cellKey = cells[lastPendingIdx];
+    const tileId = pendingTileIds[cellKey];
+
+    // Return tile to pool
+    if (tileId !== undefined) {
+      setTilePool(prev => [...prev, { letter: pendingCells[cellKey], id: tileId }]);
+    }
+
+    setPendingCells(prev => {
+      const n = { ...prev };
+      delete n[cellKey];
+      return n;
+    });
+    setPendingTileIds(prev => {
+      const n = { ...prev };
+      delete n[cellKey];
+      return n;
+    });
+    setCursorPos(lastPendingIdx);
+  }, [activeWord, activeWordCells, pendingCells, filledCells, pendingTileIds]);
+
+  // Jump to next unfilled word
+  const jumpToNextWord = useCallback(() => {
+    if (!crossword) return;
+    const next = crossword.placed.find(p => !completedWords.has(p.number) && p.number !== activeWordNum);
+    if (next) activateWord(next.number);
+  }, [crossword, completedWords, activeWordNum, activateWord]);
+
+  // Keyboard handler
+  useEffect(() => {
+    if (phase !== "playing") return;
+
+    const handler = (e: KeyboardEvent) => {
+      if (!activeWord) return;
+
+      if (e.key === "Escape") {
+        setActiveWordNum(null);
+        hiddenInputRef.current?.blur();
+        return;
+      }
+
+      if (e.key === "Backspace") {
+        e.preventDefault();
+        handleBackspace();
+        return;
+      }
+
+      if (e.key === "Enter" || e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        jumpToNextWord();
+        return;
+      }
+
+      // Letter input
+      if (e.key.length === 1 && /[a-zA-ZäöüÄÖÜß]/i.test(e.key)) {
+        e.preventDefault();
+        typeLetter(e.key);
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [phase, activeWord, handleBackspace, jumpToNextWord, typeLetter]);
+
+  // Hidden input handler for mobile virtual keyboard
+  const handleHiddenInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    const value = (e.target as HTMLInputElement).value;
+    if (value.length > 0) {
+      const lastChar = value[value.length - 1];
+      if (/[a-zA-ZäöüÄÖÜß]/i.test(lastChar)) {
+        typeLetter(lastChar);
+      }
+      (e.target as HTMLInputElement).value = "";
+    }
+  }, [typeLetter]);
+
+  const handleHiddenKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace") {
+      e.preventDefault();
+      handleBackspace();
+    }
+  }, [handleBackspace]);
+
+  // Drag and drop onto grid cell
+  const handleDrop = useCallback((row: number, col: number, tileId: number) => {
+    if (!crossword) return;
+    const key = `${row}-${col}`;
+    if (filledCells[key] || pendingCells[key]) return;
+    const expected = crossword.grid[row]?.[col];
+    if (!expected) return;
+
+    const tile = tilePool.find(t => t.id === tileId);
+    if (!tile) return;
+
+    // Activate the word this cell belongs to (if not already)
+    const wordsHere = getWordsAtCell(key);
+    if (wordsHere.length > 0 && activeWordNum === null) {
+      activateWord(wordsHere[0].number);
+    }
+
+    placePendingLetter(key, tile.letter, tile.id);
+
+    // Check if any word containing this cell is now complete
+    for (const w of wordsHere) {
+      const cells = getWordCells(w);
+      const newPending = { ...pendingCells, [key]: tile.letter };
+      const allFilled = cells.every(c => filledCells[c] || newPending[c]);
+      if (allFilled) {
+        setTimeout(() => validateActiveWord(w, filledCells, newPending), 100);
+        break;
+      }
+    }
+  }, [crossword, filledCells, pendingCells, tilePool, getWordsAtCell, activeWordNum, activateWord, placePendingLetter, getWordCells, validateActiveWord]);
+
+  // Cell numbers for crossword
   const cellNumbers = useMemo(() => {
     if (!crossword) return {};
     const nums: Record<string, number> = {};
@@ -176,13 +473,20 @@ export default function ScrabbleGame() {
     return nums;
   }, [crossword]);
 
+  // Cursor cell key
+  const cursorCellKey = useMemo(() => {
+    if (!activeWord || cursorPos >= activeWordCells.length) return null;
+    return activeWordCells[cursorPos];
+  }, [activeWord, cursorPos, activeWordCells]);
+
   if (phase === "lobby") {
-    return <LobbyScreen
+    return <ScrabbleLobby
       selected={selectedProfessions}
       onToggle={toggleProfession}
       onSelectAll={() => setSelectedProfessions([])}
       isAllSelected={selectedProfessions.length === 0}
       onStart={startGame}
+      groupColors={GROUP_COLORS}
     />;
   }
 
@@ -213,245 +517,53 @@ export default function ScrabbleGame() {
 
   if (!crossword) return null;
 
-  const horizontalWords = crossword.placed.filter(p => p.direction === "H");
-  const verticalWords = crossword.placed.filter(p => p.direction === "V");
-
   return (
-    <div className="max-w-4xl mx-auto px-2 sm:px-4 py-4">
-      {/* Grid */}
-      <div className="flex justify-center mb-6 overflow-x-auto">
-        <div
-          className="inline-grid gap-0"
-          style={{
-            gridTemplateColumns: `repeat(${crossword.cols}, minmax(0, 1fr))`,
-          }}
-        >
-          {Array.from({ length: crossword.rows }, (_, row) =>
-            Array.from({ length: crossword.cols }, (_, col) => {
-              const key = `${row}-${col}`;
-              const letter = crossword.grid[row][col];
-              const filled = filledCells[key];
-              const isHighlighted = highlightedCells.has(key);
-              const isShaking = shakingCell === key;
-              const num = cellNumbers[key];
+    <div ref={wrapperRef} className="max-w-4xl mx-auto px-2 sm:px-4 py-4" tabIndex={-1}>
+      {/* Hidden input for mobile virtual keyboard */}
+      <input
+        ref={hiddenInputRef}
+        type="text"
+        inputMode="text"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="characters"
+        spellCheck={false}
+        className="absolute left-[-9999px] opacity-0 w-0 h-0"
+        onInput={handleHiddenInput}
+        onKeyDown={handleHiddenKeyDown}
+      />
 
-              if (!letter) {
-                return <div key={key} className="w-10 h-10 sm:w-12 sm:h-12" />;
-              }
+      <ScrabbleGrid
+        crossword={crossword}
+        filledCells={filledCells}
+        pendingCells={pendingCells}
+        cellNumbers={cellNumbers}
+        activeWordCells={new Set(activeWordCells)}
+        cursorCellKey={cursorCellKey}
+        shakingCells={shakingCells}
+        onCellClick={handleCellClick}
+        onDrop={handleDrop}
+      />
 
-              return (
-                <div
-                  key={key}
-                  onClick={() => placeTile(row, col)}
-                  className={`
-                    relative w-10 h-10 sm:w-12 sm:h-12 border border-border/50 flex items-center justify-center
-                    font-body font-bold text-sm sm:text-base cursor-pointer select-none transition-all
-                    ${filled ? "bg-primary text-primary-foreground" : "bg-card"}
-                    ${isHighlighted && !filled ? "ring-2 ring-primary/50" : ""}
-                    ${isShaking ? "animate-shake" : ""}
-                  `}
-                  onDragOver={e => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }}
-                  onDrop={e => {
-                    e.preventDefault();
-                    const tileId = parseInt(e.dataTransfer.getData("text/plain"), 10);
-                    if (!isNaN(tileId)) {
-                      // Simulate selecting then placing
-                      setSelectedTile(tileId);
-                      // We need to place directly
-                      const tile = tilePool.find(t => t.id === tileId);
-                      if (tile && !filledCells[key]) {
-                        const expected = crossword.grid[row]?.[col];
-                        if (expected && tile.letter === expected) {
-                          const newFilled = { ...filledCells, [key]: tile.letter };
-                          setFilledCells(newFilled);
-                          setTilePool(prev => prev.filter(t => t.id !== tileId));
-                          setSelectedTile(null);
-                          const completed = checkWordCompletion(newFilled, crossword);
-                          setCompletedWords(completed);
-                          if (completed.size === crossword.placed.length) {
-                            setTimeout(() => setPhase("victory"), 600);
-                          }
-                        } else {
-                          setShakingCell(key);
-                          setTimeout(() => setShakingCell(null), 500);
-                        }
-                      }
-                    }
-                  }}
-                >
-                  {num && !filled && (
-                    <span className="absolute top-0 left-0.5 text-[8px] sm:text-[10px] text-muted-foreground font-body">
-                      {num}
-                    </span>
-                  )}
-                  {filled && <span>{filled}</span>}
-                </div>
-              );
-            })
-          )}
-        </div>
-      </div>
+      <ScrabbleClues
+        crossword={crossword}
+        activeWordNum={activeWordNum}
+        completedWords={completedWords}
+        onClueClick={(num) => activateWord(num)}
+      />
 
-      {/* Clues */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 px-2">
-        {horizontalWords.length > 0 && (
-          <div>
-            <h3 className="font-body font-bold text-sm text-foreground mb-2">→ Vodorovně</h3>
-            <div className="space-y-1">
-              {horizontalWords.map(p => (
-                <button
-                  key={p.number}
-                  onClick={() => setHighlightedWord(highlightedWord === p.number ? null : p.number)}
-                  className={`block w-full text-left font-body text-sm px-2 py-1 rounded transition-colors ${
-                    highlightedWord === p.number ? "bg-primary/10" : "hover:bg-muted"
-                  } ${completedWords.has(p.number) ? "line-through text-muted-foreground" : "text-foreground"}`}
-                >
-                  <span className="text-muted-foreground">{p.number}.</span>{" "}
-                  {p.entry.czech} ({p.entry.article})
-                  {completedWords.has(p.number) && " ✅"}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-        {verticalWords.length > 0 && (
-          <div>
-            <h3 className="font-body font-bold text-sm text-foreground mb-2">↓ Svisle</h3>
-            <div className="space-y-1">
-              {verticalWords.map(p => (
-                <button
-                  key={p.number}
-                  onClick={() => setHighlightedWord(highlightedWord === p.number ? null : p.number)}
-                  className={`block w-full text-left font-body text-sm px-2 py-1 rounded transition-colors ${
-                    highlightedWord === p.number ? "bg-primary/10" : "hover:bg-muted"
-                  } ${completedWords.has(p.number) ? "line-through text-muted-foreground" : "text-foreground"}`}
-                >
-                  <span className="text-muted-foreground">{p.number}.</span>{" "}
-                  {p.entry.czech} ({p.entry.article})
-                  {completedWords.has(p.number) && " ✅"}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+      <ScrabbleTilePool
+        tilePool={tilePool}
+        selectedTile={selectedTile}
+        onTileClick={(id) => setSelectedTile(selectedTile === id ? null : id)}
+      />
 
-      {/* Tile Pool */}
-      <div className="px-2">
-        <h3 className="font-body font-bold text-sm text-foreground mb-2 text-center">Písmena</h3>
-        <div className="flex flex-wrap justify-center gap-2">
-          {tilePool.map(tile => (
-            <div
-              key={tile.id}
-              draggable
-              onDragStart={e => {
-                e.dataTransfer.setData("text/plain", String(tile.id));
-                e.dataTransfer.effectAllowed = "move";
-              }}
-              onClick={() => setSelectedTile(selectedTile === tile.id ? null : tile.id)}
-              className={`
-                w-11 h-11 flex items-center justify-center rounded-lg font-body font-bold text-base
-                cursor-grab active:cursor-grabbing select-none transition-all
-                bg-card border-2 shadow-sm hover:shadow-md
-                ${selectedTile === tile.id
-                  ? "border-primary ring-2 ring-primary/30 scale-110"
-                  : "border-border text-foreground hover:border-primary/40"
-                }
-              `}
-            >
-              {tile.letter}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Back button */}
       <div className="text-center mt-6">
         <button
           onClick={() => setPhase("lobby")}
           className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           ← Zpět na výběr profese
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// Lobby screen
-function LobbyScreen({
-  selected,
-  onToggle,
-  onSelectAll,
-  isAllSelected,
-  onStart,
-}: {
-  selected: Profession[];
-  onToggle: (p: Profession) => void;
-  onSelectAll: () => void;
-  isAllSelected: boolean;
-  onStart: () => void;
-}) {
-  return (
-    <div className="max-w-2xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
-      <div className="text-center mb-6">
-        <h2 className="font-game text-lg sm:text-xl text-foreground mb-1">Vyber si svou profesi</h2>
-        <p className="font-body text-sm text-muted-foreground">
-          Vyber profese, ze kterých chceš skládat křížovku
-        </p>
-      </div>
-
-      <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-8">
-        <button
-          onClick={onSelectAll}
-          className={`font-body font-bold text-[10px] sm:text-xs px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border-2 transition-all active:scale-95 ${
-            isAllSelected
-              ? "text-primary-foreground border-transparent shadow-lg ring-2 ring-primary/30"
-              : "bg-card text-foreground border-primary/50 hover:border-primary hover:shadow-md"
-          }`}
-          style={isAllSelected ? { backgroundColor: "hsl(var(--primary))", borderColor: "hsl(var(--primary))" } : undefined}
-        >
-          🌍 Všechny profese
-        </button>
-
-        {PROFESSION_LIST.map(prof => {
-          const isActive = selected.includes(prof.id);
-          const color = GROUP_COLORS[prof.group] || GROUP_COLORS.obecné;
-          return (
-            <button
-              key={prof.id}
-              onClick={() => onToggle(prof.id)}
-              className={`font-body font-semibold text-[10px] sm:text-xs px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full border-2 transition-all active:scale-95 ${
-                isActive
-                  ? "text-white border-transparent shadow-md"
-                  : "bg-card text-muted-foreground border-border hover:shadow-sm"
-              }`}
-              style={isActive ? { backgroundColor: color, borderColor: color } : undefined}
-              onMouseEnter={e => {
-                if (!isActive) {
-                  (e.currentTarget as HTMLElement).style.borderColor = color;
-                  (e.currentTarget as HTMLElement).style.color = color;
-                }
-              }}
-              onMouseLeave={e => {
-                if (!isActive) {
-                  (e.currentTarget as HTMLElement).style.borderColor = "";
-                  (e.currentTarget as HTMLElement).style.color = "";
-                }
-              }}
-            >
-              {prof.emoji} {prof.label}
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="text-center">
-        <button
-          onClick={onStart}
-          className="font-game text-sm sm:text-base px-8 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-lg"
-        >
-          ZAČÍT HRU
         </button>
       </div>
     </div>
