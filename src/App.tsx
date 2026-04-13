@@ -12,6 +12,7 @@ import Kontakt from "./pages/Kontakt";
 import NotFound from "./pages/NotFound";
 import NemcinaDoPrice from "./pages/NemcinaDoPrice";
 import Wortpaare from "./pages/Wortpaare";
+import Scrabble from "./pages/Scrabble";
 import ProfessionLanding from "./pages/professions/ProfessionLanding";
 
 const queryClient = new QueryClient();
@@ -76,6 +77,14 @@ const App = () => (
             element={
               <Layout>
                 <Wortpaare />
+              </Layout>
+            }
+          />
+          <Route
+            path="/scrabble"
+            element={
+              <Layout>
+                <Scrabble />
               </Layout>
             }
           />
