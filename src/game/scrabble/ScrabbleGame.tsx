@@ -6,6 +6,7 @@ import ScrabbleLobby from "./ScrabbleLobby";
 import ScrabbleGrid from "./ScrabbleGrid";
 import ScrabbleClues from "./ScrabbleClues";
 import ScrabbleTilePool from "./ScrabbleTilePool";
+import ScrabbleHints from "./ScrabbleHints";
 
 function shuffle<T>(arr: T[]): T[] {
   const s = [...arr];
