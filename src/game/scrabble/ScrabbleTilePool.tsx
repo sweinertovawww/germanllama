@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { type TileItem } from "./ScrabbleGame";
+import { type TileItem } from "./types";
 
 interface ScrabbleTilePoolProps {
   tilePool: TileItem[];

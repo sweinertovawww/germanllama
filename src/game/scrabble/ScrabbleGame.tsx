@@ -30,10 +30,7 @@ const GROUP_COLORS: Record<string, string> = {
 
 type GamePhase = "lobby" | "playing" | "victory";
 
-export interface TileItem {
-  letter: string;
-  id: number;
-}
+export type { TileItem } from "./types";
 
 export default function ScrabbleGame() {
   const [phase, setPhase] = useState<GamePhase>("lobby");
