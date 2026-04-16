@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { type TileItem } from "./types";
 import { type Profession, PROFESSION_LIST } from "@/game/vocabularyData";
 import { generateCrossword, getWordsForProfession, type CrosswordData, type PlacedWord } from "./crosswordGenerator";
 import ScrabbleLobby from "./ScrabbleLobby";
