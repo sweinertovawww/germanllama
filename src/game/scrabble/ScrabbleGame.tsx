@@ -6,6 +6,7 @@ import ScrabbleLobby from "./ScrabbleLobby";
 import ScrabbleGrid from "./ScrabbleGrid";
 import ScrabbleClues from "./ScrabbleClues";
 import ScrabbleTilePool from "./ScrabbleTilePool";
+import ScrabbleHints from "./ScrabbleHints";
 
 function shuffle<T>(arr: T[]): T[] {
   const s = [...arr];
@@ -567,7 +568,8 @@ export default function ScrabbleGame() {
         onTileClick={(id) => setSelectedTile(selectedTile === id ? null : id)}
       />
 
-      <div className="text-center mt-6">
+      <div className="flex items-center justify-center gap-4 mt-6">
+        <ScrabbleHints crossword={crossword} completedWords={completedWords} />
         <button
           onClick={() => setPhase("lobby")}
           className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors"
