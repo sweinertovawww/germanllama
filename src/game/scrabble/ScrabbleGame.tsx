@@ -189,7 +189,7 @@ export default function ScrabbleGame() {
     setActiveWordNum(wordNum);
     setCursorPos(0);
     // Focus hidden input for mobile keyboard
-    setTimeout(() => hiddenInputRef.current?.focus(), 50);
+    setTimeout(() => hiddenInputRef.current?.focus({ preventScroll: true }), 50);
   }, []);
 
   // Place a pending letter in a cell
@@ -403,7 +403,7 @@ export default function ScrabbleGame() {
 
       // Redirect letter keys to hidden input so onChange handles composition
       if (e.key.length === 1 && /[a-zA-ZäöüÄÖÜß]/i.test(e.key)) {
-        hiddenInputRef.current?.focus();
+        hiddenInputRef.current?.focus({ preventScroll: true });
       }
     };
 
@@ -487,6 +487,9 @@ export default function ScrabbleGame() {
     return activeWordCells[cursorPos];
   }, [activeWord, cursorPos, activeWordCells]);
 
+  // Stable Set for activeWordCells to avoid re-creating on every render
+  const activeWordCellsSet = useMemo(() => new Set(activeWordCells), [activeWordCells]);
+
   if (phase === "lobby") {
     return <ScrabbleLobby
       selected={selectedProfessions}
@@ -546,7 +549,7 @@ export default function ScrabbleGame() {
         filledCells={filledCells}
         pendingCells={pendingCells}
         cellNumbers={cellNumbers}
-        activeWordCells={new Set(activeWordCells)}
+        activeWordCells={activeWordCellsSet}
         cursorCellKey={cursorCellKey}
         shakingCells={shakingCells}
         onCellClick={handleCellClick}

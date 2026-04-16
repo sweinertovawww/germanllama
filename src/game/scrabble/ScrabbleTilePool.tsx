@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { type TileItem } from "./ScrabbleGame";
 
 interface ScrabbleTilePoolProps {
@@ -6,7 +7,7 @@ interface ScrabbleTilePoolProps {
   onTileClick: (id: number) => void;
 }
 
-export default function ScrabbleTilePool({
+const ScrabbleTilePool = memo(function ScrabbleTilePool({
   tilePool,
   selectedTile,
   onTileClick,
@@ -40,4 +41,6 @@ export default function ScrabbleTilePool({
       </div>
     </div>
   );
-}
+});
+
+export default ScrabbleTilePool;

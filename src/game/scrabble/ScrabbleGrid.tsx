@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { type CrosswordData } from "./crosswordGenerator";
 
 interface ScrabbleGridProps {
@@ -12,7 +13,7 @@ interface ScrabbleGridProps {
   onDrop: (row: number, col: number, tileId: number) => void;
 }
 
-export default function ScrabbleGrid({
+const ScrabbleGrid = memo(function ScrabbleGrid({
   crossword,
   filledCells,
   pendingCells,
@@ -89,4 +90,6 @@ export default function ScrabbleGrid({
       </div>
     </div>
   );
-}
+});
+
+export default ScrabbleGrid;
