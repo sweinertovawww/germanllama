@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { type CrosswordData } from "./crosswordGenerator";
 
 interface ScrabbleCluesProps {
@@ -7,7 +8,7 @@ interface ScrabbleCluesProps {
   onClueClick: (num: number) => void;
 }
 
-export default function ScrabbleClues({
+const ScrabbleClues = memo(function ScrabbleClues({
   crossword,
   activeWordNum,
   completedWords,
@@ -46,4 +47,6 @@ export default function ScrabbleClues({
       )}
     </div>
   );
-}
+});
+
+export default ScrabbleClues;
