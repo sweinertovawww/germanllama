@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { type TileItem } from "./types";
 import { type Profession, PROFESSION_LIST } from "@/game/vocabularyData";
 import { generateCrossword, getWordsForProfession, type CrosswordData, type PlacedWord } from "./crosswordGenerator";
 import ScrabbleLobby from "./ScrabbleLobby";
@@ -30,10 +31,7 @@ const GROUP_COLORS: Record<string, string> = {
 
 type GamePhase = "lobby" | "playing" | "victory";
 
-export interface TileItem {
-  letter: string;
-  id: number;
-}
+export type { TileItem } from "./types";
 
 export default function ScrabbleGame() {
   const [phase, setPhase] = useState<GamePhase>("lobby");
