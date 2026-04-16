@@ -376,7 +376,7 @@ export default function ScrabbleGame() {
     if (next) activateWord(next.number);
   }, [crossword, completedWords, activeWordNum, activateWord]);
 
-  // Keyboard handler
+  // Keyboard handler — control keys only (letters handled via hidden input onChange)
   useEffect(() => {
     if (phase !== "playing") return;
 
@@ -401,27 +401,26 @@ export default function ScrabbleGame() {
         return;
       }
 
-      // Letter input
+      // Redirect letter keys to hidden input so onChange handles composition
       if (e.key.length === 1 && /[a-zA-ZäöüÄÖÜß]/i.test(e.key)) {
-        e.preventDefault();
-        typeLetter(e.key);
+        hiddenInputRef.current?.focus();
       }
     };
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [phase, activeWord, handleBackspace, jumpToNextWord, typeLetter]);
+  }, [phase, activeWord, handleBackspace, jumpToNextWord]);
 
-  // Hidden input handler for mobile virtual keyboard
-  const handleHiddenInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-    const value = (e.target as HTMLInputElement).value;
-    if (value.length > 0) {
-      const lastChar = value[value.length - 1];
-      if (/[a-zA-ZäöüÄÖÜß]/i.test(lastChar)) {
-        typeLetter(lastChar);
+  // Hidden input onChange — handles composed characters (umlauts via dead keys)
+  const handleHiddenChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    if (newValue.length > 0) {
+      const addedChar = newValue.slice(-1);
+      if (/[a-zA-ZäöüÄÖÜß]/i.test(addedChar)) {
+        typeLetter(addedChar);
       }
-      (e.target as HTMLInputElement).value = "";
     }
+    e.target.value = "";
   }, [typeLetter]);
 
   const handleHiddenKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -429,7 +428,16 @@ export default function ScrabbleGame() {
       e.preventDefault();
       handleBackspace();
     }
-  }, [handleBackspace]);
+    if (e.key === "Enter" || e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      jumpToNextWord();
+    }
+    if (e.key === "Escape") {
+      e.preventDefault();
+      setActiveWordNum(null);
+      hiddenInputRef.current?.blur();
+    }
+  }, [handleBackspace, jumpToNextWord]);
 
   // Drag and drop onto grid cell
   const handleDrop = useCallback((row: number, col: number, tileId: number) => {
@@ -529,7 +537,7 @@ export default function ScrabbleGame() {
         autoCapitalize="characters"
         spellCheck={false}
         className="absolute left-[-9999px] opacity-0 w-0 h-0"
-        onInput={handleHiddenInput}
+        onChange={handleHiddenChange}
         onKeyDown={handleHiddenKeyDown}
       />
 
