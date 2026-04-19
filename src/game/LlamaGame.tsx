@@ -4,6 +4,7 @@ import { Copy, Check, ArrowLeft, Gamepad2 } from "lucide-react";
 import { QUESTIONS, FILL_QUESTIONS, filterByProfession, isTranslationCorrect, type Question, type FillQuestion } from "./vocabularyData";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
@@ -289,6 +290,7 @@ const sparklePositions = [
 
 const ShareButtons = ({ score, level }: { score: number; level: number }) => {
   const [copied, setCopied] = useState(false);
+  const { t } = useLanguage();
   const shareText = `Právě jsem vyskákal ${score} bodů (Level ${level}) v němčině na Germanllama.com! 🦙🇩🇪`;
   const shareUrl = "https://germanllama.lovable.app";
 
@@ -320,7 +322,7 @@ const ShareButtons = ({ score, level }: { score: number; level: number }) => {
           </span>
         );
       })}
-      <span className="relative z-10 font-game text-sm text-foreground text-center">📣 Pochlub se a sdílej výsledek 🤩</span>
+      <span className="relative z-10 font-game text-sm text-foreground text-center">{t("shareBoast")}</span>
       <div className="relative">
         {/* Button sparkles */}
         {sparklePositions.map((sp, i) => {
@@ -346,7 +348,7 @@ const ShareButtons = ({ score, level }: { score: number; level: number }) => {
           className="relative z-10 flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
         >
           {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-          {copied ? "Zkopírováno!" : "Kopírovat"}
+          {copied ? t("copied") : t("copy")}
         </button>
       </div>
     </div>
@@ -421,6 +423,7 @@ const saveToLeaderboardDB = async (name: string, score: number) => {
 const isMobileDevice = () => window.innerWidth < 768;
 
 const LlamaGame = () => {
+  const { t } = useLanguage();
   const profFilter = useProfessionFilter();
   const [inLobby, setInLobby] = useState(true);
   const [nameEntry, setNameEntry] = useState(false);
@@ -1007,7 +1010,7 @@ const LlamaGame = () => {
             className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg flex items-center gap-2"
           >
             <Gamepad2 className="w-5 h-5" />
-            START HRY
+            {t("startGameBtn")}
           </button>
         </div>
       ) : (
@@ -1038,13 +1041,13 @@ const LlamaGame = () => {
         {nameEntry && (
           <div className="absolute inset-0 z-30 flex items-center justify-center bg-foreground/40 backdrop-blur-[2px]">
             <div className="bg-card/95 rounded-2xl p-6 sm:p-8 shadow-2xl border-2 border-primary flex flex-col items-center gap-4 max-w-[90%] sm:max-w-xs">
-              <p className="font-game text-sm sm:text-base text-foreground">🦙 Zadej své jméno</p>
+              <p className="font-game text-sm sm:text-base text-foreground">{t("enterName")}</p>
               <input
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter" && playerName.trim()) { (e.target as HTMLInputElement).blur(); enterGame(); } }}
-                placeholder="Tvoje jméno..."
+                placeholder={t("namePlaceholder")}
                 maxLength={20}
                 autoFocus
                 className="font-game text-xs sm:text-sm px-4 py-2.5 rounded-xl border-2 border-primary/40 bg-card text-card-foreground focus:border-primary focus:outline-none w-full text-center"
@@ -1101,10 +1104,10 @@ const LlamaGame = () => {
                     ))}
                   </div>
                   {articleResult === "wrong" && (
-                    <p className="font-game text-xs text-destructive mt-3 sm:mt-4">✗ Špatně! Správně: {currentQuestion.options[currentQuestion.correct]} — 0 bodů</p>
+                    <p className="font-game text-xs text-destructive mt-3 sm:mt-4">{t("wrongArticle", { article: currentQuestion.options[currentQuestion.correct] })}</p>
                   )}
                   {!articleResult && (
-                    <p className="text-muted-foreground text-xs mt-3 sm:mt-4 hidden sm:block">Klávesy 1, 2, 3 pro odpověď</p>
+                    <p className="text-muted-foreground text-xs mt-3 sm:mt-4 hidden sm:block">{t("keys123")}</p>
                   )}
                 </>
               )}
@@ -1112,8 +1115,8 @@ const LlamaGame = () => {
               {/* Phase 2: Translation input */}
               {quizPhase === "translation" && (
                 <>
-                  <p className="font-game text-xs text-green-500 mb-1">✓ Správný člen! Napiš překlad do češtiny:</p>
-                  <p className="font-game text-[10px] text-muted-foreground mb-2 sm:mb-3">(Používej diakritiku)</p>
+                  <p className="font-game text-xs text-green-500 mb-1">{t("correctArticle")}</p>
+                  <p className="font-game text-[10px] text-muted-foreground mb-2 sm:mb-3">{t("useDiacritics")}</p>
                   <div className="flex gap-2 justify-center items-center">
                     <input
                       ref={translationInputRef}
@@ -1121,7 +1124,7 @@ const LlamaGame = () => {
                       value={translationInput}
                       onChange={(e) => setTranslationInput(e.target.value)}
                       disabled={translationResult !== null}
-                      placeholder="Překlad..."
+                      placeholder={t("translationPlaceholder")}
                       className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-32 sm:w-48"
                     />
                     <button
@@ -1134,16 +1137,16 @@ const LlamaGame = () => {
                   </div>
                   {translationResult === "correct" && (
                     <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
-                      ✓ Správně! ({currentQuestion.translation}) +2 body
+                      {t("correct2", { word: currentQuestion.translation })}
                     </p>
                   )}
                   {translationResult === "wrong" && (
                     <p className="font-game text-xs text-destructive mt-3">
-                      ✗ Správně: {currentQuestion.translation} — +1 bod
+                      {t("wrong1", { word: currentQuestion.translation })}
                     </p>
                   )}
                   {!translationResult && (
-                    <p className="text-muted-foreground text-xs mt-3 hidden sm:block">Enter pro potvrzení</p>
+                    <p className="text-muted-foreground text-xs mt-3 hidden sm:block">{t("enterConfirm")}</p>
                   )}
                 </>
               )}
@@ -1154,7 +1157,7 @@ const LlamaGame = () => {
         {gameState === "starQuiz" && currentFillQuestion && (
           <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
             <div className="bg-card rounded-xl p-3 sm:p-6 shadow-2xl text-center max-w-[95%] sm:max-w-md mx-2 sm:mx-4 border-2 border-accent">
-              <p className="font-game text-xs sm:text-sm text-accent mb-2">⭐ Doplň slovo!</p>
+              <p className="font-game text-xs sm:text-sm text-accent mb-2">{t("fillWord")}</p>
               <p className="font-game text-xs sm:text-sm text-card-foreground mb-2 leading-relaxed">
                 {currentFillQuestion.sentence}
               </p>
@@ -1169,7 +1172,7 @@ const LlamaGame = () => {
                   value={fillInput}
                   onChange={(e) => setFillInput(e.target.value)}
                   disabled={fillResult !== null}
-                  placeholder="Doplň..."
+                  placeholder={t("fillPlaceholder")}
                   className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-accent focus:outline-none w-32 sm:w-48"
                 />
                 <button
@@ -1182,16 +1185,16 @@ const LlamaGame = () => {
               </div>
               {fillResult === "correct" && (
                 <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
-                  ✓ Správně! ({currentFillQuestion.answer}) +1 bod
+                  {t("correct1", { word: currentFillQuestion.answer })}
                 </p>
               )}
               {fillResult === "wrong" && (
                 <p className="font-game text-xs text-destructive mt-3">
-                  ✗ Správně: {currentFillQuestion.answer} — 0 bodů
+                  {t("wrong0", { word: currentFillQuestion.answer })}
                 </p>
               )}
               {!fillResult && (
-                <p className="text-muted-foreground text-xs mt-3 hidden sm:block">Enter pro potvrzení</p>
+                <p className="text-muted-foreground text-xs mt-3 hidden sm:block">{t("enterConfirm")}</p>
               )}
             </div>
           </div>
@@ -1201,10 +1204,10 @@ const LlamaGame = () => {
           <div className="absolute inset-0 flex items-center justify-center z-30 animate-fade-in">
             <div className="absolute inset-0 bg-foreground/60 animate-game-over-flash" />
             <div className="relative z-10 flex flex-col items-center gap-3 sm:gap-4 bg-card/95 rounded-2xl p-4 sm:p-8 shadow-2xl border-2 border-primary mx-4 animate-scale-in max-w-[90%]">
-              <p className="font-game text-lg sm:text-2xl text-destructive">💀 GAME OVER</p>
+              <p className="font-game text-lg sm:text-2xl text-destructive">{t("gameOverText")}</p>
               <div className="flex flex-col items-center gap-1">
-                <p className="font-game text-sm sm:text-base text-foreground">Skóre: <span className="text-primary">{score}</span></p>
-                <p className="font-game text-xs text-muted-foreground">Nejlepší: <span className="text-primary">{highScore}</span></p>
+                <p className="font-game text-sm sm:text-base text-foreground">{t("scoreLabel")}: <span className="text-primary">{score}</span></p>
+                <p className="font-game text-xs text-muted-foreground">{t("bestLabel")}: <span className="text-primary">{highScore}</span></p>
                 <p className="font-game text-xs text-muted-foreground">🏆 {totalTrophies}  ⭐ Level {level}</p>
               </div>
               <button
@@ -1216,7 +1219,7 @@ const LlamaGame = () => {
                   boxShadow: '0 4px 20px hsla(168, 72%, 40%, 0.4), 0 0 30px hsla(168, 72%, 40%, 0.2)',
                 }}
               >
-                🦙 Zkusit znovu
+                {t("tryAgainBtn")}
               </button>
               <div className="flex gap-2 sm:gap-3">
                 <button
@@ -1224,13 +1227,13 @@ const LlamaGame = () => {
                   className="font-game text-[10px] sm:text-xs px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-border bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/50 hover:scale-105 active:scale-95 transition-all whitespace-nowrap flex items-center gap-1"
                 >
                   <ArrowLeft className="w-3 h-3" />
-                  Změnit obor
+                  {t("changeFieldBtn")}
                 </button>
                 <button
                   onClick={newPlayer}
                   className="font-game text-[10px] sm:text-xs px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-destructive/50 bg-card/80 text-destructive hover:text-destructive hover:border-destructive hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
                 >
-                  👤 Nový hráč
+                  {t("newPlayer")}
                 </button>
               </div>
             </div>
@@ -1243,10 +1246,10 @@ const LlamaGame = () => {
         <div className="flex flex-col items-center gap-2">
           <div className="flex gap-4 sm:gap-8 font-game text-xs sm:text-sm">
             <span className="text-muted-foreground">
-              Skóre: <span className="text-foreground">{score}</span>
+              {t("scoreLabel")}: <span className="text-foreground">{score}</span>
             </span>
             <span className="text-muted-foreground">
-              Nejlepší: <span className="text-primary">{highScore}</span>
+              {t("bestLabel")}: <span className="text-primary">{highScore}</span>
             </span>
           </div>
           <div className="flex gap-4 sm:gap-6 font-game text-xs items-center">
@@ -1259,11 +1262,11 @@ const LlamaGame = () => {
           </div>
           {dailyBest && (
             <div className="font-game text-xs text-muted-foreground">
-              🏆 Dnes nejlepší: <span className="text-primary">{dailyBest.name}</span> — <span className="text-foreground">{dailyBest.score} b.</span>
+              {t("todayBest")}: <span className="text-primary">{dailyBest.name}</span> — <span className="text-foreground">{dailyBest.score} b.</span>
             </div>
           )}
           <div className="font-game text-xs text-muted-foreground">
-            👥 Hráči dnes: <span className="text-foreground">{dailyPlayerCount}</span>
+            {t("playersToday")}: <span className="text-foreground">{dailyPlayerCount}</span>
           </div>
         </div>
       )}
@@ -1280,23 +1283,23 @@ const LlamaGame = () => {
           }}
           className="bg-primary text-primary-foreground font-game text-sm w-full max-w-xs py-5 rounded-xl hover:opacity-90 transition-opacity md:hidden active:scale-95 touch-manipulation shadow-md"
         >
-          ↑ SKOK
+          {t("jumpBtn")}
         </button>
       )}
 
       <p className="text-muted-foreground text-xs sm:text-sm hidden sm:block">
-        Použij <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">↑</kbd> nebo{" "}
-        <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">SPACE</kbd> pro skok
+        {t("useKeys")} <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">↑</kbd> {t("orKey")}{" "}
+        <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">SPACE</kbd> {t("forJump")}
       </p>
 
       <div className="w-full max-w-xs mt-2">
-          <h3 className="font-game text-xs text-center text-primary mb-2">🌍 Globální Top 10</h3>
+          <h3 className="font-game text-xs text-center text-primary mb-2">{t("globalTop10")}</h3>
           <table className="w-full text-xs font-game">
             <thead>
               <tr className="border-b border-border">
                 <th className="text-left py-1 px-2 text-muted-foreground">#</th>
-                <th className="text-left py-1 px-2 text-muted-foreground">Jméno</th>
-                <th className="text-right py-1 px-2 text-muted-foreground">Skóre</th>
+                <th className="text-left py-1 px-2 text-muted-foreground">{t("nameCol")}</th>
+                <th className="text-right py-1 px-2 text-muted-foreground">{t("scoreCol")}</th>
               </tr>
             </thead>
             <tbody>

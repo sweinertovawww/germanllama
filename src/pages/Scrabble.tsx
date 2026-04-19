@@ -1,7 +1,10 @@
 import SEOHead from "@/components/SEOHead";
 import ScrabbleGame from "@/game/scrabble/ScrabbleGame";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Scrabble = () => {
+  const { t } = useLanguage();
+
   return (
     <>
       <SEOHead
@@ -12,7 +15,7 @@ const Scrabble = () => {
       <section className="py-4 sm:py-6 px-3 sm:px-4">
         <div className="max-w-4xl mx-auto text-center mb-4">
           <h1 className="font-game text-xl sm:text-2xl text-foreground">Scrabble</h1>
-          <p className="font-body text-sm text-muted-foreground">Křížovka ze slovíček</p>
+          <p className="font-body text-sm text-muted-foreground">{t("scrabblePageDesc")}</p>
         </div>
         <ScrabbleGame />
       </section>

@@ -16,6 +16,7 @@ import {
   DragEndEvent,
 } from "@dnd-kit/core";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 function shuffleArray<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -69,6 +70,7 @@ function DraggableEnd({
   selected: boolean;
   onTap: () => void;
 }) {
+  const { t } = useLanguage();
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id, disabled });
 
   return (
@@ -91,7 +93,7 @@ function DraggableEnd({
       <GripVertical className="w-4 h-4 text-muted-foreground shrink-0 hidden sm:block" />
       <span className="text-foreground font-semibold">{text}</span>
       {selected && (
-        <span className="ml-auto text-[10px] font-game text-primary animate-pulse">vybrán</span>
+        <span className="ml-auto text-[10px] font-game text-primary animate-pulse">{t("selected")}</span>
       )}
     </div>
   );
@@ -113,6 +115,7 @@ function DroppableSlot({
   clickable: boolean;
   onTap: () => void;
 }) {
+  const { t } = useLanguage();
   const { setNodeRef } = useDroppable({ id });
   return (
     <div
@@ -131,11 +134,10 @@ function DroppableSlot({
       {matched ? (
         <span className="font-body text-sm font-bold text-primary">{matchedText}</span>
       ) : clickable ? (
-        <span className="font-body text-xs text-primary font-semibold">👆 klepni sem</span>
+        <span className="font-body text-xs text-primary font-semibold">{t("tapHere")}</span>
       ) : (
         <span className="font-body text-[10px] sm:text-xs text-muted-foreground italic">
-          {/* Mobile: tap hint, Desktop: drag hint */}
-          přetáhni nebo klepni...
+          {t("dragOrTap")}
         </span>
       )}
     </div>
@@ -144,6 +146,7 @@ function DroppableSlot({
 
 const SentenceBuilder = () => {
   const isMobile = useIsMobile();
+  const { t } = useLanguage();
   const profFilter = useProfessionFilter();
   const filteredQuestions = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
   // --- localStorage persistence ---
@@ -307,7 +310,7 @@ const SentenceBuilder = () => {
       <section className="py-4 sm:py-8 px-3 sm:px-4">
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-t-2xl px-4 sm:px-8 py-2 sm:py-2.5 text-center">
-            <h2 className="font-game text-base sm:text-xl font-bold">Pravidla Hry</h2>
+            <h2 className="font-game text-base sm:text-xl font-bold">{t("gameRules")}</h2>
           </div>
           <div className="bg-muted rounded-b-2xl border border-t-0 border-border px-4 sm:px-8 py-3 sm:py-4 shadow-sm">
             <div className="flex items-center gap-3 sm:gap-4">
@@ -315,12 +318,12 @@ const SentenceBuilder = () => {
                 <PuzzleIcon className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
               </div>
               <div>
-                <h3 className="font-body font-bold text-foreground text-sm sm:text-base">Skládání vět</h3>
+                <h3 className="font-body font-bold text-foreground text-sm sm:text-base">{t("sentenceBuilderName")}</h3>
                 <p className="font-body text-muted-foreground text-xs sm:text-sm leading-relaxed">
-                  Přiřaď správné konce německých vět k jejich začátkům. Pomůže ti český překlad.
-                  Stačí konec věty chytit a přetáhnout na správné místo.
+                  {t("sentenceBuilderRuleText1")}
+                  {" "}{t("sentenceBuilderRuleText2")}
                   <br />
-                  Na mobilu 📲 klikni nejdříve na konec věty z výběru dole a pak na místo, kam jí chceš přiřadit.
+                  {t("sentenceBuilderRuleText3")}
                 </p>
               </div>
             </div>
@@ -336,7 +339,7 @@ const SentenceBuilder = () => {
               onClick={startGame}
               className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg"
             >
-              🎮 START HRY
+              🎮 {t("startGame")}
             </button>
           </div>
         </section>
@@ -348,14 +351,14 @@ const SentenceBuilder = () => {
           {/* Score */}
           <div className="flex items-center justify-between mb-5 px-1">
             <span className="font-game text-[10px] sm:text-xs text-muted-foreground">
-              Kolo: {completedRounds + 1}
+              {t("round")}: {completedRounds + 1}
             </span>
             <div className="flex items-center gap-2">
               <button
                 onClick={goToLobby}
                 className="font-game text-[10px] sm:text-xs border border-border text-muted-foreground px-2.5 py-1 rounded-lg hover:text-foreground hover:border-primary/50 transition-colors"
               >
-                ← Změnit obor
+                ← {t("changeField")}
               </button>
               <span className="font-game text-[10px] sm:text-xs text-foreground">
                 ✅ {score}/{SENTENCES_PER_ROUND}
@@ -374,7 +377,7 @@ const SentenceBuilder = () => {
               {/* Sentence starts with drop zones */}
               <div className="space-y-3">
                 <h3 className="font-game text-[10px] sm:text-xs text-muted-foreground mb-2">
-                  Začátky vět
+                  {t("sentenceStarts")}
                 </h3>
                 {pairs.map((pair) => (
                   <div
@@ -410,7 +413,7 @@ const SentenceBuilder = () => {
               {/* Draggable / tappable ends */}
               <div className="space-y-3">
                 <h3 className="font-game text-[10px] sm:text-xs text-muted-foreground mb-2">
-                  Konce vět
+                  {t("sentenceEnds")}
                 </h3>
                 {availableEnds.length > 0 ? (
                   <div className="space-y-2">
@@ -427,7 +430,7 @@ const SentenceBuilder = () => {
                   </div>
                 ) : (
                   <p className="font-body text-xs text-muted-foreground italic text-center py-4">
-                    Vše přiřazeno! 🎉
+                    {t("allAssigned")}
                   </p>
                 )}
               </div>
@@ -447,15 +450,15 @@ const SentenceBuilder = () => {
           {allMatched && (
             <div className="mt-8 rounded-2xl border-2 border-primary p-6 sm:p-8 text-center space-y-4" style={{ background: `hsl(var(--share-bg))` }}>
               <div className="space-y-1">
-                <h2 className="font-game text-sm sm:text-base text-foreground">🎉 Skvělá práce!</h2>
+                <h2 className="font-game text-sm sm:text-base text-foreground">{t("greatWork")}</h2>
                 <p className="font-body text-xs sm:text-sm text-muted-foreground">
-                  Složil/a jsi všech {SENTENCES_PER_ROUND} vět správně!
+                  {t("allSentencesCorrect", { n: SENTENCES_PER_ROUND })}
                 </p>
               </div>
 
               {/* Sparkle share section */}
               <div className="flex flex-col items-center gap-3">
-                <span className="font-game text-[10px] sm:text-xs text-foreground">📣 Pochlub se a sdílej výsledek 🤩</span>
+                <span className="font-game text-[10px] sm:text-xs text-foreground">{t("shareBoast")}</span>
                 <div className="relative">
                   {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
                     const rad = (angle * Math.PI) / 180;
@@ -480,7 +483,7 @@ const SentenceBuilder = () => {
                     className="relative z-10 flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
                   >
                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    {copied ? "Zkopírováno!" : "Kopírovat"}
+                    {copied ? t("copied") : t("copy")}
                   </button>
                 </div>
               </div>
@@ -490,13 +493,13 @@ const SentenceBuilder = () => {
                   onClick={handleNextRound}
                   className="font-game text-xs px-6 py-3 rounded-xl bg-accent text-accent-foreground hover:scale-105 transition-transform shadow-md"
                 >
-                  Další věty →
+                  {t("nextSentences")}
                 </button>
                 <button
                   onClick={goToLobby}
                   className="font-game text-xs border-2 border-border text-muted-foreground px-5 py-2.5 rounded-xl hover:border-primary/50 hover:text-foreground transition-colors"
                 >
-                  Změnit obor
+                  {t("changeField")}
                 </button>
               </div>
             </div>

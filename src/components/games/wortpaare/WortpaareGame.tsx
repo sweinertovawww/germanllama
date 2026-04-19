@@ -4,8 +4,10 @@ import WordCard from "./WordCard";
 import MatchedPair from "./MatchedPair";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import { RotateCcw } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const WortpaareGame: React.FC = () => {
+  const { t } = useLanguage();
   const { cards, matched, selected, shaking, loading, completed, selectCard, startGame } = useWortpaare(6);
 
   if (loading) {
@@ -22,7 +24,7 @@ const WortpaareGame: React.FC = () => {
       {matched.length === 0 && !completed && (
         <div className="bg-muted border border-border rounded-xl px-4 py-3 mb-4 text-center">
           <p className="font-body text-sm text-muted-foreground">
-            Klikni na slovo a pak na jeho synonymum nebo antonymum.
+            {t("clickForPair")}
           </p>
         </div>
       )}
@@ -32,17 +34,17 @@ const WortpaareGame: React.FC = () => {
         <div className="flex flex-col items-center gap-6 py-10">
           <img src={germanLlamaLogo} alt="GermanLlama" className="w-24 h-24 rounded-2xl" />
           <h3 className="font-game text-lg sm:text-xl text-foreground text-center">
-            Výborně! 🎉
+            {t("completedWortpaare")}
           </h3>
           <p className="font-body text-muted-foreground text-center">
-            Všechny páry jsi správně přiřadil/a!
+            {t("allPairsCorrect")}
           </p>
           <button
             onClick={startGame}
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body font-bold px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors"
           >
             <RotateCcw className="w-4 h-4" />
-            Hrát znovu
+            {t("playAgain")}
           </button>
 
           {/* Show all matched pairs */}
@@ -57,14 +59,14 @@ const WortpaareGame: React.FC = () => {
           {/* Progress */}
           <div className="flex items-center justify-between mb-3">
             <span className="font-body text-sm text-muted-foreground">
-              Spárováno: {matched.length} / {matched.length + Math.floor(cards.length / 2)}
+              {t("paired")}: {matched.length} / {matched.length + Math.floor(cards.length / 2)}
             </span>
             <button
               onClick={startGame}
               className="font-body text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
             >
               <RotateCcw className="w-3 h-3" />
-              Nová hra
+              {t("newGame")}
             </button>
           </div>
 
@@ -85,7 +87,7 @@ const WortpaareGame: React.FC = () => {
           {matched.length > 0 && (
             <div className="space-y-2">
               <h4 className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1">
-                Spárovaná slova
+                {t("pairedWords")}
               </h4>
               {matched.map((m) => (
                 <MatchedPair key={m.pair.id} data={m} />

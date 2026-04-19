@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Lightbulb } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ScrabbleHintsProps {
   crossword: CrosswordData;
@@ -29,6 +30,7 @@ const ScrabbleHints = memo(function ScrabbleHints({
   crossword,
   completedWords,
 }: ScrabbleHintsProps) {
+  const { t } = useLanguage();
   const [revealedWords, setRevealedWords] = useState<Set<number>>(new Set());
 
   const toggleReveal = useCallback((num: number) => {
@@ -47,16 +49,16 @@ const ScrabbleHints = memo(function ScrabbleHints({
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="gap-1.5">
           <Lightbulb className="h-4 w-4" />
-          Nápověda
+          {t("hintBtn")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-game text-lg">Nápověda</DialogTitle>
+          <DialogTitle className="font-game text-lg">{t("hintBtn")}</DialogTitle>
         </DialogHeader>
         {remaining.length === 0 ? (
           <p className="font-body text-sm text-muted-foreground py-4 text-center">
-            Všechna slova jsou vyplněna! 🎉
+            {t("allWordsFilled")}
           </p>
         ) : (
           <div className="space-y-1">

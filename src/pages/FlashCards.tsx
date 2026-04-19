@@ -4,6 +4,7 @@ import { getAllFlashCards, filterByProfession, type FlashCard, type Profession }
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 function shuffleArray<T>(arr: T[]): T[] {
   const shuffled = [...arr];
@@ -17,6 +18,7 @@ function shuffleArray<T>(arr: T[]): T[] {
 type Category = "mix" | "nouns" | "sentences";
 
 const FlashCards = () => {
+  const { t } = useLanguage();
   const allCardsRaw = useMemo(() => getAllFlashCards(), []);
   const profFilter = useProfessionFilter();
 
@@ -93,12 +95,12 @@ const FlashCards = () => {
               <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
             </div>
             <div>
-              <h3 className="font-body font-bold text-foreground text-sm sm:text-base">Jak na to</h3>
+              <h3 className="font-body font-bold text-foreground text-sm sm:text-base">{t("howToTitle")}</h3>
               <p className="font-body text-muted-foreground text-xs sm:text-sm leading-relaxed">
-                Přelož si slovíčko nebo větu a poté otoč kliknutím na kartičku pro kontrolu.
+                {t("howToText")}
               </p>
               <p className="font-body text-muted-foreground text-xs sm:text-sm leading-relaxed mt-1">
-                Slovíčka a věty ve Flash Cards se objevují i v ostatních hrách. Čím víc se jich naučíš – tím více nasbíráš bodů při hraní. 😉
+                {t("howToText2")}
               </p>
             </div>
           </div>
@@ -118,7 +120,7 @@ const FlashCards = () => {
               className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg flex items-center gap-2"
             >
               <Gamepad2 className="w-5 h-5" />
-              START HRY
+              {t("startGame")}
             </button>
           </div>
         ) : (
@@ -131,7 +133,7 @@ const FlashCards = () => {
                 className="font-game text-[10px] sm:text-xs border border-border text-muted-foreground px-2.5 py-1 rounded-lg hover:text-foreground hover:border-primary/50 transition-colors flex items-center gap-1"
               >
                 <ArrowLeft className="w-3 h-3" />
-                Změnit obor
+                {t("changeField")}
               </button>
               <span className="font-body text-sm text-muted-foreground">
                 {currentIndex + 1} / {cards.length}
@@ -141,9 +143,9 @@ const FlashCards = () => {
             {/* Category filter */}
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-4 sm:mb-6">
               {([
-                { key: "nouns" as Category, label: "Slovíčka" },
-                { key: "sentences" as Category, label: "Věty / Fráze" },
-                { key: "mix" as Category, label: "Mix" },
+                { key: "nouns" as Category, label: t("wordsCategory") },
+                { key: "sentences" as Category, label: t("sentencesCategory") },
+                { key: "mix" as Category, label: t("mixCategory") },
               ]).map(({ key, label }) => (
                 <button
                   key={key}
@@ -183,7 +185,7 @@ const FlashCards = () => {
                       />
                       <div className="flex flex-col items-center gap-2 w-full">
                         <span className="text-[10px] sm:text-xs font-body text-muted-foreground uppercase tracking-wider">
-                          {card.type === "noun" ? "Podstatné jméno" : "Věta"}
+                          {card.type === "noun" ? t("noun") : t("sentence")}
                         </span>
                         <p
                           className={`font-body font-bold text-foreground text-center break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`}
@@ -192,7 +194,7 @@ const FlashCards = () => {
                           {card.german}
                         </p>
                         <span className="text-[10px] sm:text-xs font-body text-muted-foreground">
-                          Klikni pro otočení →
+                          {t("clickToFlip")}
                         </span>
                       </div>
                     </div>
@@ -213,7 +215,7 @@ const FlashCards = () => {
                       />
                       <div className="flex flex-col items-center gap-2 w-full">
                         <span className="text-[10px] sm:text-xs font-body text-primary uppercase tracking-wider font-semibold">
-                          Překlad
+                          {t("translationLabel")}
                         </span>
                         <p
                           className={`font-body font-bold text-foreground text-center break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`}
@@ -233,13 +235,13 @@ const FlashCards = () => {
                     className="flex items-center gap-1 font-body font-semibold text-xs sm:text-sm px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-border bg-card text-foreground hover:border-primary/50 hover:bg-muted active:scale-95 transition-all"
                   >
                     <ChevronLeft className="w-4 h-4" />
-                    Předchozí
+                    {t("previous")}
                   </button>
                   <button
                     onClick={goNext}
                     className="flex items-center gap-1 font-body font-semibold text-xs sm:text-sm px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-border bg-card text-foreground hover:border-primary/50 hover:bg-muted active:scale-95 transition-all"
                   >
-                    Další
+                    {t("next")}
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>

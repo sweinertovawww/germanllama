@@ -5,12 +5,14 @@ import heroBackground from "@/assets/hero-background.jpg";
 import { Gamepad2, Layers, Brain, PuzzleIcon, ArrowLeftRight, Grid3X3, Instagram, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
+  const { t, lang, setLang } = useLanguage();
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const [visitDate, setVisitDate] = useState<string>("");
   const [privacyOpen, setPrivacyOpen] = useState(false);
@@ -87,53 +89,100 @@ const Layout = ({ children }: LayoutProps) => {
             </Link>
           <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center">
             <span className="font-game text-base lg:text-xl text-foreground leading-tight">
-              Němčina do práce hravě!
+              {t("slogan")}
             </span>
             <span className="font-body text-sm text-foreground">
-              Platforma pro samouky němčiny
+              {t("platform")}
             </span>
             {visitorCount !== null && (
               <span className="flex items-center gap-1.5 font-body text-xs text-muted-foreground mt-1">
                 <Users className="w-3.5 h-3.5" />
-                Počet samouků na webu dnes ({visitDate}): {visitorCount}
+                {t("visitorCount")} ({visitDate}): {visitorCount}
               </span>
             )}
           </div>
-          {/* Desktop: Kontakt */}
-          <div className="hidden sm:flex items-center gap-6">
+          {/* Desktop: nav buttons + language switcher */}
+          <div className="hidden sm:flex items-center gap-4">
             <button
               onClick={() => navigate("/nemcina-do-prace")}
               className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors"
             >
-              Profese
+              {t("professions")}
             </button>
             <button
               onClick={() => navigate("/kontakt")}
               className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors"
             >
-              Kontakt
+              {t("contact")}
+            </button>
+            {/* Language switcher */}
+            <div className="flex items-center rounded-lg border border-border overflow-hidden">
+              <button
+                onClick={() => setLang("cs")}
+                className={`font-body font-bold text-xs px-2.5 py-1.5 transition-colors ${
+                  lang === "cs"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-card text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                CZ
+              </button>
+              <button
+                onClick={() => setLang("ko")}
+                className={`font-body font-bold text-xs px-2.5 py-1.5 transition-colors ${
+                  lang === "ko"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-card text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                KO
+              </button>
+            </div>
+          </div>
+          {/* Mobile: language switcher + contact */}
+          <div className="sm:hidden flex items-center gap-2">
+            <div className="flex items-center rounded-lg border border-border overflow-hidden">
+              <button
+                onClick={() => setLang("cs")}
+                className={`font-body font-bold text-[10px] px-2 py-1 transition-colors ${
+                  lang === "cs"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-card text-muted-foreground"
+                }`}
+              >
+                CZ
+              </button>
+              <button
+                onClick={() => setLang("ko")}
+                className={`font-body font-bold text-[10px] px-2 py-1 transition-colors ${
+                  lang === "ko"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-card text-muted-foreground"
+                }`}
+              >
+                KO
+              </button>
+            </div>
+            <button
+              onClick={() => navigate("/kontakt")}
+              className="font-body font-semibold text-xs text-foreground/70 hover:text-primary transition-colors px-2 py-1"
+            >
+              {t("contact")}
             </button>
           </div>
-          {/* Mobile: Kontakt button */}
-          <button
-            onClick={() => navigate("/kontakt")}
-            className="sm:hidden font-body font-semibold text-xs text-foreground/70 hover:text-primary transition-colors px-2 py-1"
-          >
-            Kontakt
-          </button>
         </div>
         {/* Mobile: slogan + counter strip */}
         <div className="md:hidden border-t border-border bg-card px-4 py-1.5 text-center">
           <span className="font-game text-[9px] text-foreground leading-tight block">
-            Němčina do práce hravě!
+            {t("slogan")}
           </span>
           <span className="font-body text-[9px] text-muted-foreground block">
-            Platforma pro samouky němčiny
+            {t("platform")}
           </span>
           {visitorCount !== null && (
             <span className="flex items-center justify-center gap-1 font-body text-[8px] text-muted-foreground mt-0.5">
               <Users className="w-2.5 h-2.5" />
-              Počet samouků na webu dnes ({visitDate}): {visitorCount}
+              {t("visitorCount")} ({visitDate}): {visitorCount}
             </span>
           )}
         </div>
@@ -166,7 +215,7 @@ const Layout = ({ children }: LayoutProps) => {
                   Llama Run
                 </span>
                 <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "llama-run" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                  Vyskákej si lepší němčinu
+                  {t("llamaRunDesc")}
                 </span>
               </div>
             </button>
@@ -184,7 +233,7 @@ const Layout = ({ children }: LayoutProps) => {
                   Flash Cards
                 </span>
                 <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "flash-cards" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                  Kartičky na překlad
+                  {t("flashCardsDesc")}
                 </span>
               </div>
             </button>
@@ -202,7 +251,7 @@ const Layout = ({ children }: LayoutProps) => {
                   Pexeso
                 </span>
                 <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "pexeso" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                  Paměťová hra
+                  {t("pexesoDesc")}
                 </span>
               </div>
             </button>
@@ -217,10 +266,10 @@ const Layout = ({ children }: LayoutProps) => {
               <PuzzleIcon className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "sentence-builder" ? "text-primary-foreground" : "text-primary"}`} />
               <div className="text-left">
                 <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "sentence-builder" ? "text-primary-foreground" : "text-foreground"}`}>
-                  Skládání vět
+                  {t("sentenceBuilderName")}
                 </span>
                 <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "sentence-builder" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                  Přiřaď konce vět
+                  {t("sentenceBuilderDesc")}
                 </span>
               </div>
             </button>
@@ -235,10 +284,10 @@ const Layout = ({ children }: LayoutProps) => {
               <ArrowLeftRight className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "wortpaare" ? "text-primary-foreground" : "text-primary"}`} />
               <div className="text-left">
                 <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "wortpaare" ? "text-primary-foreground" : "text-foreground"}`}>
-                  Slovní páry
+                  {t("wordPairsName")}
                 </span>
                 <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "wortpaare" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                  Synonyma & antonyma
+                  {t("wordPairsDesc")}
                 </span>
               </div>
             </button>
@@ -256,7 +305,7 @@ const Layout = ({ children }: LayoutProps) => {
                   Scrabble
                 </span>
                 <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "scrabble" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                  Křížovka ze slovíček
+                  {t("scrabbleDesc")}
                 </span>
               </div>
             </button>
@@ -274,18 +323,18 @@ const Layout = ({ children }: LayoutProps) => {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="font-game text-sm sm:text-base text-foreground">
-              🦙 Ochrana soukromí u Germanllama
+              {t("privacyTitle")}
             </DialogTitle>
           </DialogHeader>
           <div className="font-body text-sm text-muted-foreground space-y-3">
-            <p>Vaše soukromí je pro nás důležité. Neukládáme žádné citlivé údaje ani e-maily.</p>
-            <p className="font-semibold text-foreground">Ukládáme pouze:</p>
+            <p>{t("privacyP1")}</p>
+            <p className="font-semibold text-foreground">{t("privacySaveTitle")}</p>
             <ol className="list-decimal list-inside space-y-1.5 pl-1">
-              <li>Vaše herní jméno (pro tabulku výsledků)</li>
-              <li>Vybranou profesi (pro vaše pohodlí)</li>
-              <li>Anonymní ID návštěvníka (abychom věděli, kolik lidí se s námi učí)</li>
+              <li>{t("privacySave1")}</li>
+              <li>{t("privacySave2")}</li>
+              <li>{t("privacySave3")}</li>
             </ol>
-            <p>Žádná data nepředáváme třetím stranám.</p>
+            <p>{t("privacyNoShare")}</p>
           </div>
         </DialogContent>
       </Dialog>
@@ -296,28 +345,28 @@ const Layout = ({ children }: LayoutProps) => {
           {/* Privacy strip */}
           <div className="text-center mb-4 pb-4 border-b border-primary-foreground/10">
             <p className="font-body text-sm text-primary-foreground/80 mb-1">
-              🦙 Moje lama nejí sušenky (cookies), jen je používá k tomu, aby si pamatovala tvé jméno a skóre!
+              {t("cookieNotice")}
             </p>
             <p className="font-body text-[11px] text-primary-foreground/40">
-              Tento web používá pouze nezbytné technické cookies a místní úložiště pro správné fungování her a anonymní statistiky návštěvnosti.
+              {t("cookieDetail")}
               {" "}
               <button
                 onClick={() => setPrivacyOpen(true)}
                 className="underline underline-offset-2 text-primary-foreground/60 hover:text-accent transition-colors"
               >
-                soukromí
+                {t("privacyLink")}
               </button>
             </p>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
             <div className="flex flex-col items-center sm:items-start gap-1">
               <p className="text-xs text-primary-foreground/60 text-center sm:text-left">
-                © 2026 Germanllama.com · Všechna práva vyhrazena.
+                {t("copyright")}
               </p>
             </div>
             <div className="flex items-center gap-4">
               <span className="text-xs sm:text-sm text-primary-foreground/60 font-body">
-                Sledujte nás:
+                {t("followUs")}
               </span>
               <a
                 href="https://www.instagram.com/playgermanllama/"
@@ -331,7 +380,7 @@ const Layout = ({ children }: LayoutProps) => {
                 href="https://www.facebook.com/profile.php?id=61586284749463"
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Otevřít Facebook"
+                title="Facebook"
                 className="inline-flex items-center text-primary-foreground/80 hover:text-accent hover:scale-110 transition-all duration-200"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
@@ -340,7 +389,7 @@ const Layout = ({ children }: LayoutProps) => {
                 href="https://open.spotify.com/show/3hoxYnDeM1UMlXz2YfhCiD?si=89c40afb384e49d4"
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Otevřít Spotify"
+                title="Spotify"
                 className="inline-flex items-center text-primary-foreground/80 hover:text-accent hover:scale-110 transition-all duration-200"
               >
                 <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="20" height="20"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm5.508 17.302c-.223.367-.704.482-1.071.258-2.858-1.745-6.456-2.14-10.693-1.171-.42.096-.842-.17-.938-.59-.096-.42.17-.842.59-.938 4.634-1.06 8.605-.612 11.854 1.371.367.224.482.704.258 1.07zm1.47-3.254c-.28.455-.878.6-1.333.32-3.273-2.013-8.262-2.593-12.132-1.417-.512.155-1.063-.142-1.218-.654-.155-.512.142-1.063.654-1.218 4.417-1.34 9.914-.688 13.709 1.64.455.28.6.878.32 1.333zm.126-3.374C15.244 8.354 8.878 8.143 5.132 9.28c-.58.176-1.192-.156-1.368-.736-.176-.58.156-1.192.736-1.368 4.29-1.3 11.33-1.056 15.786 1.59.522.31.693.985.383 1.507-.31.522-.985.693-1.507.383z"/></svg>

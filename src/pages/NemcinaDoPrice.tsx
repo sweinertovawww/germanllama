@@ -1,27 +1,49 @@
 import { Link } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
-import { PROFESSION_LIST } from "@/game/vocabularyData";
+import { PROFESSION_LIST, type Profession } from "@/game/vocabularyData";
 import { Gamepad2, Layers, Brain, PuzzleIcon, ArrowRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { type translations } from "@/i18n/translations";
 
-const professionPages: Record<string, { slug: string; description: string }> = {
-  obecné: { slug: "skladnik", description: "Základní slovíčka a fráze pro práci ve skladu." },
-  automechanik: { slug: "automechanik", description: "Slovíčka a fráze pro práci v autoservisu a dílně." },
-  zedník: { slug: "stavba", description: "Němčina na stavbě – materiály, nářadí, bezpečnost práce." },
-  gastro: { slug: "gastro", description: "Objednávky, jídelní lístek, komunikace v kuchyni a restauraci." },
-  sestřička: { slug: "sestra", description: "Komunikace s pacienty, lékaři a kolegy ve zdravotnictví." },
-  pokladní: { slug: "pokladni", description: "Platby, reklamace a zákaznický servis německy." },
-  truhlář: { slug: "truhlar", description: "Slovíčka pro truhlářskou dílnu – dřevo, nástroje, povrchy." },
-  instalatér: { slug: "instalater", description: "Potrubí, ventily, topení – němčina pro instalatéry." },
-  elektrikář: { slug: "elektrikar", description: "Kabely, jističe, zásuvky – němčina pro elektrikáře." },
-  uklízečka: { slug: "uklizecka", description: "Čisticí prostředky, nástroje a pokyny pro úklid." },
-  kancelář: { slug: "kancelar", description: "E-maily, schůzky, telefonáty – němčina v kanceláři." },
-  zahradník: { slug: "zahradnik", description: "Rostliny, nářadí a komunikace se zákazníky." },
-  učitel: { slug: "ucitel", description: "Škola, vyučování a komunikace s rodiči německy." },
-  kadeřník: { slug: "kadernik", description: "Střih, barvení, péče – němčina pro kadeřníky." },
-  systemy_pro_haseni: { slug: "haseni", description: "Hasicí systémy, bezpečnost a odborné názvosloví." },
+const PROF_DESC_KEYS: Record<Profession, keyof typeof translations.cs> = {
+  obecné: "profDescObecne",
+  automechanik: "profDescAutomechanik",
+  zedník: "profDescZednik",
+  gastro: "profDescGastro",
+  sestřička: "profDescSestricka",
+  pokladní: "profDescPokladni",
+  truhlář: "profDescTruhlar",
+  instalatér: "profDescInstalater",
+  elektrikář: "profDescElektrikar",
+  uklízečka: "profDescUklizecka",
+  kancelář: "profDescKancelar",
+  zahradník: "profDescZahradnik",
+  učitel: "profDescUcitel",
+  kadeřník: "profDescKadernik",
+  systemy_pro_haseni: "profDescHaseni",
+};
+
+const professionSlugs: Record<Profession, string> = {
+  obecné: "skladnik",
+  automechanik: "automechanik",
+  zedník: "stavba",
+  gastro: "gastro",
+  sestřička: "sestra",
+  pokladní: "pokladni",
+  truhlář: "truhlar",
+  instalatér: "instalater",
+  elektrikář: "elektrikar",
+  uklízečka: "uklizecka",
+  kancelář: "kancelar",
+  zahradník: "zahradnik",
+  učitel: "ucitel",
+  kadeřník: "kadernik",
+  systemy_pro_haseni: "haseni",
 };
 
 const NemcinaDoPrice = () => {
+  const { t } = useLanguage();
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -41,18 +63,16 @@ const NemcinaDoPrice = () => {
 
       <section className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
         <h1 className="font-game text-2xl sm:text-3xl text-foreground mb-3">
-          Němčina do práce – vyberte si profesi
+          {t("nemcinaPageTitle")}
         </h1>
         <p className="font-body text-base text-muted-foreground mb-8 max-w-2xl leading-relaxed">
-          Pracujete v Německu, Rakousku nebo Švýcarsku? Vyberte si svou profesi a naučte se přesně ta slovíčka a fráze,
-          která potřebujete v práci každý den. Stačí 10 minut denně.
+          {t("nemcinaPageDesc")}
         </p>
 
         {/* Profession grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
           {PROFESSION_LIST.filter(p => p.id !== "obecné").map((prof) => {
-            const page = professionPages[prof.id];
-            const slug = page?.slug || prof.id;
+            const slug = professionSlugs[prof.id] || prof.id;
             const href = `/nemcina-do-prace/${slug}`;
             return (
               <Link key={prof.id} to={href}>
@@ -62,10 +82,10 @@ const NemcinaDoPrice = () => {
                     <h2 className="font-game text-base text-foreground">{prof.label}</h2>
                   </div>
                   <p className="font-body text-sm text-muted-foreground leading-relaxed flex-1">
-                    {page?.description || `Německá slovíčka a fráze pro profesi ${prof.label.toLowerCase()}.`}
+                    {t(PROF_DESC_KEYS[prof.id])}
                   </p>
                   <span className="inline-flex items-center gap-1 mt-3 text-sm font-body text-primary font-semibold">
-                    Zobrazit detail <ArrowRight className="w-4 h-4" />
+                    {t("showDetail")} <ArrowRight className="w-4 h-4" />
                   </span>
                 </div>
               </Link>
@@ -74,16 +94,16 @@ const NemcinaDoPrice = () => {
         </div>
 
         {/* Games section */}
-        <h2 className="font-game text-xl text-foreground mb-4">Jak se učit?</h2>
+        <h2 className="font-game text-xl text-foreground mb-4">{t("howToLearn")}</h2>
         <p className="font-body text-sm text-muted-foreground mb-6 max-w-xl">
-          Vyberte profesi a procvičujte slovíčka ve 4 různých hrách. Žádná registrace, žádné platby – jen vy a němčina.
+          {t("howToLearnDesc")}
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
-            { to: "/", icon: <Gamepad2 className="w-6 h-6" />, label: "Llama Run", desc: "Skákej a odpovídej" },
-            { to: "/flashcards", icon: <Layers className="w-6 h-6" />, label: "Flash Cards", desc: "Kartičky na překlad" },
-            { to: "/pexeso", icon: <Brain className="w-6 h-6" />, label: "Pexeso", desc: "Paměťová hra" },
-            { to: "/skladani-vet", icon: <PuzzleIcon className="w-6 h-6" />, label: "Skládání vět", desc: "Přiřaď konce vět" },
+            { to: "/", icon: <Gamepad2 className="w-6 h-6" />, label: "Llama Run", descKey: "llamaRunGameDesc" as const },
+            { to: "/flashcards", icon: <Layers className="w-6 h-6" />, label: "Flash Cards", descKey: "flashCardsGameDesc" as const },
+            { to: "/pexeso", icon: <Brain className="w-6 h-6" />, label: "Pexeso", descKey: "pexesoGameDesc" as const },
+            { to: "/skladani-vet", icon: <PuzzleIcon className="w-6 h-6" />, label: t("sentenceBuilderName"), descKey: "sentenceBuilderGameDesc" as const },
           ].map((game) => (
             <Link
               key={game.to}
@@ -92,27 +112,24 @@ const NemcinaDoPrice = () => {
             >
               <div className="text-primary mx-auto mb-2">{game.icon}</div>
               <span className="font-game text-sm text-foreground block">{game.label}</span>
-              <span className="font-body text-xs text-muted-foreground">{game.desc}</span>
+              <span className="font-body text-xs text-muted-foreground">{t(game.descKey)}</span>
             </Link>
           ))}
         </div>
 
         {/* Internal linking text */}
         <div className="mt-12 border-t border-border pt-8">
-          <h2 className="font-game text-lg text-foreground mb-3">Proč se učit němčinu do práce?</h2>
+          <h2 className="font-game text-lg text-foreground mb-3">{t("nemcinaWhyTitle")}</h2>
           <div className="font-body text-sm text-muted-foreground space-y-3 leading-relaxed max-w-2xl">
+            <p>{t("nemcinaWhyP1")}</p>
+            <p>{t("nemcinaWhyP2")}</p>
             <p>
-              Tisíce Čechů pracují v Německu a Rakousku v oborech jako skladnictví, stavebnictví, gastronomie nebo zdravotnictví.
-              Základní komunikace s šéfem a kolegy je klíčová pro kariérní postup i každodenní pohodlí.
-            </p>
-            <p>
-              Na GermanLlama se učíte přesně ta slovíčka, která uslyšíte v práci – ne abstraktní gramatiku z učebnic.
-              Naše hry jsou navržené tak, aby vám stačilo 10 minut denně a výsledky se dostavily rychle.
-            </p>
-            <p>
-              Začněte s <Link to="/flashcards" className="text-primary underline">kartičkami</Link> pro základní slovní zásobu,
-              pak přejděte na <Link to="/" className="text-primary underline">Llama Run</Link> pro testování členů
-              a <Link to="/skladani-vet" className="text-primary underline">skládání vět</Link> pro praktické fráze.
+              {t("nemcinaWhyP3")}{" "}
+              <Link to="/flashcards" className="text-primary underline">{t("flashcardsLink")}</Link>
+              {" · "}
+              <Link to="/" className="text-primary underline">{t("llamaRunLink")}</Link>
+              {" · "}
+              <Link to="/skladani-vet" className="text-primary underline">{t("sentenceBuilderLink")}</Link>
             </p>
           </div>
         </div>

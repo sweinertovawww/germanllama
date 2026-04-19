@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { type TileItem } from "./types";
 import { type Profession, PROFESSION_LIST } from "@/game/vocabularyData";
 import { generateCrossword, getWordsForProfession, type CrosswordData, type PlacedWord } from "./crosswordGenerator";
+import { useLanguage } from "@/contexts/LanguageContext";
 import ScrabbleLobby from "./ScrabbleLobby";
 import ScrabbleGrid from "./ScrabbleGrid";
 import ScrabbleClues from "./ScrabbleClues";
@@ -35,6 +36,7 @@ type GamePhase = "lobby" | "playing" | "victory";
 export type { TileItem } from "./types";
 
 export default function ScrabbleGame() {
+  const { t } = useLanguage();
   const [phase, setPhase] = useState<GamePhase>("lobby");
   const [selectedProfessions, setSelectedProfessions] = useState<Profession[]>([]);
   const [crossword, setCrossword] = useState<CrosswordData | null>(null);
@@ -503,22 +505,22 @@ export default function ScrabbleGame() {
   if (phase === "victory" && crossword) {
     return (
       <div className="max-w-md mx-auto text-center py-12 px-4">
-        <h2 className="font-game text-2xl sm:text-3xl text-primary mb-4">Výborně! 🦙</h2>
+        <h2 className="font-game text-2xl sm:text-3xl text-primary mb-4">{t("scrabbleVictoryTitle")}</h2>
         <p className="font-body text-foreground text-lg mb-8">
-          Vyplnil/a jsi {crossword.placed.length} slov z {crossword.placed.length}
+          {t("scrabbleVictoryText", { n: crossword.placed.length, total: crossword.placed.length })}
         </p>
         <div className="flex gap-3 justify-center">
           <button
             onClick={startGame}
             className="font-body font-bold text-sm px-6 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
           >
-            Hrát znovu
+            {t("playAgainScrabble")}
           </button>
           <button
             onClick={() => setPhase("lobby")}
             className="font-body font-bold text-sm px-6 py-3 rounded-xl border-2 border-border bg-card text-foreground hover:border-primary/40 transition-colors"
           >
-            Změnit profesi
+            {t("changeProfession")}
           </button>
         </div>
       </div>
@@ -574,7 +576,7 @@ export default function ScrabbleGame() {
           onClick={() => setPhase("lobby")}
           className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          ← Zpět na výběr profese
+          {t("backToProfession")}
         </button>
       </div>
     </div>

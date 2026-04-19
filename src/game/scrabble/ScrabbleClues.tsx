@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { type CrosswordData } from "./crosswordGenerator";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ScrabbleCluesProps {
   crossword: CrosswordData;
@@ -14,6 +15,7 @@ const ScrabbleClues = memo(function ScrabbleClues({
   completedWords,
   onClueClick,
 }: ScrabbleCluesProps) {
+  const { t } = useLanguage();
   const horizontalWords = crossword.placed.filter(p => p.direction === "H");
   const verticalWords = crossword.placed.filter(p => p.direction === "V");
 
@@ -35,13 +37,13 @@ const ScrabbleClues = memo(function ScrabbleClues({
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 px-2">
       {horizontalWords.length > 0 && (
         <div>
-          <h3 className="font-body font-bold text-sm text-foreground mb-2">→ Vodorovně</h3>
+          <h3 className="font-body font-bold text-sm text-foreground mb-2">{t("horizontal")}</h3>
           <div className="space-y-1">{horizontalWords.map(renderClue)}</div>
         </div>
       )}
       {verticalWords.length > 0 && (
         <div>
-          <h3 className="font-body font-bold text-sm text-foreground mb-2">↓ Svisle</h3>
+          <h3 className="font-body font-bold text-sm text-foreground mb-2">{t("vertical")}</h3>
           <div className="space-y-1">{verticalWords.map(renderClue)}</div>
         </div>
       )}

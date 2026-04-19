@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { CheckCircle, Send } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Kontakt = () => {
+  const { t } = useLanguage();
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -24,7 +26,7 @@ const Kontakt = () => {
       .insert({ message: message.trim(), email: email.trim() || null });
 
     if (dbError) {
-      setError("Nepodařilo se odeslat zprávu. Zkus to prosím znovu.");
+      setError(t("sendError"));
       setLoading(false);
       return;
     }
@@ -44,27 +46,26 @@ const Kontakt = () => {
         <div className="text-center space-y-4 py-12">
           <CheckCircle className="w-16 h-16 text-primary mx-auto" />
           <h2 className="font-game text-xl sm:text-2xl text-foreground">
-            Děkuji!
+            {t("thankYou")}
           </h2>
           <p className="font-body text-muted-foreground">
-            Tvá zpráva byla úspěšně odeslána.
+            {t("messageSent")}
           </p>
         </div>
       ) : (
         <div className="space-y-6">
           <div className="text-center space-y-2">
             <h1 className="font-game text-xl sm:text-2xl text-foreground">
-              Pomozte vylepšit Germanllama.com
+              {t("contactTitle")}
             </h1>
             <p className="font-body text-sm sm:text-base text-muted-foreground">
-              Budeme moc rádi za tvůj feedback, nápady na nové věty/slovíčka,
-              nebo hlášení chyb.
+              {t("contactDesc")}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <Textarea
-              placeholder="Tvoje zpráva..."
+              placeholder={t("messagePlaceholder")}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="min-h-[140px] font-body"
@@ -73,13 +74,13 @@ const Kontakt = () => {
             <div className="space-y-1">
               <Input
                 type="email"
-                placeholder="Tvůj e-mail (nepovinné)"
+                placeholder={t("emailPlaceholder")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="font-body"
               />
               <p className="text-xs text-muted-foreground font-body">
-                Vyplň, pokud chceš odpověď.
+                {t("emailHint")}
               </p>
             </div>
 
@@ -93,7 +94,7 @@ const Kontakt = () => {
               className="w-full font-game"
             >
               <Send className="w-4 h-4 mr-2" />
-              {loading ? "Odesílám..." : "Odeslat"}
+              {loading ? t("sending") : t("send")}
             </Button>
           </form>
         </div>

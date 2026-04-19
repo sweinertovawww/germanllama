@@ -3,8 +3,11 @@ import SEOHead from "@/components/SEOHead";
 import GameSEOContent from "@/components/GameSEOContent";
 import WortpaareGame from "@/components/games/wortpaare/WortpaareGame";
 import { ArrowLeftRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Wortpaare = () => {
+  const { t } = useLanguage();
+
   return (
     <>
       <SEOHead
@@ -29,12 +32,12 @@ const Wortpaare = () => {
           <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-t-2xl px-4 sm:px-8 py-2 sm:py-2.5 text-center">
             <h2 className="font-game text-base sm:text-xl font-bold flex items-center justify-center gap-2">
               <ArrowLeftRight className="w-5 h-5 sm:w-6 sm:h-6" />
-              Slovní páry
+              {t("wordPairsName")}
             </h2>
           </div>
           <div className="bg-muted rounded-b-2xl border border-t-0 border-border px-4 sm:px-8 py-3 sm:py-4 shadow-sm">
             <p className="font-body text-sm text-muted-foreground text-center">
-              Přiřaď ke každému německému slovu jeho synonymum (podobný význam) nebo antonymum (opačný význam).
+              {t("wortpaareRuleText")}
             </p>
           </div>
         </div>
@@ -47,8 +50,8 @@ const Wortpaare = () => {
       </section>
 
       <GameSEOContent
-        title="Co se naučíš ve hře Slovní páry?"
-        intro="Slovní páry je hra na přiřazování slovních párů – synonym a antonym v němčině. Rozšíříš si slovní zásobu a naučíš se rozlišovat slova s podobným i opačným významem."
+        title={t("wortpaareSeoTitle")}
+        intro={t("wortpaareSeoIntro")}
         sampleWords={[
           { german: "groß ↔ klein", czech: "velký ↔ malý" },
           { german: "sprechen = reden", czech: "mluvit = hovořit" },
@@ -58,9 +61,9 @@ const Wortpaare = () => {
           { german: "helfen = unterstützen", czech: "pomáhat = podporovat" },
         ]}
         faqs={[
-          { q: "Jak se hraje Slovní páry?", a: "Klikni na německé slovo a pak na jeho synonymum nebo antonymum. Po správném přiřazení se pár zobrazí s českým překladem." },
-          { q: "Co jsou synonyma a antonyma?", a: "Synonyma jsou slova s podobným významem (např. sprechen = reden). Antonyma mají opačný význam (např. groß ↔ klein)." },
-          { q: "Je hra zdarma?", a: "Ano, hra je kompletně zdarma a bez registrace." },
+          { q: t("wortpaareFaq1q"), a: t("wortpaareFaq1a") },
+          { q: t("wortpaareFaq2q"), a: t("wortpaareFaq2a") },
+          { q: t("wortpaareFaq3q"), a: t("wortpaareFaq3a") },
         ]}
       />
     </>

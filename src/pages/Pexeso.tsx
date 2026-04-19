@@ -5,6 +5,7 @@ import { Brain, RotateCcw, Trophy, Skull, Copy, Check, ArrowLeft } from "lucide-
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface MemoryCard {
   id: number;
@@ -70,6 +71,7 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
 }
 
 const Pexeso = () => {
+  const { t } = useLanguage();
   const isMobile = useIsMobile();
   const pairCount = 5;
   const profFilter = useProfessionFilter();
@@ -175,7 +177,7 @@ const Pexeso = () => {
       <section className="py-4 sm:py-8 px-3 sm:px-4">
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-t-2xl px-4 sm:px-8 py-2 sm:py-2.5 text-center">
-            <h2 className="font-game text-base sm:text-xl font-bold">Pravidla Hry</h2>
+            <h2 className="font-game text-base sm:text-xl font-bold">{t("gameRules")}</h2>
           </div>
           <div className="bg-muted rounded-b-2xl border border-t-0 border-border px-4 sm:px-8 py-3 sm:py-4 shadow-sm">
             <div className="flex items-center gap-3 sm:gap-4">
@@ -183,9 +185,9 @@ const Pexeso = () => {
                 <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
               </div>
               <div>
-                <h3 className="font-body font-bold text-foreground text-sm sm:text-base">Pexeso</h3>
+                <h3 className="font-body font-bold text-foreground text-sm sm:text-base">{t("pexesoName")}</h3>
                 <p className="font-body text-muted-foreground text-xs sm:text-sm leading-relaxed">
-                  Najdi dvojice německých slovíček a jejich českých překladů. Pozor! Každou kartu můžeš otočit jen 3×, tak si dobře pamatuj, co pod ní bylo.
+                  {t("pexesoRuleText")}
                 </p>
               </div>
             </div>
@@ -202,7 +204,7 @@ const Pexeso = () => {
               onClick={startGame}
               className="font-game text-sm sm:text-base px-10 sm:px-14 py-3 sm:py-4 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg"
             >
-              🎮 START HRY
+              🎮 {t("startGame")}
             </button>
           </div>
         </section>
@@ -213,20 +215,20 @@ const Pexeso = () => {
             {/* Status bar */}
             <div className="flex items-center justify-between mb-4 px-1">
               <span className="font-body text-sm sm:text-base text-foreground font-semibold">
-                Nalezeno: {matchedCount} / {totalPairs}
+                {t("found")}: {matchedCount} / {totalPairs}
               </span>
               <div className="flex items-center gap-2">
                 <button
                   onClick={goToLobby}
                   className="flex items-center gap-1 font-body text-xs sm:text-sm font-semibold border border-border text-muted-foreground px-2.5 py-1.5 rounded-lg hover:text-foreground hover:border-primary/50 transition-colors"
                 >
-                  <ArrowLeft className="w-3.5 h-3.5" /> Změnit obor
+                  <ArrowLeft className="w-3.5 h-3.5" /> {t("changeField")}
                 </button>
                 <button
                   onClick={resetGame}
                   className="flex items-center gap-1.5 font-body text-xs sm:text-sm font-semibold bg-primary text-primary-foreground px-3 py-1.5 rounded-lg hover:bg-primary/90 transition-colors"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" /> Nová hra
+                  <RotateCcw className="w-3.5 h-3.5" /> {t("newGame")}
                 </button>
               </div>
             </div>
@@ -239,16 +241,16 @@ const Pexeso = () => {
                     {won ? <Trophy className="w-12 h-12 text-primary" /> : <Skull className="w-12 h-12 text-destructive" />}
                   </div>
                   <h3 className={`font-game text-lg sm:text-2xl mb-2 ${won ? "text-primary" : "text-destructive"}`}>
-                    {won ? "Výborně!" : "Game Over"}
+                    {won ? t("excellent") : t("gameOverLabel")}
                   </h3>
                   <p className="font-body text-muted-foreground text-sm mb-2">
                     {won
-                      ? `Všech ${totalPairs} dvojic nalezeno!`
-                      : "Vyčerpal jsi pokusy u jedné z karet."}
+                      ? t("allPairsFound", { n: totalPairs })
+                      : t("exhaustedFlips")}
                   </p>
                   {completedGames > 0 && (
                     <p className="font-body text-muted-foreground text-xs mb-4">
-                      Dokončeno her: {completedGames}
+                      {t("completedGamesLabel")}: {completedGames}
                     </p>
                   )}
                   <div className="flex items-center justify-center gap-3 flex-wrap">
@@ -262,13 +264,13 @@ const Pexeso = () => {
                       }}
                       className="font-game text-xs sm:text-sm bg-primary text-primary-foreground px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors"
                     >
-                      {won ? "Další hra" : "Zkusit znovu"}
+                      {won ? t("nextGame") : t("tryAgain")}
                     </button>
                     <button
                       onClick={goToLobby}
                       className="font-game text-xs sm:text-sm border-2 border-border text-muted-foreground px-5 py-2.5 rounded-xl hover:border-primary/50 hover:text-foreground transition-colors"
                     >
-                      Změnit obor
+                      {t("changeField")}
                     </button>
                   </div>
                 </div>
@@ -295,7 +297,7 @@ const Pexeso = () => {
                         </span>
                       );
                     })}
-                    <span className="relative z-10 font-game text-sm text-foreground text-center">📣 Pochlub se a sdílej výsledek 🤩</span>
+                    <span className="relative z-10 font-game text-sm text-foreground text-center">{t("shareBoast")}</span>
                     <div className="relative">
                       {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
                         const rad = (angle * Math.PI) / 180;
@@ -328,7 +330,7 @@ const Pexeso = () => {
                         className="relative z-10 flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
                       >
                         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                        {copied ? "Zkopírováno!" : "Kopírovat"}
+                        {copied ? t("copied") : t("copy")}
                       </button>
                     </div>
                   </div>

@@ -1,4 +1,6 @@
 import { PROFESSION_LIST, type Profession } from "@/game/vocabularyData";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/i18n/translations";
 
 const GROUP_COLORS: Record<string, string> = {
   kancelář: "hsl(230 60% 55%)",
@@ -11,6 +13,24 @@ const GROUP_COLORS: Record<string, string> = {
   doprava: "hsl(280 65% 50%)",
   zemědělství: "hsl(90 70% 45%)",
   vzdělání: "hsl(260 70% 50%)",
+};
+
+const PROF_LABEL_KEYS: Record<Profession, keyof typeof translations.cs> = {
+  obecné: "profLabelObecne",
+  automechanik: "profLabelAutomechanik",
+  elektrikář: "profLabelElektrikar",
+  gastro: "profLabelGastro",
+  instalatér: "profLabelInstalater",
+  kadeřník: "profLabelKadernik",
+  kancelář: "profLabelKancelar",
+  pokladní: "profLabelPokladni",
+  systemy_pro_haseni: "profLabelHaseni",
+  sestřička: "profLabelSestricka",
+  truhlář: "profLabelTruhlar",
+  učitel: "profLabelUcitel",
+  uklízečka: "profLabelUklizecka",
+  zahradník: "profLabelZahradnik",
+  zedník: "profLabelZednik",
 };
 
 interface ProfessionFilterProps {
@@ -26,13 +46,15 @@ export default function ProfessionFilter({
   onSelectAll,
   isAllSelected,
 }: ProfessionFilterProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="max-w-4xl mx-auto mb-4 sm:mb-6 px-3 sm:px-4">
       <p className="font-body font-bold text-foreground text-xs sm:text-sm mb-2 text-center">
-        🎯 Vyber si svou profesi
+        {t("chooseProfession")}
       </p>
       <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-        {/* Všechny profese – vizuálně odlišené */}
+        {/* All professions button */}
         <button
           onClick={onSelectAll}
           className={`font-body font-bold text-[10px] sm:text-xs px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border-2 transition-all active:scale-95 ${
@@ -42,7 +64,7 @@ export default function ProfessionFilter({
           }`}
           style={isAllSelected ? { backgroundColor: "hsl(var(--primary))", borderColor: "hsl(var(--primary))" } : undefined}
         >
-          🌍 Všechny profese
+          {t("allProfessions")}
         </button>
 
         {PROFESSION_LIST.map((prof) => {
@@ -76,7 +98,7 @@ export default function ProfessionFilter({
                 }
               }}
             >
-              {prof.emoji} {prof.label}
+              {prof.emoji} {t(PROF_LABEL_KEYS[prof.id])}
             </button>
           );
         })}
