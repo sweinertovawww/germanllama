@@ -116,51 +116,51 @@ const Layout = ({ children }: LayoutProps) => {
               {t("contact")}
             </button>
             {/* Language switcher */}
-            <div className="flex items-center rounded-lg border border-border overflow-hidden">
+            <div className="flex items-center gap-1 bg-muted rounded-xl p-1 border border-border">
               <button
                 onClick={() => setLang("cs")}
-                className={`font-body font-bold text-xs px-2.5 py-1.5 transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body font-semibold transition-all ${
                   lang === "cs"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-card text-muted-foreground hover:text-foreground"
+                    ? "bg-card shadow-sm text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                CZ
+                🇨🇿 CZ
               </button>
               <button
                 onClick={() => setLang("ko")}
-                className={`font-body font-bold text-xs px-2.5 py-1.5 transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body font-semibold transition-all ${
                   lang === "ko"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-card text-muted-foreground hover:text-foreground"
+                    ? "bg-card shadow-sm text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                KO
+                🇰🇷 KO
               </button>
             </div>
           </div>
           {/* Mobile: language switcher + contact */}
           <div className="sm:hidden flex items-center gap-2">
-            <div className="flex items-center rounded-lg border border-border overflow-hidden">
+            <div className="flex items-center gap-1 bg-muted rounded-xl p-1 border border-border">
               <button
                 onClick={() => setLang("cs")}
-                className={`font-body font-bold text-[10px] px-2 py-1 transition-colors ${
+                className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-body font-semibold transition-all ${
                   lang === "cs"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-card text-muted-foreground"
+                    ? "bg-card shadow-sm text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                CZ
+                🇨🇿 CZ
               </button>
               <button
                 onClick={() => setLang("ko")}
-                className={`font-body font-bold text-[10px] px-2 py-1 transition-colors ${
+                className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-body font-semibold transition-all ${
                   lang === "ko"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-card text-muted-foreground"
+                    ? "bg-card shadow-sm text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                KO
+                🇰🇷 KO
               </button>
             </div>
             <button
