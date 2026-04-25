@@ -6,7 +6,7 @@ import { ArrowLeftRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const Wortpaare = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   return (
     <>
@@ -53,12 +53,12 @@ const Wortpaare = () => {
         title={t("wortpaareSeoTitle")}
         intro={t("wortpaareSeoIntro")}
         sampleWords={[
-          { german: "groß ↔ klein", czech: "velký ↔ malý" },
-          { german: "sprechen = reden", czech: "mluvit = hovořit" },
-          { german: "kaufen ↔ verkaufen", czech: "kupovat ↔ prodávat" },
-          { german: "Arbeit = Job", czech: "práce = zaměstnání" },
-          { german: "krank ↔ gesund", czech: "nemocný ↔ zdravý" },
-          { german: "helfen = unterstützen", czech: "pomáhat = podporovat" },
+          { german: "groß ↔ klein", translation: lang === "ko" ? "크다 ↔ 작다" : "velký ↔ malý" },
+          { german: "sprechen = reden", translation: lang === "ko" ? "말하다 = 이야기하다" : "mluvit = hovořit" },
+          { german: "kaufen ↔ verkaufen", translation: lang === "ko" ? "사다 ↔팔다" : "kupovat ↔ prodávat" },
+          { german: "Arbeit = Job", translation: lang === "ko" ? "일 = 직업" : "práce = zaměstnání" },
+          { german: "krank ↔ gesund", translation: lang === "ko" ? "아프다 ↔ 건강하다" : "nemocný ↔ zdravý" },
+          { german: "helfen = unterstützen", translation: lang === "ko" ? "돕다 = 지원하다" : "pomáhat = podporovat" },
         ]}
         faqs={[
           { q: t("wortpaareFaq1q"), a: t("wortpaareFaq1a") },
