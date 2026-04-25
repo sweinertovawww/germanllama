@@ -1,212 +1,252 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
     <loc>https://www.germanllama.com/</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/?lang=ko</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://www.germanllama.com/nemcina-do-prace</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace"/>
+    <loc>https://www.germanllama.com/flashcards</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/flashcards?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.germanllama.com/pexeso</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/pexeso?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.germanllama.com/skladani-vet</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/skladani-vet?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.germanllama.com/wortpaare</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/wortpaare?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.germanllama.com/scrabble</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/scrabble?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/elektrikar</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/elektrikar"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/elektrikar?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/elektrikar"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/elektrikar?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/skladnik</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/skladnik"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/skladnik?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/skladnik"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/skladnik?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/stavba</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/stavba"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/stavba?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/stavba"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/stavba?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/gastro</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/gastro"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/gastro?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/gastro"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/gastro?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/sestra</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/sestra"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/sestra?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/sestra"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/sestra?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/pokladni</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/pokladni"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/pokladni?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/pokladni"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/pokladni?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/truhlar</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/truhlar"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/truhlar?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/truhlar"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/truhlar?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/instalater</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/instalater"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/instalater?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/instalater"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/instalater?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/uklizecka</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/uklizecka"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/uklizecka?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/uklizecka"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/uklizecka?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/kancelar</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/kancelar"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/kancelar?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/kancelar"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/kancelar?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/zahradnik</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/zahradnik"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/zahradnik?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/zahradnik"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/zahradnik?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/ucitel</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/ucitel"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/ucitel?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/ucitel"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/ucitel?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/kadernik</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/kadernik"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/kadernik?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/kadernik"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/kadernik?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/automechanik</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/automechanik"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/automechanik?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/automechanik"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/automechanik?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/haseni</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/nemcina-do-prace/haseni"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/nemcina-do-prace/haseni?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/nemcina-do-prace/haseni"/>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/haseni?lang=ko</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://www.germanllama.com/flashcards</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/flashcards"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/flashcards?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/flashcards"/>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://www.germanllama.com/pexeso</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/pexeso"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/pexeso?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/pexeso"/>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://www.germanllama.com/skladani-vet</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/skladani-vet"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/skladani-vet?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/skladani-vet"/>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://www.germanllama.com/wortpaare</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/wortpaare"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/wortpaare?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/wortpaare"/>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://www.germanllama.com/scrabble</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/scrabble"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/scrabble?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/scrabble"/>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
     <loc>https://www.germanllama.com/kontakt</loc>
-    <xhtml:link rel="alternate" hreflang="cs" href="https://www.germanllama.com/kontakt"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://www.germanllama.com/kontakt?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.germanllama.com/kontakt"/>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 
 </urlset>
