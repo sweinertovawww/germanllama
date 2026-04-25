@@ -444,7 +444,7 @@ const ko: typeof cs = {
   wortpaareSeoTitle: "단어 쌍 게임에서 무엇을 배울 수 있나요?",
   wortpaareSeoIntro: "단어 쌍은 독일어 동의어와 반의어를 연결하는 게임입니다. 어휘를 늘리고 비슷하거나 반대 의미의 단어를 구분하는 능력을 키울 수 있습니다.",
   wortpaareFaq1q: "단어 쌍 게임을 어떻게 하나요?",
-  wortpaareFaq1a: "독일어 단어를 클릭하고 동의어나 반의어를 클릭하세요. 올바르게 연결되면 체코어 번역과 함께 쌍이 표시됩니다.",
+  wortpaareFaq1a: "독일어 단어를 클릭하고 동의어나 반의어를 클릭하세요. 올바르게 연결되면 한국어 번역과 함께 쌍이 표시됩니다.",
   wortpaareFaq2q: "동의어와 반의어가 무엇인가요?",
   wortpaareFaq2a: "동의어는 비슷한 의미의 단어입니다 (예: sprechen = reden). 반의어는 반대 의미의 단어입니다 (예: groß ↔ klein).",
   wortpaareFaq3q: "게임은 무료인가요?",
