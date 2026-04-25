@@ -364,7 +364,7 @@ const Pexeso = () => {
                           {card.text}
                         </span>
                         <span className={`mt-1.5 font-body text-[9px] sm:text-xs font-semibold uppercase ${card.lang === "de" ? "text-primary" : "text-accent"}`}>
-                          {card.lang === "de" ? "DE" : "CZ"}
+                          {card.lang === "de" ? "DE" : lang === "ko" ? "KO" : "CZ"}
                         </span>
                         <span className="font-body text-[7px] sm:text-[8px] text-muted-foreground/60 mt-0.5">[{card.profession}]</span>
                       </div>
