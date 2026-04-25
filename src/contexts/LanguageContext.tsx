@@ -11,15 +11,24 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLang] = useState<Lang>(() => {
-    const saved = (localStorage.getItem("gl_lang") as Lang) || "cs";
-    document.documentElement.lang = saved;
-    return saved;
+    const urlLang = new URLSearchParams(window.location.search).get("lang") as Lang | null;
+    const initial = urlLang || (localStorage.getItem("gl_lang") as Lang) || "cs";
+    document.documentElement.lang = initial;
+    return initial;
   });
 
   const handleSetLang = (l: Lang) => {
     setLang(l);
     localStorage.setItem("gl_lang", l);
     document.documentElement.lang = l;
+    const params = new URLSearchParams(window.location.search);
+    if (l === "cs") {
+      params.delete("lang");
+    } else {
+      params.set("lang", l);
+    }
+    const query = params.toString();
+    history.replaceState(null, "", window.location.pathname + (query ? `?${query}` : ""));
   };
 
   const t = (key: keyof typeof translations.cs, params?: Record<string, string | number>): string => {

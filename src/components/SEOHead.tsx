@@ -8,6 +8,7 @@ interface SEOHeadProps {
 }
 
 const BASE_URL = "https://germanllama.lovable.app";
+const CANONICAL_BASE = "https://www.germanllama.com";
 
 const SEOHead = ({ title, description, canonical, jsonLd }: SEOHeadProps) => {
   useEffect(() => {
@@ -42,6 +43,21 @@ const SEOHead = ({ title, description, canonical, jsonLd }: SEOHeadProps) => {
       link.href = canonicalUrl;
     }
 
+    // Hreflang
+    const hreflangData = [
+      { hreflang: "cs", href: `${CANONICAL_BASE}${canonical || "/"}` },
+      { hreflang: "ko", href: `${CANONICAL_BASE}${canonical || "/"}?lang=ko` },
+      { hreflang: "x-default", href: `${CANONICAL_BASE}${canonical || "/"}` },
+    ];
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(el => el.remove());
+    hreflangData.forEach(({ hreflang, href }) => {
+      const el = document.createElement("link");
+      el.rel = "alternate";
+      el.setAttribute("hreflang", hreflang);
+      el.href = href;
+      document.head.appendChild(el);
+    });
+
     // JSON-LD
     const existingScript = document.querySelector('script[data-seo-jsonld]');
     if (existingScript) existingScript.remove();
@@ -56,6 +72,7 @@ const SEOHead = ({ title, description, canonical, jsonLd }: SEOHeadProps) => {
     return () => {
       const s = document.querySelector('script[data-seo-jsonld]');
       if (s) s.remove();
+      document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(el => el.remove());
     };
   }, [title, description, canonical, jsonLd]);
 
