@@ -146,7 +146,7 @@ function DroppableSlot({
 
 const SentenceBuilder = () => {
   const isMobile = useIsMobile();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const profFilter = useProfessionFilter();
   const filteredQuestions = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
   // --- localStorage persistence ---
@@ -387,7 +387,7 @@ const SentenceBuilder = () => {
                     }`}
                   >
                     <p className="font-body text-xs text-muted-foreground mb-1.5 italic">
-                      🇨🇿 {pair.translation}
+                      {lang === "ko" ? "🇰🇷" : "🇨🇿"} {pair.translation}
                     </p>
                     <span className="font-body text-[7px] sm:text-[8px] text-muted-foreground/60">[{pair.profession}]</span>
                     <div className="flex items-center gap-2 flex-wrap">
