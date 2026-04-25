@@ -25,7 +25,8 @@ export interface CrosswordData {
 const ARTICLES = ["der", "die", "das"];
 
 function getGermanWord(text: string): string {
-  return text.replace("Jaký člen má ", "").replace("?", "").trim();
+  const m = text.match(/má\s+(.+?)\?/);
+  return m ? m[1].trim() : text.replace("?", "").trim();
 }
 
 export function getWordsForProfession(professions: Profession[]): WordEntry[] {

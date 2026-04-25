@@ -1,10 +1,34 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Copy, Check, ArrowLeft, Gamepad2 } from "lucide-react";
-import { QUESTIONS, FILL_QUESTIONS, filterByProfession, isTranslationCorrect, type Question, type FillQuestion } from "./vocabularyData";
+import { QUESTIONS, FILL_QUESTIONS, filterByProfession, isTranslationCorrect, type Question, type FillQuestion, type Profession } from "./vocabularyData";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/i18n/translations";
+
+const PROF_LABEL_KEYS: Record<Profession, keyof typeof translations.cs> = {
+  obecné: "profLabelObecne",
+  automechanik: "profLabelAutomechanik",
+  elektrikář: "profLabelElektrikar",
+  gastro: "profLabelGastro",
+  instalatér: "profLabelInstalater",
+  kadeřník: "profLabelKadernik",
+  kancelář: "profLabelKancelar",
+  pokladní: "profLabelPokladni",
+  systemy_pro_haseni: "profLabelHaseni",
+  sestřička: "profLabelSestricka",
+  truhlář: "profLabelTruhlar",
+  učitel: "profLabelUcitel",
+  uklízečka: "profLabelUklizecka",
+  zahradník: "profLabelZahradnik",
+  zedník: "profLabelZednik",
+};
+
+function getGermanWordFromText(text: string): string {
+  const m = text.match(/má\s+(.+?)\?/);
+  return m ? m[1] : text;
+}
 
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
@@ -1077,9 +1101,9 @@ const LlamaGame = () => {
           <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
             <div className="bg-card rounded-xl p-3 sm:p-6 shadow-2xl text-center max-w-[95%] sm:max-w-md mx-2 sm:mx-4 border-2 border-primary">
               <p className="font-game text-xs sm:text-sm text-card-foreground mb-3 sm:mb-4 leading-relaxed">
-                {currentQuestion.text}
+                {t("questionArticle").replace("{word}", getGermanWordFromText(currentQuestion.text))}
               </p>
-              <span className="font-game text-[7px] text-muted-foreground/60 block mb-2">[{currentQuestion.profession}]</span>
+              <span className="font-game text-[7px] text-muted-foreground/60 block mb-2">[{t(PROF_LABEL_KEYS[currentQuestion.profession])}]</span>
 
               {/* Phase 1: Article selection */}
               {quizPhase === "article" && (
@@ -1161,7 +1185,7 @@ const LlamaGame = () => {
               <p className="font-game text-xs sm:text-sm text-card-foreground mb-2 leading-relaxed">
                 {currentFillQuestion.sentence}
               </p>
-              <span className="font-game text-[7px] text-muted-foreground/60 block mb-1">[{currentFillQuestion.profession}]</span>
+              <span className="font-game text-[7px] text-muted-foreground/60 block mb-1">[{t(PROF_LABEL_KEYS[currentFillQuestion.profession])}]</span>
               <p className="font-game text-xs text-muted-foreground mb-3 sm:mb-4 italic">
                 {currentFillQuestion.translation}
               </p>
