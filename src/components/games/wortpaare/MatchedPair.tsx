@@ -1,6 +1,7 @@
 import React from "react";
 import { Check, ArrowLeftRight } from "lucide-react";
 import { MatchedPairData } from "@/hooks/useWortpaare";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface MatchedPairProps {
   data: MatchedPairData;
@@ -8,6 +9,7 @@ interface MatchedPairProps {
 
 const MatchedPair: React.FC<MatchedPairProps> = ({ data }) => {
   const { pair } = data;
+  const { lang } = useLanguage();
   const isSynonym = pair.pair_type === "synonym";
 
   return (
@@ -15,7 +17,7 @@ const MatchedPair: React.FC<MatchedPairProps> = ({ data }) => {
       {/* Word A */}
       <div className="flex-1 text-center">
         <p className="font-body font-bold text-sm sm:text-base text-foreground/70">{pair.word_a}</p>
-        <p className="font-body text-xs text-muted-foreground">{pair.translation_a}</p>
+        <p className="font-body text-xs text-muted-foreground">{lang === "ko" ? (pair.translation_a_ko || pair.translation_a) : pair.translation_a}</p>
       </div>
 
       {/* Badge */}
@@ -35,7 +37,7 @@ const MatchedPair: React.FC<MatchedPairProps> = ({ data }) => {
       {/* Word B */}
       <div className="flex-1 text-center">
         <p className="font-body font-bold text-sm sm:text-base text-foreground/70">{pair.word_b}</p>
-        <p className="font-body text-xs text-muted-foreground">{pair.translation_b}</p>
+        <p className="font-body text-xs text-muted-foreground">{lang === "ko" ? (pair.translation_b_ko || pair.translation_b) : pair.translation_b}</p>
       </div>
 
       <Check className="w-4 h-4 text-primary shrink-0" />

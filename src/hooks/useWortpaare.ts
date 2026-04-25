@@ -8,6 +8,8 @@ export interface WordPair {
   pair_type: "synonym" | "antonym";
   translation_a: string;
   translation_b: string;
+  translation_a_ko: string | null;
+  translation_b_ko: string | null;
   category: string | null;
 }
 
