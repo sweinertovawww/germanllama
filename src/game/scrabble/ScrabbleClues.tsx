@@ -15,7 +15,7 @@ const ScrabbleClues = memo(function ScrabbleClues({
   completedWords,
   onClueClick,
 }: ScrabbleCluesProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const horizontalWords = crossword.placed.filter(p => p.direction === "H");
   const verticalWords = crossword.placed.filter(p => p.direction === "V");
 
@@ -28,7 +28,7 @@ const ScrabbleClues = memo(function ScrabbleClues({
       } ${completedWords.has(p.number) ? "line-through text-muted-foreground" : "text-foreground"}`}
     >
       <span className="text-muted-foreground">{p.number}.</span>{" "}
-      {p.entry.czech} ({p.entry.article})
+      {lang === "ko" ? p.entry.ko : p.entry.czech} ({p.entry.article})
       {completedWords.has(p.number) && " ✅"}
     </button>
   );

@@ -30,7 +30,7 @@ const ScrabbleHints = memo(function ScrabbleHints({
   crossword,
   completedWords,
 }: ScrabbleHintsProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [revealedWords, setRevealedWords] = useState<Set<number>>(new Set());
 
   const toggleReveal = useCallback((num: number) => {
@@ -72,7 +72,7 @@ const ScrabbleHints = memo(function ScrabbleHints({
                 >
                   <span className="font-body text-sm text-foreground">
                     <span className="text-muted-foreground mr-1.5">{p.number}.</span>
-                    {p.entry.czech}
+                    {lang === "ko" ? p.entry.ko : p.entry.czech}
                     {p.entry.article && (
                       <span className="text-muted-foreground ml-1">({p.entry.article})</span>
                     )}

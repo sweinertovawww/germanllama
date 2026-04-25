@@ -3,6 +3,7 @@ import { QUESTIONS, type Profession } from "@/game/vocabularyData";
 export interface WordEntry {
   german: string;
   czech: string;
+  ko: string;
   article: string;
 }
 
@@ -38,6 +39,7 @@ export function getWordsForProfession(professions: Profession[]): WordEntry[] {
     .map(q => ({
       german: getGermanWord(q.text).toUpperCase(),
       czech: q.translation,
+      ko: q.translationKo,
       article: ARTICLES[q.correct],
     }))
     .filter(w => w.german.length >= 4 && w.german.length <= 12);

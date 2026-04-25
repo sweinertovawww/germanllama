@@ -30,15 +30,15 @@ function shuffleArray<T>(arr: T[]): T[] {
 
 const MAX_FLIPS = 3;
 
-function buildCards(pairCount: number, professions: import("@/game/vocabularyData").Profession[] = []): MemoryCard[] {
+function buildCards(pairCount: number, professions: import("@/game/vocabularyData").Profession[] = [], activeLang: string = "cs"): MemoryCard[] {
   let allCards = filterByProfession(getAllFlashCards(), professions);
   if (!allCards || allCards.length === 0) {
     allCards = [
-      { german: "der Hund", czech: "pes", type: "noun", profession: "obecné" },
-      { german: "die Katze", czech: "kočka", type: "noun", profession: "obecné" },
-      { german: "das Haus", czech: "dům", type: "noun", profession: "obecné" },
-      { german: "der Tisch", czech: "stůl", type: "noun", profession: "obecné" },
-      { german: "die Blume", czech: "květina", type: "noun", profession: "obecné" },
+      { german: "der Hund", czech: "pes", ko: "개", type: "noun", profession: "obecné" },
+      { german: "die Katze", czech: "kočka", ko: "고양이", type: "noun", profession: "obecné" },
+      { german: "das Haus", czech: "dům", ko: "집", type: "noun", profession: "obecné" },
+      { german: "der Tisch", czech: "stůl", ko: "테이블", type: "noun", profession: "obecné" },
+      { german: "die Blume", czech: "květina", ko: "꽃", type: "noun", profession: "obecné" },
     ];
   }
   const selected = shuffleArray(allCards).slice(0, pairCount);
@@ -58,7 +58,7 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
     memoryCards.push({
       id: i * 2 + 1,
       pairId: i,
-      text: card.czech,
+      text: activeLang === "ko" ? card.ko : card.czech,
       lang: "cz",
       flipped: false,
       matched: false,
@@ -71,7 +71,7 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
 }
 
 const Pexeso = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const isMobile = useIsMobile();
   const pairCount = 5;
   const profFilter = useProfessionFilter();
@@ -90,21 +90,21 @@ const Pexeso = () => {
   const totalPairs = useMemo(() => new Set(cards.map((c) => c.pairId)).size, [cards]);
 
   const startGame = useCallback(() => {
-    setCards(buildCards(pairCount, profFilter.selected));
+    setCards(buildCards(pairCount, profFilter.selected, lang));
     setSelected([]);
     setChecking(false);
     setGameOver(false);
     setWon(false);
     setInLobby(false);
-  }, [pairCount, profFilter.selected]);
+  }, [pairCount, profFilter.selected, lang]);
 
   const resetGame = useCallback(() => {
-    setCards(buildCards(pairCount, profFilter.selected));
+    setCards(buildCards(pairCount, profFilter.selected, lang));
     setSelected([]);
     setChecking(false);
     setGameOver(false);
     setWon(false);
-  }, [pairCount, profFilter.selected]);
+  }, [pairCount, profFilter.selected, lang]);
 
   const goToLobby = useCallback(() => {
     setInLobby(true);

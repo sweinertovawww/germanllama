@@ -9,7 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 interface GameSEOContentProps {
   title: string;
   intro: string;
-  sampleWords?: { german: string; czech: string }[];
+  sampleWords?: { german: string; translation: string }[];
   faqs: { q: string; a: string }[];
 }
 
@@ -32,7 +32,7 @@ const GameSEOContent = ({ title, intro, sampleWords, faqs }: GameSEOContentProps
             {sampleWords.map((w, i) => (
               <div key={i} className="bg-muted rounded-lg px-3 py-2 text-center border border-border">
                 <span className="font-body text-sm font-semibold text-foreground block">{w.german}</span>
-                <span className="font-body text-xs text-muted-foreground">{w.czech}</span>
+                <span className="font-body text-xs text-muted-foreground">{w.translation}</span>
               </div>
             ))}
           </div>

@@ -18,7 +18,7 @@ function shuffleArray<T>(arr: T[]): T[] {
 type Category = "mix" | "nouns" | "sentences";
 
 const FlashCards = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const allCardsRaw = useMemo(() => getAllFlashCards(), []);
   const profFilter = useProfessionFilter();
 
@@ -221,7 +221,7 @@ const FlashCards = () => {
                           className={`font-body font-bold text-foreground text-center break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`}
                           style={{ lineHeight: 1.5, marginBottom: "0.5em" }}
                         >
-                          {card.czech}
+                          {lang === "ko" ? card.ko : card.czech}
                         </p>
                       </div>
                     </div>

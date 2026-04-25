@@ -19,7 +19,7 @@ function RuleItem({ icon, title, text }: { icon: React.ReactNode; title: string;
 }
 
 const Index = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   return (
     <>
@@ -83,16 +83,16 @@ const Index = () => {
         title={t("indexGameSeoTitle")}
         intro={t("indexGameSeoIntro")}
         sampleWords={[
-          { german: "der Tisch", czech: "stůl" },
-          { german: "die Katze", czech: "kočka" },
-          { german: "das Haus", czech: "dům" },
-          { german: "der Hund", czech: "pes" },
-          { german: "die Blume", czech: "květina" },
-          { german: "das Buch", czech: "kniha" },
-          { german: "der Stuhl", czech: "židle" },
-          { german: "die Lampe", czech: "lampa" },
-          { german: "das Auto", czech: "auto" },
-          { german: "der Baum", czech: "strom" },
+          { german: "der Tisch", translation: lang === "ko" ? "테이블" : "stůl" },
+          { german: "die Katze", translation: lang === "ko" ? "고양이" : "kočka" },
+          { german: "das Haus", translation: lang === "ko" ? "집" : "dům" },
+          { german: "der Hund", translation: lang === "ko" ? "개" : "pes" },
+          { german: "die Blume", translation: lang === "ko" ? "꽃" : "květina" },
+          { german: "das Buch", translation: lang === "ko" ? "책" : "kniha" },
+          { german: "der Stuhl", translation: lang === "ko" ? "의자" : "židle" },
+          { german: "die Lampe", translation: lang === "ko" ? "램프" : "lampa" },
+          { german: "das Auto", translation: lang === "ko" ? "자동차" : "auto" },
+          { german: "der Baum", translation: lang === "ko" ? "나무" : "strom" },
         ]}
         faqs={[
           { q: t("indexFaq1q"), a: t("indexFaq1a") },
