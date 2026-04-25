@@ -11,12 +11,15 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLang] = useState<Lang>(() => {
-    return (localStorage.getItem("gl_lang") as Lang) || "cs";
+    const saved = (localStorage.getItem("gl_lang") as Lang) || "cs";
+    document.documentElement.lang = saved;
+    return saved;
   });
 
   const handleSetLang = (l: Lang) => {
     setLang(l);
     localStorage.setItem("gl_lang", l);
+    document.documentElement.lang = l;
   };
 
   const t = (key: keyof typeof translations.cs, params?: Record<string, string | number>): string => {
