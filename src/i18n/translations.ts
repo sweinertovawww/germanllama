@@ -651,7 +651,7 @@ const en: typeof cs = {
   indexSeoP1b: "We focus on workplace German you'll actually use every day. Whether you work as an electrician, warehouse worker, bricklayer, plumber or in another trade, you'll learn the words and phrases you need to communicate with colleagues and customers.",
   indexSeoTitle2: "Why is workplace German different from textbook German?",
   indexSeoP2: "You might already know the basics. But at work you need something different:",
-  indexSeoLi2a: "understanding instructions ("Bring the cable", "Replace the fuse")",
+  indexSeoLi2a: "understanding instructions ('Bring the cable', 'Replace the fuse')",
   indexSeoLi2b: "reacting quickly",
   indexSeoLi2c: "using specialist vocabulary from your trade",
   indexSeoLi2d: "handling simple conversations in real situations",
