@@ -31,6 +31,7 @@ export interface Question {
   correct: number;
   translation: string;
   translationKo: string;
+  translationEn?: string;
   profession: Profession;
 }
 
@@ -39,6 +40,7 @@ export interface FillQuestion {
   answer: string;
   translation: string;
   translationKo: string;
+  translationEn?: string;
   profession: Profession;
 }
 

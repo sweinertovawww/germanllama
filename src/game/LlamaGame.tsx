@@ -5,7 +5,13 @@ import { QUESTIONS, FILL_QUESTIONS, filterByProfession, isTranslationCorrect, ty
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { translations } from "@/i18n/translations";
+import { translations, type Lang } from "@/i18n/translations";
+
+function getTranslation(q: Question | FillQuestion, lang: Lang): string {
+  if (lang === "ko") return q.translationKo;
+  if (lang === "en") return q.translationEn ?? q.translation;
+  return q.translation;
+}
 
 const PROF_LABEL_KEYS: Record<Profession, keyof typeof translations.cs> = {
   obecné: "profLabelObecne",
@@ -447,7 +453,7 @@ const saveToLeaderboardDB = async (name: string, score: number) => {
 const isMobileDevice = () => window.innerWidth < 768;
 
 const LlamaGame = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const profFilter = useProfessionFilter();
   const [inLobby, setInLobby] = useState(true);
   const [nameEntry, setNameEntry] = useState(false);
@@ -644,7 +650,7 @@ const LlamaGame = () => {
 
   const handleTranslationSubmit = useCallback(() => {
     if (!currentQuestion || quizPhase !== "translation") return;
-    const isCorrect = isTranslationCorrect(translationInput, currentQuestion.translation);
+    const isCorrect = isTranslationCorrect(translationInput, getTranslation(currentQuestion, lang));
     const points = isCorrect ? 2 : 1;
     setTranslationResult(isCorrect ? "correct" : "wrong");
     gameRef.current.score += points;
@@ -1161,12 +1167,12 @@ const LlamaGame = () => {
                   </div>
                   {translationResult === "correct" && (
                     <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
-                      {t("correct2", { word: currentQuestion.translation })}
+                      {t("correct2", { word: getTranslation(currentQuestion, lang) })}
                     </p>
                   )}
                   {translationResult === "wrong" && (
                     <p className="font-game text-xs text-destructive mt-3">
-                      {t("wrong1", { word: currentQuestion.translation })}
+                      {t("wrong1", { word: getTranslation(currentQuestion, lang) })}
                     </p>
                   )}
                   {!translationResult && (
@@ -1187,7 +1193,7 @@ const LlamaGame = () => {
               </p>
               <span className="font-game text-[7px] text-muted-foreground/60 block mb-1">[{t(PROF_LABEL_KEYS[currentFillQuestion.profession])}]</span>
               <p className="font-game text-xs text-muted-foreground mb-3 sm:mb-4 italic">
-                {currentFillQuestion.translation}
+                {getTranslation(currentFillQuestion, lang)}
               </p>
               <div className="flex gap-2 justify-center items-center">
                 <input
