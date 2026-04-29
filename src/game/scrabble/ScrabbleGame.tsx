@@ -540,7 +540,7 @@ export default function ScrabbleGame() {
         autoCorrect="off"
         autoCapitalize="characters"
         spellCheck={false}
-        className="absolute left-[-9999px] opacity-0 w-0 h-0"
+        className="fixed left-[-9999px] top-0 opacity-0 w-0 h-0"
         onChange={handleHiddenChange}
         onKeyDown={handleHiddenKeyDown}
       />
