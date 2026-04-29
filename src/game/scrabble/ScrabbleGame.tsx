@@ -166,31 +166,32 @@ export default function ScrabbleGame() {
 
     if (wordsHere.length === 1) {
       const w = wordsHere[0];
-      if (activeWordNum !== w.number) {
-        activateWord(w.number);
-      }
+      activateWord(w.number, true);
     } else {
       // Intersection: toggle between H and V
       if (lastClickedCell === key) {
         const newDir = intersectionToggle === "H" ? "V" : "H";
         setIntersectionToggle(newDir);
         const target = wordsHere.find(w => w.direction === newDir) ?? wordsHere[0];
-        activateWord(target.number);
+        activateWord(target.number, true);
       } else {
         const hWord = wordsHere.find(w => w.direction === "H");
         const target = hWord ?? wordsHere[0];
         setIntersectionToggle(target.direction);
-        activateWord(target.number);
+        activateWord(target.number, true);
       }
     }
     setLastClickedCell(key);
   }, [crossword, selectedTile, tilePool, filledCells, pendingCells, activeWordNum, lastClickedCell, intersectionToggle, getWordsAtCell]);
 
-  const activateWord = useCallback((wordNum: number) => {
+  const activateWord = useCallback((wordNum: number, focusInput = false) => {
     setActiveWordNum(wordNum);
     setCursorPos(0);
-    // Focus hidden input for mobile keyboard
-    setTimeout(() => hiddenInputRef.current?.focus({ preventScroll: true }), 50);
+    // focusInput=true only when called from a direct user gesture (tap on cell/clue)
+    // so iOS keyboard opens. Deferred calls (after validation) omit this flag.
+    if (focusInput) {
+      hiddenInputRef.current?.focus({ preventScroll: true });
+    }
   }, []);
 
   // Place a pending letter in a cell
@@ -561,7 +562,7 @@ export default function ScrabbleGame() {
         crossword={crossword}
         activeWordNum={activeWordNum}
         completedWords={completedWords}
-        onClueClick={(num) => activateWord(num)}
+        onClueClick={(num) => activateWord(num, true)}
       />
 
       <ScrabbleTilePool
