@@ -28,7 +28,7 @@ const ScrabbleClues = memo(function ScrabbleClues({
       } ${completedWords.has(p.number) ? "line-through text-muted-foreground" : "text-foreground"}`}
     >
       <span className="text-muted-foreground">{p.number}.</span>{" "}
-      {lang === "ko" ? p.entry.ko : p.entry.czech} ({p.entry.article})
+      {lang === "ko" ? p.entry.ko : lang === "en" ? p.entry.en : p.entry.czech} ({p.entry.article})
       {completedWords.has(p.number) && " ✅"}
     </button>
   );
