@@ -11,6 +11,7 @@ interface ScrabbleGridProps {
   shakingCells: Set<string>;
   onCellClick: (row: number, col: number) => void;
   onDrop: (row: number, col: number, tileId: number) => void;
+  onCellRef: (key: string, el: HTMLDivElement | null) => void;
 }
 
 const ScrabbleGrid = memo(function ScrabbleGrid({
@@ -23,6 +24,7 @@ const ScrabbleGrid = memo(function ScrabbleGrid({
   shakingCells,
   onCellClick,
   onDrop,
+  onCellRef,
 }: ScrabbleGridProps) {
   return (
     <div className="flex justify-center mb-6 overflow-x-auto">
@@ -54,6 +56,7 @@ const ScrabbleGrid = memo(function ScrabbleGrid({
             return (
               <div
                 key={key}
+                ref={el => onCellRef(key, el)}
                 onClick={() => onCellClick(row, col)}
                 className={`
                   relative w-10 h-10 sm:w-12 sm:h-12 border flex items-center justify-center

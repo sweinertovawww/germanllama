@@ -63,6 +63,20 @@ export default function ScrabbleGame() {
 
   const hiddenInputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const cellRefsMap = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const setCellRef = useCallback((key: string, el: HTMLDivElement | null) => {
+    cellRefsMap.current[key] = el;
+  }, []);
+
+  // Scroll active cursor cell into view whenever it changes
+  useEffect(() => {
+    if (!cursorCellKey) return;
+    const el = cellRefsMap.current[cursorCellKey];
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+    }
+  }, [cursorCellKey]);
 
   const toggleProfession = useCallback((p: Profession) => {
     setSelectedProfessions(prev =>
@@ -556,6 +570,7 @@ export default function ScrabbleGame() {
         shakingCells={shakingCells}
         onCellClick={handleCellClick}
         onDrop={handleDrop}
+        onCellRef={setCellRef}
       />
 
       <ScrabbleClues
