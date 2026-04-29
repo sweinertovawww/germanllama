@@ -69,15 +69,6 @@ export default function ScrabbleGame() {
     cellRefsMap.current[key] = el;
   }, []);
 
-  // Scroll active cursor cell into view whenever it changes
-  useEffect(() => {
-    if (!cursorCellKey) return;
-    const el = cellRefsMap.current[cursorCellKey];
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
-    }
-  }, [cursorCellKey]);
-
   const toggleProfession = useCallback((p: Profession) => {
     setSelectedProfessions(prev =>
       prev.includes(p) ? prev.filter(x => x !== p) : [...prev, p]
@@ -505,6 +496,15 @@ export default function ScrabbleGame() {
 
   // Stable Set for activeWordCells to avoid re-creating on every render
   const activeWordCellsSet = useMemo(() => new Set(activeWordCells), [activeWordCells]);
+
+  // Scroll active cursor cell into view whenever cursor moves
+  useEffect(() => {
+    if (!cursorCellKey) return;
+    const el = cellRefsMap.current[cursorCellKey];
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+    }
+  }, [cursorCellKey]);
 
   if (phase === "lobby") {
     return <ScrabbleLobby
