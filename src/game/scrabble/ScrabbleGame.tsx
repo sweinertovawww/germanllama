@@ -547,6 +547,8 @@ export default function ScrabbleGame() {
   return (
     <div ref={wrapperRef} className="max-w-4xl mx-auto px-2 sm:px-4 py-4" tabIndex={-1}>
       {/* Hidden input for mobile virtual keyboard */}
+      {/* Hidden input: position:fixed at top-left so browser never scrolls to it,
+          transform moves it visually off-screen. font-size:16px prevents iOS auto-zoom. */}
       <input
         ref={hiddenInputRef}
         type="text"
@@ -555,7 +557,17 @@ export default function ScrabbleGame() {
         autoCorrect="off"
         autoCapitalize="characters"
         spellCheck={false}
-        className="fixed left-[-9999px] top-0 opacity-0 w-0 h-0"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "1px",
+          height: "1px",
+          opacity: 0,
+          fontSize: "16px",
+          transform: "translateX(-9999px)",
+          pointerEvents: "none",
+        }}
         onChange={handleHiddenChange}
         onKeyDown={handleHiddenKeyDown}
       />
