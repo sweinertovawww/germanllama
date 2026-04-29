@@ -497,14 +497,22 @@ export default function ScrabbleGame() {
   // Stable Set for activeWordCells to avoid re-creating on every render
   const activeWordCellsSet = useMemo(() => new Set(activeWordCells), [activeWordCells]);
 
-  // Scroll active cursor cell into view whenever cursor moves
+  // Scroll active cursor cell into view whenever cursor moves.
+  // Horizontal words: center vertically (word spans cols, cursor moves across the row).
+  // Vertical words: nearest (cell scrolls just into view at top edge — avoids ending up
+  // flush against the soft keyboard which sits below the visible area).
   useEffect(() => {
     if (!cursorCellKey) return;
     const el = cellRefsMap.current[cursorCellKey];
     if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+      const isVertical = activeWord?.direction === "V";
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: isVertical ? "nearest" : "center",
+        inline: "center",
+      });
     }
-  }, [cursorCellKey]);
+  }, [cursorCellKey, activeWord]);
 
   if (phase === "lobby") {
     return <ScrabbleLobby

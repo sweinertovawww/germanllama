@@ -31,7 +31,7 @@ const ScrabbleGrid = memo(function ScrabbleGrid({
       <div
         className="inline-grid gap-0"
         style={{
-          gridTemplateColumns: `repeat(${crossword.cols}, minmax(0, 1fr))`,
+          gridTemplateColumns: `repeat(${crossword.cols}, auto)`,
         }}
       >
         {Array.from({ length: crossword.rows }, (_, row) =>
