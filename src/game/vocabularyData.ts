@@ -32,6 +32,7 @@ export interface Question {
   translation: string;
   translationKo: string;
   translationEn?: string;
+  translationPl?: string;
   profession: Profession;
 }
 
@@ -41,6 +42,7 @@ export interface FillQuestion {
   translation: string;
   translationKo: string;
   translationEn?: string;
+  translationPl?: string;
   profession: Profession;
 }
 

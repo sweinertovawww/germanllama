@@ -10,6 +10,7 @@ import { translations, type Lang } from "@/i18n/translations";
 function getTranslation(q: Question | FillQuestion, lang: Lang): string {
   if (lang === "ko") return q.translationKo;
   if (lang === "en") return q.translationEn ?? q.translation;
+  if (lang === "pl") return q.translationPl ?? q.translation;
   return q.translation;
 }
 

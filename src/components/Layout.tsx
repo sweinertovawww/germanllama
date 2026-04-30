@@ -147,6 +147,16 @@ const Layout = ({ children }: LayoutProps) => {
               >
                 🇬🇧 EN
               </button>
+              <button
+                onClick={() => setLang("pl")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body font-semibold transition-all ${
+                  lang === "pl"
+                    ? "bg-card shadow-sm text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                🇵🇱 PL
+              </button>
             </div>
           </div>
           {/* Mobile: language switcher + contact */}
@@ -181,6 +191,16 @@ const Layout = ({ children }: LayoutProps) => {
                 }`}
               >
                 🇬🇧 EN
+              </button>
+              <button
+                onClick={() => setLang("pl")}
+                className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-body font-semibold transition-all ${
+                  lang === "pl"
+                    ? "bg-card shadow-sm text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                🇵🇱 PL
               </button>
             </div>
             <button

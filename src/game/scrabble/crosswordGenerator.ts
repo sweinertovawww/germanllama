@@ -5,6 +5,7 @@ export interface WordEntry {
   czech: string;
   ko: string;
   en: string;
+  pl: string;
   article: string;
 }
 
@@ -42,6 +43,7 @@ export function getWordsForProfession(professions: Profession[]): WordEntry[] {
       czech: q.translation,
       ko: q.translationKo,
       en: q.translationEn ?? q.translation,
+      pl: q.translationPl ?? q.translation,
       article: ARTICLES[q.correct],
     }))
     .filter(w => w.german.length >= 4 && w.german.length <= 12);
