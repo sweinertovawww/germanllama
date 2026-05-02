@@ -1792,6 +1792,7 @@ export interface FlashCard {
   german: string;
   czech: string;
   ko: string;
+  pl?: string;
   type: "noun" | "sentence";
   profession: Profession;
 }
@@ -1801,6 +1802,7 @@ export function getAllFlashCards(): FlashCard[] {
     german: `${getArticle(q)} ${extractGermanWord(q)}`,
     czech: q.translation,
     ko: q.translationKo,
+    pl: q.translationPl,
     type: "noun" as const,
     profession: q.profession,
   }));
@@ -1809,6 +1811,7 @@ export function getAllFlashCards(): FlashCard[] {
     german: q.sentence.replace("___", q.answer),
     czech: q.translation,
     ko: q.translationKo,
+    pl: q.translationPl,
     type: "sentence" as const,
     profession: q.profession,
   }));
