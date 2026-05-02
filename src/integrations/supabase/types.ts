@@ -84,7 +84,11 @@ export type Database = {
           id: string
           pair_type: string
           translation_a: string
+          translation_a_ko: string | null
+          translation_a_pl: string | null
           translation_b: string
+          translation_b_ko: string | null
+          translation_b_pl: string | null
           word_a: string
           word_b: string
         }
@@ -94,7 +98,11 @@ export type Database = {
           id?: string
           pair_type: string
           translation_a: string
+          translation_a_ko?: string | null
+          translation_a_pl?: string | null
           translation_b: string
+          translation_b_ko?: string | null
+          translation_b_pl?: string | null
           word_a: string
           word_b: string
         }
@@ -104,7 +112,11 @@ export type Database = {
           id?: string
           pair_type?: string
           translation_a?: string
+          translation_a_ko?: string | null
+          translation_a_pl?: string | null
           translation_b?: string
+          translation_b_ko?: string | null
+          translation_b_pl?: string | null
           word_a?: string
           word_b?: string
         }

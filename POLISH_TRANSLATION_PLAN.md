@@ -23,4 +23,4 @@ Generated: 2026-05-02. Resume by reading this file and continuing from the first
 - [x] **src/pages/Pexeso.tsx** — use PL translation in buildCards(); show "PL" label; use t("sharePexeso") share text
 - [x] **src/pages/SentenceBuilder.tsx** — store all translations in SentencePair; display PL hint for PL lang; use t("shareSentenceBuilder") share text
 - [x] **src/game/LlamaGame.tsx** — use t("shareLlamaRun") share text
-- [ ] **Wortpaare (MatchedPair.tsx + Supabase)** — deferred: needs DB migration to add translation_a_pl/b_pl columns and translate ~50-100 word pairs
+- [x] **Wortpaare (MatchedPair.tsx + Supabase)** — migration 20260502000000_add_polish_translations.sql adds translation_a_pl/b_pl; MatchedPair.tsx and useWortpaare.ts updated; types.ts synced
