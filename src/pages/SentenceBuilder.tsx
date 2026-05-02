@@ -33,6 +33,9 @@ interface SentencePair {
   id: number;
   fullGerman: string;
   translation: string;
+  translationKo: string;
+  translationEn: string;
+  translationPl: string;
   start: string;
   end: string;
   matched: boolean;
@@ -52,7 +55,18 @@ function makePairs(questions: typeof FILL_QUESTIONS): SentencePair[] {
   return questions.map((q, i) => {
     const full = q.sentence.replace("___", q.answer);
     const { start, end } = splitSentence(full);
-    return { id: i, fullGerman: full, translation: q.translation, start, end, matched: false, profession: q.profession };
+    return {
+      id: i,
+      fullGerman: full,
+      translation: q.translation,
+      translationKo: q.translationKo,
+      translationEn: q.translationEn ?? q.translation,
+      translationPl: q.translationPl ?? q.translation,
+      start,
+      end,
+      matched: false,
+      profession: q.profession,
+    };
   });
 }
 
@@ -292,7 +306,7 @@ const SentenceBuilder = () => {
     const finalScore = totalScore + score;
     const finalRounds = completedRounds + (allMatched ? 1 : 0);
     navigator.clipboard.writeText(
-      `Na Germanllama.com jsem ve Skládání vět správně složil/a ${finalScore} vět v ${finalRounds} kolech! Zkus to taky 🦙 https://www.germanllama.com`
+      t("shareSentenceBuilder", { score: String(finalScore), rounds: String(finalRounds) })
     );
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -387,7 +401,8 @@ const SentenceBuilder = () => {
                     }`}
                   >
                     <p className="font-body text-xs text-muted-foreground mb-1.5 italic">
-                      {lang === "ko" ? "🇰🇷" : "🇨🇿"} {pair.translation}
+                      {lang === "ko" ? "🇰🇷" : lang === "pl" ? "🇵🇱" : lang === "en" ? "🇬🇧" : "🇨🇿"}{" "}
+                      {lang === "ko" ? pair.translationKo : lang === "pl" ? pair.translationPl : lang === "en" ? pair.translationEn : pair.translation}
                     </p>
                     <span className="font-body text-[7px] sm:text-[8px] text-muted-foreground/60">[{pair.profession}]</span>
                     <div className="flex items-center gap-2 flex-wrap">
