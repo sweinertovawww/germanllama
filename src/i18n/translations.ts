@@ -950,7 +950,7 @@ const pl: typeof cs = {
   indexSeoP1a: "Pracujesz w Niemczech lub Austrii i musisz komunikować się w pracy? Jeśli masz już podstawy języka niemieckiego (poziom A2 lub wyżej), ale w prawdziwych sytuacjach zawodowych czujesz się niepewnie – jesteś we właściwym miejscu. GermanLlama pomoże Ci poprawić niemczyznę praktycznie – bez zbędnej teorii i gramatyki.",
   indexSeoP1b: "Skupiamy się na języku niemieckim do pracy, który naprawdę wykorzystasz na co dzień. Bez względu na to, czy pracujesz jako elektryk, magazynier, murarz, hydraulik czy w innym zawodzie, nauczysz się słówek i zwrotów potrzebnych do komunikacji ze współpracownikami i klientami.",
   indexSeoTitle2: "Dlaczego zawodowy język niemiecki różni się od szkolnego?",
-  indexSeoP2: "Może już znasz podstawy – wiesz, co znaczy „Haus" lub „Auto". Ale w pracy potrzebujesz czegoś innego:",
+  indexSeoP2: "Może już znasz podstawy – wiesz, co znaczy \"Haus\" lub \"Auto\". Ale w pracy potrzebujesz czegoś innego:",
   indexSeoLi2a: "rozumieć polecenia ('Przynieś kabel', 'Wymień bezpiecznik')",
   indexSeoLi2b: "reagować szybko",
   indexSeoLi2c: "używać fachowego słownictwa ze swojej branży",
