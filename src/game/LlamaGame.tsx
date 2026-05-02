@@ -322,11 +322,10 @@ const sparklePositions = [
 const ShareButtons = ({ score, level }: { score: number; level: number }) => {
   const [copied, setCopied] = useState(false);
   const { t } = useLanguage();
-  const shareText = `Právě jsem vyskákal ${score} bodů (Level ${level}) v němčině na Germanllama.com! 🦙🇩🇪`;
-  const shareUrl = "https://germanllama.lovable.app";
+  const shareText = t("shareLlamaRun", { score: String(score), level: String(level) });
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+    navigator.clipboard.writeText(shareText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
