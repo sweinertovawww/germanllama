@@ -122,6 +122,9 @@ const cs = {
   shareBoast: "📣 Pochlub se a sdílej výsledek 🤩",
   copy: "Kopírovat",
   copied: "Zkopírováno!",
+  shareLlamaRun: "Právě jsem vyskákal {score} bodů (Level {level}) v němčině na Germanllama.com! 🦙🇩🇪",
+  sharePexeso: "V pexesu na Germanllama.com jsem našel {pairs} dvojic za {rounds} kol! Zkus to taky 🦙 https://www.germanllama.com",
+  shareSentenceBuilder: "Na Germanllama.com jsem ve Skládání vět správně složil/a {score} vět v {rounds} kolech! Zkus to taky 🦙 https://www.germanllama.com",
 
   // Sentence Builder
   sentenceBuilderRuleText1: "Přiřaď správné konce německých vět k jejich začátkům. Pomůže ti český překlad.",
@@ -422,6 +425,9 @@ const ko: typeof cs = {
   shareBoast: "📣 자랑하고 결과 공유하기 🤩",
   copy: "복사",
   copied: "복사됨!",
+  shareLlamaRun: "방금 Germanllama.com에서 독일어 {score}점 (레벨 {level})을 획득했어요! 🦙🇩🇪",
+  sharePexeso: "Germanllama.com 짝 맞추기에서 {rounds}라운드 동안 {pairs}쌍을 찾았어요! 도전해 보세요 🦙 https://www.germanllama.com",
+  shareSentenceBuilder: "Germanllama.com에서 {rounds}라운드 동안 {score}개 문장을 완성했어요! 도전해 보세요 🦙 https://www.germanllama.com",
 
   // Sentence Builder
   sentenceBuilderRuleText1: "독일어 문장의 시작과 올바른 끝을 연결하세요. 번역이 도움이 됩니다.",
@@ -722,6 +728,9 @@ const en: typeof cs = {
   shareBoast: "📣 Show off and share your result 🤩",
   copy: "Copy",
   copied: "Copied!",
+  shareLlamaRun: "I just scored {score} points (Level {level}) learning German on Germanllama.com! 🦙🇩🇪",
+  sharePexeso: "I found {pairs} pairs in {rounds} rounds on Germanllama.com! Give it a try 🦙 https://www.germanllama.com",
+  shareSentenceBuilder: "I completed {score} sentences in {rounds} rounds on Germanllama.com! Give it a try 🦙 https://www.germanllama.com",
 
   // Sentence Builder
   sentenceBuilderRuleText1: "Match the correct endings of German sentences to their beginnings. The translation will help you.",
@@ -1022,6 +1031,9 @@ const pl: typeof cs = {
   shareBoast: "📣 Pochwal się i podziel wynikiem 🤩",
   copy: "Kopiuj",
   copied: "Skopiowano!",
+  shareLlamaRun: "Właśnie zdobyłem/am {score} punktów (poziom {level}) ucząc się niemieckiego na Germanllama.com! 🦙🇩🇪",
+  sharePexeso: "W grze pamięciowej na Germanllama.com znalazłem/am {pairs} par w {rounds} rundach! Spróbuj też 🦙 https://www.germanllama.com",
+  shareSentenceBuilder: "Na Germanllama.com ułożyłem/am poprawnie {score} zdań w {rounds} rundach! Spróbuj też 🦙 https://www.germanllama.com",
 
   // Sentence Builder
   sentenceBuilderRuleText1: "Dopasuj właściwe końcówki niemieckich zdań do ich początków. Tłumaczenie ci pomoże.",
