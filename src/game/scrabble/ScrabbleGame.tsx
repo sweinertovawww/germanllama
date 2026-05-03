@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { Copy, Check } from "lucide-react";
 import { type TileItem } from "./types";
 import { type Profession, PROFESSION_LIST } from "@/game/vocabularyData";
 import { generateCrossword, getWordsForProfession, type CrosswordData, type PlacedWord } from "./crosswordGenerator";
@@ -60,6 +61,7 @@ export default function ScrabbleGame() {
 
   const [shakingCells, setShakingCells] = useState<Set<string>>(new Set());
   const [selectedTile, setSelectedTile] = useState<number | null>(null);
+  const [shareCopied, setShareCopied] = useState(false);
 
   const hiddenInputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -526,16 +528,36 @@ export default function ScrabbleGame() {
   }
 
   if (phase === "victory" && crossword) {
+    const handleShare = () => {
+      const text = t("shareScrabble", { n: String(crossword.placed.length) });
+      if (navigator.share) {
+        navigator.share({ text }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(text);
+        setShareCopied(true);
+        setTimeout(() => setShareCopied(false), 2000);
+      }
+    };
     return (
       <div className="max-w-md mx-auto text-center py-12 px-4">
         <h2 className="font-game text-2xl sm:text-3xl text-primary mb-4">{t("scrabbleVictoryTitle")}</h2>
-        <p className="font-body text-foreground text-lg mb-8">
+        <p className="font-body text-foreground text-lg mb-6">
           {t("scrabbleVictoryText", { n: crossword.placed.length, total: crossword.placed.length })}
         </p>
+        <div className="flex flex-col items-center gap-3 mb-6">
+          <p className="font-game text-sm text-foreground">{t("shareBoast")}</p>
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
+          >
+            {shareCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            {shareCopied ? t("copied") : t("copy")}
+          </button>
+        </div>
         <div className="flex gap-3 justify-center">
           <button
             onClick={startGame}
-            className="font-body font-bold text-sm px-6 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            className="font-body font-bold text-sm px-6 py-3 rounded-xl bg-muted border border-border text-foreground hover:bg-muted/80 transition-colors"
           >
             {t("playAgainScrabble")}
           </button>
