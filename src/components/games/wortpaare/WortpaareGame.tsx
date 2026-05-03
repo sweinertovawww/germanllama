@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { useWortpaare } from "@/hooks/useWortpaare";
 import WordCard from "./WordCard";
 import MatchedPair from "./MatchedPair";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, Copy, Check } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const WortpaareGame: React.FC = () => {
   const { t } = useLanguage();
   const { cards, matched, selected, shaking, loading, completed, selectCard, startGame } = useWortpaare(6);
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = () => {
+    const text = t("shareWortpaare", { pairs: String(matched.length) });
+    if (navigator.share) {
+      navigator.share({ text }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   if (loading) {
     return (
@@ -39,9 +51,19 @@ const WortpaareGame: React.FC = () => {
           <p className="font-body text-muted-foreground text-center">
             {t("allPairsCorrect")}
           </p>
+          <div className="flex flex-col items-center gap-3">
+            <p className="font-game text-sm text-foreground">{t("shareBoast")}</p>
+            <button
+              onClick={handleShare}
+              className="flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copied ? t("copied") : t("copy")}
+            </button>
+          </div>
           <button
             onClick={startGame}
-            className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body font-bold px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center gap-2 bg-muted border border-border text-foreground font-body font-bold px-6 py-3 rounded-xl hover:bg-muted/80 transition-colors"
           >
             <RotateCcw className="w-4 h-4" />
             {t("playAgain")}
