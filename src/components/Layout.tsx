@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
-import { Gamepad2, Layers, Brain, PuzzleIcon, ArrowLeftRight, Grid3X3, Instagram, Users } from "lucide-react";
+import { Gamepad2, Layers, Brain, PuzzleIcon, ArrowLeftRight, Grid3X3, Instagram, Users, Menu, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -16,10 +16,13 @@ const Layout = ({ children }: LayoutProps) => {
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const [visitDate, setVisitDate] = useState<string>("");
   const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   const activeTab = location.pathname === "/flashcards" ? "flash-cards" : location.pathname === "/pexeso" ? "pexeso" : location.pathname === "/skladani-vet" ? "sentence-builder" : location.pathname === "/wortpaare" ? "wortpaare" : location.pathname === "/scrabble" ? "scrabble" : "llama-run";
+
+  useEffect(() => { setMobileMenuOpen(false); }, [location.pathname]);
 
   useEffect(() => {
     const trackVisit = async () => {
@@ -77,17 +80,19 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Navigation */}
       <nav className="w-full bg-card border-b border-border fixed top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-2 sm:py-6 flex items-center justify-between relative">
-            <Link to="/" className="flex items-center gap-2 sm:gap-4 cursor-pointer hover:opacity-80 transition-opacity">
-              <img
-                src={germanLlamaLogo}
-                alt="GermanLlama logo"
-                className="w-10 h-10 sm:w-20 sm:h-20 rounded-lg"
-              />
-              <span className="font-body font-bold text-sm sm:text-2xl text-foreground">
-                Germanllama.com
-              </span>
-            </Link>
-          <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center">
+          <Link to="/" className="flex items-center gap-2 sm:gap-4 cursor-pointer hover:opacity-80 transition-opacity shrink-0">
+            <img
+              src={germanLlamaLogo}
+              alt="GermanLlama logo"
+              className="w-10 h-10 sm:w-20 sm:h-20 rounded-lg"
+            />
+            <span className="font-body font-bold text-sm sm:text-2xl text-foreground">
+              Germanllama.com
+            </span>
+          </Link>
+
+          {/* Center slogan — only md+ */}
+          <div className="absolute left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center pointer-events-none">
             <span className="font-game text-base lg:text-xl text-foreground leading-tight">
               {t("slogan")}
             </span>
@@ -101,116 +106,84 @@ const Layout = ({ children }: LayoutProps) => {
               </span>
             )}
           </div>
-          {/* Desktop: nav buttons + language switcher */}
-          <div className="hidden sm:flex items-center gap-4">
+
+          {/* Desktop: nav links | lang switcher — show at md+ */}
+          <div className="hidden md:flex items-center gap-3 shrink-0">
             <button
               onClick={() => navigate("/nemcina-do-prace")}
-              className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors"
+              className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
             >
               {t("professions")}
             </button>
             <button
               onClick={() => navigate("/kontakt")}
-              className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors"
+              className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
             >
               {t("contact")}
             </button>
+            {/* Divider */}
+            <div className="w-px h-5 bg-border mx-1 shrink-0" />
             {/* Language switcher */}
-            <div className="flex items-center gap-1 bg-muted rounded-xl p-1 border border-border">
-              <button
-                onClick={() => setLang("cs")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body font-semibold transition-all ${
-                  lang === "cs"
-                    ? "bg-card shadow-sm text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                🇨🇿 CZ
-              </button>
-              <button
-                onClick={() => setLang("ko")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body font-semibold transition-all ${
-                  lang === "ko"
-                    ? "bg-card shadow-sm text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                🇰🇷 KO
-              </button>
-              <button
-                onClick={() => setLang("en")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body font-semibold transition-all ${
-                  lang === "en"
-                    ? "bg-card shadow-sm text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                🇬🇧 EN
-              </button>
-              <button
-                onClick={() => setLang("pl")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body font-semibold transition-all ${
-                  lang === "pl"
-                    ? "bg-card shadow-sm text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                🇵🇱 PL
-              </button>
+            <div className="flex items-center gap-1 bg-muted rounded-xl p-1 border border-border shrink-0">
+              {(["cs", "ko", "en", "pl"] as const).map((l) => (
+                <button
+                  key={l}
+                  onClick={() => setLang(l)}
+                  className={`px-2.5 py-1.5 rounded-lg text-xs font-body font-semibold transition-all ${
+                    lang === l ? "bg-card shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {l === "cs" ? "🇨🇿 CZ" : l === "ko" ? "🇰🇷 KO" : l === "en" ? "🇬🇧 EN" : "🇵🇱 PL"}
+                </button>
+              ))}
             </div>
           </div>
-          {/* Mobile: language switcher + contact */}
-          <div className="sm:hidden flex items-center gap-2">
-            <div className="flex items-center gap-1 bg-muted rounded-xl p-1 border border-border">
-              <button
-                onClick={() => setLang("cs")}
-                className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-body font-semibold transition-all ${
-                  lang === "cs"
-                    ? "bg-card shadow-sm text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                🇨🇿 CZ
-              </button>
-              <button
-                onClick={() => setLang("ko")}
-                className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-body font-semibold transition-all ${
-                  lang === "ko"
-                    ? "bg-card shadow-sm text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                🇰🇷 KO
-              </button>
-              <button
-                onClick={() => setLang("en")}
-                className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-body font-semibold transition-all ${
-                  lang === "en"
-                    ? "bg-card shadow-sm text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                🇬🇧 EN
-              </button>
-              <button
-                onClick={() => setLang("pl")}
-                className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-body font-semibold transition-all ${
-                  lang === "pl"
-                    ? "bg-card shadow-sm text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                🇵🇱 PL
-              </button>
+
+          {/* Mobile: lang switcher + hamburger — hide at md+ */}
+          <div className="md:hidden flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-0.5 bg-muted rounded-xl p-1 border border-border">
+              {(["cs", "ko", "en", "pl"] as const).map((l) => (
+                <button
+                  key={l}
+                  onClick={() => setLang(l)}
+                  className={`px-1.5 py-1 rounded-lg text-[11px] font-body font-semibold transition-all ${
+                    lang === l ? "bg-card shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {l === "cs" ? "🇨🇿" : l === "ko" ? "🇰🇷" : l === "en" ? "🇬🇧" : "🇵🇱"}
+                </button>
+              ))}
             </div>
             <button
-              onClick={() => navigate("/kontakt")}
-              className="font-body font-semibold text-xs text-foreground/70 hover:text-primary transition-colors px-2 py-1"
+              onClick={() => setMobileMenuOpen((o) => !o)}
+              className="p-1.5 rounded-lg text-foreground/70 hover:text-primary hover:bg-muted transition-all"
+              aria-label="Menu"
             >
-              {t("contact")}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
+
+        {/* Mobile dropdown menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-border bg-card shadow-md">
+            <div className="px-4 py-3 flex flex-col gap-1">
+              <button
+                onClick={() => navigate("/nemcina-do-prace")}
+                className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors text-left px-2 py-2 rounded-lg hover:bg-muted"
+              >
+                {t("professions")}
+              </button>
+              <button
+                onClick={() => navigate("/kontakt")}
+                className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors text-left px-2 py-2 rounded-lg hover:bg-muted"
+              >
+                {t("contact")}
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Mobile: slogan + counter strip */}
         <div className="md:hidden border-t border-border bg-card px-4 py-1.5 text-center">
           <span className="font-game text-[9px] text-foreground leading-tight block">
