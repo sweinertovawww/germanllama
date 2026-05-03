@@ -34,11 +34,11 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
   let allCards = filterByProfession(getAllFlashCards(), professions);
   if (!allCards || allCards.length === 0) {
     allCards = [
-      { german: "der Hund", czech: "pes", ko: "개", pl: "pies", type: "noun", profession: "obecné" },
-      { german: "die Katze", czech: "kočka", ko: "고양이", pl: "kot", type: "noun", profession: "obecné" },
-      { german: "das Haus", czech: "dům", ko: "집", pl: "dom", type: "noun", profession: "obecné" },
-      { german: "der Tisch", czech: "stůl", ko: "테이블", pl: "stół", type: "noun", profession: "obecné" },
-      { german: "die Blume", czech: "květina", ko: "꽃", pl: "kwiat", type: "noun", profession: "obecné" },
+      { german: "der Hund", czech: "pes", ko: "개", pl: "pies", en: "dog", type: "noun", profession: "obecné" },
+      { german: "die Katze", czech: "kočka", ko: "고양이", pl: "kot", en: "cat", type: "noun", profession: "obecné" },
+      { german: "das Haus", czech: "dům", ko: "집", pl: "dom", en: "house", type: "noun", profession: "obecné" },
+      { german: "der Tisch", czech: "stůl", ko: "테이블", pl: "stół", en: "table", type: "noun", profession: "obecné" },
+      { german: "die Blume", czech: "květina", ko: "꽃", pl: "kwiat", en: "flower", type: "noun", profession: "obecné" },
     ];
   }
   const selected = shuffleArray(allCards).slice(0, pairCount);
@@ -58,7 +58,7 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
     memoryCards.push({
       id: i * 2 + 1,
       pairId: i,
-      text: activeLang === "ko" ? card.ko : activeLang === "pl" ? (card.pl ?? card.czech) : card.czech,
+      text: activeLang === "ko" ? card.ko : activeLang === "pl" ? (card.pl ?? card.czech) : activeLang === "en" ? (card.en ?? card.czech) : card.czech,
       lang: "cz",
       flipped: false,
       matched: false,
@@ -364,7 +364,7 @@ const Pexeso = () => {
                           {card.text}
                         </span>
                         <span className={`mt-1.5 font-body text-[9px] sm:text-xs font-semibold uppercase ${card.lang === "de" ? "text-primary" : "text-accent"}`}>
-                          {card.lang === "de" ? "DE" : lang === "ko" ? "KO" : lang === "pl" ? "PL" : "CZ"}
+                          {card.lang === "de" ? "DE" : lang === "ko" ? "KO" : lang === "pl" ? "PL" : lang === "en" ? "EN" : "CZ"}
                         </span>
                         <span className="font-body text-[7px] sm:text-[8px] text-muted-foreground/60 mt-0.5">[{card.profession}]</span>
                       </div>
