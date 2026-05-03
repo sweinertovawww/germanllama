@@ -1793,6 +1793,7 @@ export interface FlashCard {
   czech: string;
   ko: string;
   pl?: string;
+  en?: string;
   type: "noun" | "sentence";
   profession: Profession;
 }
@@ -1803,6 +1804,7 @@ export function getAllFlashCards(): FlashCard[] {
     czech: q.translation,
     ko: q.translationKo,
     pl: q.translationPl,
+    en: q.translationEn,
     type: "noun" as const,
     profession: q.profession,
   }));
@@ -1812,6 +1814,7 @@ export function getAllFlashCards(): FlashCard[] {
     czech: q.translation,
     ko: q.translationKo,
     pl: q.translationPl,
+    en: q.translationEn,
     type: "sentence" as const,
     profession: q.profession,
   }));
