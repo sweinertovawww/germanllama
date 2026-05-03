@@ -240,115 +240,35 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Tab Navigation */}
       <section className="bg-card border-b border-border">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3">
-            <button
-              onClick={() => navigate("/")}
-              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-200 border-2 ${
-                activeTab === "llama-run"
-                  ? "bg-primary text-primary-foreground border-primary shadow-lg scale-[1.02]"
-                  : "bg-muted text-muted-foreground border-border hover:border-primary/40 hover:bg-muted/80"
-              }`}
-            >
-              <Gamepad2 className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "llama-run" ? "text-primary-foreground" : "text-primary"}`} />
-              <div className="text-left">
-                <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "llama-run" ? "text-primary-foreground" : "text-foreground"}`}>
-                  Llama Run
-                </span>
-                <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "llama-run" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                  {t("llamaRunDesc")}
-                </span>
-              </div>
-            </button>
-            <button
-              onClick={() => navigate("/flashcards")}
-              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-200 border-2 ${
-                activeTab === "flash-cards"
-                  ? "bg-primary text-primary-foreground border-primary shadow-lg scale-[1.02]"
-                  : "bg-muted text-muted-foreground border-border hover:border-primary/40 hover:bg-muted/80"
-              }`}
-            >
-              <Layers className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "flash-cards" ? "text-primary-foreground" : "text-primary"}`} />
-              <div className="text-left">
-                <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "flash-cards" ? "text-primary-foreground" : "text-foreground"}`}>
-                  Flash Cards
-                </span>
-                <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "flash-cards" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                  {t("flashCardsDesc")}
-                </span>
-              </div>
-            </button>
-            <button
-              onClick={() => navigate("/pexeso")}
-              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-200 border-2 ${
-                activeTab === "pexeso"
-                  ? "bg-primary text-primary-foreground border-primary shadow-lg scale-[1.02]"
-                  : "bg-muted text-muted-foreground border-border hover:border-primary/40 hover:bg-muted/80"
-              }`}
-            >
-              <Brain className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "pexeso" ? "text-primary-foreground" : "text-primary"}`} />
-              <div className="text-left">
-                <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "pexeso" ? "text-primary-foreground" : "text-foreground"}`}>
-                  Pexeso
-                </span>
-                <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "pexeso" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                  {t("pexesoDesc")}
-                </span>
-              </div>
-            </button>
-            <button
-              onClick={() => navigate("/skladani-vet")}
-              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-200 border-2 ${
-                activeTab === "sentence-builder"
-                  ? "bg-primary text-primary-foreground border-primary shadow-lg scale-[1.02]"
-                  : "bg-muted text-muted-foreground border-border hover:border-primary/40 hover:bg-muted/80"
-              }`}
-            >
-              <PuzzleIcon className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "sentence-builder" ? "text-primary-foreground" : "text-primary"}`} />
-              <div className="text-left">
-                <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "sentence-builder" ? "text-primary-foreground" : "text-foreground"}`}>
-                  {t("sentenceBuilderName")}
-                </span>
-                <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "sentence-builder" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                  {t("sentenceBuilderDesc")}
-                </span>
-              </div>
-            </button>
-            <button
-              onClick={() => navigate("/wortpaare")}
-              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-200 border-2 ${
-                activeTab === "wortpaare"
-                  ? "bg-primary text-primary-foreground border-primary shadow-lg scale-[1.02]"
-                  : "bg-muted text-muted-foreground border-border hover:border-primary/40 hover:bg-muted/80"
-              }`}
-            >
-              <ArrowLeftRight className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "wortpaare" ? "text-primary-foreground" : "text-primary"}`} />
-              <div className="text-left">
-                <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "wortpaare" ? "text-primary-foreground" : "text-foreground"}`}>
-                  {t("wordPairsName")}
-                </span>
-                <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "wortpaare" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                  {t("wordPairsDesc")}
-                </span>
-              </div>
-            </button>
-            <button
-              onClick={() => navigate("/scrabble")}
-              className={`group relative flex items-center gap-3 sm:gap-4 rounded-xl px-4 sm:px-6 py-3 sm:py-4 transition-all duration-200 border-2 ${
-                activeTab === "scrabble"
-                  ? "bg-primary text-primary-foreground border-primary shadow-lg scale-[1.02]"
-                  : "bg-muted text-muted-foreground border-border hover:border-primary/40 hover:bg-muted/80"
-              }`}
-            >
-              <Grid3X3 className={`w-7 h-7 sm:w-8 sm:h-8 shrink-0 ${activeTab === "scrabble" ? "text-primary-foreground" : "text-primary"}`} />
-              <div className="text-left">
-                <span className={`font-game text-xs sm:text-sm block leading-tight ${activeTab === "scrabble" ? "text-primary-foreground" : "text-foreground"}`}>
-                  Scrabble
-                </span>
-                <span className={`font-body text-[10px] sm:text-xs mt-0.5 block ${activeTab === "scrabble" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                  {t("scrabbleDesc")}
-                </span>
-              </div>
-            </button>
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+            {[
+              { tab: "llama-run",       path: "/",              icon: <Gamepad2    className={`w-6 h-6 shrink-0 ${activeTab === "llama-run"       ? "text-primary-foreground" : "text-primary"}`} />, name: "Llama Run",               desc: t("llamaRunDesc") },
+              { tab: "flash-cards",     path: "/flashcards",    icon: <Layers      className={`w-6 h-6 shrink-0 ${activeTab === "flash-cards"     ? "text-primary-foreground" : "text-primary"}`} />, name: "Flash Cards",              desc: t("flashCardsDesc") },
+              { tab: "pexeso",          path: "/pexeso",        icon: <Brain       className={`w-6 h-6 shrink-0 ${activeTab === "pexeso"          ? "text-primary-foreground" : "text-primary"}`} />, name: "Pexeso",                   desc: t("pexesoDesc") },
+              { tab: "sentence-builder",path: "/skladani-vet",  icon: <PuzzleIcon  className={`w-6 h-6 shrink-0 ${activeTab === "sentence-builder"? "text-primary-foreground" : "text-primary"}`} />, name: t("sentenceBuilderName"),   desc: t("sentenceBuilderDesc") },
+              { tab: "wortpaare",       path: "/wortpaare",     icon: <ArrowLeftRight className={`w-6 h-6 shrink-0 ${activeTab === "wortpaare"    ? "text-primary-foreground" : "text-primary"}`} />, name: t("wordPairsName"),         desc: t("wordPairsDesc") },
+              { tab: "scrabble",        path: "/scrabble",      icon: <Grid3X3     className={`w-6 h-6 shrink-0 ${activeTab === "scrabble"        ? "text-primary-foreground" : "text-primary"}`} />, name: "Scrabble",                 desc: t("scrabbleDesc") },
+            ].map(({ tab, path, icon, name, desc }) => (
+              <button
+                key={tab}
+                onClick={() => navigate(path)}
+                className={`flex flex-col items-center text-center gap-1.5 rounded-xl px-2 py-3 transition-all duration-200 border-2 ${
+                  activeTab === tab
+                    ? "bg-primary text-primary-foreground border-primary shadow-lg scale-[1.02]"
+                    : "bg-muted text-muted-foreground border-border hover:border-primary/40 hover:bg-muted/80"
+                }`}
+              >
+                {icon}
+                <div className="w-full">
+                  <span className={`font-game text-[11px] sm:text-xs block leading-tight break-words ${activeTab === tab ? "text-primary-foreground" : "text-foreground"}`}>
+                    {name}
+                  </span>
+                  <span className={`font-body text-[9px] sm:text-[10px] mt-0.5 block leading-snug break-words ${activeTab === tab ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                    {desc}
+                  </span>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       </section>
