@@ -79,52 +79,66 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="flex flex-col min-h-[100dvh] bg-background">
       {/* Navigation */}
       <nav className="w-full bg-card border-b border-border fixed top-0 z-50">
-        {/*
-          Desktop: 3 independent flex children → justify-between gives:
-          [logo — left]   [nav links — center]   [lang switcher — right]
-          Mobile: 2 children → [logo — left] [lang+hamburger — right]
-        */}
-        <div className="max-w-6xl mx-auto px-4 py-2 sm:py-6 flex items-center justify-between gap-4">
+        {/* Desktop: 3 × flex-1 columns — guaranteed no overlap at any width */}
+        <div className="max-w-6xl mx-auto px-4 py-2 sm:py-6 flex items-center gap-4">
 
-          {/* ── 1. Logo (always left) ── */}
-          <Link to="/" className="flex items-center gap-2 sm:gap-4 cursor-pointer hover:opacity-80 transition-opacity shrink-0">
-            <img src={germanLlamaLogo} alt="GermanLlama logo" className="w-10 h-10 sm:w-20 sm:h-20 rounded-lg" />
-            <span className="font-body font-bold text-sm sm:text-2xl text-foreground whitespace-nowrap">
-              Germanllama.com
-            </span>
-          </Link>
-
-          {/* ── 2. Nav links (desktop center, hidden on mobile) ── */}
-          <div className="hidden md:flex items-center gap-6">
-            <button
-              onClick={() => navigate("/nemcina-do-prace")}
-              className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
-            >
-              {t("professions")}
-            </button>
-            <button
-              onClick={() => navigate("/kontakt")}
-              className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
-            >
-              {t("contact")}
-            </button>
+          {/* ── COL 1: Logo (left) ── */}
+          <div className="flex-1 flex items-center">
+            <Link to="/" className="flex items-center gap-2 sm:gap-4 cursor-pointer hover:opacity-80 transition-opacity">
+              <img src={germanLlamaLogo} alt="GermanLlama logo" className="w-10 h-10 sm:w-20 sm:h-20 rounded-lg shrink-0" />
+              <span className="font-body font-bold text-sm sm:text-2xl text-foreground whitespace-nowrap">
+                Germanllama.com
+              </span>
+            </Link>
           </div>
 
-          {/* ── 3. Right side (always present so justify-between works on both mobile and desktop) ── */}
-          <div className="flex items-center gap-2 shrink-0">
-            {/* Desktop lang switcher */}
-            <div className="hidden md:flex items-center gap-1 bg-muted rounded-xl p-1 border border-border">
-              {(["cs", "ko", "en", "pl"] as const).map((l) => (
+          {/* ── COL 2: Slogan + subtitle + visitors (center, desktop only) ── */}
+          <div className="flex-1 hidden md:flex flex-col items-center justify-center text-center min-w-0">
+            <span className="font-game text-sm lg:text-xl text-foreground leading-tight">
+              {t("slogan")}
+            </span>
+            <span className="font-body text-xs lg:text-sm text-foreground mt-0.5">
+              {t("platform")}
+            </span>
+            {visitorCount !== null && (
+              <span className="flex items-center gap-1 font-body text-xs text-muted-foreground mt-1">
+                <Users className="w-3 h-3 shrink-0" />
+                {t("visitorCount")} ({visitDate}): {visitorCount}
+              </span>
+            )}
+          </div>
+
+          {/* ── COL 3: Nav + lang switcher (right, desktop) / lang + hamburger (mobile) ── */}
+          <div className="flex-1 flex items-center justify-end gap-2">
+            {/* Desktop: nav links + lang switcher */}
+            <div className="hidden md:flex items-center gap-5">
+              <div className="flex items-center gap-4">
                 <button
-                  key={l}
-                  onClick={() => setLang(l)}
-                  className={`px-2.5 py-1.5 rounded-lg text-xs font-body font-semibold transition-all ${
-                    lang === l ? "bg-card shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
-                  }`}
+                  onClick={() => navigate("/nemcina-do-prace")}
+                  className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
                 >
-                  {l === "cs" ? "🇨🇿 CZ" : l === "ko" ? "🇰🇷 KO" : l === "en" ? "🇬🇧 EN" : "🇵🇱 PL"}
+                  {t("professions")}
                 </button>
-              ))}
+                <button
+                  onClick={() => navigate("/kontakt")}
+                  className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
+                >
+                  {t("contact")}
+                </button>
+              </div>
+              <div className="flex items-center gap-1 bg-muted rounded-xl p-1 border border-border shrink-0">
+                {(["cs", "ko", "en", "pl"] as const).map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => setLang(l)}
+                    className={`px-2.5 py-1.5 rounded-lg text-xs font-body font-semibold transition-all ${
+                      lang === l ? "bg-card shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {l === "cs" ? "🇨🇿 CZ" : l === "ko" ? "🇰🇷 KO" : l === "en" ? "🇬🇧 EN" : "🇵🇱 PL"}
+                  </button>
+                ))}
+              </div>
             </div>
             {/* Mobile: flag-only lang switcher + hamburger */}
             <div className="md:hidden flex items-center gap-2">
