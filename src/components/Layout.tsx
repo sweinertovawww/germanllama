@@ -107,23 +107,24 @@ const Layout = ({ children }: LayoutProps) => {
             )}
           </div>
 
-          {/* Desktop: nav links | lang switcher — show at md+ */}
-          <div className="hidden md:flex items-center gap-3 shrink-0">
-            <button
-              onClick={() => navigate("/nemcina-do-prace")}
-              className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
-            >
-              {t("professions")}
-            </button>
-            <button
-              onClick={() => navigate("/kontakt")}
-              className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
-            >
-              {t("contact")}
-            </button>
-            {/* Divider */}
-            <div className="w-px h-5 bg-border mx-1 shrink-0" />
-            {/* Language switcher */}
+          {/* Desktop: nav links + lang switcher — show at md+ */}
+          <div className="hidden md:flex items-center gap-8 shrink-0">
+            {/* Nav links */}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigate("/nemcina-do-prace")}
+                className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
+              >
+                {t("professions")}
+              </button>
+              <button
+                onClick={() => navigate("/kontakt")}
+                className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
+              >
+                {t("contact")}
+              </button>
+            </div>
+            {/* Language switcher — pinned right, never shrinks */}
             <div className="flex items-center gap-1 bg-muted rounded-xl p-1 border border-border shrink-0">
               {(["cs", "ko", "en", "pl"] as const).map((l) => (
                 <button
