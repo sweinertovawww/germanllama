@@ -221,7 +221,7 @@ const FlashCards = () => {
                           className={`font-body font-bold text-foreground text-center break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`}
                           style={{ lineHeight: 1.5, marginBottom: "0.5em" }}
                         >
-                          {lang === "ko" ? card.ko : lang === "pl" ? (card.pl ?? card.czech) : card.czech}
+                          {lang === "ko" ? card.ko : lang === "pl" ? (card.pl ?? card.czech) : lang === "en" ? (card.en ?? card.czech) : card.czech}
                         </p>
                       </div>
                     </div>
