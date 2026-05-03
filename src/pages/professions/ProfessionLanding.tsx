@@ -332,7 +332,7 @@ const ProfessionLanding = () => {
   const allCards = getAllFlashCards();
   const profCards = allCards.filter(c => c.profession === page.professionId);
   const sentenceCount = FILL_QUESTIONS.filter(q => q.profession === page.professionId).length;
-  const sampleWords = profCards.slice(0, 10).map(v => ({ german: v.german, translation: lang === "ko" ? v.ko : v.czech }));
+  const sampleWords = profCards.slice(0, 10).map(v => ({ german: v.german, translation: lang === "ko" ? v.ko : lang === "pl" ? (v.pl ?? v.czech) : lang === "en" ? (v.en ?? v.czech) : v.czech }));
   const totalVocab = profCards.length;
 
   const h1 = lang === "ko" ? page.h1Ko : page.h1;

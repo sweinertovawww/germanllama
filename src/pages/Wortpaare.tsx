@@ -53,12 +53,12 @@ const Wortpaare = () => {
         title={t("wortpaareSeoTitle")}
         intro={t("wortpaareSeoIntro")}
         sampleWords={[
-          { german: "groß ↔ klein", translation: lang === "ko" ? "크다 ↔ 작다" : "velký ↔ malý" },
-          { german: "sprechen = reden", translation: lang === "ko" ? "말하다 = 이야기하다" : "mluvit = hovořit" },
-          { german: "kaufen ↔ verkaufen", translation: lang === "ko" ? "사다 ↔팔다" : "kupovat ↔ prodávat" },
-          { german: "Arbeit = Job", translation: lang === "ko" ? "일 = 직업" : "práce = zaměstnání" },
-          { german: "krank ↔ gesund", translation: lang === "ko" ? "아프다 ↔ 건강하다" : "nemocný ↔ zdravý" },
-          { german: "helfen = unterstützen", translation: lang === "ko" ? "돕다 = 지원하다" : "pomáhat = podporovat" },
+          { german: "groß ↔ klein",         translation: lang === "ko" ? "크다 ↔ 작다"         : lang === "pl" ? "duży ↔ mały"              : lang === "en" ? "big ↔ small"       : "velký ↔ malý" },
+          { german: "sprechen = reden",      translation: lang === "ko" ? "말하다 = 이야기하다" : lang === "pl" ? "mówić = rozmawiać"         : lang === "en" ? "speak = talk"      : "mluvit = hovořit" },
+          { german: "kaufen ↔ verkaufen",    translation: lang === "ko" ? "사다 ↔ 팔다"         : lang === "pl" ? "kupować ↔ sprzedawać"     : lang === "en" ? "buy ↔ sell"        : "kupovat ↔ prodávat" },
+          { german: "Arbeit = Job",          translation: lang === "ko" ? "일 = 직업"           : lang === "pl" ? "praca = zajęcie"          : lang === "en" ? "work = job"        : "práce = zaměstnání" },
+          { german: "krank ↔ gesund",        translation: lang === "ko" ? "아프다 ↔ 건강하다"   : lang === "pl" ? "chory ↔ zdrowy"           : lang === "en" ? "sick ↔ healthy"    : "nemocný ↔ zdravý" },
+          { german: "helfen = unterstützen", translation: lang === "ko" ? "돕다 = 지원하다"     : lang === "pl" ? "pomagać = wspierać"       : lang === "en" ? "help = support"    : "pomáhat = podporovat" },
         ]}
         faqs={[
           { q: t("wortpaareFaq1q"), a: t("wortpaareFaq1a") },
