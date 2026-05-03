@@ -25,7 +25,7 @@ Stav: `ko`, `en`, `pl` jsou definovány jako `typeof cs` — TypeScript vynutí 
 Spot-check: sekce cs začíná na řádku 3, ko na 306, en na 609, pl na 912.
 
 - [x] Ověřit, že všechny klíče jsou přítomny ve všech 4 jazycích (typeof cs vynucení + 303 klíčů v každé sekci)
-- [x] Žádné chybějící klíče – fáze hotová
+- [x] Zadne chybejici klice – faze hotova (typeof cs vynuceni)
 - [x] git commit "audit(translations): all keys present, no changes needed"
 
 ## FÁZE 2 – Statická data na landing pages
