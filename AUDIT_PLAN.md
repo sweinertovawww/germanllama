@@ -34,39 +34,40 @@ Stav: opraveno v předchozí session (commit cccdbe9).
 - [x] Index.tsx sampleWords – ko/pl/en/cs větve přidány
 - [x] Wortpaare.tsx sampleWords – ko/pl/en/cs větve přidány
 - [x] ProfessionLanding.tsx sampleWords – ko/pl/en/cs větve přidány (v.en zatím undefined → opraveno v Fázi 3)
-- [x] git commit "audit(phase2): static landing page sample words fixed"
+- [x] git commit cccdbe9 "Fix sample words on landing pages to show PL/EN translations"
 
 ## FÁZE 3 – Herní data (vocabularyData.ts + Supabase)
 
 ### 3a – FlashCard interface + getAllFlashCards()
-- [ ] Přidat `en?: string` do FlashCard interface (vocabularyData.ts:1791)
-- [ ] Aktualizovat getAllFlashCards() – mapovat translationEn → en (řádky 1801–1817)
-- [ ] git commit + push
+- [x] Přidat `en?: string` do FlashCard interface (vocabularyData.ts:1791)
+- [x] Aktualizovat getAllFlashCards() – mapovat translationEn → en (řádky 1801–1817)
+- [x] git commit b9f1065 + push
 
 ### 3b – Supabase word_pairs EN překlady
-- [ ] Vytvořit supabase/migrations/20260503000000_add_english_translations.sql
-  - ALTER TABLE přidat translation_a_en, translation_b_en
-  - UPDATE pro všech 24+38 = 62 párů (EN překlady)
-- [ ] Aktualizovat useWortpaare.ts – přidat translation_a_en/b_en do WordPair interface
-- [ ] git commit + push
-- [ ] Říct uživateli, co spustit v Lovable SQL editoru
+- [x] Vytvoreno supabase/migrations/20260503000000_add_english_translations.sql
+  - ALTER TABLE pridava translation_a_en, translation_b_en
+  - UPDATE pro vsech 62 paru (EN preklady)
+- [x] Aktualizovan useWortpaare.ts – pridany translation_a_en/b_en do WordPair interface
+- [x] Aktualizovan types.ts
+- [x] git commit ac845cf + push
+- [x] SQL soubor pripraven – uzivatel musi spustit v Lovable SQL editoru
 
 ## FÁZE 4 – Vizuální kontrola komponent
 
 ### 4a – FlashCards.tsx
-- [ ] Řádek 224: přidat `lang === "en"` větev před fallback na czechtinu
-- [ ] git commit + push
+- [x] Radek 224: pridana `lang === "en"` vetev pred fallback na cestinu
+- [x] git commit 515aaed + push
 
 ### 4b – Pexeso.tsx
-- [ ] Řádek 61: přidat `activeLang === "en"` větev v buildCards()
-- [ ] Řádky 37-41: přidat `en` pole do fallback karet
-- [ ] Řádek 367: opravit štítek "CZ" → přidat `lang === "en" ? "EN"` větev
-- [ ] git commit + push
+- [x] Radek 61: pridana `activeLang === "en"` vetev v buildCards()
+- [x] Radky 37-41: pridano `en` pole do fallback karet
+- [x] Radek 367: opraven stitek "CZ" → pridana `lang === "en" ? "EN"` vetev
+- [x] git commit 93c81d5 + push
 
 ### 4c – MatchedPair.tsx + useWortpaare.ts
-- [ ] Přidat translation_a_en/b_en do WordPair interface (useWortpaare.ts)
-- [ ] Řádky 20 a 40: přidat `lang === "en"` větev
-- [ ] git commit + push
+- [x] Pridany translation_a_en/b_en do WordPair interface (useWortpaare.ts)
+- [x] Radky 20 a 40: pridana `lang === "en"` vetev
+- [x] git commit 129935b + push
 
 ## ODLOŽENO (budoucí práce)
 - ProfessionLanding.tsx h1/intro/tips pro PL a EN – vyžaduje přeložit 15 × 2 jazyky = 30 bloků obsahu
