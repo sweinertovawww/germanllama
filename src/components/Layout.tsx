@@ -79,53 +79,41 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="flex flex-col min-h-[100dvh] bg-background">
       {/* Navigation */}
       <nav className="w-full bg-card border-b border-border fixed top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-2 sm:py-6 flex items-center justify-between relative">
+        {/*
+          Desktop: 3 independent flex children → justify-between gives:
+          [logo — left]   [nav links — center]   [lang switcher — right]
+          Mobile: 2 children → [logo — left] [lang+hamburger — right]
+        */}
+        <div className="max-w-6xl mx-auto px-4 py-2 sm:py-6 flex items-center justify-between gap-4">
+
+          {/* ── 1. Logo (always left) ── */}
           <Link to="/" className="flex items-center gap-2 sm:gap-4 cursor-pointer hover:opacity-80 transition-opacity shrink-0">
-            <img
-              src={germanLlamaLogo}
-              alt="GermanLlama logo"
-              className="w-10 h-10 sm:w-20 sm:h-20 rounded-lg"
-            />
-            <span className="font-body font-bold text-sm sm:text-2xl text-foreground">
+            <img src={germanLlamaLogo} alt="GermanLlama logo" className="w-10 h-10 sm:w-20 sm:h-20 rounded-lg" />
+            <span className="font-body font-bold text-sm sm:text-2xl text-foreground whitespace-nowrap">
               Germanllama.com
             </span>
           </Link>
 
-          {/* Center slogan — only md+ */}
-          <div className="absolute left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center pointer-events-none">
-            <span className="font-game text-base lg:text-xl text-foreground leading-tight">
-              {t("slogan")}
-            </span>
-            <span className="font-body text-sm text-foreground">
-              {t("platform")}
-            </span>
-            {visitorCount !== null && (
-              <span className="flex items-center gap-1.5 font-body text-xs text-muted-foreground mt-1">
-                <Users className="w-3.5 h-3.5" />
-                {t("visitorCount")} ({visitDate}): {visitorCount}
-              </span>
-            )}
+          {/* ── 2. Nav links (desktop center, hidden on mobile) ── */}
+          <div className="hidden md:flex items-center gap-6">
+            <button
+              onClick={() => navigate("/nemcina-do-prace")}
+              className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
+            >
+              {t("professions")}
+            </button>
+            <button
+              onClick={() => navigate("/kontakt")}
+              className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
+            >
+              {t("contact")}
+            </button>
           </div>
 
-          {/* Desktop: nav links + lang switcher — show at md+ */}
-          <div className="hidden md:flex items-center gap-8 shrink-0">
-            {/* Nav links */}
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => navigate("/nemcina-do-prace")}
-                className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
-              >
-                {t("professions")}
-              </button>
-              <button
-                onClick={() => navigate("/kontakt")}
-                className="font-body font-semibold text-sm text-foreground/70 hover:text-primary transition-colors whitespace-nowrap"
-              >
-                {t("contact")}
-              </button>
-            </div>
-            {/* Language switcher — pinned right, never shrinks */}
-            <div className="flex items-center gap-1 bg-muted rounded-xl p-1 border border-border shrink-0">
+          {/* ── 3. Right side (always present so justify-between works on both mobile and desktop) ── */}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Desktop lang switcher */}
+            <div className="hidden md:flex items-center gap-1 bg-muted rounded-xl p-1 border border-border">
               {(["cs", "ko", "en", "pl"] as const).map((l) => (
                 <button
                   key={l}
@@ -138,31 +126,31 @@ const Layout = ({ children }: LayoutProps) => {
                 </button>
               ))}
             </div>
+            {/* Mobile: flag-only lang switcher + hamburger */}
+            <div className="md:hidden flex items-center gap-2">
+              <div className="flex items-center gap-0.5 bg-muted rounded-xl p-1 border border-border">
+                {(["cs", "ko", "en", "pl"] as const).map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => setLang(l)}
+                    className={`px-1.5 py-1 rounded-lg text-[11px] font-body font-semibold transition-all ${
+                      lang === l ? "bg-card shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {l === "cs" ? "🇨🇿" : l === "ko" ? "🇰🇷" : l === "en" ? "🇬🇧" : "🇵🇱"}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => setMobileMenuOpen((o) => !o)}
+                className="p-1.5 rounded-lg text-foreground/70 hover:text-primary hover:bg-muted transition-all"
+                aria-label="Menu"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
           </div>
 
-          {/* Mobile: lang switcher + hamburger — hide at md+ */}
-          <div className="md:hidden flex items-center gap-2 shrink-0">
-            <div className="flex items-center gap-0.5 bg-muted rounded-xl p-1 border border-border">
-              {(["cs", "ko", "en", "pl"] as const).map((l) => (
-                <button
-                  key={l}
-                  onClick={() => setLang(l)}
-                  className={`px-1.5 py-1 rounded-lg text-[11px] font-body font-semibold transition-all ${
-                    lang === l ? "bg-card shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {l === "cs" ? "🇨🇿" : l === "ko" ? "🇰🇷" : l === "en" ? "🇬🇧" : "🇵🇱"}
-                </button>
-              ))}
-            </div>
-            <button
-              onClick={() => setMobileMenuOpen((o) => !o)}
-              className="p-1.5 rounded-lg text-foreground/70 hover:text-primary hover:bg-muted transition-all"
-              aria-label="Menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
         </div>
 
         {/* Mobile dropdown menu */}
