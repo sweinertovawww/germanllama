@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://germanllama.lovable.app/sitemap.xml
+Sitemap: https://www.germanllama.com/sitemap.xml

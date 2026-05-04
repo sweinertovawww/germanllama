@@ -11,6 +11,16 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  <url>
+    <loc>https://www.germanllama.com/?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/?lang=pl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
 
   <url>
     <loc>https://www.germanllama.com/flashcards</loc>
@@ -19,6 +29,16 @@
   </url>
   <url>
     <loc>https://www.germanllama.com/flashcards?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/flashcards?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/flashcards?lang=pl</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -33,6 +53,16 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.germanllama.com/pexeso?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/pexeso?lang=pl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <url>
     <loc>https://www.germanllama.com/skladani-vet</loc>
@@ -41,6 +71,16 @@
   </url>
   <url>
     <loc>https://www.germanllama.com/skladani-vet?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/skladani-vet?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/skladani-vet?lang=pl</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -55,6 +95,16 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.germanllama.com/wortpaare?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/wortpaare?lang=pl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <url>
     <loc>https://www.germanllama.com/scrabble</loc>
@@ -63,6 +113,16 @@
   </url>
   <url>
     <loc>https://www.germanllama.com/scrabble?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/scrabble?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/scrabble?lang=pl</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -77,6 +137,16 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace?lang=pl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/elektrikar</loc>
@@ -85,6 +155,16 @@
   </url>
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/elektrikar?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/elektrikar?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/elektrikar?lang=pl</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -99,6 +179,16 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/skladnik?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/skladnik?lang=pl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/stavba</loc>
@@ -107,6 +197,16 @@
   </url>
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/stavba?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/stavba?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/stavba?lang=pl</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -121,6 +221,16 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/gastro?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/gastro?lang=pl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/sestra</loc>
@@ -129,6 +239,16 @@
   </url>
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/sestra?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/sestra?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/sestra?lang=pl</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -143,6 +263,16 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/pokladni?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/pokladni?lang=pl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/truhlar</loc>
@@ -151,6 +281,16 @@
   </url>
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/truhlar?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/truhlar?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/truhlar?lang=pl</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -165,6 +305,16 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/instalater?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/instalater?lang=pl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/uklizecka</loc>
@@ -173,6 +323,16 @@
   </url>
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/uklizecka?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/uklizecka?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/uklizecka?lang=pl</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -187,6 +347,16 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/kancelar?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/kancelar?lang=pl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/zahradnik</loc>
@@ -195,6 +365,16 @@
   </url>
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/zahradnik?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/zahradnik?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/zahradnik?lang=pl</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -209,6 +389,16 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/ucitel?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/ucitel?lang=pl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/kadernik</loc>
@@ -217,6 +407,16 @@
   </url>
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/kadernik?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/kadernik?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/kadernik?lang=pl</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -231,6 +431,16 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/automechanik?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/automechanik?lang=pl</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/haseni</loc>
@@ -239,6 +449,16 @@
   </url>
   <url>
     <loc>https://www.germanllama.com/nemcina-do-prace/haseni?lang=ko</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/haseni?lang=en</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.germanllama.com/nemcina-do-prace/haseni?lang=pl</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
