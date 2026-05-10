@@ -454,7 +454,7 @@ const saveToLeaderboardDB = async (name: string, score: number) => {
 const isMobileDevice = () => window.innerWidth < 768;
 
 const LlamaGame = () => {
-  const { t, lang, targetLanguage, setTargetLanguage } = useLanguage();
+  const { t, lang } = useLanguage();
   const profFilter = useProfessionFilter();
   const [inLobby, setInLobby] = useState(true);
   const [nameEntry, setNameEntry] = useState(false);
@@ -1029,19 +1029,7 @@ const LlamaGame = () => {
     setGameState("idle");
   }, []);
 
-  if (targetLanguage !== "de") {
-    return (
-      <div className="flex flex-col items-center gap-4 py-10 px-4 max-w-md mx-auto text-center">
-        <p className="font-body text-muted-foreground text-sm">{t("gameOnlyForDe")}</p>
-        <button
-          onClick={() => setTargetLanguage("de")}
-          className="font-game text-sm px-8 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-md"
-        >
-          {t("switchToGerman")}
-        </button>
-      </div>
-    );
-  }
+
 
   const gameContent = (
     <div className={`flex flex-col items-center w-full ${isFullscreen ? 'gap-1' : 'gap-2 sm:gap-6'} ${isFullscreen ? '' : 'max-w-[800px] mx-auto'}`}>

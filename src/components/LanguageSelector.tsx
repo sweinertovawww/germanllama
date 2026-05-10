@@ -11,7 +11,6 @@ interface LangOption {
 
 const LANG_OPTIONS: LangOption[] = [
   { code: "cs", flag: "🇨🇿", nameKey: "langNameCs" },
-  { code: "de", flag: "🇩🇪", nameKey: "langNameDe" },
   { code: "en", flag: "🇬🇧", nameKey: "langNameEn" },
   { code: "pl", flag: "🇵🇱", nameKey: "langNamePl" },
   { code: "ko", flag: "🇰🇷", nameKey: "langNameKo" },
@@ -24,28 +23,12 @@ interface LanguageSelectorProps {
 }
 
 const LanguageSelector: React.FC<LanguageSelectorProps> = ({ mode, onClose }) => {
-  const { lang, setLang, targetLanguage, setTargetLanguage, t } = useLanguage();
+  const { lang, setLang, t } = useLanguage();
 
   const [nativeLang, setNativeLang] = useState<Lang>(lang);
-  const [learnLang, setLearnLang] = useState<Lang>(
-    targetLanguage === lang ? "de" : targetLanguage
-  );
-
-  const handleNativeSelect = (code: Lang) => {
-    setNativeLang(code);
-    if (learnLang === code) {
-      setLearnLang(code === "de" ? "cs" : "de");
-    }
-  };
-
-  const handleLearnSelect = (code: Lang) => {
-    if (code === nativeLang) return;
-    setLearnLang(code);
-  };
 
   const handleConfirm = () => {
     setLang(nativeLang);
-    setTargetLanguage(learnLang);
     localStorage.setItem("gl_onboarding_done", "1");
     onClose?.();
   };
@@ -60,7 +43,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ mode, onClose }) =>
       </div>
 
       {/* Native language */}
-      <div className="mb-5">
+      <div className="mb-6">
         <p className="font-body font-semibold text-sm text-muted-foreground mb-2 text-center uppercase tracking-wide">
           {t("onboardingNativeLang")}
         </p>
@@ -68,7 +51,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ mode, onClose }) =>
           {LANG_OPTIONS.map((opt) => (
             <button
               key={opt.code}
-              onClick={() => handleNativeSelect(opt.code)}
+              onClick={() => setNativeLang(opt.code)}
               className={`flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl border-2 transition-all font-body text-xs font-semibold ${
                 nativeLang === opt.code
                   ? "border-primary bg-primary/10 text-primary"
@@ -79,35 +62,6 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ mode, onClose }) =>
               <span>{t(opt.nameKey)}</span>
             </button>
           ))}
-        </div>
-      </div>
-
-      {/* Target language */}
-      <div className="mb-6">
-        <p className="font-body font-semibold text-sm text-muted-foreground mb-2 text-center uppercase tracking-wide">
-          {t("onboardingTargetLang")}
-        </p>
-        <div className="flex flex-wrap justify-center gap-2">
-          {LANG_OPTIONS.map((opt) => {
-            const disabled = opt.code === nativeLang;
-            return (
-              <button
-                key={opt.code}
-                onClick={() => handleLearnSelect(opt.code)}
-                disabled={disabled}
-                className={`flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl border-2 transition-all font-body text-xs font-semibold ${
-                  disabled
-                    ? "border-border/30 bg-background/40 text-muted-foreground/30 cursor-not-allowed"
-                    : learnLang === opt.code
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground"
-                }`}
-              >
-                <span className="text-xl">{opt.flag}</span>
-                <span>{t(opt.nameKey)}</span>
-              </button>
-            );
-          })}
         </div>
       </div>
 

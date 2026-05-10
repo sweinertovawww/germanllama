@@ -162,7 +162,7 @@ function DroppableSlot({
 
 const SentenceBuilder = () => {
   const isMobile = useIsMobile();
-  const { t, lang, targetLanguage, setTargetLanguage } = useLanguage();
+  const { t, lang } = useLanguage();
   const profFilter = useProfessionFilter();
   const filteredQuestions = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
   // --- localStorage persistence ---
@@ -320,19 +320,7 @@ const SentenceBuilder = () => {
     return pairs.find((p) => p.id === id)?.end ?? "";
   }, [activeDragId, pairs]);
 
-  if (targetLanguage !== "de") {
-    return (
-      <div className="flex flex-col items-center gap-4 py-10 px-4 max-w-md mx-auto text-center">
-        <p className="font-body text-muted-foreground text-sm">{t("gameOnlyForDe")}</p>
-        <button
-          onClick={() => setTargetLanguage("de")}
-          className="font-game text-sm px-8 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-md"
-        >
-          {t("switchToGerman")}
-        </button>
-      </div>
-    );
-  }
+
 
   return (
     <>

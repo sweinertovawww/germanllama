@@ -10,7 +10,7 @@ import LanguageSelector from "@/components/LanguageSelector";
 import type { Lang } from "@/i18n/translations";
 
 const FLAG: Record<Lang, string> = {
-  cs: "🇨🇿", ko: "🇰🇷", en: "🇬🇧", pl: "🇵🇱", de: "🇩🇪",
+  cs: "🇨🇿", ko: "🇰🇷", en: "🇬🇧", pl: "🇵🇱", de: "🇩🇪", uk: "🇺🇦",
 };
 
 interface LayoutProps {
@@ -18,7 +18,7 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const { t, lang, targetLanguage } = useLanguage();
+  const { t, lang } = useLanguage();
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const [visitDate, setVisitDate] = useState<string>("");
   const [privacyOpen, setPrivacyOpen] = useState(false);
@@ -140,7 +140,7 @@ const Layout = ({ children }: LayoutProps) => {
               >
                 <span className="text-base leading-none">{FLAG[lang]}</span>
                 <span className="font-body text-[10px] text-muted-foreground">→</span>
-                <span className="text-base leading-none">{FLAG[targetLanguage]}</span>
+                <span className="text-base leading-none">🇩🇪</span>
               </button>
             </div>
             {/* Mobile: flag-only lang switcher + hamburger */}
@@ -152,7 +152,7 @@ const Layout = ({ children }: LayoutProps) => {
               >
                 <span className="text-sm leading-none">{FLAG[lang]}</span>
                 <span className="font-body text-[9px] text-muted-foreground">→</span>
-                <span className="text-sm leading-none">{FLAG[targetLanguage]}</span>
+                <span className="text-sm leading-none">🇩🇪</span>
               </button>
               <button
                 onClick={() => setMobileMenuOpen((o) => !o)}
