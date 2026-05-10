@@ -6,17 +6,24 @@ import { Gamepad2, Layers, Brain, PuzzleIcon, ArrowLeftRight, Grid3X3, Instagram
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSelector from "@/components/LanguageSelector";
+import type { Lang } from "@/i18n/translations";
+
+const FLAG: Record<Lang, string> = {
+  cs: "🇨🇿", ko: "🇰🇷", en: "🇬🇧", pl: "🇵🇱", de: "🇩🇪",
+};
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const { t, lang, setLang } = useLanguage();
+  const { t, lang, targetLanguage } = useLanguage();
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const [visitDate, setVisitDate] = useState<string>("");
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [langSelectorOpen, setLangSelectorOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -126,35 +133,27 @@ const Layout = ({ children }: LayoutProps) => {
                   {t("contact")}
                 </button>
               </div>
-              <div className="flex items-center gap-1 bg-muted rounded-xl p-1 border border-border shrink-0">
-                {(["cs", "ko", "en", "pl"] as const).map((l) => (
-                  <button
-                    key={l}
-                    onClick={() => setLang(l)}
-                    className={`px-2.5 py-1.5 rounded-lg text-xs font-body font-semibold transition-all ${
-                      lang === l ? "bg-card shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    {l === "cs" ? "🇨🇿 CZ" : l === "ko" ? "🇰🇷 KO" : l === "en" ? "🇬🇧 EN" : "🇵🇱 PL"}
-                  </button>
-                ))}
-              </div>
+              <button
+                onClick={() => setLangSelectorOpen(true)}
+                className="flex items-center gap-1.5 bg-muted rounded-xl px-3 py-1.5 border border-border shrink-0 hover:border-primary/50 hover:bg-muted/80 transition-all"
+                title={t("changeLangs")}
+              >
+                <span className="text-base leading-none">{FLAG[lang]}</span>
+                <span className="font-body text-[10px] text-muted-foreground">→</span>
+                <span className="text-base leading-none">{FLAG[targetLanguage]}</span>
+              </button>
             </div>
             {/* Mobile: flag-only lang switcher + hamburger */}
             <div className="md:hidden flex items-center gap-2">
-              <div className="flex items-center gap-0.5 bg-muted rounded-xl p-1 border border-border">
-                {(["cs", "ko", "en", "pl"] as const).map((l) => (
-                  <button
-                    key={l}
-                    onClick={() => setLang(l)}
-                    className={`px-1.5 py-1 rounded-lg text-[11px] font-body font-semibold transition-all ${
-                      lang === l ? "bg-card shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    {l === "cs" ? "🇨🇿" : l === "ko" ? "🇰🇷" : l === "en" ? "🇬🇧" : "🇵🇱"}
-                  </button>
-                ))}
-              </div>
+              <button
+                onClick={() => setLangSelectorOpen(true)}
+                className="flex items-center gap-1 bg-muted rounded-xl px-2 py-1 border border-border hover:border-primary/50 transition-all"
+                title={t("changeLangs")}
+              >
+                <span className="text-sm leading-none">{FLAG[lang]}</span>
+                <span className="font-body text-[9px] text-muted-foreground">→</span>
+                <span className="text-sm leading-none">{FLAG[targetLanguage]}</span>
+              </button>
               <button
                 onClick={() => setMobileMenuOpen((o) => !o)}
                 className="p-1.5 rounded-lg text-foreground/70 hover:text-primary hover:bg-muted transition-all"
@@ -253,6 +252,11 @@ const Layout = ({ children }: LayoutProps) => {
       <main className="flex-1">
         {children}
       </main>
+
+      {/* Language selector modal */}
+      {langSelectorOpen && (
+        <LanguageSelector mode="modal" onClose={() => setLangSelectorOpen(false)} />
+      )}
 
       {/* Privacy Modal */}
       <Dialog open={privacyOpen} onOpenChange={setPrivacyOpen}>

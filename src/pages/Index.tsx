@@ -83,16 +83,16 @@ const Index = () => {
         title={t("indexGameSeoTitle")}
         intro={t("indexGameSeoIntro")}
         sampleWords={[
-          { german: "der Tisch", translation: lang === "ko" ? "테이블"   : lang === "pl" ? "stół"     : lang === "en" ? "table"   : "stůl" },
-          { german: "die Katze", translation: lang === "ko" ? "고양이"   : lang === "pl" ? "kot"      : lang === "en" ? "cat"     : "kočka" },
-          { german: "das Haus",  translation: lang === "ko" ? "집"       : lang === "pl" ? "dom"      : lang === "en" ? "house"   : "dům" },
-          { german: "der Hund",  translation: lang === "ko" ? "개"       : lang === "pl" ? "pies"     : lang === "en" ? "dog"     : "pes" },
-          { german: "die Blume", translation: lang === "ko" ? "꽃"       : lang === "pl" ? "kwiat"    : lang === "en" ? "flower"  : "květina" },
-          { german: "das Buch",  translation: lang === "ko" ? "책"       : lang === "pl" ? "książka"  : lang === "en" ? "book"    : "kniha" },
-          { german: "der Stuhl", translation: lang === "ko" ? "의자"     : lang === "pl" ? "krzesło"  : lang === "en" ? "chair"   : "židle" },
-          { german: "die Lampe", translation: lang === "ko" ? "램프"     : lang === "pl" ? "lampa"    : lang === "en" ? "lamp"    : "lampa" },
-          { german: "das Auto",  translation: lang === "ko" ? "자동차"   : lang === "pl" ? "samochód" : lang === "en" ? "car"     : "auto" },
-          { german: "der Baum",  translation: lang === "ko" ? "나무"     : lang === "pl" ? "drzewo"   : lang === "en" ? "tree"    : "strom" },
+          { german: "der Tisch", translation: lang === "de" ? "table"    : lang === "ko" ? "테이블"   : lang === "pl" ? "stół"     : lang === "en" ? "table"   : lang === "uk" ? "стіл"      : "stůl" },
+          { german: "die Katze", translation: lang === "de" ? "cat"      : lang === "ko" ? "고양이"   : lang === "pl" ? "kot"      : lang === "en" ? "cat"     : lang === "uk" ? "кіт"       : "kočka" },
+          { german: "das Haus",  translation: lang === "de" ? "house"    : lang === "ko" ? "집"       : lang === "pl" ? "dom"      : lang === "en" ? "house"   : lang === "uk" ? "будинок"   : "dům" },
+          { german: "der Hund",  translation: lang === "de" ? "dog"      : lang === "ko" ? "개"       : lang === "pl" ? "pies"     : lang === "en" ? "dog"     : lang === "uk" ? "собака"    : "pes" },
+          { german: "die Blume", translation: lang === "de" ? "flower"   : lang === "ko" ? "꽃"       : lang === "pl" ? "kwiat"    : lang === "en" ? "flower"  : lang === "uk" ? "квітка"    : "květina" },
+          { german: "das Buch",  translation: lang === "de" ? "book"     : lang === "ko" ? "책"       : lang === "pl" ? "książka"  : lang === "en" ? "book"    : lang === "uk" ? "книга"     : "kniha" },
+          { german: "der Stuhl", translation: lang === "de" ? "chair"    : lang === "ko" ? "의자"     : lang === "pl" ? "krzesło"  : lang === "en" ? "chair"   : lang === "uk" ? "стілець"   : "židle" },
+          { german: "die Lampe", translation: lang === "de" ? "lamp"     : lang === "ko" ? "램프"     : lang === "pl" ? "lampa"    : lang === "en" ? "lamp"    : lang === "uk" ? "лампа"     : "lampa" },
+          { german: "das Auto",  translation: lang === "de" ? "car"      : lang === "ko" ? "자동차"   : lang === "pl" ? "samochód" : lang === "en" ? "car"     : lang === "uk" ? "автомобіль": "auto" },
+          { german: "der Baum",  translation: lang === "de" ? "tree"     : lang === "ko" ? "나무"     : lang === "pl" ? "drzewo"   : lang === "en" ? "tree"    : lang === "uk" ? "дерево"    : "strom" },
         ]}
         faqs={[
           { q: t("indexFaq1q"), a: t("indexFaq1a") },

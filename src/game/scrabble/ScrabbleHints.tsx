@@ -72,7 +72,7 @@ const ScrabbleHints = memo(function ScrabbleHints({
                 >
                   <span className="font-body text-sm text-foreground">
                     <span className="text-muted-foreground mr-1.5">{p.number}.</span>
-                    {lang === "ko" ? p.entry.ko : lang === "en" ? p.entry.en : lang === "pl" ? p.entry.pl : p.entry.czech}
+                    {lang === "ko" ? p.entry.ko : lang === "en" ? p.entry.en : lang === "pl" ? p.entry.pl : lang === "uk" ? (p.entry.uk ?? p.entry.en) : p.entry.czech}
                     {p.entry.article && (
                       <span className="text-muted-foreground ml-1">({p.entry.article})</span>
                     )}

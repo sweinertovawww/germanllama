@@ -47,6 +47,7 @@ const SEOHead = ({ title, description, canonical, jsonLd }: SEOHeadProps) => {
     const hreflangData = [
       { hreflang: "cs", href: `${CANONICAL_BASE}${canonical || "/"}` },
       { hreflang: "ko", href: `${CANONICAL_BASE}${canonical || "/"}?lang=ko` },
+      { hreflang: "uk", href: `${CANONICAL_BASE}${canonical || "/"}?lang=uk` },
       { hreflang: "x-default", href: `${CANONICAL_BASE}${canonical || "/"}` },
     ];
     document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(el => el.remove());

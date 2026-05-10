@@ -36,6 +36,7 @@ interface SentencePair {
   translationKo: string;
   translationEn: string;
   translationPl: string;
+  translationUk: string;
   start: string;
   end: string;
   matched: boolean;
@@ -62,6 +63,7 @@ function makePairs(questions: typeof FILL_QUESTIONS): SentencePair[] {
       translationKo: q.translationKo,
       translationEn: q.translationEn ?? q.translation,
       translationPl: q.translationPl ?? q.translation,
+      translationUk: q.translationUk ?? q.translationEn ?? q.translation,
       start,
       end,
       matched: false,
@@ -160,7 +162,7 @@ function DroppableSlot({
 
 const SentenceBuilder = () => {
   const isMobile = useIsMobile();
-  const { t, lang } = useLanguage();
+  const { t, lang, targetLanguage, setTargetLanguage } = useLanguage();
   const profFilter = useProfessionFilter();
   const filteredQuestions = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
   // --- localStorage persistence ---
@@ -318,6 +320,20 @@ const SentenceBuilder = () => {
     return pairs.find((p) => p.id === id)?.end ?? "";
   }, [activeDragId, pairs]);
 
+  if (targetLanguage !== "de") {
+    return (
+      <div className="flex flex-col items-center gap-4 py-10 px-4 max-w-md mx-auto text-center">
+        <p className="font-body text-muted-foreground text-sm">{t("gameOnlyForDe")}</p>
+        <button
+          onClick={() => setTargetLanguage("de")}
+          className="font-game text-sm px-8 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-md"
+        >
+          {t("switchToGerman")}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Rules */}
@@ -401,8 +417,8 @@ const SentenceBuilder = () => {
                     }`}
                   >
                     <p className="font-body text-xs text-muted-foreground mb-1.5 italic">
-                      {lang === "ko" ? "🇰🇷" : lang === "pl" ? "🇵🇱" : lang === "en" ? "🇬🇧" : "🇨🇿"}{" "}
-                      {lang === "ko" ? pair.translationKo : lang === "pl" ? pair.translationPl : lang === "en" ? pair.translationEn : pair.translation}
+                      {lang === "ko" ? "🇰🇷" : lang === "pl" ? "🇵🇱" : lang === "en" ? "🇬🇧" : lang === "uk" ? "🇺🇦" : "🇨🇿"}{" "}
+                      {lang === "ko" ? pair.translationKo : lang === "pl" ? pair.translationPl : lang === "en" ? pair.translationEn : lang === "uk" ? pair.translationUk : pair.translation}
                     </p>
                     <span className="font-body text-[7px] sm:text-[8px] text-muted-foreground/60">[{pair.profession}]</span>
                     <div className="flex items-center gap-2 flex-wrap">

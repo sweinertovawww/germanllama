@@ -6,6 +6,16 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { Lang } from "@/i18n/translations";
+
+function getCardFace(card: FlashCard, language: Lang): string {
+  if (language === "de") return card.german;
+  if (language === "cs") return card.czech;
+  if (language === "ko") return card.ko;
+  if (language === "pl") return card.pl ?? card.czech;
+  if (language === "uk") return card.uk ?? card.en ?? card.czech;
+  return card.en ?? card.czech;
+}
 
 interface MemoryCard {
   id: number;
@@ -30,7 +40,7 @@ function shuffleArray<T>(arr: T[]): T[] {
 
 const MAX_FLIPS = 3;
 
-function buildCards(pairCount: number, professions: import("@/game/vocabularyData").Profession[] = [], activeLang: string = "cs"): MemoryCard[] {
+function buildCards(pairCount: number, professions: import("@/game/vocabularyData").Profession[] = [], nativeLang: Lang = "cs", targetLang: Lang = "de"): MemoryCard[] {
   let allCards = filterByProfession(getAllFlashCards(), professions);
   if (!allCards || allCards.length === 0) {
     allCards = [
@@ -47,7 +57,7 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
     memoryCards.push({
       id: i * 2,
       pairId: i,
-      text: card.german,
+      text: getCardFace(card, targetLang),
       lang: "de",
       flipped: false,
       matched: false,
@@ -58,7 +68,7 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
     memoryCards.push({
       id: i * 2 + 1,
       pairId: i,
-      text: activeLang === "ko" ? card.ko : activeLang === "pl" ? (card.pl ?? card.czech) : activeLang === "en" ? (card.en ?? card.czech) : card.czech,
+      text: getCardFace(card, nativeLang),
       lang: "cz",
       flipped: false,
       matched: false,
@@ -71,7 +81,7 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
 }
 
 const Pexeso = () => {
-  const { t, lang } = useLanguage();
+  const { t, lang, targetLanguage } = useLanguage();
   const isMobile = useIsMobile();
   const pairCount = 5;
   const profFilter = useProfessionFilter();
@@ -90,21 +100,21 @@ const Pexeso = () => {
   const totalPairs = useMemo(() => new Set(cards.map((c) => c.pairId)).size, [cards]);
 
   const startGame = useCallback(() => {
-    setCards(buildCards(pairCount, profFilter.selected, lang));
+    setCards(buildCards(pairCount, profFilter.selected, lang, targetLanguage));
     setSelected([]);
     setChecking(false);
     setGameOver(false);
     setWon(false);
     setInLobby(false);
-  }, [pairCount, profFilter.selected, lang]);
+  }, [pairCount, profFilter.selected, lang, targetLanguage]);
 
   const resetGame = useCallback(() => {
-    setCards(buildCards(pairCount, profFilter.selected, lang));
+    setCards(buildCards(pairCount, profFilter.selected, lang, targetLanguage));
     setSelected([]);
     setChecking(false);
     setGameOver(false);
     setWon(false);
-  }, [pairCount, profFilter.selected, lang]);
+  }, [pairCount, profFilter.selected, lang, targetLanguage]);
 
   const goToLobby = useCallback(() => {
     setInLobby(true);
@@ -364,7 +374,7 @@ const Pexeso = () => {
                           {card.text}
                         </span>
                         <span className={`mt-1.5 font-body text-[9px] sm:text-xs font-semibold uppercase ${card.lang === "de" ? "text-primary" : "text-accent"}`}>
-                          {card.lang === "de" ? "DE" : lang === "ko" ? "KO" : lang === "pl" ? "PL" : lang === "en" ? "EN" : "CZ"}
+                          {card.lang === "de" ? targetLanguage.toUpperCase() : lang.toUpperCase()}
                         </span>
                         <span className="font-body text-[7px] sm:text-[8px] text-muted-foreground/60 mt-0.5">[{card.profession}]</span>
                       </div>

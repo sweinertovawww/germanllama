@@ -14,14 +14,17 @@ interface ProfessionPageData {
   h1Ko: string;
   h1En: string;
   h1Pl: string;
+  h1Uk?: string;
   intro: string;
   introKo: string;
   introEn: string;
   introPl: string;
+  introUk?: string;
   tips: string[];
   tipsKo: string[];
   tipsEn: string[];
   tipsPl: string[];
+  tipsUk?: string[];
 }
 
 const PAGES: Record<string, ProfessionPageData> = {
@@ -58,6 +61,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "Przejdź do Llama Run i ćwicz rodzajniki (der Gabelstapler, das Regal...)",
       "W układaniu zdań nauczysz się praktycznych poleceń szefa",
     ],
+    h1Uk: "Німецька для складських робітників",
+    introUk: "Працюєш на складі в Німеччині? Вивчи слова, які почуєш щодня — від стелажів і палет до вказівок начальника. Все через ігри та безкоштовно.",
+    tipsUk: [
+      "Починай з карток і вивчи базову лексику для складу",
+      "Спробуй Llama Run та відпрацюй артиклі (der Gabelstapler, das Regal...)",
+      "У складанні речень навчишся практичним вказівкам начальника",
+    ],
   },
   automechanik: {
     professionId: "automechanik",
@@ -91,6 +101,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "Fiszki pomogą ci z nazwami części samochodowych i narzędzi",
       "W Llama Run ćwicz rodzajniki – der Motor, die Bremse, das Getriebe",
       "Układanie zdań nauczy cię komunikacji z klientami",
+    ],
+    h1Uk: "Німецька для автомеханіків",
+    introUk: "Працюєш в автосервісі в Німеччині або Австрії? Вивчи назви деталей, інструментів і фрази для спілкування з клієнтами та колегами.",
+    tipsUk: [
+      "Картки допоможуть з назвами автодеталей та інструментів",
+      "У Llama Run відпрацюй артиклі — der Motor, die Bremse, das Getriebe",
+      "Складання речень навчить спілкуватися з клієнтами",
     ],
   },
   stavba: {
@@ -126,6 +143,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "W grze memory zapamiętasz pary niemiecko-polskie",
       "Układanie zdań przygotuje cię na polecenia na budowie",
     ],
+    h1Uk: "Німецька на будівельному майданчику",
+    introUk: "Будівельні роботи в Німеччині? Вивчи лексику для матеріалів, інструментів та безпеки праці. Спілкуйся з бригадою та виконробом.",
+    tipsUk: [
+      "Починай з карток для будівельних матеріалів та інструментів",
+      "У грі на пам'ять запам'ятаєш пари по-німецьки",
+      "Складання речень підготує тебе до вказівок на майданчику",
+    ],
   },
   gastro: {
     professionId: "gastro",
@@ -159,6 +183,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "Fiszki na jedzenie, napoje i wyposażenie kuchni",
       "Llama Run pomoże z rodzajnikami – der Teller, die Gabel, das Messer",
       "Układanie zdań symuluje prawdziwe zamówienia gości",
+    ],
+    h1Uk: "Німецька для гастрономії",
+    introUk: "Працюєш у ресторані, готелі або на кухні? Вивчи замовлення, меню та спілкування з гостями й колегами на кухні.",
+    tipsUk: [
+      "Картки на їжу, напої та кухонне обладнання",
+      "Llama Run допоможе з артиклями — der Teller, die Gabel, das Messer",
+      "Складання речень симулює реальні замовлення гостей",
     ],
   },
   sestra: {
@@ -194,6 +225,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "W Llama Run ćwicz rodzajniki – der Patient, die Spritze, das Medikament",
       "Układanie zdań nauczy cię rozmawiać z pacjentami",
     ],
+    h1Uk: "Німецька для медичних працівників",
+    introUk: "Працюєш в охороні здоров'я в Німеччині? Навчись спілкуватися з пацієнтами, лікарями та колегами. Лексика для догляду, ліків та обстежень.",
+    tipsUk: [
+      "Починай з карток для медичних термінів",
+      "У Llama Run відпрацюй артиклі — der Patient, die Spritze, das Medikament",
+      "Складання речень навчить розмовляти з пацієнтами",
+    ],
   },
   truhlar: {
     professionId: "truhlář",
@@ -227,6 +265,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "Fiszki nauczą cię nazw narzędzi i materiałów",
       "W Llama Run ćwicz rodzajniki – der Hobel, die Säge, das Brett",
       "Układanie zdań przygotuje cię na zamówienia i komunikację",
+    ],
+    h1Uk: "Німецька для теслярів",
+    introUk: "Працюєш у столярній майстерні в Німеччині? Вивчи назви порід дерева, інструментів, кріплення і фрази для спілкування з клієнтами.",
+    tipsUk: [
+      "Картки навчать назвам інструментів та матеріалів",
+      "У Llama Run відпрацюй артиклі — der Hobel, die Säge, das Brett",
+      "Складання речень підготує до замовлень та спілкування",
     ],
   },
   instalater: {
@@ -262,6 +307,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "W Llama Run ćwicz rodzajniki – der Hahn, die Leitung, das Ventil",
       "Układanie zdań nauczy cię obsługi klientów",
     ],
+    h1Uk: "Німецька для сантехніків",
+    introUk: "Монтажні роботи в Німеччині? Вивчи лексику для труб, фітингів, опалення та спілкування з клієнтами й колегами.",
+    tipsUk: [
+      "Починай з карток для сантехнічної термінології",
+      "У Llama Run відпрацюй артиклі — der Hahn, die Leitung, das Ventil",
+      "Складання речень навчить роботи з клієнтами",
+    ],
   },
   elektrikar: {
     professionId: "elektrikář",
@@ -295,6 +347,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "Fiszki na materiały elektroinstalacyjne i narzędzia",
       "W Llama Run ćwicz rodzajniki – der Schalter, die Sicherung, das Kabel",
       "Układanie zdań przygotuje cię do komunikacji na budowie",
+    ],
+    h1Uk: "Німецька для електриків",
+    introUk: "Працюєш електриком у Німеччині? Вивчи назви компонентів, інструментів та фрази для безпеки праці.",
+    tipsUk: [
+      "Картки для електромонтажних матеріалів та інструментів",
+      "У Llama Run відпрацюй артиклі — der Schalter, die Sicherung, das Kabel",
+      "Складання речень підготує до спілкування на майданчику",
     ],
   },
   pokladni: {
@@ -330,6 +389,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "W Llama Run ćwicz rodzajniki – der Kassenbon, die Karte, das Wechselgeld",
       "Układanie zdań symuluje rzeczywiste sytuacje przy kasie",
     ],
+    h1Uk: "Німецька для касирів",
+    introUk: "Працюєш на касі в Німеччині? Вивчи фрази для обслуговування клієнтів, повернень, платежів та щоденного спілкування.",
+    tipsUk: [
+      "Картки навчать базових фраз для клієнтів",
+      "У Llama Run відпрацюй артиклі — der Kassenbon, die Karte, das Wechselgeld",
+      "Складання речень симулює реальні ситуації на касі",
+    ],
   },
   uklizecka: {
     professionId: "uklízečka",
@@ -363,6 +429,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "Zacznij od fiszek na środki czyszczące i narzędzia",
       "W Llama Run ćwicz rodzajniki – der Besen, die Seife, das Putzmittel",
       "Układanie zdań nauczy cię rozumieć polecenia",
+    ],
+    h1Uk: "Німецька для прибиральників",
+    introUk: "Працюєш прибиральником/-цею в Німеччині? Вивчи назви засобів та інструментів для прибирання і фрази для спілкування з керівниками.",
+    tipsUk: [
+      "Починай з карток для засобів та інструментів прибирання",
+      "У Llama Run відпрацюй артиклі — der Besen, die Seife, das Putzmittel",
+      "Складання речень навчить розуміти вказівки",
     ],
   },
   kancelar: {
@@ -398,6 +471,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "W Llama Run ćwicz rodzajniki – der Drucker, die Besprechung, das Dokument",
       "Układanie zdań nauczy cię pisać e-maile i prowadzić negocjacje",
     ],
+    h1Uk: "Німецька в офісі",
+    introUk: "Працюєш в офісі в Німеччині? Вивчи фрази для електронних листів, нарад, телефонних дзвінків та спілкування з колегами.",
+    tipsUk: [
+      "Картки для офісної лексики",
+      "У Llama Run відпрацюй артиклі — der Drucker, die Besprechung, das Dokument",
+      "Складання речень навчить писати листи та вести переговори",
+    ],
   },
   zahradnik: {
     professionId: "zahradník",
@@ -431,6 +511,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "Zacznij od fiszek na rośliny i narzędzia ogrodnicze",
       "W Llama Run ćwicz rodzajniki – der Rasen, die Pflanze, das Beet",
       "Układanie zdań przygotuje cię na zlecenia klientów",
+    ],
+    h1Uk: "Німецька для садівників",
+    introUk: "Працюєш у садівництві в Німеччині? Вивчи назви рослин, інструментів та фрази для спілкування з клієнтами й колегами.",
+    tipsUk: [
+      "Починай з карток для рослин та садових інструментів",
+      "У Llama Run відпрацюй артиклі — der Rasen, die Pflanze, das Beet",
+      "Складання речень підготує до замовлень клієнтів",
     ],
   },
   ucitel: {
@@ -466,6 +553,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "W Llama Run ćwicz rodzajniki – der Schüler, die Tafel, das Zeugnis",
       "Układanie zdań nauczy cię komunikować się z rodzicami",
     ],
+    h1Uk: "Німецька для вчителів",
+    introUk: "Викладаєш у Німеччині або плануєш? Вивчи лексику для школи, уроків та спілкування з батьками, учнями й колегами.",
+    tipsUk: [
+      "Картки для шкільної лексики",
+      "У Llama Run відпрацюй артиклі — der Schüler, die Tafel, das Zeugnis",
+      "Складання речень навчить спілкуватися з батьками",
+    ],
   },
   kadernik: {
     professionId: "kadeřník",
@@ -499,6 +593,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "Fiszki nauczą cię nazw zabiegów i narzędzi",
       "W Llama Run ćwicz rodzajniki – der Föhn, die Schere, das Shampoo",
       "Układanie zdań symuluje rozmowę z klientem",
+    ],
+    h1Uk: "Німецька для перукарів",
+    introUk: "Працюєш у перукарні в Німеччині? Вивчи фрази для спілкування з клієнтами — від консультації до оплати.",
+    tipsUk: [
+      "Картки навчать назвам процедур та інструментів",
+      "У Llama Run відпрацюй артиклі — der Föhn, die Schere, das Shampoo",
+      "Складання речень симулює розмову з клієнтом",
     ],
   },
   haseni: {
@@ -534,6 +635,13 @@ const PAGES: Record<string, ProfessionPageData> = {
       "W Llama Run ćwicz rodzajniki – der Feuerlöscher, die Sprinkleranlage, das Löschmittel",
       "Układanie zdań przygotuje cię na szkolenia BHP",
     ],
+    h1Uk: "Німецька для систем пожежогасіння",
+    introUk: "Працюєш із системами пожежогасіння в Німеччині? Вивчи спеціальну термінологію для монтажу, обслуговування та правил безпеки.",
+    tipsUk: [
+      "Починай з карток для протипожежного обладнання",
+      "У Llama Run відпрацюй артиклі — der Feuerlöscher, die Sprinkleranlage, das Löschmittel",
+      "Складання речень підготує до інструктажів з безпеки",
+    ],
   },
 };
 
@@ -548,12 +656,12 @@ const ProfessionLanding = () => {
   const allCards = getAllFlashCards();
   const profCards = allCards.filter(c => c.profession === page.professionId);
   const sentenceCount = FILL_QUESTIONS.filter(q => q.profession === page.professionId).length;
-  const sampleWords = profCards.slice(0, 10).map(v => ({ german: v.german, translation: lang === "ko" ? v.ko : lang === "pl" ? (v.pl ?? v.czech) : lang === "en" ? (v.en ?? v.czech) : v.czech }));
+  const sampleWords = profCards.slice(0, 10).map(v => ({ german: v.german, translation: lang === "ko" ? v.ko : lang === "pl" ? (v.pl ?? v.czech) : lang === "en" ? (v.en ?? v.czech) : lang === "uk" ? (v.uk ?? v.en ?? v.czech) : v.czech }));
   const totalVocab = profCards.length;
 
-  const h1 = lang === "ko" ? page.h1Ko : lang === "en" ? page.h1En : lang === "pl" ? page.h1Pl : page.h1;
-  const intro = lang === "ko" ? page.introKo : lang === "en" ? page.introEn : lang === "pl" ? page.introPl : page.intro;
-  const tips = lang === "ko" ? page.tipsKo : lang === "en" ? page.tipsEn : lang === "pl" ? page.tipsPl : page.tips;
+  const h1 = lang === "ko" ? page.h1Ko : lang === "en" ? page.h1En : lang === "pl" ? page.h1Pl : lang === "uk" ? (page.h1Uk ?? page.h1En) : page.h1;
+  const intro = lang === "ko" ? page.introKo : lang === "en" ? page.introEn : lang === "pl" ? page.introPl : lang === "uk" ? (page.introUk ?? page.introEn) : page.intro;
+  const tips = lang === "ko" ? page.tipsKo : lang === "en" ? page.tipsEn : lang === "pl" ? page.tipsPl : lang === "uk" ? (page.tipsUk ?? page.tipsEn) : page.tips;
 
   const jsonLd = {
     "@context": "https://schema.org",

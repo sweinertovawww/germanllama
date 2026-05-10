@@ -4,23 +4,50 @@ import { translations, type Lang } from "@/i18n/translations";
 interface LanguageContextValue {
   lang: Lang;
   setLang: (l: Lang) => void;
+  targetLanguage: Lang;
+  setTargetLanguage: (l: Lang) => void;
   t: (key: keyof typeof translations.cs, params?: Record<string, string | number>) => string;
 }
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
+function detectBrowserLang(): Lang {
+  const nav = navigator.language.toLowerCase().slice(0, 2);
+  if (nav === "cs") return "cs";
+  if (nav === "pl") return "pl";
+  if (nav === "ko") return "ko";
+  if (nav === "de") return "de";
+  if (nav === "uk") return "uk";
+  return "en";
+}
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLang] = useState<Lang>(() => {
     const urlLang = new URLSearchParams(window.location.search).get("lang") as Lang | null;
-    const initial = urlLang || (localStorage.getItem("gl_lang") as Lang) || "cs";
+    const stored = localStorage.getItem("gl_lang") as Lang | null;
+    const initial = urlLang || stored || detectBrowserLang();
     document.documentElement.lang = initial;
     return initial;
+  });
+
+  const [targetLanguage, setTargetLanguageState] = useState<Lang>(() => {
+    const urlLang = new URLSearchParams(window.location.search).get("lang") as Lang | null;
+    const storedLang = localStorage.getItem("gl_lang") as Lang | null;
+    const currentLang = urlLang || storedLang || detectBrowserLang();
+    const stored = localStorage.getItem("gl_target_lang") as Lang | null;
+    if (stored && stored !== currentLang) return stored;
+    return currentLang === "de" ? "cs" : "de";
   });
 
   const handleSetLang = (l: Lang) => {
     setLang(l);
     localStorage.setItem("gl_lang", l);
     document.documentElement.lang = l;
+    if (targetLanguage === l) {
+      const fallback = l === "de" ? "cs" : "de";
+      setTargetLanguageState(fallback);
+      localStorage.setItem("gl_target_lang", fallback);
+    }
     const params = new URLSearchParams(window.location.search);
     if (l === "cs") {
       params.delete("lang");
@@ -29,6 +56,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
     const query = params.toString();
     history.replaceState(null, "", window.location.pathname + (query ? `?${query}` : ""));
+  };
+
+  const handleSetTargetLanguage = (l: Lang) => {
+    if (l === lang) return;
+    setTargetLanguageState(l);
+    localStorage.setItem("gl_target_lang", l);
   };
 
   const t = (key: keyof typeof translations.cs, params?: Record<string, string | number>): string => {
@@ -42,7 +75,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang: handleSetLang, t }}>
+    <LanguageContext.Provider value={{ lang, setLang: handleSetLang, targetLanguage, setTargetLanguage: handleSetTargetLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );

@@ -37,7 +37,7 @@ type GamePhase = "lobby" | "playing" | "victory";
 export type { TileItem } from "./types";
 
 export default function ScrabbleGame() {
-  const { t } = useLanguage();
+  const { t, targetLanguage, setTargetLanguage } = useLanguage();
   const [phase, setPhase] = useState<GamePhase>("lobby");
   const [selectedProfessions, setSelectedProfessions] = useState<Profession[]>([]);
   const [crossword, setCrossword] = useState<CrosswordData | null>(null);
@@ -515,6 +515,20 @@ export default function ScrabbleGame() {
       });
     }
   }, [cursorCellKey, activeWord]);
+
+  if (targetLanguage !== "de") {
+    return (
+      <div className="flex flex-col items-center gap-4 py-10 px-4 max-w-md mx-auto text-center">
+        <p className="font-body text-muted-foreground text-sm">{t("gameOnlyForDe")}</p>
+        <button
+          onClick={() => setTargetLanguage("de")}
+          className="font-game text-sm px-8 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-md"
+        >
+          {t("switchToGerman")}
+        </button>
+      </div>
+    );
+  }
 
   if (phase === "lobby") {
     return <ScrabbleLobby

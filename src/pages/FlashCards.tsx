@@ -5,6 +5,7 @@ import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { Lang } from "@/i18n/translations";
 
 function shuffleArray<T>(arr: T[]): T[] {
   const shuffled = [...arr];
@@ -15,10 +16,19 @@ function shuffleArray<T>(arr: T[]): T[] {
   return shuffled;
 }
 
+function getCardFace(card: FlashCard, language: Lang): string {
+  if (language === "de") return card.german;
+  if (language === "cs") return card.czech;
+  if (language === "ko") return card.ko;
+  if (language === "pl") return card.pl ?? card.czech;
+  if (language === "uk") return card.uk ?? card.en ?? card.czech;
+  return card.en ?? card.czech;
+}
+
 type Category = "mix" | "nouns" | "sentences";
 
 const FlashCards = () => {
-  const { t, lang } = useLanguage();
+  const { t, lang, targetLanguage } = useLanguage();
   const allCardsRaw = useMemo(() => getAllFlashCards(), []);
   const profFilter = useProfessionFilter();
 
@@ -191,7 +201,7 @@ const FlashCards = () => {
                           className={`font-body font-bold text-foreground text-center break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`}
                           style={{ lineHeight: 1.5, marginBottom: "0.5em" }}
                         >
-                          {card.german}
+                          {getCardFace(card, targetLanguage)}
                         </p>
                         <span className="text-[10px] sm:text-xs font-body text-muted-foreground">
                           {t("clickToFlip")}
@@ -221,7 +231,7 @@ const FlashCards = () => {
                           className={`font-body font-bold text-foreground text-center break-words hyphens-auto ${card.type === "sentence" ? "text-base sm:text-xl" : "text-xl sm:text-3xl"}`}
                           style={{ lineHeight: 1.5, marginBottom: "0.5em" }}
                         >
-                          {lang === "ko" ? card.ko : lang === "pl" ? (card.pl ?? card.czech) : lang === "en" ? (card.en ?? card.czech) : card.czech}
+                          {getCardFace(card, lang)}
                         </p>
                       </div>
                     </div>
