@@ -6,7 +6,6 @@ import { Gamepad2, Layers, Brain, PuzzleIcon, ArrowLeftRight, Grid3X3, Instagram
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
-import LanguageSelector from "@/components/LanguageSelector";
 import type { Lang } from "@/i18n/translations";
 
 const FLAG: Record<Lang, string> = {
@@ -18,12 +17,19 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const { t, lang } = useLanguage();
+  const { t, lang, setLang } = useLanguage();
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
   const [visitDate, setVisitDate] = useState<string>("");
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [langSelectorOpen, setLangSelectorOpen] = useState(false);
+
+  const NATIVE_LANGS: { code: Lang; flag: string }[] = [
+    { code: "cs", flag: "🇨🇿" },
+    { code: "en", flag: "🇬🇧" },
+    { code: "pl", flag: "🇵🇱" },
+    { code: "ko", flag: "🇰🇷" },
+    { code: "uk", flag: "🇺🇦" },
+  ];
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -133,27 +139,40 @@ const Layout = ({ children }: LayoutProps) => {
                   {t("contact")}
                 </button>
               </div>
-              <button
-                onClick={() => setLangSelectorOpen(true)}
-                className="flex items-center gap-1.5 bg-muted rounded-xl px-3 py-1.5 border border-border shrink-0 hover:border-primary/50 hover:bg-muted/80 transition-all"
-                title={t("changeLangs")}
-              >
-                <span className="text-base leading-none">{FLAG[lang]}</span>
-                <span className="font-body text-[10px] text-muted-foreground">→</span>
-                <span className="text-base leading-none">🇩🇪</span>
-              </button>
+              <div className="flex items-center gap-1 shrink-0">
+                {NATIVE_LANGS.map(({ code, flag }) => (
+                  <button
+                    key={code}
+                    onClick={() => setLang(code)}
+                    title={FLAG[code]}
+                    className={`text-base leading-none px-1.5 py-1 rounded-lg transition-all ${
+                      lang === code
+                        ? "bg-primary/15 ring-1 ring-primary/40"
+                        : "opacity-50 hover:opacity-90 hover:bg-muted"
+                    }`}
+                  >
+                    {flag}
+                  </button>
+                ))}
+              </div>
             </div>
             {/* Mobile: flag-only lang switcher + hamburger */}
             <div className="md:hidden flex items-center gap-2">
-              <button
-                onClick={() => setLangSelectorOpen(true)}
-                className="flex items-center gap-1 bg-muted rounded-xl px-2 py-1 border border-border hover:border-primary/50 transition-all"
-                title={t("changeLangs")}
-              >
-                <span className="text-sm leading-none">{FLAG[lang]}</span>
-                <span className="font-body text-[9px] text-muted-foreground">→</span>
-                <span className="text-sm leading-none">🇩🇪</span>
-              </button>
+              <div className="flex items-center gap-0.5">
+                {NATIVE_LANGS.map(({ code, flag }) => (
+                  <button
+                    key={code}
+                    onClick={() => setLang(code)}
+                    className={`text-sm leading-none px-1 py-1 rounded-lg transition-all ${
+                      lang === code
+                        ? "bg-primary/15 ring-1 ring-primary/40"
+                        : "opacity-50 hover:opacity-90 hover:bg-muted"
+                    }`}
+                  >
+                    {flag}
+                  </button>
+                ))}
+              </div>
               <button
                 onClick={() => setMobileMenuOpen((o) => !o)}
                 className="p-1.5 rounded-lg text-foreground/70 hover:text-primary hover:bg-muted transition-all"
@@ -252,11 +271,6 @@ const Layout = ({ children }: LayoutProps) => {
       <main className="flex-1">
         {children}
       </main>
-
-      {/* Language selector modal */}
-      {langSelectorOpen && (
-        <LanguageSelector mode="modal" onClose={() => setLangSelectorOpen(false)} />
-      )}
 
       {/* Privacy Modal */}
       <Dialog open={privacyOpen} onOpenChange={setPrivacyOpen}>
