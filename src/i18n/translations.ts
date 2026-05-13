@@ -323,7 +323,7 @@ const cs = {
   challengeName: "GermanLlama Challenge",
   challengeDesc: "Všechny hry v jednom!",
   challengeIntroTitle: "GermanLlama Challenge",
-  challengeIntroText: "Zahraj si všechny hry za sebou. Kumuluj body — jedno sezení, žádné ukládání.",
+  challengeIntroText: "Zahraj si všechny hry za sebou a sbírej body. Jedno sezení — bez ukládání.",
   challengeStart: "Zahájit Challenge",
   challengeNextGame: "Další hra:",
   challengeCurrentScore: "Průběžné skóre:",
@@ -2018,7 +2018,7 @@ const uk: typeof cs = {
   challengeGameBreakdown: "Результати ігор",
   challengePlayAgain: "Грати знову",
   shareChallenge: "Я набрав/ла {score} балів у GermanLlama Challenge! 🦙 germanllama.com",
-  challengeTimeLeft: "Залишилось: {s}s",
+  challengeTimeLeft: "Залишилось: {s}с",
   challengeGameOf: "Гра {n} з {total}",
 };
 
