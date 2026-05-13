@@ -318,6 +318,23 @@ const cs = {
   langNameUk: "Ukrajinština",
   gameOnlyForDe: "Tato hra je dostupná pouze pro výuku němčiny.",
   switchToGerman: "Přepnout na výuku němčiny",
+
+  // Challenge mode
+  challengeName: "GermanLlama Challenge",
+  challengeDesc: "Všechny hry v jednom!",
+  challengeIntroTitle: "GermanLlama Challenge",
+  challengeIntroText: "Zahraj si všechny hry za sebou. Kumuluj body — jedno sezení, žádné ukládání.",
+  challengeStart: "Zahájit Challenge",
+  challengeNextGame: "Další hra:",
+  challengeCurrentScore: "Průběžné skóre:",
+  challengeContinue: "Pokračovat →",
+  challengeComplete: "🦙 Challenge dokončena!",
+  challengeTotalScore: "Celkové skóre",
+  challengeGameBreakdown: "Výsledky her",
+  challengePlayAgain: "Hrát znovu",
+  shareChallenge: "Získal/a jsem {score} bodů v GermanLlama Challenge! 🦙 germanllama.com",
+  challengeTimeLeft: "Zbývá: {s}s",
+  challengeGameOf: "Hra {n} z {total}",
 } as const;
 
 const ko: typeof cs = {
@@ -638,6 +655,23 @@ const ko: typeof cs = {
   langNameUk: "우크라이나어",
   gameOnlyForDe: "이 게임은 독일어 학습용으로만 제공됩니다.",
   switchToGerman: "독일어 학습으로 전환",
+
+  // Challenge mode
+  challengeName: "GermanLlama Challenge",
+  challengeDesc: "모든 게임 한번에!",
+  challengeIntroTitle: "GermanLlama Challenge",
+  challengeIntroText: "모든 게임을 연속으로 플레이하세요. 점수를 누적하세요 — 한 세션, 저장 없음.",
+  challengeStart: "챌린지 시작",
+  challengeNextGame: "다음 게임:",
+  challengeCurrentScore: "현재 점수:",
+  challengeContinue: "계속 →",
+  challengeComplete: "🦙 챌린지 완료!",
+  challengeTotalScore: "총 점수",
+  challengeGameBreakdown: "게임별 결과",
+  challengePlayAgain: "다시 플레이",
+  shareChallenge: "{score}점을 획득했어요 — GermanLlama Challenge! 🦙 germanllama.com",
+  challengeTimeLeft: "남은 시간: {s}초",
+  challengeGameOf: "{n}/{total} 게임",
 };
 
 const en: typeof cs = {
@@ -958,6 +992,23 @@ const en: typeof cs = {
   langNameUk: "Ukrainian",
   gameOnlyForDe: "This game is only available for learning German.",
   switchToGerman: "Switch to learning German",
+
+  // Challenge mode
+  challengeName: "GermanLlama Challenge",
+  challengeDesc: "All games in one!",
+  challengeIntroTitle: "GermanLlama Challenge",
+  challengeIntroText: "Play all games in a row. Accumulate points — one session, no saving.",
+  challengeStart: "Start Challenge",
+  challengeNextGame: "Next game:",
+  challengeCurrentScore: "Current score:",
+  challengeContinue: "Continue →",
+  challengeComplete: "🦙 Challenge Complete!",
+  challengeTotalScore: "Total score",
+  challengeGameBreakdown: "Game breakdown",
+  challengePlayAgain: "Play again",
+  shareChallenge: "I scored {score} points in the GermanLlama Challenge! 🦙 germanllama.com",
+  challengeTimeLeft: "Time left: {s}s",
+  challengeGameOf: "Game {n} of {total}",
 };
 
 const pl: typeof cs = {
@@ -1278,6 +1329,23 @@ const pl: typeof cs = {
   langNameUk: "Ukraiński",
   gameOnlyForDe: "Ta gra jest dostępna tylko do nauki języka niemieckiego.",
   switchToGerman: "Przełącz na naukę niemieckiego",
+
+  // Challenge mode
+  challengeName: "GermanLlama Challenge",
+  challengeDesc: "Wszystkie gry w jednym!",
+  challengeIntroTitle: "GermanLlama Challenge",
+  challengeIntroText: "Zagraj we wszystkie gry z rzędu. Zbieraj punkty — jedna sesja, bez zapisywania.",
+  challengeStart: "Rozpocznij Challenge",
+  challengeNextGame: "Następna gra:",
+  challengeCurrentScore: "Aktualny wynik:",
+  challengeContinue: "Kontynuuj →",
+  challengeComplete: "🦙 Challenge ukończony!",
+  challengeTotalScore: "Łączny wynik",
+  challengeGameBreakdown: "Wyniki gier",
+  challengePlayAgain: "Zagraj ponownie",
+  shareChallenge: "Zdobyłem/am {score} punktów w GermanLlama Challenge! 🦙 germanllama.com",
+  challengeTimeLeft: "Pozostało: {s}s",
+  challengeGameOf: "Gra {n} z {total}",
 };
 
 const de: typeof cs = {
@@ -1598,6 +1666,23 @@ const de: typeof cs = {
   langNameUk: "Ukrainisch",
   gameOnlyForDe: "Dieses Spiel ist nur für Deutsch als Lernsprache verfügbar.",
   switchToGerman: "Auf Deutsch-Lernen umschalten",
+
+  // Challenge mode
+  challengeName: "GermanLlama Challenge",
+  challengeDesc: "Alle Spiele auf einmal!",
+  challengeIntroTitle: "GermanLlama Challenge",
+  challengeIntroText: "Spiele alle Spiele hintereinander. Sammle Punkte — eine Sitzung, kein Speichern.",
+  challengeStart: "Challenge starten",
+  challengeNextGame: "Nächstes Spiel:",
+  challengeCurrentScore: "Aktueller Punktestand:",
+  challengeContinue: "Weiter →",
+  challengeComplete: "🦙 Challenge abgeschlossen!",
+  challengeTotalScore: "Gesamtpunktzahl",
+  challengeGameBreakdown: "Spielergebnisse",
+  challengePlayAgain: "Nochmal spielen",
+  shareChallenge: "Ich habe {score} Punkte im GermanLlama Challenge erzielt! 🦙 germanllama.com",
+  challengeTimeLeft: "Verbleibend: {s}s",
+  challengeGameOf: "Spiel {n} von {total}",
 };
 
 const uk: typeof cs = {
@@ -1918,6 +2003,23 @@ const uk: typeof cs = {
   langNameUk: "Українська",
   gameOnlyForDe: "Ця гра доступна лише для вивчення німецької.",
   switchToGerman: "Перейти до вивчення німецької",
+
+  // Challenge mode
+  challengeName: "GermanLlama Challenge",
+  challengeDesc: "Усі ігри разом!",
+  challengeIntroTitle: "GermanLlama Challenge",
+  challengeIntroText: "Зіграй у всі ігри поспіль. Накопичуй очки — один сеанс, без збереження.",
+  challengeStart: "Розпочати Challenge",
+  challengeNextGame: "Наступна гра:",
+  challengeCurrentScore: "Поточний рахунок:",
+  challengeContinue: "Продовжити →",
+  challengeComplete: "🦙 Challenge завершено!",
+  challengeTotalScore: "Загальний рахунок",
+  challengeGameBreakdown: "Результати ігор",
+  challengePlayAgain: "Грати знову",
+  shareChallenge: "Я набрав/ла {score} балів у GermanLlama Challenge! 🦙 germanllama.com",
+  challengeTimeLeft: "Залишилось: {s}s",
+  challengeGameOf: "Гра {n} з {total}",
 };
 
 export const translations: Record<Lang, typeof cs> = { cs, ko, en, pl, de, uk };

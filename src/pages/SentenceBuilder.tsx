@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useRef } from "react";
+import React, { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { FILL_QUESTIONS, filterByProfession } from "@/game/vocabularyData";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
@@ -160,7 +160,12 @@ function DroppableSlot({
   );
 }
 
-const SentenceBuilder = () => {
+interface SentenceBuilderProps {
+  onGameComplete?: (score: number) => void;
+  challengeMode?: boolean;
+}
+
+const SentenceBuilder = ({ onGameComplete, challengeMode = false }: SentenceBuilderProps) => {
   const isMobile = useIsMobile();
   const { t, lang } = useLanguage();
   const profFilter = useProfessionFilter();
@@ -181,9 +186,9 @@ const SentenceBuilder = () => {
     } catch { return null; }
   };
 
-  const saved = useRef(loadSaved());
+  const saved = useRef(challengeMode ? null : loadSaved());
 
-  const [inLobby, setInLobby] = useState(!saved.current);
+  const [inLobby, setInLobby] = useState(challengeMode ? false : !saved.current);
   const [pairs, setPairs] = useState<SentencePair[]>(saved.current?.pairs ?? []);
   const [score, setScore] = useState(saved.current?.score ?? 0);
   const [totalScore, setTotalScore] = useState(saved.current?.totalScore ?? 0);
@@ -193,14 +198,15 @@ const SentenceBuilder = () => {
   const [overSlotId, setOverSlotId] = useState<string | null>(null);
   const [selectedEndId, setSelectedEndId] = useState<number | null>(null);
 
-  // Persist game state on every meaningful change
+  // Persist game state on every meaningful change (skip in challenge mode)
   React.useEffect(() => {
+    if (challengeMode) return;
     if (inLobby || pairs.length === 0) {
       localStorage.removeItem(STORAGE_KEY);
       return;
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ pairs, score, totalScore, completedRounds }));
-  }, [inLobby, pairs, score, totalScore, completedRounds]);
+  }, [inLobby, pairs, score, totalScore, completedRounds, challengeMode]);
 
   // Queue-based approach: a ref holds a pre-shuffled queue of all sentences.
   const queueRef = useRef<typeof FILL_QUESTIONS>([]);
@@ -319,6 +325,26 @@ const SentenceBuilder = () => {
     const id = parseInt(activeDragId.replace("end-", ""));
     return pairs.find((p) => p.id === id)?.end ?? "";
   }, [activeDragId, pairs]);
+
+  const completionCalledRef = useRef(false);
+
+  // Challenge: auto-start without lobby
+  useEffect(() => {
+    if (!challengeMode) return;
+    startGame();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Challenge: fire onGameComplete when round is complete
+  useEffect(() => {
+    if (!challengeMode || !allMatched) return;
+    if (completionCalledRef.current) return;
+    completionCalledRef.current = true;
+    const challengeScore = score * 20;
+    const timer = setTimeout(() => onGameComplete?.(challengeScore), 1500);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allMatched]);
 
 
 
@@ -476,51 +502,58 @@ const SentenceBuilder = () => {
               </div>
 
               {/* Sparkle share section */}
-              <div className="flex flex-col items-center gap-3">
-                <span className="font-game text-[10px] sm:text-xs text-foreground">{t("shareBoast")}</span>
-                <div className="relative">
-                  {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
-                    const rad = (angle * Math.PI) / 180;
-                    const x = Math.cos(rad) * 38;
-                    const y = Math.sin(rad) * 38;
-                    return (
-                      <span
-                        key={i}
-                        className="absolute left-1/2 top-1/2 text-xs pointer-events-none"
-                        style={{
-                          ["--sp-x" as string]: `${x}px`,
-                          ["--sp-y" as string]: `${y}px`,
-                          animation: `sparkle-burst 1.6s ease-in-out ${(i * 0.2).toFixed(1)}s infinite`,
-                        }}
-                      >
-                        ✨
-                      </span>
-                    );
-                  })}
+              {!challengeMode && (
+                <div className="flex flex-col items-center gap-3">
+                  <span className="font-game text-[10px] sm:text-xs text-foreground">{t("shareBoast")}</span>
+                  <div className="relative">
+                    {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
+                      const rad = (angle * Math.PI) / 180;
+                      const x = Math.cos(rad) * 38;
+                      const y = Math.sin(rad) * 38;
+                      return (
+                        <span
+                          key={i}
+                          className="absolute left-1/2 top-1/2 text-xs pointer-events-none"
+                          style={{
+                            ["--sp-x" as string]: `${x}px`,
+                            ["--sp-y" as string]: `${y}px`,
+                            animation: `sparkle-burst 1.6s ease-in-out ${(i * 0.2).toFixed(1)}s infinite`,
+                          }}
+                        >
+                          ✨
+                        </span>
+                      );
+                    })}
+                    <button
+                      onClick={handleCopy}
+                      className="relative z-10 flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
+                    >
+                      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      {copied ? t("copied") : t("copy")}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {!challengeMode && (
+                <div className="flex items-center justify-center gap-3 flex-wrap">
                   <button
-                    onClick={handleCopy}
-                    className="relative z-10 flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
+                    onClick={handleNextRound}
+                    className="font-game text-xs px-6 py-3 rounded-xl bg-accent text-accent-foreground hover:scale-105 transition-transform shadow-md"
                   >
-                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    {copied ? t("copied") : t("copy")}
+                    {t("nextSentences")}
+                  </button>
+                  <button
+                    onClick={goToLobby}
+                    className="font-game text-xs border-2 border-border text-muted-foreground px-5 py-2.5 rounded-xl hover:border-primary/50 hover:text-foreground transition-colors"
+                  >
+                    {t("changeField")}
                   </button>
                 </div>
-              </div>
-
-              <div className="flex items-center justify-center gap-3 flex-wrap">
-                <button
-                  onClick={handleNextRound}
-                  className="font-game text-xs px-6 py-3 rounded-xl bg-accent text-accent-foreground hover:scale-105 transition-transform shadow-md"
-                >
-                  {t("nextSentences")}
-                </button>
-                <button
-                  onClick={goToLobby}
-                  className="font-game text-xs border-2 border-border text-muted-foreground px-5 py-2.5 rounded-xl hover:border-primary/50 hover:text-foreground transition-colors"
-                >
-                  {t("changeField")}
-                </button>
-              </div>
+              )}
+              {challengeMode && (
+                <p className="font-game text-xs text-muted-foreground">⏳ {t("challengeNextGame")} ...</p>
+              )}
             </div>
           )}
         </div>

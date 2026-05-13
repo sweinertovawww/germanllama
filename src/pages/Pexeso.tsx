@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from "react";
+import React, { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { getAllFlashCards, FlashCard, filterByProfession } from "@/game/vocabularyData";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import { Brain, RotateCcw, Trophy, Skull, Copy, Check, ArrowLeft } from "lucide-react";
@@ -80,13 +80,18 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
   return shuffleArray(memoryCards);
 }
 
-const Pexeso = () => {
+interface PexesoProps {
+  onGameComplete?: (score: number) => void;
+  challengeMode?: boolean;
+}
+
+const Pexeso = ({ onGameComplete, challengeMode = false }: PexesoProps) => {
   const { t, lang, targetLanguage } = useLanguage();
   const isMobile = useIsMobile();
   const pairCount = 5;
   const profFilter = useProfessionFilter();
 
-  const [inLobby, setInLobby] = useState(true);
+  const [inLobby, setInLobby] = useState(!challengeMode);
   const [cards, setCards] = useState<MemoryCard[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
   const [checking, setChecking] = useState(false);
@@ -98,6 +103,26 @@ const Pexeso = () => {
 
   const matchedCount = useMemo(() => cards.filter((c) => c.matched).length / 2, [cards]);
   const totalPairs = useMemo(() => new Set(cards.map((c) => c.pairId)).size, [cards]);
+
+  const completionCalledRef = useRef(false);
+
+  // Challenge: auto-start without lobby
+  useEffect(() => {
+    if (!challengeMode) return;
+    startGame();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Challenge: fire onGameComplete when round ends
+  useEffect(() => {
+    if (!challengeMode || (!won && !gameOver)) return;
+    if (completionCalledRef.current) return;
+    completionCalledRef.current = true;
+    const challengeScore = Math.round(matchedCount) * 20;
+    const timer = setTimeout(() => onGameComplete?.(challengeScore), 1500);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [won, gameOver]);
 
   const startGame = useCallback(() => {
     setCards(buildCards(pairCount, profFilter.selected, lang, targetLanguage));
@@ -263,30 +288,35 @@ const Pexeso = () => {
                       {t("completedGamesLabel")}: {completedGames}
                     </p>
                   )}
-                  <div className="flex items-center justify-center gap-3 flex-wrap">
-                    <button
-                      onClick={() => {
-                        if (won) {
-                          setTotalMatchedPairs((prev) => prev + totalPairs);
-                          setCompletedGames((prev) => prev + 1);
-                        }
-                        resetGame();
-                      }}
-                      className="font-game text-xs sm:text-sm bg-primary text-primary-foreground px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors"
-                    >
-                      {won ? t("nextGame") : t("tryAgain")}
-                    </button>
-                    <button
-                      onClick={goToLobby}
-                      className="font-game text-xs sm:text-sm border-2 border-border text-muted-foreground px-5 py-2.5 rounded-xl hover:border-primary/50 hover:text-foreground transition-colors"
-                    >
-                      {t("changeField")}
-                    </button>
-                  </div>
+                  {!challengeMode && (
+                    <div className="flex items-center justify-center gap-3 flex-wrap">
+                      <button
+                        onClick={() => {
+                          if (won) {
+                            setTotalMatchedPairs((prev) => prev + totalPairs);
+                            setCompletedGames((prev) => prev + 1);
+                          }
+                          resetGame();
+                        }}
+                        className="font-game text-xs sm:text-sm bg-primary text-primary-foreground px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors"
+                      >
+                        {won ? t("nextGame") : t("tryAgain")}
+                      </button>
+                      <button
+                        onClick={goToLobby}
+                        className="font-game text-xs sm:text-sm border-2 border-border text-muted-foreground px-5 py-2.5 rounded-xl hover:border-primary/50 hover:text-foreground transition-colors"
+                      >
+                        {t("changeField")}
+                      </button>
+                    </div>
+                  )}
+                  {challengeMode && (
+                    <p className="font-game text-xs text-muted-foreground mt-2">⏳ {t("challengeNextGame")} ...</p>
+                  )}
                 </div>
 
                 {/* Share section */}
-                {won && (
+                {won && !challengeMode && (
                   <div className="bg-share-bg rounded-2xl shadow-lg p-6 w-full max-w-xs flex flex-col items-center gap-3 relative overflow-hidden">
                     {Array.from({ length: 20 }).map((_, i) => {
                       const left = Math.random() * 100;

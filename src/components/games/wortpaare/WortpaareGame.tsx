@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useWortpaare } from "@/hooks/useWortpaare";
 import WordCard from "./WordCard";
 import MatchedPair from "./MatchedPair";
@@ -6,10 +6,28 @@ import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import { RotateCcw, Copy, Check } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const WortpaareGame: React.FC = () => {
+interface WortpaareGameProps {
+  onGameComplete?: (score: number) => void;
+  challengeMode?: boolean;
+}
+
+const WortpaareGame: React.FC<WortpaareGameProps> = ({ onGameComplete, challengeMode = false }) => {
   const { t } = useLanguage();
   const { cards, matched, selected, shaking, loading, completed, selectCard, startGame } = useWortpaare(6);
   const [copied, setCopied] = useState(false);
+
+  const completionCalledRef = useRef(false);
+
+  // Challenge: fire onGameComplete when all pairs matched
+  useEffect(() => {
+    if (!challengeMode || !completed) return;
+    if (completionCalledRef.current) return;
+    completionCalledRef.current = true;
+    const challengeScore = matched.length * 15;
+    const timer = setTimeout(() => onGameComplete?.(challengeScore), 1500);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [completed]);
 
   const handleShare = () => {
     const text = t("shareWortpaare", { pairs: String(matched.length) });
@@ -52,23 +70,30 @@ const WortpaareGame: React.FC = () => {
           <p className="font-body text-muted-foreground text-center">
             {t("allPairsCorrect")}
           </p>
-          <div className="flex flex-col items-center gap-3">
-            <p className="font-game text-sm text-foreground">{t("shareBoast")}</p>
+          {!challengeMode && (
+            <div className="flex flex-col items-center gap-3">
+              <p className="font-game text-sm text-foreground">{t("shareBoast")}</p>
+              <button
+                onClick={handleShare}
+                className="flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copied ? t("copied") : t("copy")}
+              </button>
+            </div>
+          )}
+          {!challengeMode && (
             <button
-              onClick={handleShare}
-              className="flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
+              onClick={startGame}
+              className="inline-flex items-center gap-2 bg-muted border border-border text-foreground font-body font-bold px-6 py-3 rounded-xl hover:bg-muted/80 transition-colors"
             >
-              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              {copied ? t("copied") : t("copy")}
+              <RotateCcw className="w-4 h-4" />
+              {t("playAgain")}
             </button>
-          </div>
-          <button
-            onClick={startGame}
-            className="inline-flex items-center gap-2 bg-muted border border-border text-foreground font-body font-bold px-6 py-3 rounded-xl hover:bg-muted/80 transition-colors"
-          >
-            <RotateCcw className="w-4 h-4" />
-            {t("playAgain")}
-          </button>
+          )}
+          {challengeMode && (
+            <p className="font-game text-xs text-muted-foreground">⏳ {t("challengeNextGame")} ...</p>
+          )}
 
           {/* Show all matched pairs */}
           <div className="w-full space-y-2 mt-4">

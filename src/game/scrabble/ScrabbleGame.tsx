@@ -36,7 +36,13 @@ type GamePhase = "lobby" | "playing" | "victory";
 
 export type { TileItem } from "./types";
 
-export default function ScrabbleGame() {
+interface ScrabbleGameProps {
+  onGameComplete?: (score: number) => void;
+  challengeMode?: boolean;
+  initialProfession?: Profession[];
+}
+
+export default function ScrabbleGame({ onGameComplete, challengeMode = false, initialProfession }: ScrabbleGameProps) {
   const { t } = useLanguage();
   const [phase, setPhase] = useState<GamePhase>("lobby");
   const [selectedProfessions, setSelectedProfessions] = useState<Profession[]>([]);
@@ -70,6 +76,41 @@ export default function ScrabbleGame() {
   const setCellRef = useCallback((key: string, el: HTMLDivElement | null) => {
     cellRefsMap.current[key] = el;
   }, []);
+
+  const completionCalledRef = useRef(false);
+
+  // Challenge: auto-start with given profession
+  useEffect(() => {
+    if (!initialProfession) return;
+    const profs = initialProfession;
+    const words = getWordsForProfession(profs);
+    if (words.length < 3) return;
+    const cw = generateCrossword(words, 7);
+    if (cw.placed.length < 2) return;
+    setCrossword(cw);
+    setFilledCells({});
+    setPendingCells({});
+    setPendingTileIds({});
+    setCompletedWords(new Set());
+    setSelectedTile(null);
+    setActiveWordNum(null);
+    setCursorPos(0);
+    setTilePool(buildTilePool(cw));
+    setSelectedProfessions(profs);
+    setPhase("playing");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Challenge: fire onGameComplete on victory
+  useEffect(() => {
+    if (!challengeMode || phase !== "victory") return;
+    if (completionCalledRef.current) return;
+    completionCalledRef.current = true;
+    const challengeScore = completedWords.size * 10;
+    const timer = setTimeout(() => onGameComplete?.(challengeScore), 1500);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
 
   const toggleProfession = useCallback((p: Profession) => {
     setSelectedProfessions(prev =>
@@ -530,6 +571,17 @@ export default function ScrabbleGame() {
   }
 
   if (phase === "victory" && crossword) {
+    if (challengeMode) {
+      return (
+        <div className="max-w-md mx-auto text-center py-12 px-4">
+          <h2 className="font-game text-2xl sm:text-3xl text-primary mb-4">{t("scrabbleVictoryTitle")}</h2>
+          <p className="font-body text-foreground text-lg mb-4">
+            {t("scrabbleVictoryText", { n: crossword.placed.length, total: crossword.placed.length })}
+          </p>
+          <p className="font-game text-sm text-muted-foreground">⏳ {t("challengeNextGame")} ...</p>
+        </div>
+      );
+    }
     const handleShare = () => {
       const text = t("shareScrabble", { n: String(crossword.placed.length) });
       if (navigator.share) {

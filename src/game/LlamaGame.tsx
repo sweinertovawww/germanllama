@@ -453,10 +453,16 @@ const saveToLeaderboardDB = async (name: string, score: number) => {
 
 const isMobileDevice = () => window.innerWidth < 768;
 
-const LlamaGame = () => {
+interface LlamaGameProps {
+  onGameComplete?: (score: number) => void;
+  challengeMode?: boolean;
+  timeLimitSeconds?: number;
+}
+
+const LlamaGame = ({ onGameComplete, challengeMode = false, timeLimitSeconds }: LlamaGameProps) => {
   const { t, lang } = useLanguage();
   const profFilter = useProfessionFilter();
-  const [inLobby, setInLobby] = useState(true);
+  const [inLobby, setInLobby] = useState(!challengeMode);
   const [nameEntry, setNameEntry] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const filteredQuestions = useMemo(() => {
@@ -494,6 +500,21 @@ const LlamaGame = () => {
   const translationInputRef = useRef<HTMLInputElement>(null);
   const fillInputRef = useRef<HTMLInputElement>(null);
   const playerNameRef = useRef("");
+
+  // Challenge mode refs — kept stable across re-renders for use inside game loop
+  const challengeModeRef = useRef(challengeMode);
+  const timeLimitRef = useRef(timeLimitSeconds);
+  const onGameCompleteRef = useRef(onGameComplete);
+  const challengeStartTimeRef = useRef<number | null>(null);
+  const finalScoreRef = useRef(0);
+  const completionCalledRef = useRef(false);
+  const [remainingSeconds, setRemainingSeconds] = useState<number | null>(
+    challengeMode && timeLimitSeconds ? timeLimitSeconds : null
+  );
+
+  useEffect(() => { challengeModeRef.current = challengeMode; }, [challengeMode]);
+  useEffect(() => { timeLimitRef.current = timeLimitSeconds; }, [timeLimitSeconds]);
+  useEffect(() => { onGameCompleteRef.current = onGameComplete; }, [onGameComplete]);
 
   const gameRef = useRef({
     llamaY: GROUND_Y,
@@ -896,6 +917,18 @@ const LlamaGame = () => {
         }
       }
 
+      // Time limit check (challenge mode)
+      if (timeLimitRef.current && challengeStartTimeRef.current && !completionCalledRef.current) {
+        const elapsed = (Date.now() - challengeStartTimeRef.current) / 1000;
+        if (elapsed >= timeLimitRef.current) {
+          completionCalledRef.current = true;
+          finalScoreRef.current = g.score;
+          onGameCompleteRef.current?.(g.score);
+          setGameState("over");
+          return;
+        }
+      }
+
       // Wolf collision - llama must jump on top to kill, otherwise game over
       for (const w of g.wolves) {
         if (!w.alive) continue;
@@ -919,7 +952,17 @@ const LlamaGame = () => {
             saveDailyScore(playerNameRef.current, g.score);
             setDailyBest(getDailyBest());
           } else {
-            // Wolf hit llama from side = game over, lose all points
+            // Wolf hit llama from side
+            if (challengeModeRef.current) {
+              // Challenge: don't zero score, just complete the game
+              if (!completionCalledRef.current) {
+                completionCalledRef.current = true;
+                finalScoreRef.current = g.score;
+                onGameCompleteRef.current?.(g.score);
+              }
+              setGameState("over");
+              return;
+            }
             g.score = 0;
             setScore(0);
             fetchLeaderboard().then(setLeaderboard);
@@ -1028,6 +1071,48 @@ const LlamaGame = () => {
     setScore(0);
     setGameState("idle");
   }, []);
+
+  // Challenge: auto-start with all questions, no lobby or name entry
+  useEffect(() => {
+    if (!challengeMode) return;
+    playerNameRef.current = "GermanLlama";
+    const g = gameRef.current;
+    g.llamaY = GROUND_Y;
+    g.velocityY = 0;
+    g.isJumping = false;
+    g.obstacles = [];
+    g.stars = [];
+    g.sombreros = [];
+    g.wolves = [];
+    g.starTimer = 0;
+    g.sombreroTimer = 0;
+    g.wolfTimer = 0;
+    g.frameCount = 0;
+    g.speed = GAME_SPEED_INITIAL;
+    g.score = 0;
+    g.groundOffset = 0;
+    questionIndexRef.current = 0;
+    fillIndexRef.current = 0;
+    const lamaQ = QUESTIONS.find(q => q.text.includes("Lama"));
+    const rest = QUESTIONS.filter(q => !q.text.includes("Lama")).sort(() => Math.random() - 0.5);
+    shuffledQuestionsRef.current = lamaQ ? [lamaQ, ...rest] : rest;
+    shuffledFillRef.current = [...FILL_QUESTIONS].sort(() => Math.random() - 0.5);
+    setScore(0);
+    challengeStartTimeRef.current = Date.now();
+    setGameState("playing");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Challenge: countdown timer display
+  useEffect(() => {
+    if (!challengeMode || !timeLimitSeconds) return;
+    const interval = setInterval(() => {
+      if (!challengeStartTimeRef.current) return;
+      const elapsed = (Date.now() - challengeStartTimeRef.current) / 1000;
+      setRemainingSeconds(Math.max(0, Math.ceil(timeLimitSeconds - elapsed)));
+    }, 500);
+    return () => clearInterval(interval);
+  }, [challengeMode, timeLimitSeconds]);
 
 
 
@@ -1233,7 +1318,16 @@ const LlamaGame = () => {
           </div>
         )}
         {/* Game Over overlay */}
-        {gameState === "over" && (
+        {gameState === "over" && challengeMode && (
+          <div className="absolute inset-0 flex items-center justify-center z-30 animate-fade-in">
+            <div className="absolute inset-0 bg-foreground/60" />
+            <div className="relative z-10 bg-card/95 rounded-2xl p-6 text-center border-2 border-primary mx-4">
+              <p className="font-game text-sm text-foreground mb-2">{t("gameOverText")}</p>
+              <p className="font-game text-xs text-muted-foreground">⏳ {t("challengeNextGame")} ...</p>
+            </div>
+          </div>
+        )}
+        {gameState === "over" && !challengeMode && (
           <div className="absolute inset-0 flex items-center justify-center z-30 animate-fade-in">
             <div className="absolute inset-0 bg-foreground/60 animate-game-over-flash" />
             <div className="relative z-10 flex flex-col items-center gap-3 sm:gap-4 bg-card/95 rounded-2xl p-4 sm:p-8 shadow-2xl border-2 border-primary mx-4 animate-scale-in max-w-[90%]">
@@ -1277,13 +1371,20 @@ const LlamaGame = () => {
 
       {!inLobby && gameState !== "over" && (
         <div className="flex flex-col items-center gap-2">
+          {challengeMode && remainingSeconds !== null && (
+            <div className="font-game text-sm text-foreground">
+              {t("challengeTimeLeft", { s: String(remainingSeconds) })}
+            </div>
+          )}
           <div className="flex gap-4 sm:gap-8 font-game text-xs sm:text-sm">
             <span className="text-muted-foreground">
               {t("scoreLabel")}: <span className="text-foreground">{score}</span>
             </span>
-            <span className="text-muted-foreground">
-              {t("bestLabel")}: <span className="text-primary">{highScore}</span>
-            </span>
+            {!challengeMode && (
+              <span className="text-muted-foreground">
+                {t("bestLabel")}: <span className="text-primary">{highScore}</span>
+              </span>
+            )}
           </div>
           <div className="flex gap-4 sm:gap-6 font-game text-xs items-center">
             <span className="text-muted-foreground">
@@ -1304,7 +1405,7 @@ const LlamaGame = () => {
         </div>
       )}
 
-      {!inLobby && gameState === "over" && score > 0 && (
+      {!inLobby && gameState === "over" && score > 0 && !challengeMode && (
         <ShareButtons score={score} level={level} />
       )}
 
@@ -1325,7 +1426,7 @@ const LlamaGame = () => {
         <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">SPACE</kbd> {t("forJump")}
       </p>
 
-      <div className="w-full max-w-xs mt-2">
+      {!challengeMode && <div className="w-full max-w-xs mt-2">
           <h3 className="font-game text-xs text-center text-primary mb-2">{t("globalTop10")}</h3>
           <table className="w-full text-xs font-game">
             <thead>
@@ -1348,7 +1449,7 @@ const LlamaGame = () => {
               })}
             </tbody>
           </table>
-        </div>
+        </div>}
 
       </>
       )}

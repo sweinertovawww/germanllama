@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import NemcinaDoPrice from "./pages/NemcinaDoPrice";
 import Wortpaare from "./pages/Wortpaare";
 import Scrabble from "./pages/Scrabble";
+import Challenge from "./pages/Challenge";
 import ProfessionLanding from "./pages/professions/ProfessionLanding";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ function AppRoutes() {
           <Route path="/nemcina-do-prace/:slug" element={<Layout><ProfessionLanding /></Layout>} />
           <Route path="/wortpaare" element={<Layout><Wortpaare /></Layout>} />
           <Route path="/scrabble" element={<Layout><Scrabble /></Layout>} />
+          <Route path="/challenge" element={<Layout><Challenge /></Layout>} />
           <Route path="/kontakt" element={<Layout><Kontakt /></Layout>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
