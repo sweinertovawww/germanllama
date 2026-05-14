@@ -337,7 +337,7 @@ const SentenceBuilder = ({ onGameComplete, challengeMode = false }: SentenceBuil
 
   // Challenge: fire onGameComplete when round is complete
   useEffect(() => {
-    if (!challengeMode || !allMatched) return;
+    if (!challengeMode || !allMatched || pairs.length === 0) return;
     if (completionCalledRef.current) return;
     completionCalledRef.current = true;
     const challengeScore = score * 20;
