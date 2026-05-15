@@ -40,7 +40,7 @@ export function getWordsForProfession(professions: Profession[]): WordEntry[] {
 
   return qs
     .map(q => ({
-      german: getGermanWord(q.text).toUpperCase(),
+      german: getGermanWord(q.text).toUpperCase().replace(/\s+/g, ''),
       czech: q.translation,
       ko: q.translationKo,
       en: q.translationEn ?? q.translation,
