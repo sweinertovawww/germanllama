@@ -5,9 +5,10 @@ import { useLanguage } from "@/contexts/LanguageContext";
 interface ChallengeSummaryProps {
   perGameScores: number[];
   onPlayAgain: () => void;
+  variant?: "standard" | "a1";
 }
 
-export default function ChallengeSummary({ perGameScores, onPlayAgain }: ChallengeSummaryProps) {
+export default function ChallengeSummary({ perGameScores, onPlayAgain, variant = "standard" }: ChallengeSummaryProps) {
   const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
 
@@ -22,7 +23,7 @@ export default function ChallengeSummary({ perGameScores, onPlayAgain }: Challen
   };
 
   const handleShare = () => {
-    const text = t("shareChallenge", { score: String(totalScore) });
+    const text = t(variant === "a1" ? "shareChallengeA1" : "shareChallenge", { score: String(totalScore) });
     if (navigator.share) {
       navigator.share({ text }).catch(() => {});
     } else {

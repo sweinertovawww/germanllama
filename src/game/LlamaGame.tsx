@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Copy, Check, ArrowLeft, Gamepad2 } from "lucide-react";
-import { QUESTIONS, FILL_QUESTIONS, filterByProfession, isTranslationCorrect, type Question, type FillQuestion, type Profession } from "./vocabularyData";
+import { QUESTIONS, FILL_QUESTIONS, filterByProfession, filterByLevel, isTranslationCorrect, type Question, type FillQuestion, type Profession, type Level } from "./vocabularyData";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -457,22 +457,25 @@ interface LlamaGameProps {
   onGameComplete?: (score: number) => void;
   challengeMode?: boolean;
   timeLimitSeconds?: number;
+  levelOverride?: Level;
 }
 
-const LlamaGame = ({ onGameComplete, challengeMode = false, timeLimitSeconds }: LlamaGameProps) => {
+const LlamaGame = ({ onGameComplete, challengeMode = false, timeLimitSeconds, levelOverride }: LlamaGameProps) => {
   const { t, lang } = useLanguage();
   const profFilter = useProfessionFilter();
   const [inLobby, setInLobby] = useState(!challengeMode);
   const [nameEntry, setNameEntry] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const filteredQuestions = useMemo(() => {
+    if (levelOverride) return filterByLevel(QUESTIONS, levelOverride);
     const result = filterByProfession(QUESTIONS, profFilter.selected);
     return result.length > 0 ? result : QUESTIONS.filter(q => q.profession === "obecné");
-  }, [profFilter.selected]);
+  }, [profFilter.selected, levelOverride]);
   const filteredFill = useMemo(() => {
+    if (levelOverride) return filterByLevel(FILL_QUESTIONS, levelOverride);
     const result = filterByProfession(FILL_QUESTIONS, profFilter.selected);
     return result.length > 0 ? result : FILL_QUESTIONS.filter(q => q.profession === "obecné");
-  }, [profFilter.selected]);
+  }, [profFilter.selected, levelOverride]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -1093,10 +1096,12 @@ const LlamaGame = ({ onGameComplete, challengeMode = false, timeLimitSeconds }: 
     g.groundOffset = 0;
     questionIndexRef.current = 0;
     fillIndexRef.current = 0;
-    const lamaQ = QUESTIONS.find(q => q.text.includes("Lama"));
-    const rest = QUESTIONS.filter(q => !q.text.includes("Lama")).sort(() => Math.random() - 0.5);
+    const pool = levelOverride ? QUESTIONS.filter(q => q.level === levelOverride) : QUESTIONS;
+    const lamaQ = pool.find(q => q.text.includes("Lama"));
+    const rest = pool.filter(q => !q.text.includes("Lama")).sort(() => Math.random() - 0.5);
     shuffledQuestionsRef.current = lamaQ ? [lamaQ, ...rest] : rest;
-    shuffledFillRef.current = [...FILL_QUESTIONS].sort(() => Math.random() - 0.5);
+    const fillPool = levelOverride ? FILL_QUESTIONS.filter(q => q.level === levelOverride) : FILL_QUESTIONS;
+    shuffledFillRef.current = [...fillPool].sort(() => Math.random() - 0.5);
     setScore(0);
     challengeStartTimeRef.current = Date.now();
     setGameState("playing");

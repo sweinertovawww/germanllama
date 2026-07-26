@@ -1,4 +1,4 @@
-import { QUESTIONS, type Profession } from "@/game/vocabularyData";
+import { QUESTIONS, type Profession, type Level } from "@/game/vocabularyData";
 
 export interface WordEntry {
   german: string;
@@ -33,10 +33,12 @@ function getGermanWord(text: string): string {
   return m ? m[1].trim() : text.replace("?", "").trim();
 }
 
-export function getWordsForProfession(professions: Profession[]): WordEntry[] {
-  const qs = professions.length === 0
-    ? QUESTIONS
-    : QUESTIONS.filter(q => professions.includes(q.profession));
+export function getWordsForProfession(professions: Profession[], level?: Level): WordEntry[] {
+  const qs = level
+    ? QUESTIONS.filter(q => q.level === level)
+    : professions.length === 0
+      ? QUESTIONS
+      : QUESTIONS.filter(q => professions.includes(q.profession));
 
   return qs
     .map(q => ({

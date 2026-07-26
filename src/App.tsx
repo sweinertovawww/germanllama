@@ -17,6 +17,7 @@ import NemcinaDoPrice from "./pages/NemcinaDoPrice";
 import Wortpaare from "./pages/Wortpaare";
 import Scrabble from "./pages/Scrabble";
 import Challenge from "./pages/Challenge";
+import ChallengeA1 from "./pages/ChallengeA1";
 import ProfessionLanding from "./pages/professions/ProfessionLanding";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ function AppRoutes() {
           <Route path="/wortpaare" element={<Layout><Wortpaare /></Layout>} />
           <Route path="/scrabble" element={<Layout><Scrabble /></Layout>} />
           <Route path="/challenge" element={<Layout><Challenge /></Layout>} />
+          <Route path="/challenge-a1" element={<Layout><ChallengeA1 /></Layout>} />
           <Route path="/kontakt" element={<Layout><Kontakt /></Layout>} />
           <Route path="*" element={<NotFound />} />
         </Routes>

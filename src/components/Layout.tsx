@@ -33,7 +33,7 @@ const Layout = ({ children }: LayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const activeTab = location.pathname === "/challenge" ? "challenge" : location.pathname === "/flashcards" ? "flash-cards" : location.pathname === "/pexeso" ? "pexeso" : location.pathname === "/skladani-vet" ? "sentence-builder" : location.pathname === "/wortpaare" ? "wortpaare" : location.pathname === "/scrabble" ? "scrabble" : "llama-run";
+  const activeTab = location.pathname === "/challenge" ? "challenge" : location.pathname === "/challenge-a1" ? "challenge-a1" : location.pathname === "/flashcards" ? "flash-cards" : location.pathname === "/pexeso" ? "pexeso" : location.pathname === "/skladani-vet" ? "sentence-builder" : location.pathname === "/wortpaare" ? "wortpaare" : location.pathname === "/scrabble" ? "scrabble" : "llama-run";
 
   useEffect(() => { setMobileMenuOpen(false); }, [location.pathname]);
 
@@ -289,6 +289,34 @@ const Layout = ({ children }: LayoutProps) => {
                 </span>
               </div>
               <Trophy className={`w-4 h-4 sm:w-5 sm:h-5 shrink-0 ${activeTab === "challenge" ? "text-primary" : "text-primary/60"}`} />
+            </button>
+          </div>
+
+          {/* Challenge A1 card — same style, labeled for absolute beginners */}
+          <div className="col-span-3 sm:col-span-6 mt-1">
+            <button
+              onClick={() => navigate("/challenge-a1")}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
+                activeTab === "challenge-a1"
+                  ? "border-primary bg-primary/10 shadow-lg"
+                  : "border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5 hover:border-primary/60 hover:bg-primary/10"
+              }`}
+            >
+              <span className="text-2xl shrink-0">🦙</span>
+              <div className="flex-1 text-left min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className={`font-game text-xs sm:text-sm leading-tight ${activeTab === "challenge-a1" ? "text-primary" : "text-foreground"}`}>
+                    {t("challengeNameA1")}
+                  </span>
+                  <span className="font-game text-[8px] px-1.5 py-0.5 rounded bg-primary text-primary-foreground shrink-0">
+                    A1
+                  </span>
+                </div>
+                <span className="font-body text-[9px] sm:text-[10px] text-muted-foreground block leading-snug">
+                  {t("challengeDescA1")}
+                </span>
+              </div>
+              <Trophy className={`w-4 h-4 sm:w-5 sm:h-5 shrink-0 ${activeTab === "challenge-a1" ? "text-primary" : "text-primary/60"}`} />
             </button>
           </div>
         </div>

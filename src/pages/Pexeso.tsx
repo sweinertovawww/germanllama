@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect, useRef } from "react";
-import { getAllFlashCards, FlashCard, filterByProfession } from "@/game/vocabularyData";
+import { getAllFlashCards, FlashCard, filterByProfession, filterByLevel, type Level } from "@/game/vocabularyData";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import { Brain, RotateCcw, Trophy, Skull, Copy, Check, ArrowLeft } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -40,8 +40,10 @@ function shuffleArray<T>(arr: T[]): T[] {
 
 const MAX_FLIPS = 3;
 
-function buildCards(pairCount: number, professions: import("@/game/vocabularyData").Profession[] = [], nativeLang: Lang = "cs", targetLang: Lang = "de"): MemoryCard[] {
-  let allCards = filterByProfession(getAllFlashCards(), professions);
+function buildCards(pairCount: number, professions: import("@/game/vocabularyData").Profession[] = [], nativeLang: Lang = "cs", targetLang: Lang = "de", level?: Level): MemoryCard[] {
+  let allCards = level
+    ? filterByLevel(getAllFlashCards(), level)
+    : filterByProfession(getAllFlashCards(), professions);
   if (!allCards || allCards.length === 0) {
     allCards = [
       { german: "der Hund", czech: "pes", ko: "개", pl: "pies", en: "dog", type: "noun", profession: "obecné" },
@@ -83,9 +85,10 @@ function buildCards(pairCount: number, professions: import("@/game/vocabularyDat
 interface PexesoProps {
   onGameComplete?: (score: number) => void;
   challengeMode?: boolean;
+  levelOverride?: Level;
 }
 
-const Pexeso = ({ onGameComplete, challengeMode = false }: PexesoProps) => {
+const Pexeso = ({ onGameComplete, challengeMode = false, levelOverride }: PexesoProps) => {
   const { t, lang, targetLanguage } = useLanguage();
   const isMobile = useIsMobile();
   const pairCount = 5;
@@ -125,21 +128,21 @@ const Pexeso = ({ onGameComplete, challengeMode = false }: PexesoProps) => {
   }, [won, gameOver]);
 
   const startGame = useCallback(() => {
-    setCards(buildCards(pairCount, profFilter.selected, lang, targetLanguage));
+    setCards(buildCards(pairCount, profFilter.selected, lang, targetLanguage, levelOverride));
     setSelected([]);
     setChecking(false);
     setGameOver(false);
     setWon(false);
     setInLobby(false);
-  }, [pairCount, profFilter.selected, lang, targetLanguage]);
+  }, [pairCount, profFilter.selected, lang, targetLanguage, levelOverride]);
 
   const resetGame = useCallback(() => {
-    setCards(buildCards(pairCount, profFilter.selected, lang, targetLanguage));
+    setCards(buildCards(pairCount, profFilter.selected, lang, targetLanguage, levelOverride));
     setSelected([]);
     setChecking(false);
     setGameOver(false);
     setWon(false);
-  }, [pairCount, profFilter.selected, lang, targetLanguage]);
+  }, [pairCount, profFilter.selected, lang, targetLanguage, levelOverride]);
 
   const goToLobby = useCallback(() => {
     setInLobby(true);

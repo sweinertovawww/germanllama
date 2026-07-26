@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from "react";
-import { FILL_QUESTIONS, filterByProfession } from "@/game/vocabularyData";
+import { FILL_QUESTIONS, filterByProfession, filterByLevel, type Level } from "@/game/vocabularyData";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
 import { Copy, Check, ArrowRight, GripVertical, PuzzleIcon } from "lucide-react";
@@ -163,13 +163,17 @@ function DroppableSlot({
 interface SentenceBuilderProps {
   onGameComplete?: (score: number) => void;
   challengeMode?: boolean;
+  levelOverride?: Level;
 }
 
-const SentenceBuilder = ({ onGameComplete, challengeMode = false }: SentenceBuilderProps) => {
+const SentenceBuilder = ({ onGameComplete, challengeMode = false, levelOverride }: SentenceBuilderProps) => {
   const isMobile = useIsMobile();
   const { t, lang } = useLanguage();
   const profFilter = useProfessionFilter();
-  const filteredQuestions = useMemo(() => filterByProfession(FILL_QUESTIONS, profFilter.selected), [profFilter.selected]);
+  const filteredQuestions = useMemo(
+    () => levelOverride ? filterByLevel(FILL_QUESTIONS, levelOverride) : filterByProfession(FILL_QUESTIONS, profFilter.selected),
+    [profFilter.selected, levelOverride]
+  );
   // --- localStorage persistence ---
   const STORAGE_KEY = "sb-game-state";
 

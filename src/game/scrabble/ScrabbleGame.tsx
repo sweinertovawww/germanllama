@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { Copy, Check } from "lucide-react";
 import { type TileItem } from "./types";
-import { type Profession, PROFESSION_LIST } from "@/game/vocabularyData";
+import { type Profession, type Level, PROFESSION_LIST } from "@/game/vocabularyData";
 import { generateCrossword, getWordsForProfession, type CrosswordData, type PlacedWord } from "./crosswordGenerator";
 import { useLanguage } from "@/contexts/LanguageContext";
 import ScrabbleLobby from "./ScrabbleLobby";
@@ -40,9 +40,10 @@ interface ScrabbleGameProps {
   onGameComplete?: (score: number) => void;
   challengeMode?: boolean;
   initialProfession?: Profession[];
+  levelOverride?: Level;
 }
 
-export default function ScrabbleGame({ onGameComplete, challengeMode = false, initialProfession }: ScrabbleGameProps) {
+export default function ScrabbleGame({ onGameComplete, challengeMode = false, initialProfession, levelOverride }: ScrabbleGameProps) {
   const { t } = useLanguage();
   const [phase, setPhase] = useState<GamePhase>("lobby");
   const [selectedProfessions, setSelectedProfessions] = useState<Profession[]>([]);
@@ -79,11 +80,11 @@ export default function ScrabbleGame({ onGameComplete, challengeMode = false, in
 
   const completionCalledRef = useRef(false);
 
-  // Challenge: auto-start with given profession
+  // Challenge: auto-start with given profession (or level override)
   useEffect(() => {
-    if (!initialProfession) return;
-    const profs = initialProfession;
-    const words = getWordsForProfession(profs);
+    if (!initialProfession && !levelOverride) return;
+    const profs = initialProfession ?? [];
+    const words = getWordsForProfession(profs, levelOverride);
     if (words.length < 3) return;
     const cw = generateCrossword(words, 7);
     if (cw.placed.length < 2) return;

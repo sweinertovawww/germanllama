@@ -1,5 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import type { Level } from "@/game/vocabularyData";
+
+// A1-appropriate subset of the seeded word_pairs — both sides genuinely beginner-level.
+const A1_WORD_A_VALUES = [
+  "groß", "schnell", "alt", "sauber", "laut", "öffnen", "stark", "billig",
+  "krank", "kaufen", "Antwort", "anfangen",
+];
 
 export interface WordPair {
   id: string;
@@ -39,7 +46,7 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-export function useWortpaare(pairCount = 6) {
+export function useWortpaare(pairCount = 6, levelOverride?: Level) {
   const [allPairs, setAllPairs] = useState<WordPair[]>([]);
   const [gamePairs, setGamePairs] = useState<WordPair[]>([]);
   const [cards, setCards] = useState<GameCard[]>([]);
@@ -57,12 +64,17 @@ export function useWortpaare(pairCount = 6) {
         .from("word_pairs")
         .select("*");
       if (!error && data && data.length > 0) {
-        setAllPairs(data as WordPair[]);
+        const rows = data as WordPair[];
+        setAllPairs(
+          levelOverride === "A1"
+            ? rows.filter((p) => A1_WORD_A_VALUES.includes(p.word_a))
+            : rows
+        );
       }
       setLoading(false);
     };
     fetchPairs();
-  }, []);
+  }, [levelOverride]);
 
   const startGame = useCallback(() => {
     if (allPairs.length === 0) return;

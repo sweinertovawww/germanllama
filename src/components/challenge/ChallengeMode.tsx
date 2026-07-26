@@ -7,20 +7,26 @@ import ScrabbleGame from "@/game/scrabble/ScrabbleGame";
 import LlamaGame from "@/game/LlamaGame";
 import ChallengeInterstitial from "./ChallengeInterstitial";
 import ChallengeSummary from "./ChallengeSummary";
-import type { Profession } from "@/game/vocabularyData";
+import type { Profession, Level } from "@/game/vocabularyData";
 
 type ChallengePhase = "intro" | "playing" | "interstitial" | "summary";
+type ChallengeVariant = "standard" | "a1";
 
 const GAME_COUNT = 5;
 // "obecné" is guaranteed to have sufficient vocabulary for Scrabble
 const SCRABBLE_PROFESSION: Profession[] = ["obecné"];
 const LLAMA_TIME_LIMIT = 180;
 
-export default function ChallengeMode() {
+interface ChallengeModeProps {
+  variant?: ChallengeVariant;
+}
+
+export default function ChallengeMode({ variant = "standard" }: ChallengeModeProps) {
   const { t } = useLanguage();
   const [phase, setPhase] = useState<ChallengePhase>("intro");
   const [gameIndex, setGameIndex] = useState(0);
   const [perGameScores, setPerGameScores] = useState<number[]>([]);
+  const levelOverride: Level | undefined = variant === "a1" ? "A1" : undefined;
 
   const totalScore = perGameScores.reduce((a, b) => a + b, 0);
 
@@ -50,14 +56,14 @@ export default function ChallengeMode() {
   const renderCurrentGame = () => {
     switch (gameIndex) {
       case 0:
-        return <Pexeso key="pexeso" challengeMode onGameComplete={handleGameComplete} />;
+        return <Pexeso key="pexeso" challengeMode levelOverride={levelOverride} onGameComplete={handleGameComplete} />;
       case 1:
-        return <SentenceBuilder key="sentence" challengeMode onGameComplete={handleGameComplete} />;
+        return <SentenceBuilder key="sentence" challengeMode levelOverride={levelOverride} onGameComplete={handleGameComplete} />;
       case 2:
         return (
           <section className="px-3 sm:px-4 pb-8">
             <div className="max-w-4xl mx-auto">
-              <WortpaareGame key="wortpaare" challengeMode onGameComplete={handleGameComplete} />
+              <WortpaareGame key="wortpaare" challengeMode levelOverride={levelOverride} onGameComplete={handleGameComplete} />
             </div>
           </section>
         );
@@ -67,7 +73,8 @@ export default function ChallengeMode() {
             <ScrabbleGame
               key="scrabble"
               challengeMode
-              initialProfession={SCRABBLE_PROFESSION}
+              initialProfession={levelOverride ? undefined : SCRABBLE_PROFESSION}
+              levelOverride={levelOverride}
               onGameComplete={handleGameComplete}
             />
           </section>
@@ -79,6 +86,7 @@ export default function ChallengeMode() {
               key="llama"
               challengeMode
               timeLimitSeconds={LLAMA_TIME_LIMIT}
+              levelOverride={levelOverride}
               onGameComplete={handleGameComplete}
             />
           </section>
@@ -95,10 +103,10 @@ export default function ChallengeMode() {
           style={{ borderImage: "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent))) 1" }}>
           <span className="text-5xl block mb-4">🦙</span>
           <h1 className="font-game text-xl sm:text-2xl text-foreground mb-3">
-            {t("challengeIntroTitle")}
+            {t(variant === "a1" ? "challengeIntroTitleA1" : "challengeIntroTitle")}
           </h1>
           <p className="font-body text-sm text-muted-foreground mb-8 leading-relaxed">
-            {t("challengeIntroText")}
+            {t(variant === "a1" ? "challengeIntroTextA1" : "challengeIntroText")}
           </p>
           <div className="space-y-2 text-left mb-8">
             {["pexesoName", "sentenceBuilderName", "wordPairsName"].map((key, i) => (
@@ -119,7 +127,7 @@ export default function ChallengeMode() {
             className="w-full font-game text-sm py-4 rounded-xl text-primary-foreground hover:opacity-90 active:scale-95 transition-all shadow-lg"
             style={{ background: "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))" }}
           >
-            {t("challengeStart")}
+            {t(variant === "a1" ? "challengeStartA1" : "challengeStart")}
           </button>
         </div>
       </div>
@@ -137,7 +145,7 @@ export default function ChallengeMode() {
   }
 
   if (phase === "summary") {
-    return <ChallengeSummary perGameScores={perGameScores} onPlayAgain={handlePlayAgain} />;
+    return <ChallengeSummary perGameScores={perGameScores} onPlayAgain={handlePlayAgain} variant={variant} />;
   }
 
   // phase === "playing"

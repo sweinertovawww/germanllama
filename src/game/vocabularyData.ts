@@ -1,5 +1,7 @@
 export type Profession = "obecné" | "truhlář" | "zedník" | "instalatér" | "elektrikář" | "gastro" | "pokladní" | "uklízečka" | "sestřička" | "kancelář" | "automechanik" | "zahradník" | "učitel" | "kadeřník" | "systemy_pro_haseni";
 
+export type Level = "A1";
+
 export interface ProfessionInfo {
   id: Profession;
   label: string;
@@ -35,6 +37,7 @@ export interface Question {
   translationPl?: string;
   translationUk?: string;
   profession: Profession;
+  level?: Level;
 }
 
 export interface FillQuestion {
@@ -46,24 +49,55 @@ export interface FillQuestion {
   translationPl?: string;
   translationUk?: string;
   profession: Profession;
+  level?: Level;
 }
 
 export const QUESTIONS: Question[] = [
   // === OBECNÉ (základy) ===
-  { text: "Jaký člen má Lama?", options: ["der", "die", "das"], correct: 2, translation: "lama", translationKo: "라마", translationEn: "llama", translationPl: "lama", translationUk: "лама", profession: "obecné" },
-  { text: "Jaký člen má Haus?", options: ["der", "die", "das"], correct: 2, translation: "dům", translationKo: "집", translationEn: "house", translationPl: "dom", translationUk: "будинок", profession: "obecné" },
-  { text: "Jaký člen má Hund?", options: ["der", "die", "das"], correct: 0, translation: "pes", translationKo: "개", translationEn: "dog", translationPl: "pies", translationUk: "собака", profession: "obecné" },
-  { text: "Jaký člen má Katze?", options: ["der", "die", "das"], correct: 1, translation: "kočka", translationKo: "고양이", translationEn: "cat", translationPl: "kot", translationUk: "кіт", profession: "obecné" },
-  { text: "Jaký člen má Buch?", options: ["der", "die", "das"], correct: 2, translation: "kniha", translationKo: "책", translationEn: "book", translationPl: "książka", translationUk: "книга", profession: "obecné" },
-  { text: "Jaký člen má Tisch?", options: ["der", "die", "das"], correct: 0, translation: "stůl", translationKo: "테이블", translationEn: "table", translationPl: "stół", translationUk: "стіл", profession: "obecné" },
-  { text: "Jaký člen má Blume?", options: ["der", "die", "das"], correct: 1, translation: "květina", translationKo: "꽃", translationEn: "flower", translationPl: "kwiat", translationUk: "квітка", profession: "zahradník" },
-  { text: "Jaký člen má Auto?", options: ["der", "die", "das"], correct: 2, translation: "auto", translationKo: "자동차", translationEn: "car", translationPl: "samochód", translationUk: "автомобіль", profession: "automechanik" },
-  { text: "Jaký člen má Baum?", options: ["der", "die", "das"], correct: 0, translation: "strom", translationKo: "나무", translationEn: "tree", translationPl: "drzewo", translationUk: "дерево", profession: "zahradník" },
-  { text: "Jaký člen má Schule?", options: ["der", "die", "das"], correct: 1, translation: "škola", translationKo: "학교", translationEn: "school", translationPl: "szkoła", translationUk: "школа", profession: "učitel" },
+  { text: "Jaký člen má Lama?", options: ["der", "die", "das"], correct: 2, translation: "lama", translationKo: "라마", translationEn: "llama", translationPl: "lama", translationUk: "лама", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Haus?", options: ["der", "die", "das"], correct: 2, translation: "dům", translationKo: "집", translationEn: "house", translationPl: "dom", translationUk: "будинок", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Hund?", options: ["der", "die", "das"], correct: 0, translation: "pes", translationKo: "개", translationEn: "dog", translationPl: "pies", translationUk: "собака", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Katze?", options: ["der", "die", "das"], correct: 1, translation: "kočka", translationKo: "고양이", translationEn: "cat", translationPl: "kot", translationUk: "кіт", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Buch?", options: ["der", "die", "das"], correct: 2, translation: "kniha", translationKo: "책", translationEn: "book", translationPl: "książka", translationUk: "книга", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Tisch?", options: ["der", "die", "das"], correct: 0, translation: "stůl", translationKo: "테이블", translationEn: "table", translationPl: "stół", translationUk: "стіл", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Blume?", options: ["der", "die", "das"], correct: 1, translation: "květina", translationKo: "꽃", translationEn: "flower", translationPl: "kwiat", translationUk: "квітка", profession: "zahradník", level: "A1" },
+  { text: "Jaký člen má Auto?", options: ["der", "die", "das"], correct: 2, translation: "auto", translationKo: "자동차", translationEn: "car", translationPl: "samochód", translationUk: "автомобіль", profession: "automechanik", level: "A1" },
+  { text: "Jaký člen má Baum?", options: ["der", "die", "das"], correct: 0, translation: "strom", translationKo: "나무", translationEn: "tree", translationPl: "drzewo", translationUk: "дерево", profession: "zahradník", level: "A1" },
+  { text: "Jaký člen má Schule?", options: ["der", "die", "das"], correct: 1, translation: "škola", translationKo: "학교", translationEn: "school", translationPl: "szkoła", translationUk: "школа", profession: "učitel", level: "A1" },
+  { text: "Jaký člen má Wasser?", options: ["der", "die", "das"], correct: 2, translation: "voda", translationKo: "물", translationEn: "water", translationPl: "woda", translationUk: "вода", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Brot?", options: ["der", "die", "das"], correct: 2, translation: "chléb", translationKo: "빵", translationEn: "bread", translationPl: "chleb", translationUk: "хліб", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Milch?", options: ["der", "die", "das"], correct: 1, translation: "mléko", translationKo: "우유", translationEn: "milk", translationPl: "mleko", translationUk: "молоко", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Kaffee?", options: ["der", "die", "das"], correct: 0, translation: "káva", translationKo: "커피", translationEn: "coffee", translationPl: "kawa", translationUk: "кава", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Straße?", options: ["der", "die", "das"], correct: 1, translation: "ulice", translationKo: "거리", translationEn: "street", translationPl: "ulica", translationUk: "вулиця", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Bus?", options: ["der", "die", "das"], correct: 0, translation: "autobus", translationKo: "버스", translationEn: "bus", translationPl: "autobus", translationUk: "автобус", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Zug?", options: ["der", "die", "das"], correct: 0, translation: "vlak", translationKo: "기차", translationEn: "train", translationPl: "pociąg", translationUk: "потяг", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Geld?", options: ["der", "die", "das"], correct: 2, translation: "peníze", translationKo: "돈", translationEn: "money", translationPl: "pieniądze", translationUk: "гроші", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Familie?", options: ["der", "die", "das"], correct: 1, translation: "rodina", translationKo: "가족", translationEn: "family", translationPl: "rodzina", translationUk: "сім'я", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Kind?", options: ["der", "die", "das"], correct: 2, translation: "dítě", translationKo: "아이", translationEn: "child", translationPl: "dziecko", translationUk: "дитина", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Frau?", options: ["der", "die", "das"], correct: 1, translation: "žena", translationKo: "여자", translationEn: "woman", translationPl: "kobieta", translationUk: "жінка", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Mann?", options: ["der", "die", "das"], correct: 0, translation: "muž", translationKo: "남자", translationEn: "man", translationPl: "mężczyzna", translationUk: "чоловік", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Freund?", options: ["der", "die", "das"], correct: 0, translation: "přítel", translationKo: "친구", translationEn: "friend", translationPl: "przyjaciel", translationUk: "друг", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Handy?", options: ["der", "die", "das"], correct: 2, translation: "mobil", translationKo: "핸드폰", translationEn: "mobile phone", translationPl: "telefon komórkowy", translationUk: "мобільний телефон", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Jahr?", options: ["der", "die", "das"], correct: 2, translation: "rok", translationKo: "년", translationEn: "year", translationPl: "rok", translationUk: "рік", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Woche?", options: ["der", "die", "das"], correct: 1, translation: "týden", translationKo: "주", translationEn: "week", translationPl: "tydzień", translationUk: "тиждень", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Uhr?", options: ["der", "die", "das"], correct: 1, translation: "hodiny/hodinky", translationKo: "시계", translationEn: "clock/watch", translationPl: "zegar", translationUk: "годинник", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Stadt?", options: ["der", "die", "das"], correct: 1, translation: "město", translationKo: "도시", translationEn: "city", translationPl: "miasto", translationUk: "місто", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Land?", options: ["der", "die", "das"], correct: 2, translation: "země", translationKo: "나라", translationEn: "country", translationPl: "kraj", translationUk: "країна", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Tag?", options: ["der", "die", "das"], correct: 0, translation: "den", translationKo: "날", translationEn: "day", translationPl: "dzień", translationUk: "день", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Mutter?", options: ["der", "die", "das"], correct: 1, translation: "matka", translationKo: "어머니", translationEn: "mother", translationPl: "matka", translationUk: "мати", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Vater?", options: ["der", "die", "das"], correct: 0, translation: "otec", translationKo: "아버지", translationEn: "father", translationPl: "ojciec", translationUk: "батько", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Schwester?", options: ["der", "die", "das"], correct: 1, translation: "sestra", translationKo: "여동생/누나", translationEn: "sister", translationPl: "siostra", translationUk: "сестра", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Bruder?", options: ["der", "die", "das"], correct: 0, translation: "bratr", translationKo: "형제", translationEn: "brother", translationPl: "brat", translationUk: "брат", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Zimmer?", options: ["der", "die", "das"], correct: 2, translation: "pokoj", translationKo: "방", translationEn: "room", translationPl: "pokój", translationUk: "кімната", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Küche?", options: ["der", "die", "das"], correct: 1, translation: "kuchyně", translationKo: "부엌", translationEn: "kitchen", translationPl: "kuchnia", translationUk: "кухня", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Bett?", options: ["der", "die", "das"], correct: 2, translation: "postel", translationKo: "침대", translationEn: "bed", translationPl: "łóżko", translationUk: "ліжко", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Schlüssel?", options: ["der", "die", "das"], correct: 0, translation: "klíč", translationKo: "열쇠", translationEn: "key", translationPl: "klucz", translationUk: "ключ", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Tasche?", options: ["der", "die", "das"], correct: 1, translation: "taška", translationKo: "가방", translationEn: "bag", translationPl: "torba", translationUk: "торба", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Zeit?", options: ["der", "die", "das"], correct: 1, translation: "čas", translationKo: "시간", translationEn: "time", translationPl: "czas", translationUk: "час", profession: "obecné", level: "A1" },
   // === KANCELÁŘ ===
   { text: "Jaký člen má Schreibtisch?", options: ["der", "die", "das"], correct: 0, translation: "psací stůl", translationKo: "책상", translationEn: "desk", translationPl: "biurko", translationUk: "письмовий стіл", profession: "kancelář" },
-  { text: "Jaký člen má Stuhl?", options: ["der", "die", "das"], correct: 0, translation: "židle", translationKo: "의자", translationEn: "chair", translationPl: "krzesło", translationUk: "стілець", profession: "kancelář" },
-  { text: "Jaký člen má Computer?", options: ["der", "die", "das"], correct: 0, translation: "počítač", translationKo: "컴퓨터", translationEn: "computer", translationPl: "komputer", translationUk: "комп'ютер", profession: "kancelář" },
+  { text: "Jaký člen má Stuhl?", options: ["der", "die", "das"], correct: 0, translation: "židle", translationKo: "의자", translationEn: "chair", translationPl: "krzesło", translationUk: "стілець", profession: "kancelář", level: "A1" },
+  { text: "Jaký člen má Computer?", options: ["der", "die", "das"], correct: 0, translation: "počítač", translationKo: "컴퓨터", translationEn: "computer", translationPl: "komputer", translationUk: "комп'ютер", profession: "kancelář", level: "A1" },
   { text: "Jaký člen má Monitor?", options: ["der", "die", "das"], correct: 0, translation: "monitor", translationKo: "모니터", translationEn: "monitor", translationPl: "monitor", translationUk: "монітор", profession: "kancelář" },
   { text: "Jaký člen má Tastatur?", options: ["der", "die", "das"], correct: 1, translation: "klávesnice", translationKo: "키보드", translationEn: "keyboard", translationPl: "klawiatura", translationUk: "клавіатура", profession: "kancelář" },
   { text: "Jaký člen má Maus?", options: ["der", "die", "das"], correct: 1, translation: "myš", translationKo: "마우스", translationEn: "mouse", translationPl: "mysz", translationUk: "миша", profession: "kancelář" },
@@ -97,7 +131,7 @@ export const QUESTIONS: Question[] = [
    { text: "Jaký člen má Entwurf?", options: ["der", "die", "das"], correct: 0, translation: "návrh", translationKo: "제안", translationEn: "draft", translationPl: "projekt / szkic", translationUk: "чернетка", profession: "kancelář" },
    { text: "Jaký člen má Status?", options: ["der", "die", "das"], correct: 0, translation: "stav", translationKo: "상태", translationEn: "status", translationPl: "status", translationUk: "статус", profession: "kancelář" },
    { text: "Jaký člen má Kosten?", options: ["der", "die", "das"], correct: 1, translation: "náklady", translationKo: "소송 비용", translationEn: "costs", translationPl: "koszty", translationUk: "витрати", profession: "obecné" },
-   { text: "Jaký člen má Team?", options: ["der", "die", "das"], correct: 2, translation: "tým", translationKo: "팀", translationEn: "team", translationPl: "zespół", translationUk: "команда", profession: "obecné" },
+   { text: "Jaký člen má Team?", options: ["der", "die", "das"], correct: 2, translation: "tým", translationKo: "팀", translationEn: "team", translationPl: "zespół", translationUk: "команда", profession: "obecné", level: "A1" },
    { text: "Jaký člen má Unterlagen?", options: ["der", "die", "das"], correct: 1, translation: "podklady", translationKo: "서류", translationEn: "paperwork", translationPl: "dokumenty", translationUk: "документи", profession: "kancelář" },
    { text: "Jaký člen má Deadline?", options: ["der", "die", "das"], correct: 1, translation: "termín (uzávěrka)", translationKo: "사선", translationEn: "deadline", translationPl: "termin ostateczny", translationUk: "дедлайн", profession: "obecné" },
    { text: "Jaký člen má Zusammenarbeit?", options: ["der", "die", "das"], correct: 1, translation: "spolupráce", translationKo: "협력", translationEn: "cooperation", translationPl: "współpraca", translationUk: "співпраця", profession: "obecné" },
@@ -106,8 +140,8 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Pause?", options: ["der", "die", "das"], correct: 1, translation: "přestávka", translationKo: "부서지다", translationEn: "break", translationPl: "przerwa", translationUk: "перерва", profession: "obecné" },
   { text: "Jaký člen má Kantine?", options: ["der", "die", "das"], correct: 1, translation: "jídelna", translationKo: "식당", translationEn: "canteen", translationPl: "stołówka", translationUk: "їдальня", profession: "obecné" },
   { text: "Jaký člen má Schrank?", options: ["der", "die", "das"], correct: 0, translation: "skříň", translationKo: "내각", translationEn: "wardrobe", translationPl: "szafa", translationUk: "шафа", profession: "obecné" },
-  { text: "Jaký člen má Tür?", options: ["der", "die", "das"], correct: 1, translation: "dveře", translationKo: "문", translationEn: "door", translationPl: "drzwi", translationUk: "двері", profession: "obecné" },
-  { text: "Jaký člen má Fenster?", options: ["der", "die", "das"], correct: 2, translation: "okno", translationKo: "창문", translationEn: "window", translationPl: "okno", translationUk: "вікно", profession: "obecné" },
+  { text: "Jaký člen má Tür?", options: ["der", "die", "das"], correct: 1, translation: "dveře", translationKo: "문", translationEn: "door", translationPl: "drzwi", translationUk: "двері", profession: "obecné", level: "A1" },
+  { text: "Jaký člen má Fenster?", options: ["der", "die", "das"], correct: 2, translation: "okno", translationKo: "창문", translationEn: "window", translationPl: "okno", translationUk: "вікно", profession: "obecné", level: "A1" },
   { text: "Jaký člen má Lampe?", options: ["der", "die", "das"], correct: 1, translation: "lampa", translationKo: "램프", translationEn: "lamp", translationPl: "lampa", translationUk: "лампа", profession: "obecné" },
   { text: "Jaký člen má WC?", options: ["der", "die", "das"], correct: 2, translation: "záchod", translationKo: "화장실", translationEn: "toilet", translationPl: "toaleta", translationUk: "туалет", profession: "obecné" },
   { text: "Jaký člen má Umkleide?", options: ["der", "die", "das"], correct: 1, translation: "šatna", translationKo: "휴대품 보관소", translationEn: "changing room", translationPl: "szatnia", translationUk: "роздягальня", profession: "obecné" },
@@ -844,26 +878,63 @@ export const QUESTIONS: Question[] = [
 
 export const FILL_QUESTIONS: FillQuestion[] = [
   // === OBECNÉ (základy) ===
-  { sentence: "Ich ___ Deutsch.", answer: "spreche", translation: "Já mluvím německy.", translationKo: "나는 독일어를 할 줄 압니다.", translationEn: "I speak German.", translationPl: "Mówię po niemiecku.", translationUk: "Я розмовляю німецькою.", profession: "obecné" },
-  { sentence: "Er ___ ein Buch.", answer: "liest", translation: "On čte knihu.", translationKo: "그는 책을 읽고 있습니다.", translationEn: "He is reading a book.", translationPl: "On czyta książkę.", translationUk: "Він читає книжку.", profession: "obecné" },
-  { sentence: "Wir ___ nach Hause.", answer: "gehen", translation: "My jdeme domů.", translationKo: "우리는 집에 갈거야.", translationEn: "We are going home.", translationPl: "Idziemy do domu.", translationUk: "Ми йдемо додому.", profession: "obecné" },
-  { sentence: "Sie ___ Kaffee.", answer: "trinkt", translation: "Ona pije kávu.", translationKo: "그녀는 커피를 마신다.", translationEn: "She is drinking coffee.", translationPl: "Ona pije kawę.", translationUk: "Вона п'є каву.", profession: "obecné" },
-  { sentence: "Du ___ sehr schnell.", answer: "läufst", translation: "Ty běžíš velmi rychle.", translationKo: "당신은 매우 빠르게 달리고 있습니다.", translationEn: "You run very quickly.", translationPl: "Biegniesz bardzo szybko.", translationUk: "Ви бігаєте дуже швидко.", profession: "obecné" },
-  { sentence: "Ich ___ müde.", answer: "bin", translation: "Já jsem unavený/á.", translationKo: "나는 피곤하다.", translationEn: "I am tired.", translationPl: "Jestem zmęczony/a.", translationUk: "Я втомився.", profession: "obecné" },
-  { sentence: "Er ___ Lehrer.", answer: "ist", translation: "On je učitel.", translationKo: "그는 교사입니다.", translationEn: "He is a teacher.", translationPl: "On jest nauczycielem.", translationUk: "Він вчитель.", profession: "učitel" },
-   { sentence: "Wir ___ Studenten.", answer: "sind", translation: "My jsme studenti.", translationKo: "우리는 학생입니다.", translationEn: "We are students.", translationPl: "Jesteśmy studentami.", translationUk: "Ми студенти.", profession: "učitel" },
-  { sentence: "Sie ___ eine Katze.", answer: "hat", translation: "Ona má kočku.", translationKo: "그녀에게는 고양이가 있습니다.", translationEn: "She has a cat.", translationPl: "Ona ma kota.", translationUk: "У неї є кіт.", profession: "obecné" },
-  { sentence: "Du ___ Hunger.", answer: "hast", translation: "Ty máš hlad.", translationKo: "당신은 배고프다.", translationEn: "You are hungry.", translationPl: "Jesteś głodny/a.", translationUk: "Ви голодні.", profession: "obecné" },
-  { sentence: "Ich ___ gern Musik.", answer: "höre", translation: "Já rád/a poslouchám hudbu.", translationKo: "나는 음악 듣는 것을 좋아합니다.", translationEn: "I like listening to music.", translationPl: "Lubię słuchać muzyki.", translationUk: "Я люблю слухати музику.", profession: "obecné" },
-  { sentence: "Er ___ Fußball.", answer: "spielt", translation: "On hraje fotbal.", translationKo: "그는 축구를 한다.", translationEn: "He plays football.", translationPl: "On gra w piłkę nożną.", translationUk: "Він грає у футбол.", profession: "obecné" },
-  { sentence: "Wir ___ ins Kino.", answer: "gehen", translation: "My jdeme do kina.", translationKo: "우리는 영화관에 갈 예정입니다.", translationEn: "We are going to the cinema.", translationPl: "Idziemy do kina.", translationUk: "Ми йдемо в кіно.", profession: "obecné" },
-  { sentence: "Sie ___ sehr gut.", answer: "kocht", translation: "Ona vaří velmi dobře.", translationKo: "그녀는 요리를 아주 잘해요.", translationEn: "She cooks very well.", translationPl: "Ona bardzo dobrze gotuje.", translationUk: "Вона дуже добре готує.", profession: "obecné" },
-  { sentence: "Du ___ schön.", answer: "singst", translation: "Ty zpíváš krásně.", translationKo: "당신은 아름답게 노래합니다.", translationEn: "You sing beautifully.", translationPl: "Śpiewasz pięknie.", translationUk: "Ви гарно співаєте.", profession: "obecné" },
-  { sentence: "Ich ___ Wasser.", answer: "trinke", translation: "Já piji vodu.", translationKo: "나는 물을 마신다.", translationEn: "I drink water.", translationPl: "Piję wodę.", translationUk: "Я п'ю воду.", profession: "obecné" },
-  { sentence: "Er ___ die Tür.", answer: "öffnet", translation: "On otevírá dveře.", translationKo: "그는 문을 엽니다.", translationEn: "He opens the door.", translationPl: "On otwiera drzwi.", translationUk: "Він відчиняє двері.", profession: "obecné" },
-  { sentence: "Wir ___ Deutsch.", answer: "lernen", translation: "My se učíme německy.", translationKo: "우리는 독일어를 배우고 있어요.", translationEn: "We are learning German.", translationPl: "Uczymy się niemieckiego.", translationUk: "Ми вчимо німецьку.", profession: "obecné" },
-  { sentence: "Sie ___ das Fenster.", answer: "schließt", translation: "Ona zavírá okno.", translationKo: "그녀는 창문을 닫는다.", translationEn: "She is closing the window.", translationPl: "Ona zamyka okno.", translationUk: "Вона зачиняє вікно.", profession: "obecné" },
-  { sentence: "Du ___ mir.", answer: "hilfst", translation: "Ty mi pomáháš.", translationKo: "당신이 나를 도와주세요.", translationEn: "You are helping me.", translationPl: "Pomagasz mi.", translationUk: "Ви мені допомагаєте.", profession: "obecné" },
+  { sentence: "Ich ___ Deutsch.", answer: "spreche", translation: "Já mluvím německy.", translationKo: "나는 독일어를 할 줄 압니다.", translationEn: "I speak German.", translationPl: "Mówię po niemiecku.", translationUk: "Я розмовляю німецькою.", profession: "obecné", level: "A1" },
+  { sentence: "Er ___ ein Buch.", answer: "liest", translation: "On čte knihu.", translationKo: "그는 책을 읽고 있습니다.", translationEn: "He is reading a book.", translationPl: "On czyta książkę.", translationUk: "Він читає книжку.", profession: "obecné", level: "A1" },
+  { sentence: "Wir ___ nach Hause.", answer: "gehen", translation: "My jdeme domů.", translationKo: "우리는 집에 갈거야.", translationEn: "We are going home.", translationPl: "Idziemy do domu.", translationUk: "Ми йдемо додому.", profession: "obecné", level: "A1" },
+  { sentence: "Sie ___ Kaffee.", answer: "trinkt", translation: "Ona pije kávu.", translationKo: "그녀는 커피를 마신다.", translationEn: "She is drinking coffee.", translationPl: "Ona pije kawę.", translationUk: "Вона п'є каву.", profession: "obecné", level: "A1" },
+  { sentence: "Du ___ sehr schnell.", answer: "läufst", translation: "Ty běžíš velmi rychle.", translationKo: "당신은 매우 빠르게 달리고 있습니다.", translationEn: "You run very quickly.", translationPl: "Biegniesz bardzo szybko.", translationUk: "Ви бігаєте дуже швидко.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ müde.", answer: "bin", translation: "Já jsem unavený/á.", translationKo: "나는 피곤하다.", translationEn: "I am tired.", translationPl: "Jestem zmęczony/a.", translationUk: "Я втомився.", profession: "obecné", level: "A1" },
+  { sentence: "Er ___ Lehrer.", answer: "ist", translation: "On je učitel.", translationKo: "그는 교사입니다.", translationEn: "He is a teacher.", translationPl: "On jest nauczycielem.", translationUk: "Він вчитель.", profession: "učitel", level: "A1" },
+   { sentence: "Wir ___ Studenten.", answer: "sind", translation: "My jsme studenti.", translationKo: "우리는 학생입니다.", translationEn: "We are students.", translationPl: "Jesteśmy studentami.", translationUk: "Ми студенти.", profession: "učitel", level: "A1" },
+  { sentence: "Sie ___ eine Katze.", answer: "hat", translation: "Ona má kočku.", translationKo: "그녀에게는 고양이가 있습니다.", translationEn: "She has a cat.", translationPl: "Ona ma kota.", translationUk: "У неї є кіт.", profession: "obecné", level: "A1" },
+  { sentence: "Du ___ Hunger.", answer: "hast", translation: "Ty máš hlad.", translationKo: "당신은 배고프다.", translationEn: "You are hungry.", translationPl: "Jesteś głodny/a.", translationUk: "Ви голодні.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ gern Musik.", answer: "höre", translation: "Já rád/a poslouchám hudbu.", translationKo: "나는 음악 듣는 것을 좋아합니다.", translationEn: "I like listening to music.", translationPl: "Lubię słuchać muzyki.", translationUk: "Я люблю слухати музику.", profession: "obecné", level: "A1" },
+  { sentence: "Er ___ Fußball.", answer: "spielt", translation: "On hraje fotbal.", translationKo: "그는 축구를 한다.", translationEn: "He plays football.", translationPl: "On gra w piłkę nożną.", translationUk: "Він грає у футбол.", profession: "obecné", level: "A1" },
+  { sentence: "Wir ___ ins Kino.", answer: "gehen", translation: "My jdeme do kina.", translationKo: "우리는 영화관에 갈 예정입니다.", translationEn: "We are going to the cinema.", translationPl: "Idziemy do kina.", translationUk: "Ми йдемо в кіно.", profession: "obecné", level: "A1" },
+  { sentence: "Sie ___ sehr gut.", answer: "kocht", translation: "Ona vaří velmi dobře.", translationKo: "그녀는 요리를 아주 잘해요.", translationEn: "She cooks very well.", translationPl: "Ona bardzo dobrze gotuje.", translationUk: "Вона дуже добре готує.", profession: "obecné", level: "A1" },
+  { sentence: "Du ___ schön.", answer: "singst", translation: "Ty zpíváš krásně.", translationKo: "당신은 아름답게 노래합니다.", translationEn: "You sing beautifully.", translationPl: "Śpiewasz pięknie.", translationUk: "Ви гарно співаєте.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ Wasser.", answer: "trinke", translation: "Já piji vodu.", translationKo: "나는 물을 마신다.", translationEn: "I drink water.", translationPl: "Piję wodę.", translationUk: "Я п'ю воду.", profession: "obecné", level: "A1" },
+  { sentence: "Er ___ die Tür.", answer: "öffnet", translation: "On otevírá dveře.", translationKo: "그는 문을 엽니다.", translationEn: "He opens the door.", translationPl: "On otwiera drzwi.", translationUk: "Він відчиняє двері.", profession: "obecné", level: "A1" },
+  { sentence: "Wir ___ Deutsch.", answer: "lernen", translation: "My se učíme německy.", translationKo: "우리는 독일어를 배우고 있어요.", translationEn: "We are learning German.", translationPl: "Uczymy się niemieckiego.", translationUk: "Ми вчимо німецьку.", profession: "obecné", level: "A1" },
+  { sentence: "Sie ___ das Fenster.", answer: "schließt", translation: "Ona zavírá okno.", translationKo: "그녀는 창문을 닫는다.", translationEn: "She is closing the window.", translationPl: "Ona zamyka okno.", translationUk: "Вона зачиняє вікно.", profession: "obecné", level: "A1" },
+  { sentence: "Du ___ mir.", answer: "hilfst", translation: "Ty mi pomáháš.", translationKo: "당신이 나를 도와주세요.", translationEn: "You are helping me.", translationPl: "Pomagasz mi.", translationUk: "Ви мені допомагаєте.", profession: "obecné", level: "A1" },
+  { sentence: "Du ___ nett.", answer: "bist", translation: "Ty jsi milý/á.", translationKo: "당신은 친절해요.", translationEn: "You are nice.", translationPl: "Jesteś miły/a.", translationUk: "Ти добрий/добра.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ ein Auto.", answer: "habe", translation: "Já mám auto.", translationKo: "저는 자동차가 있어요.", translationEn: "I have a car.", translationPl: "Mam samochód.", translationUk: "У мене є автомобіль.", profession: "obecné", level: "A1" },
+  { sentence: "Wir ___ Zeit.", answer: "haben", translation: "My máme čas.", translationKo: "우리는 시간이 있어요.", translationEn: "We have time.", translationPl: "Mamy czas.", translationUk: "У нас є час.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ das Essen.", answer: "mache", translation: "Já dělám jídlo.", translationKo: "저는 음식을 만들어요.", translationEn: "I am making the food.", translationPl: "Robię jedzenie.", translationUk: "Я готую їжу.", profession: "obecné", level: "A1" },
+  { sentence: "Was ___ du?", answer: "machst", translation: "Co děláš?", translationKo: "뭐 해요?", translationEn: "What are you doing?", translationPl: "Co robisz?", translationUk: "Що ти робиш?", profession: "obecné", level: "A1" },
+  { sentence: "Er ___ die Hausaufgaben.", answer: "macht", translation: "On dělá domácí úkoly.", translationKo: "그는 숙제를 해요.", translationEn: "He is doing homework.", translationPl: "On robi zadanie domowe.", translationUk: "Він робить домашнє завдання.", profession: "obecné", level: "A1" },
+  { sentence: "Wir ___ eine Pause.", answer: "machen", translation: "My děláme přestávku.", translationKo: "우리는 쉬어요.", translationEn: "We are taking a break.", translationPl: "Robimy przerwę.", translationUk: "Ми робимо перерву.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ zur Arbeit.", answer: "gehe", translation: "Já jdu do práce.", translationKo: "저는 직장에 가요.", translationEn: "I am going to work.", translationPl: "Idę do pracy.", translationUk: "Я йду на роботу.", profession: "obecné", level: "A1" },
+  { sentence: "Du ___ zur Schule.", answer: "gehst", translation: "Ty jdeš do školy.", translationKo: "당신은 학교에 가요.", translationEn: "You are going to school.", translationPl: "Idziesz do szkoły.", translationUk: "Ти йдеш до школи.", profession: "obecné", level: "A1" },
+  { sentence: "Sie ___ einkaufen.", answer: "geht", translation: "Ona jde nakupovat.", translationKo: "그녀는 쇼핑하러 가요.", translationEn: "She is going shopping.", translationPl: "Ona idzie na zakupy.", translationUk: "Вона йде за покупками.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ aus der Ukraine.", answer: "komme", translation: "Já jsem z Ukrajiny.", translationKo: "저는 우크라이나에서 왔어요.", translationEn: "I come from Ukraine.", translationPl: "Jestem z Ukrainy.", translationUk: "Я з України.", profession: "obecné", level: "A1" },
+  { sentence: "Du ___ zu spät.", answer: "kommst", translation: "Ty přicházíš pozdě.", translationKo: "당신은 늦게 와요.", translationEn: "You are coming too late.", translationPl: "Przychodzisz za późno.", translationUk: "Ти приходиш запізно.", profession: "obecné", level: "A1" },
+  { sentence: "Er ___ mit dem Bus.", answer: "kommt", translation: "On přijíždí autobusem.", translationKo: "그는 버스로 와요.", translationEn: "He comes by bus.", translationPl: "On przyjeżdża autobusem.", translationUk: "Він приїжджає автобусом.", profession: "obecné", level: "A1" },
+  { sentence: "Wir ___ morgen.", answer: "kommen", translation: "My přijedeme zítra.", translationKo: "우리는 내일 와요.", translationEn: "We are coming tomorrow.", translationPl: "Przyjeżdżamy jutro.", translationUk: "Ми приїдемо завтра.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ in Berlin.", answer: "wohne", translation: "Já bydlím v Berlíně.", translationKo: "저는 베를린에 살아요.", translationEn: "I live in Berlin.", translationPl: "Mieszkam w Berlinie.", translationUk: "Я живу в Берліні.", profession: "obecné", level: "A1" },
+  { sentence: "Du ___ in einer Wohnung.", answer: "wohnst", translation: "Ty bydlíš v bytě.", translationKo: "당신은 아파트에 살아요.", translationEn: "You live in an apartment.", translationPl: "Mieszkasz w mieszkaniu.", translationUk: "Ти живеш у квартирі.", profession: "obecné", level: "A1" },
+  { sentence: "Er ___ in einem Haus.", answer: "wohnt", translation: "On bydlí v domě.", translationKo: "그는 집에 살아요.", translationEn: "He lives in a house.", translationPl: "On mieszka w domu.", translationUk: "Він живе в будинку.", profession: "obecné", level: "A1" },
+  { sentence: "Wir ___ in Deutschland.", answer: "wohnen", translation: "My bydlíme v Německu.", translationKo: "우리는 독일에 살아요.", translationEn: "We live in Germany.", translationPl: "Mieszkamy w Niemczech.", translationUk: "Ми живемо в Німеччині.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ Anna.", answer: "heiße", translation: "Já se jmenuji Anna.", translationKo: "제 이름은 안나예요.", translationEn: "My name is Anna.", translationPl: "Nazywam się Anna.", translationUk: "Мене звати Анна.", profession: "obecné", level: "A1" },
+  { sentence: "Wie ___ du?", answer: "heißt", translation: "Jak se jmenuješ?", translationKo: "이름이 뭐예요?", translationEn: "What's your name?", translationPl: "Jak się nazywasz?", translationUk: "Як тебе звати?", profession: "obecné", level: "A1" },
+  { sentence: "Er ___ Peter.", answer: "heißt", translation: "On se jmenuje Petr.", translationKo: "그의 이름은 피터예요.", translationEn: "His name is Peter.", translationPl: "On nazywa się Peter.", translationUk: "Його звати Петро.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ Deutsch.", answer: "lerne", translation: "Já se učím německy.", translationKo: "저는 독일어를 배워요.", translationEn: "I am learning German.", translationPl: "Uczę się niemieckiego.", translationUk: "Я вивчаю німецьку.", profession: "obecné", level: "A1" },
+  { sentence: "Du ___ schnell.", answer: "lernst", translation: "Ty se učíš rychle.", translationKo: "당신은 빨리 배워요.", translationEn: "You learn quickly.", translationPl: "Szybko się uczysz.", translationUk: "Ти швидко вчишся.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ viel.", answer: "arbeite", translation: "Já pracuji hodně.", translationKo: "저는 많이 일해요.", translationEn: "I work a lot.", translationPl: "Dużo pracuję.", translationUk: "Я багато працюю.", profession: "obecné", level: "A1" },
+  { sentence: "Du ___ heute.", answer: "arbeitest", translation: "Ty dnes pracuješ.", translationKo: "당신은 오늘 일해요.", translationEn: "You are working today.", translationPl: "Dzisiaj pracujesz.", translationUk: "Ти сьогодні працюєш.", profession: "obecné", level: "A1" },
+  { sentence: "Er ___ im Büro.", answer: "arbeitet", translation: "On pracuje v kanceláři.", translationKo: "그는 사무실에서 일해요.", translationEn: "He works in the office.", translationPl: "On pracuje w biurze.", translationUk: "Він працює в офісі.", profession: "obecné", level: "A1" },
+  { sentence: "Wir ___ zusammen.", answer: "arbeiten", translation: "My pracujeme společně.", translationKo: "우리는 함께 일해요.", translationEn: "We work together.", translationPl: "Pracujemy razem.", translationUk: "Ми працюємо разом.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ Kaffee.", answer: "mag", translation: "Já mám rád/a kávu.", translationKo: "저는 커피를 좋아해요.", translationEn: "I like coffee.", translationPl: "Lubię kawę.", translationUk: "Я люблю каву.", profession: "obecné", level: "A1" },
+  { sentence: "Er ___ Musik.", answer: "mag", translation: "On má rád hudbu.", translationKo: "그는 음악을 좋아해요.", translationEn: "He likes music.", translationPl: "On lubi muzykę.", translationUk: "Він любить музику.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ Deutsch sprechen.", answer: "kann", translation: "Já umím mluvit německy.", translationKo: "저는 독일어를 할 수 있어요.", translationEn: "I can speak German.", translationPl: "Umiem mówić po niemiecku.", translationUk: "Я вмію розмовляти німецькою.", profession: "obecné", level: "A1" },
+  { sentence: "Du ___ das machen.", answer: "kannst", translation: "Ty to umíš udělat.", translationKo: "당신은 그것을 할 수 있어요.", translationEn: "You can do that.", translationPl: "Umiesz to zrobić.", translationUk: "Ти можеш це зробити.", profession: "obecné", level: "A1" },
+  { sentence: "Wir ___ schwimmen.", answer: "können", translation: "My umíme plavat.", translationKo: "우리는 수영할 수 있어요.", translationEn: "We can swim.", translationPl: "Umiemy pływać.", translationUk: "Ми вміємо плавати.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ Deutsch lernen.", answer: "will", translation: "Já chci se učit německy.", translationKo: "저는 독일어를 배우고 싶어요.", translationEn: "I want to learn German.", translationPl: "Chcę uczyć się niemieckiego.", translationUk: "Я хочу вивчати німецьку.", profession: "obecné", level: "A1" },
+  { sentence: "Er ___ nach Hause.", answer: "will", translation: "On chce jít domů.", translationKo: "그는 집에 가고 싶어해요.", translationEn: "He wants to go home.", translationPl: "On chce iść do domu.", translationUk: "Він хоче йти додому.", profession: "obecné", level: "A1" },
+  { sentence: "Ich ___ arbeiten.", answer: "muss", translation: "Já musím pracovat.", translationKo: "저는 일해야 해요.", translationEn: "I have to work.", translationPl: "Muszę pracować.", translationUk: "Я мушу працювати.", profession: "obecné", level: "A1" },
+  { sentence: "Du ___ jetzt gehen.", answer: "musst", translation: "Ty musíš teď jít.", translationKo: "당신은 지금 가야 해요.", translationEn: "You have to go now.", translationPl: "Musisz teraz iść.", translationUk: "Тобі треба зараз йти.", profession: "obecné", level: "A1" },
+  { sentence: "Wir ___ warten.", answer: "müssen", translation: "My musíme čekat.", translationKo: "우리는 기다려야 해요.", translationEn: "We have to wait.", translationPl: "Musimy czekać.", translationUk: "Ми мусимо чекати.", profession: "obecné", level: "A1" },
   // === OBECNÉ (práce, bezpečnost) ===
   { sentence: "Wann ___ du an zu arbeiten?", answer: "fängst", translation: "Kdy začínáš pracovat?", translationKo: "언제 일 시작해요?", translationEn: "When do you start work?", translationPl: "Kiedy zaczynasz pracę?", translationUk: "Коли ви починаєте роботу?", profession: "obecné" },
   { sentence: "Hast du heute viel ___?", answer: "Arbeit", translation: "Máš dnes hodně práce?", translationKo: "오늘 바빠요?", translationEn: "Do you have a lot of work today?", translationPl: "Czy masz dziś dużo pracy?", translationUk: "У вас сьогодні багато роботи?", profession: "obecné" },
@@ -2706,6 +2777,7 @@ export interface FlashCard {
   uk?: string;
   type: "noun" | "sentence";
   profession: Profession;
+  level?: Level;
 }
 
 export function getAllFlashCards(): FlashCard[] {
@@ -2718,6 +2790,7 @@ export function getAllFlashCards(): FlashCard[] {
     uk: q.translationUk,
     type: "noun" as const,
     profession: q.profession,
+    level: q.level,
   }));
 
   const sentenceCards: FlashCard[] = FILL_QUESTIONS.map((q) => ({
@@ -2729,6 +2802,7 @@ export function getAllFlashCards(): FlashCard[] {
     uk: q.translationUk,
     type: "sentence" as const,
     profession: q.profession,
+    level: q.level,
   }));
 
   return [...nounCards, ...sentenceCards];
@@ -2787,4 +2861,9 @@ export function filterByProfession<T extends { profession: Profession }>(
   return items.filter(
     (item) => selectedProfessions.includes(item.profession)
   );
+}
+
+/** Filter items by level, across all professions (used by the A1 Challenge variant). */
+export function filterByLevel<T extends { level?: Level }>(items: T[], level: Level): T[] {
+  return items.filter((item) => item.level === level);
 }

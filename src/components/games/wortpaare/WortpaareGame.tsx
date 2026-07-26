@@ -5,15 +5,17 @@ import MatchedPair from "./MatchedPair";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import { RotateCcw, Copy, Check } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { Level } from "@/game/vocabularyData";
 
 interface WortpaareGameProps {
   onGameComplete?: (score: number) => void;
   challengeMode?: boolean;
+  levelOverride?: Level;
 }
 
-const WortpaareGame: React.FC<WortpaareGameProps> = ({ onGameComplete, challengeMode = false }) => {
+const WortpaareGame: React.FC<WortpaareGameProps> = ({ onGameComplete, challengeMode = false, levelOverride }) => {
   const { t } = useLanguage();
-  const { cards, matched, selected, shaking, loading, completed, selectCard, startGame } = useWortpaare(6);
+  const { cards, matched, selected, shaking, loading, completed, selectCard, startGame } = useWortpaare(6, levelOverride);
   const [copied, setCopied] = useState(false);
 
   const completionCalledRef = useRef(false);
