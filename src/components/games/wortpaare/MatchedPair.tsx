@@ -17,7 +17,7 @@ const MatchedPair: React.FC<MatchedPairProps> = ({ data }) => {
       {/* Word A */}
       <div className="flex-1 text-center">
         <p className="font-body font-bold text-sm sm:text-base text-foreground/70">{pair.word_a}</p>
-        <p className="font-body text-xs text-muted-foreground">{lang === "de" ? "" : lang === "ko" ? (pair.translation_a_ko || pair.translation_a) : lang === "pl" ? (pair.translation_a_pl || pair.translation_a) : lang === "en" ? (pair.translation_a_en || pair.translation_a) : lang === "uk" ? (pair.translation_a_en || pair.translation_a) : pair.translation_a}</p>
+        <p className="font-body text-xs text-muted-foreground">{lang === "de" ? "" : lang === "ko" ? (pair.translation_a_ko || pair.translation_a) : lang === "pl" ? (pair.translation_a_pl || pair.translation_a) : lang === "en" ? (pair.translation_a_en || pair.translation_a) : lang === "uk" ? (pair.translation_a_uk || pair.translation_a_en || pair.translation_a) : pair.translation_a}</p>
       </div>
 
       {/* Badge */}
