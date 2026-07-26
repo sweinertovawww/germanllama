@@ -87,10 +87,12 @@ export type Database = {
           translation_a_en: string | null
           translation_a_ko: string | null
           translation_a_pl: string | null
+          translation_a_uk: string | null
           translation_b: string
           translation_b_en: string | null
           translation_b_ko: string | null
           translation_b_pl: string | null
+          translation_b_uk: string | null
           word_a: string
           word_b: string
         }
@@ -103,10 +105,12 @@ export type Database = {
           translation_a_en?: string | null
           translation_a_ko?: string | null
           translation_a_pl?: string | null
+          translation_a_uk?: string | null
           translation_b: string
           translation_b_en?: string | null
           translation_b_ko?: string | null
           translation_b_pl?: string | null
+          translation_b_uk?: string | null
           word_a: string
           word_b: string
         }
@@ -119,10 +123,12 @@ export type Database = {
           translation_a_en?: string | null
           translation_a_ko?: string | null
           translation_a_pl?: string | null
+          translation_a_uk?: string | null
           translation_b?: string
           translation_b_en?: string | null
           translation_b_ko?: string | null
           translation_b_pl?: string | null
+          translation_b_uk?: string | null
           word_a?: string
           word_b?: string
         }
