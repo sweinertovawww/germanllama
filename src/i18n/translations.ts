@@ -335,7 +335,7 @@ const cs = {
   shareChallenge: "Získal/a jsem {score} bodů v GermanLlama Challenge! 🦙 germanllama.com",
   challengeTimeLeft: "Zbývá: {s}s",
   challengeGameOf: "Hra {n} z {total}",
-} as const;
+};
 
 const ko: typeof cs = {
   // Navigation
