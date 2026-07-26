@@ -14,6 +14,8 @@ export interface WordPair {
   translation_b_pl: string | null;
   translation_a_en: string | null;
   translation_b_en: string | null;
+  translation_a_uk?: string | null;
+  translation_b_uk?: string | null;
   category: string | null;
 }
 
