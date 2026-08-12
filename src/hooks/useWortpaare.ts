@@ -23,6 +23,8 @@ export interface WordPair {
   translation_b_en: string | null;
   translation_a_uk: string | null;
   translation_b_uk: string | null;
+  translation_a_sk: string | null;
+  translation_b_sk: string | null;
   category: string | null;
 }
 
