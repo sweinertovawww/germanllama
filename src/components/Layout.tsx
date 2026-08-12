@@ -9,7 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import type { Lang } from "@/i18n/translations";
 
 const FLAG: Record<Lang, string> = {
-  cs: "🇨🇿", ko: "🇰🇷", en: "🇬🇧", pl: "🇵🇱", de: "🇩🇪", uk: "🇺🇦",
+  cs: "🇨🇿", ko: "🇰🇷", en: "🇬🇧", pl: "🇵🇱", de: "🇩🇪", uk: "🇺🇦", sk: "🇸🇰",
 };
 
 interface LayoutProps {
@@ -29,6 +29,7 @@ const Layout = ({ children }: LayoutProps) => {
     { code: "pl", flag: "🇵🇱" },
     { code: "ko", flag: "🇰🇷" },
     { code: "uk", flag: "🇺🇦" },
+    { code: "sk", flag: "🇸🇰" },
   ];
   const navigate = useNavigate();
   const location = useLocation();

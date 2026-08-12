@@ -17,6 +17,7 @@ function detectBrowserLang(): Lang {
   if (nav === "pl") return "pl";
   if (nav === "ko") return "ko";
   if (nav === "uk") return "uk";
+  if (nav === "sk") return "sk";
   return "en";
 }
 

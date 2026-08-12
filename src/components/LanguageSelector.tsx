@@ -6,7 +6,7 @@ import germanLlamaLogo from "@/assets/germanllama-logo.png";
 interface LangOption {
   code: Lang;
   flag: string;
-  nameKey: "langNameCs" | "langNameDe" | "langNameEn" | "langNamePl" | "langNameKo" | "langNameUk";
+  nameKey: "langNameCs" | "langNameDe" | "langNameEn" | "langNamePl" | "langNameKo" | "langNameUk" | "langNameSk";
 }
 
 const LANG_OPTIONS: LangOption[] = [
@@ -15,6 +15,7 @@ const LANG_OPTIONS: LangOption[] = [
   { code: "pl", flag: "🇵🇱", nameKey: "langNamePl" },
   { code: "ko", flag: "🇰🇷", nameKey: "langNameKo" },
   { code: "uk", flag: "🇺🇦", nameKey: "langNameUk" },
+  { code: "sk", flag: "🇸🇰", nameKey: "langNameSk" },
 ];
 
 interface LanguageSelectorProps {
