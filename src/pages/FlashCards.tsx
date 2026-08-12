@@ -22,6 +22,7 @@ function getCardFace(card: FlashCard, language: Lang): string {
   if (language === "ko") return card.ko;
   if (language === "pl") return card.pl ?? card.czech;
   if (language === "uk") return card.uk ?? card.en ?? card.czech;
+  if (language === "sk") return card.sk ?? card.czech;
   return card.en ?? card.czech;
 }
 

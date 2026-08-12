@@ -53,12 +53,12 @@ const Wortpaare = () => {
         title={t("wortpaareSeoTitle")}
         intro={t("wortpaareSeoIntro")}
         sampleWords={[
-          { german: "groß ↔ klein",         translation: lang === "de" ? "big ↔ small"    : lang === "ko" ? "크다 ↔ 작다"         : lang === "pl" ? "duży ↔ mały"              : lang === "en" ? "big ↔ small"       : lang === "uk" ? "великий ↔ малий"   : "velký ↔ malý" },
-          { german: "sprechen = reden",      translation: lang === "de" ? "speak = talk"   : lang === "ko" ? "말하다 = 이야기하다" : lang === "pl" ? "mówić = rozmawiać"         : lang === "en" ? "speak = talk"      : lang === "uk" ? "говорити = балакати" : "mluvit = hovořit" },
-          { german: "kaufen ↔ verkaufen",    translation: lang === "de" ? "buy ↔ sell"     : lang === "ko" ? "사다 ↔ 팔다"         : lang === "pl" ? "kupować ↔ sprzedawać"     : lang === "en" ? "buy ↔ sell"        : lang === "uk" ? "купувати ↔ продавати" : "kupovat ↔ prodávat" },
-          { german: "Arbeit = Job",          translation: lang === "de" ? "work = job"     : lang === "ko" ? "일 = 직업"           : lang === "pl" ? "praca = zajęcie"          : lang === "en" ? "work = job"        : lang === "uk" ? "робота = праця"    : "práce = zaměstnání" },
-          { german: "krank ↔ gesund",        translation: lang === "de" ? "sick ↔ healthy" : lang === "ko" ? "아프다 ↔ 건강하다"   : lang === "pl" ? "chory ↔ zdrowy"           : lang === "en" ? "sick ↔ healthy"    : lang === "uk" ? "хворий ↔ здоровий" : "nemocný ↔ zdravý" },
-          { german: "helfen = unterstützen", translation: lang === "de" ? "help = support" : lang === "ko" ? "돕다 = 지원하다"     : lang === "pl" ? "pomagać = wspierać"       : lang === "en" ? "help = support"    : lang === "uk" ? "допомагати = підтримувати" : "pomáhat = podporovat" },
+          { german: "groß ↔ klein",         translation: lang === "de" ? "big ↔ small"    : lang === "ko" ? "크다 ↔ 작다"         : lang === "pl" ? "duży ↔ mały"              : lang === "en" ? "big ↔ small"       : lang === "uk" ? "великий ↔ малий"   : lang === "sk" ? "veľký ↔ malý"          : "velký ↔ malý" },
+          { german: "sprechen = reden",      translation: lang === "de" ? "speak = talk"   : lang === "ko" ? "말하다 = 이야기하다" : lang === "pl" ? "mówić = rozmawiać"         : lang === "en" ? "speak = talk"      : lang === "uk" ? "говорити = балакати" : lang === "sk" ? "hovoriť = rozprávať"   : "mluvit = hovořit" },
+          { german: "kaufen ↔ verkaufen",    translation: lang === "de" ? "buy ↔ sell"     : lang === "ko" ? "사다 ↔ 팔다"         : lang === "pl" ? "kupować ↔ sprzedawać"     : lang === "en" ? "buy ↔ sell"        : lang === "uk" ? "купувати ↔ продавати" : lang === "sk" ? "kupovať ↔ predávať"    : "kupovat ↔ prodávat" },
+          { german: "Arbeit = Job",          translation: lang === "de" ? "work = job"     : lang === "ko" ? "일 = 직업"           : lang === "pl" ? "praca = zajęcie"          : lang === "en" ? "work = job"        : lang === "uk" ? "робота = праця"    : lang === "sk" ? "práca = zamestnanie"   : "práce = zaměstnání" },
+          { german: "krank ↔ gesund",        translation: lang === "de" ? "sick ↔ healthy" : lang === "ko" ? "아프다 ↔ 건강하다"   : lang === "pl" ? "chory ↔ zdrowy"           : lang === "en" ? "sick ↔ healthy"    : lang === "uk" ? "хворий ↔ здоровий" : lang === "sk" ? "chorý ↔ zdravý"        : "nemocný ↔ zdravý" },
+          { german: "helfen = unterstützen", translation: lang === "de" ? "help = support" : lang === "ko" ? "돕다 = 지원하다"     : lang === "pl" ? "pomagać = wspierać"       : lang === "en" ? "help = support"    : lang === "uk" ? "допомагати = підтримувати" : lang === "sk" ? "pomáhať = podporovať" : "pomáhat = podporovat" },
         ]}
         faqs={[
           { q: t("wortpaareFaq1q"), a: t("wortpaareFaq1a") },

@@ -37,6 +37,7 @@ interface SentencePair {
   translationEn: string;
   translationPl: string;
   translationUk: string;
+  translationSk: string;
   start: string;
   end: string;
   matched: boolean;
@@ -64,6 +65,7 @@ function makePairs(questions: typeof FILL_QUESTIONS): SentencePair[] {
       translationEn: q.translationEn ?? q.translation,
       translationPl: q.translationPl ?? q.translation,
       translationUk: q.translationUk ?? q.translationEn ?? q.translation,
+      translationSk: q.translationSk ?? q.translation,
       start,
       end,
       matched: false,
@@ -435,8 +437,8 @@ const SentenceBuilder = ({ onGameComplete, challengeMode = false, levelOverride 
                     }`}
                   >
                     <p className="font-body text-xs text-muted-foreground mb-1.5 italic">
-                      {lang === "ko" ? "🇰🇷" : lang === "pl" ? "🇵🇱" : lang === "en" ? "🇬🇧" : lang === "uk" ? "🇺🇦" : "🇨🇿"}{" "}
-                      {lang === "ko" ? pair.translationKo : lang === "pl" ? pair.translationPl : lang === "en" ? pair.translationEn : lang === "uk" ? pair.translationUk : pair.translation}
+                      {lang === "ko" ? "🇰🇷" : lang === "pl" ? "🇵🇱" : lang === "en" ? "🇬🇧" : lang === "uk" ? "🇺🇦" : lang === "sk" ? "🇸🇰" : "🇨🇿"}{" "}
+                      {lang === "ko" ? pair.translationKo : lang === "pl" ? pair.translationPl : lang === "en" ? pair.translationEn : lang === "uk" ? pair.translationUk : lang === "sk" ? pair.translationSk : pair.translation}
                     </p>
                     <span className="font-body text-[7px] sm:text-[8px] text-muted-foreground/60">[{pair.profession}]</span>
                     <div className="flex items-center gap-2 flex-wrap">

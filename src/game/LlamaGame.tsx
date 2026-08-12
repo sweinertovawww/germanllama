@@ -12,6 +12,7 @@ function getTranslation(q: Question | FillQuestion, lang: Lang): string {
   if (lang === "en") return q.translationEn ?? q.translation;
   if (lang === "pl") return q.translationPl ?? q.translation;
   if (lang === "uk") return q.translationUk ?? q.translationEn ?? q.translation;
+  if (lang === "sk") return q.translationSk ?? q.translation;
   return q.translation;
 }
 
