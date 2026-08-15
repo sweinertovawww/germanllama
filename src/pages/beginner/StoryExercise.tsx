@@ -28,12 +28,13 @@ function shuffleArray<T>(arr: T[]): T[] {
 interface PoolItem {
   id: string;
   text: string;
+  pair: number;
 }
 
 function buildPool(sentences: StoryWord[][]): PoolItem[] {
   const items: PoolItem[] = [];
   sentences.forEach((words, sIdx) => {
-    words.forEach((w, wIdx) => items.push({ id: `pool-${sIdx}-${wIdx}`, text: w.text }));
+    words.forEach((w, wIdx) => items.push({ id: `pool-${sIdx}-${wIdx}`, text: w.text, pair: w.pair }));
   });
   return shuffleArray(items);
 }
@@ -42,11 +43,13 @@ function buildPool(sentences: StoryWord[][]): PoolItem[] {
 function PoolTile({
   id,
   text,
+  colorClass,
   selected,
   onTap,
 }: {
   id: string;
   text: string;
+  colorClass: string;
   selected: boolean;
   onTap: () => void;
 }) {
@@ -66,7 +69,7 @@ function PoolTile({
             : "border-border bg-card hover:border-primary/50 hover:shadow-sm"
       }`}
     >
-      <span className="text-foreground font-semibold break-words">{text}</span>
+      <span className={`font-semibold break-words ${colorClass}`}>{text}</span>
     </div>
   );
 }
@@ -194,7 +197,7 @@ const StoryExercise = () => {
     [selectedPoolId, pool, attemptPlace]
   );
 
-  const activeDragText = useMemo(() => pool.find((p) => p.id === activeDragId)?.text ?? "", [activeDragId, pool]);
+  const activeDragItem = useMemo(() => pool.find((p) => p.id === activeDragId), [activeDragId, pool]);
 
   if (!story) {
     return (
@@ -320,6 +323,7 @@ const StoryExercise = () => {
                     key={item.id}
                     id={item.id}
                     text={item.text}
+                    colorClass={pairColorClass(item.pair)}
                     selected={selectedPoolId === item.id}
                     onTap={() => handlePoolTap(item.id)}
                   />
@@ -331,10 +335,10 @@ const StoryExercise = () => {
           </div>
 
           <DragOverlay>
-            {activeDragId ? (
+            {activeDragItem ? (
               <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-primary bg-card shadow-lg font-body text-sm opacity-80">
                 <GripVertical className="w-3.5 h-3.5 text-primary shrink-0" />
-                <span className="text-foreground font-semibold">{activeDragText}</span>
+                <span className={`font-semibold ${pairColorClass(activeDragItem.pair)}`}>{activeDragItem.text}</span>
               </div>
             ) : null}
           </DragOverlay>
