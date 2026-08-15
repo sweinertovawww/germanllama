@@ -7,7 +7,7 @@ interface SEOHeadProps {
   jsonLd?: object;
 }
 
-const BASE_URL = "https://germanllama.lovable.app";
+const BASE_URL = "https://www.germanllama.com";
 const CANONICAL_BASE = "https://www.germanllama.com";
 
 const SEOHead = ({ title, description, canonical, jsonLd }: SEOHeadProps) => {
