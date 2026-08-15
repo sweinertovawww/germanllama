@@ -59,7 +59,7 @@ export default async function middleware(request: Request) {
   let html = await origin.text();
   const title = escapeHtml(meta.title);
   const description = escapeHtml(meta.description);
-  const image = `https://germanllama.lovable.app/og/og-image-${lang}.jpg`;
+  const image = `https://www.germanllama.com/og/og-image-${lang}.jpg`;
 
   html = html
     .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
