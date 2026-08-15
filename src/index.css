@@ -121,3 +121,23 @@
 .animate-shake {
   animation: shake 0.4s ease-in-out;
 }
+
+/* Always-visible scrollbar, so it's obvious a panel scrolls even on touch devices */
+.scrollbar-visible {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--primary) / 0.5) hsl(var(--muted));
+}
+
+.scrollbar-visible::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-visible::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 9999px;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.5);
+  border-radius: 9999px;
+}

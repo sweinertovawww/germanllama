@@ -315,7 +315,7 @@ const StoryExercise = () => {
           {/* Shared word bank — fixed bottom bar on mobile/tablet (always in view without scrolling),
               sticky 4th column on desktop */}
           <div className="lg:w-[28rem] shrink-0">
-            <div className="fixed inset-x-0 bottom-0 z-40 max-h-[36vh] overflow-y-auto bg-card border-t-2 border-border shadow-[0_-6px_16px_-4px_rgba(0,0,0,0.15)] rounded-t-2xl px-3 py-2 sm:px-4 sm:py-3 lg:sticky lg:top-28 lg:max-h-none lg:overflow-visible lg:bg-transparent lg:shadow-none lg:border-2 lg:border-dashed lg:rounded-xl lg:p-3">
+            <div className="scrollbar-visible fixed inset-x-0 bottom-0 z-40 max-h-[36vh] overflow-y-auto bg-card border-t-2 border-border shadow-[0_-6px_16px_-4px_rgba(0,0,0,0.15)] rounded-t-2xl px-3 py-2 sm:px-4 sm:py-3 lg:sticky lg:top-28 lg:max-h-none lg:overflow-visible lg:bg-transparent lg:shadow-none lg:border-2 lg:border-dashed lg:rounded-xl lg:p-3">
               <h3 className="font-game text-[10px] sm:text-xs text-muted-foreground mb-1.5 lg:mb-3">Word Bank</h3>
               <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-1.5 sm:gap-1.5 lg:gap-1">
                 {pool.map((item) => (
