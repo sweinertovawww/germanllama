@@ -244,29 +244,48 @@ const StoryExercise = () => {
         )}
 
         <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-          <div className="space-y-3 sm:space-y-4">
+          {/* Column headers (desktop) */}
+          <div className="hidden sm:grid sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-4 mb-1">
+            <span className="font-game text-[10px] text-muted-foreground">English</span>
+            <span className="font-game text-[10px] text-muted-foreground">German</span>
+            <span className="font-game text-[10px] text-muted-foreground">Build the sentence</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-4 gap-1.5">
             {story.sentences.map((_, sIdx) => {
               const deWords = germanBySentence[sIdx];
               const enWords = englishBySentence[sIdx];
+              const rowBorder = "py-2.5 sm:py-3 border-b border-border/50";
               return (
-                <div key={sIdx} className="rounded-xl border-2 border-border bg-card p-3 sm:p-4">
-                  {!hideGerman && (
-                    <p className="font-body text-sm sm:text-base flex flex-wrap gap-x-1.5 mb-1">
-                      {deWords.map((w, i) => (
-                        <span key={i} className={`font-semibold ${pairColorClass(w.pair)}`}>
-                          {w.text}
-                        </span>
-                      ))}
-                    </p>
-                  )}
-                  <p className="font-body text-xs sm:text-sm text-muted-foreground flex flex-wrap gap-x-1.5 mb-3">
+                <React.Fragment key={sIdx}>
+                  {/* English column */}
+                  <p className={`font-body text-xs sm:text-sm text-muted-foreground flex flex-wrap content-start gap-x-1.5 ${rowBorder}`}>
+                    <span className="sm:hidden shrink-0">🇬🇧</span>
                     {enWords.map((w, i) => (
                       <span key={i} className={pairColorClass(w.pair)}>
                         {w.text}
                       </span>
                     ))}
                   </p>
-                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
+
+                  {/* German column (hideable) */}
+                  <p className={`font-body text-sm sm:text-base flex flex-wrap content-start gap-x-1.5 min-h-[1.5rem] ${rowBorder}`}>
+                    {hideGerman ? (
+                      <span className="text-muted-foreground italic text-xs">🙈 hidden</span>
+                    ) : (
+                      <>
+                        <span className="sm:hidden shrink-0">🇩🇪</span>
+                        {deWords.map((w, i) => (
+                          <span key={i} className={`font-semibold ${pairColorClass(w.pair)}`}>
+                            {w.text}
+                          </span>
+                        ))}
+                      </>
+                    )}
+                  </p>
+
+                  {/* Build column */}
+                  <div className={`flex flex-wrap content-start gap-1.5 sm:gap-2 ${rowBorder}`}>
                     {deWords.map((w, wIdx) => {
                       const slotId = `slot-${sIdx}-${wIdx}`;
                       const isFilled = !!filled[slotId];
@@ -284,7 +303,7 @@ const StoryExercise = () => {
                       );
                     })}
                   </div>
-                </div>
+                </React.Fragment>
               );
             })}
           </div>
