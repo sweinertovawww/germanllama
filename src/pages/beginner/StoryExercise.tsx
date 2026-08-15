@@ -220,7 +220,7 @@ const StoryExercise = () => {
         canonical={`/start-from-beginning/sentence-structure/${story.id}`}
       />
       <section className="max-w-6xl mx-auto px-3 sm:px-4 pt-2 sm:pt-4 pb-[42vh] sm:pb-[38vh] lg:pb-4">
-        <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+        <div className="flex items-center justify-between flex-wrap gap-2 mb-2 sm:grid sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-x-4 sm:justify-normal">
           <Link
             to="/start-from-beginning/sentence-structure"
             className="inline-flex items-center gap-1.5 font-body text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -230,7 +230,7 @@ const StoryExercise = () => {
 
           <button
             onClick={() => setHideGerman((h) => !h)}
-            className="sm:hidden font-game text-[10px] px-3 py-1.5 rounded-lg border-2 border-accent text-accent hover:bg-accent/10 transition-colors"
+            className="justify-self-start font-game text-[10px] sm:text-xs px-3 py-1.5 rounded-lg border-2 border-accent text-accent hover:bg-accent/10 transition-colors w-fit"
           >
             {hideGerman ? "Show German" : "Hide German"}
           </button>
@@ -248,17 +248,9 @@ const StoryExercise = () => {
           <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-6">
           <div className="flex-1 min-w-0">
           {/* Column headers (desktop) */}
-          <div className="hidden sm:grid sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-x-4 sm:items-center mb-0.5">
+          <div className="hidden sm:grid sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-x-4 mb-0.5">
             <span className="font-game text-[9px] text-muted-foreground">English</span>
-            <div className="flex items-center gap-2">
-              <span className="font-game text-[9px] text-muted-foreground">German</span>
-              <button
-                onClick={() => setHideGerman((h) => !h)}
-                className="font-game text-[8px] px-2 py-0.5 rounded border-2 border-accent text-accent hover:bg-accent/10 transition-colors"
-              >
-                {hideGerman ? "Show German" : "Hide German"}
-              </button>
-            </div>
+            <span className="font-game text-[9px] text-muted-foreground">German</span>
             <span className="font-game text-[9px] text-muted-foreground">Build the sentence</span>
           </div>
 
