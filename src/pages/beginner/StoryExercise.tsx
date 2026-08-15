@@ -238,6 +238,11 @@ const StoryExercise = () => {
         </div>
 
         <h1 className="font-game text-sm sm:text-lg text-foreground mb-1">{story.title}</h1>
+        <p className="font-body text-muted-foreground text-[11px] sm:text-xs mb-2">
+          Read the sentences in English and German. Words with the same meaning are marked with the same color. Then
+          hide the German sentences and try to translate the English sentences correctly. The words in the word bank
+          are color-coded to make choosing easier.
+        </p>
 
         {allDone && (
           <div className="mb-2 rounded-xl border-2 border-accent bg-accent/10 px-4 py-2 text-center">
