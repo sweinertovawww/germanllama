@@ -12,7 +12,7 @@ import {
   DragStartEvent,
   DragEndEvent,
 } from "@dnd-kit/core";
-import { ArrowLeft, GripVertical } from "lucide-react";
+import { ArrowLeft, GripVertical, Eye, EyeOff } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { getStory, chunksToWords, pairColorClass, type StoryWord } from "@/data/beginnerStories";
 
@@ -230,8 +230,9 @@ const StoryExercise = () => {
 
           <button
             onClick={() => setHideGerman((h) => !h)}
-            className="justify-self-start font-game text-[10px] sm:text-xs px-3 py-1.5 rounded-lg border-2 border-accent text-accent hover:bg-accent/10 transition-colors w-fit"
+            className="justify-self-start flex items-center gap-1.5 font-game text-[10px] sm:text-xs px-3 py-1.5 rounded-lg border-2 border-foreground text-foreground hover:bg-foreground/10 transition-colors w-fit"
           >
+            {hideGerman ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
             {hideGerman ? "Show German" : "Hide German"}
           </button>
         </div>
