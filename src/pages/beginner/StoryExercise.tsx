@@ -98,7 +98,7 @@ function Slot({
       ref={setNodeRef}
       onClick={onTap}
       style={{ minWidth: `${Math.max(answerText.length, 2)}ch` }}
-      className={`min-h-[38px] flex items-center justify-center px-2 py-1.5 rounded-lg border-2 transition-all ${
+      className={`min-h-[28px] sm:min-h-[30px] flex items-center justify-center px-1.5 py-1 rounded-md border-2 transition-all ${
         shaking
           ? "animate-shake border-destructive bg-destructive/10"
           : filled
@@ -110,7 +110,7 @@ function Slot({
                 : "border-border bg-muted/30 border-dashed"
       }`}
     >
-      {filled && <span className={`font-body text-sm font-bold ${colorClass}`}>{answerText}</span>}
+      {filled && <span className={`font-body text-xs sm:text-sm font-bold ${colorClass}`}>{answerText}</span>}
     </div>
   );
 }
@@ -219,28 +219,27 @@ const StoryExercise = () => {
         description="Read a short German story side by side with English, then rebuild each sentence yourself."
         canonical={`/start-from-beginning/sentence-structure/${story.id}`}
       />
-      <section className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
-        <Link
-          to="/start-from-beginning/sentence-structure"
-          className="inline-flex items-center gap-1.5 font-body text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors mb-3"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to Sentence Structure
-        </Link>
+      <section className="max-w-6xl mx-auto px-3 sm:px-4 py-2 sm:py-4">
+        <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+          <Link
+            to="/start-from-beginning/sentence-structure"
+            className="inline-flex items-center gap-1.5 font-body text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" /> Back
+          </Link>
 
-        <h1 className="font-game text-lg sm:text-xl text-foreground mb-2">{story.title}</h1>
-        <p className="font-body text-muted-foreground text-xs sm:text-sm mb-4">
-          Read the story below. When you're ready, hide the German and rebuild each sentence from the word bank.
-        </p>
+          <button
+            onClick={() => setHideGerman((h) => !h)}
+            className="font-game text-[10px] sm:text-xs px-3 py-1.5 rounded-lg border-2 border-accent text-accent hover:bg-accent/10 transition-colors"
+          >
+            {hideGerman ? "Show German" : "Hide German"}
+          </button>
+        </div>
 
-        <button
-          onClick={() => setHideGerman((h) => !h)}
-          className="font-game text-[10px] sm:text-xs px-4 py-2 rounded-lg border-2 border-accent text-accent hover:bg-accent/10 transition-colors mb-4"
-        >
-          {hideGerman ? "Show German" : "Hide German"}
-        </button>
+        <h1 className="font-game text-sm sm:text-lg text-foreground mb-1">{story.title}</h1>
 
         {allDone && (
-          <div className="mb-4 rounded-xl border-2 border-accent bg-accent/10 px-4 py-3 text-center">
+          <div className="mb-2 rounded-xl border-2 border-accent bg-accent/10 px-4 py-2 text-center">
             <p className="font-game text-xs sm:text-sm text-accent">🎉 Great job! You rebuilt the whole story.</p>
           </div>
         )}
@@ -249,21 +248,21 @@ const StoryExercise = () => {
           <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-6">
           <div className="flex-1 min-w-0">
           {/* Column headers (desktop) */}
-          <div className="hidden sm:grid sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-4 mb-1">
-            <span className="font-game text-[10px] text-muted-foreground">English</span>
-            <span className="font-game text-[10px] text-muted-foreground">German</span>
-            <span className="font-game text-[10px] text-muted-foreground">Build the sentence</span>
+          <div className="hidden sm:grid sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-x-4 mb-0.5">
+            <span className="font-game text-[9px] text-muted-foreground">English</span>
+            <span className="font-game text-[9px] text-muted-foreground">German</span>
+            <span className="font-game text-[9px] text-muted-foreground">Build the sentence</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-4 gap-1.5">
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-x-4 gap-y-0.5 sm:gap-y-0">
             {story.sentences.map((_, sIdx) => {
               const deWords = germanBySentence[sIdx];
               const enWords = englishBySentence[sIdx];
-              const rowBorder = "py-2.5 sm:py-3 border-b border-border/50";
+              const rowBorder = "py-1 sm:py-1.5 border-b border-border/50";
               return (
                 <React.Fragment key={sIdx}>
                   {/* English column */}
-                  <p className={`font-body text-xs sm:text-sm text-muted-foreground flex flex-wrap content-start gap-x-1.5 ${rowBorder}`}>
+                  <p className={`font-body text-[11px] sm:text-xs text-muted-foreground flex flex-wrap content-start gap-x-1.5 ${rowBorder}`}>
                     <span className="sm:hidden shrink-0">🇬🇧</span>
                     {enWords.map((w, i) => (
                       <span key={i} className={pairColorClass(w.pair)}>
@@ -273,9 +272,9 @@ const StoryExercise = () => {
                   </p>
 
                   {/* German column (hideable) */}
-                  <p className={`font-body text-sm sm:text-base flex flex-wrap content-start gap-x-1.5 min-h-[1.5rem] ${rowBorder}`}>
+                  <p className={`font-body text-xs sm:text-sm flex flex-wrap content-start gap-x-1.5 min-h-[1.25rem] ${rowBorder}`}>
                     {hideGerman ? (
-                      <span className="text-muted-foreground italic text-xs">🙈 hidden</span>
+                      <span className="text-muted-foreground italic text-[10px]">🙈 hidden</span>
                     ) : (
                       <>
                         <span className="sm:hidden shrink-0">🇩🇪</span>
@@ -289,7 +288,7 @@ const StoryExercise = () => {
                   </p>
 
                   {/* Build column */}
-                  <div className={`flex flex-wrap content-start gap-1.5 sm:gap-2 ${rowBorder}`}>
+                  <div className={`flex flex-wrap content-start gap-1 sm:gap-1.5 ${rowBorder}`}>
                     {deWords.map((w, wIdx) => {
                       const slotId = `slot-${sIdx}-${wIdx}`;
                       const isFilled = !!filled[slotId];
