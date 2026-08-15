@@ -61,7 +61,7 @@ function PoolTile({
       {...attributes}
       onClick={onTap}
       style={{ touchAction: "none" }}
-      className={`w-full flex items-center justify-center gap-1 px-1 py-1.5 rounded-lg border-2 font-body text-[10px] sm:text-xs text-center cursor-grab active:cursor-grabbing select-none transition-all ${
+      className={`w-full flex items-center justify-center gap-1 px-1.5 py-2 sm:px-1 sm:py-1.5 rounded-lg border-2 font-body text-xs sm:text-[11px] lg:text-[10px] text-center cursor-grab active:cursor-grabbing select-none transition-all ${
         isDragging
           ? "opacity-30 border-primary/30 bg-muted/50"
           : selected
@@ -98,7 +98,7 @@ function Slot({
       ref={setNodeRef}
       onClick={onTap}
       style={{ minWidth: `${Math.max(answerText.length, 2)}ch` }}
-      className={`min-h-[28px] sm:min-h-[30px] flex items-center justify-center px-1.5 py-1 rounded-md border-2 transition-all ${
+      className={`min-h-[36px] sm:min-h-[30px] flex items-center justify-center px-2 py-1.5 sm:px-1.5 sm:py-1 rounded-md border-2 transition-all ${
         shaking
           ? "animate-shake border-destructive bg-destructive/10"
           : filled
@@ -316,7 +316,7 @@ const StoryExercise = () => {
           <div className="lg:w-[28rem] shrink-0">
             <div className="lg:sticky lg:top-28 rounded-xl border-2 border-dashed border-border p-3 sm:p-4 mt-6 lg:mt-0">
               <h3 className="font-game text-[10px] sm:text-xs text-muted-foreground mb-3">Word Bank</h3>
-              <div className="grid grid-cols-5 gap-1 sm:gap-1.5">
+              <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-1.5 sm:gap-1.5 lg:gap-1">
                 {pool.map((item) => (
                   <PoolTile
                     key={item.id}
