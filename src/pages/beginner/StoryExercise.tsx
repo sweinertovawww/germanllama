@@ -12,7 +12,7 @@ import {
   DragStartEvent,
   DragEndEvent,
 } from "@dnd-kit/core";
-import { ArrowLeft, GripVertical, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, GripVertical, Eye, EyeOff, Copy, Check } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { getStory, chunksToWords, pairColorClass, type StoryWord } from "@/data/beginnerStories";
 
@@ -134,6 +134,7 @@ const StoryExercise = () => {
   const [selectedPoolId, setSelectedPoolId] = useState<string | null>(null);
   const [shakeSlot, setShakeSlot] = useState<string | null>(null);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     setPool(buildPool(germanBySentence));
@@ -199,6 +200,14 @@ const StoryExercise = () => {
 
   const activeDragItem = useMemo(() => pool.find((p) => p.id === activeDragId), [activeDragId, pool]);
 
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText(
+      `I rebuilt the "${story?.title}" story on GermanLlama! 🦙 germanllama.com`
+    );
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, [story]);
+
   if (!story) {
     return (
       <section className="max-w-4xl mx-auto px-4 py-16 text-center">
@@ -245,8 +254,37 @@ const StoryExercise = () => {
         </p>
 
         {allDone && (
-          <div className="mb-2 rounded-xl border-2 border-accent bg-accent/10 px-4 py-2 text-center">
+          <div className="mb-2 rounded-xl border-2 border-accent bg-accent/10 px-4 py-3 text-center space-y-2">
             <p className="font-game text-xs sm:text-sm text-accent">🎉 Great job! You rebuilt the whole story.</p>
+            <div className="flex flex-col items-center gap-2">
+              <div className="relative">
+                {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
+                  const rad = (angle * Math.PI) / 180;
+                  const x = Math.cos(rad) * 38;
+                  const y = Math.sin(rad) * 38;
+                  return (
+                    <span
+                      key={i}
+                      className="absolute left-1/2 top-1/2 text-xs pointer-events-none"
+                      style={{
+                        ["--sp-x" as string]: `${x}px`,
+                        ["--sp-y" as string]: `${y}px`,
+                        animation: `sparkle-burst 1.6s ease-in-out ${(i * 0.2).toFixed(1)}s infinite`,
+                      }}
+                    >
+                      ✨
+                    </span>
+                  );
+                })}
+                <button
+                  onClick={handleCopy}
+                  className="relative z-10 flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-accent text-accent-foreground hover:scale-105 transition-transform shadow-md"
+                >
+                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  {copied ? "Copied!" : "Share"}
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
