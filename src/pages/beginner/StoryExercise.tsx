@@ -217,7 +217,7 @@ const StoryExercise = () => {
         description="Read a short German story side by side with English, then rebuild each sentence yourself."
         canonical={`/start-from-beginning/sentence-structure/${story.id}`}
       />
-      <section className="max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
+      <section className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
         <Link
           to="/start-from-beginning/sentence-structure"
           className="inline-flex items-center gap-1.5 font-body text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors mb-3"
@@ -244,6 +244,8 @@ const StoryExercise = () => {
         )}
 
         <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+          <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-6">
+          <div className="flex-1 min-w-0">
           {/* Column headers (desktop) */}
           <div className="hidden sm:grid sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-4 mb-1">
             <span className="font-game text-[10px] text-muted-foreground">English</span>
@@ -307,22 +309,26 @@ const StoryExercise = () => {
               );
             })}
           </div>
+          </div>
 
-          {/* Shared word bank */}
-          <div className="mt-6 rounded-xl border-2 border-dashed border-border p-3 sm:p-4">
-            <h3 className="font-game text-[10px] sm:text-xs text-muted-foreground mb-3">Word Bank</h3>
-            <div className="flex flex-wrap gap-2">
-              {pool.map((item) => (
-                <PoolTile
-                  key={item.id}
-                  id={item.id}
-                  text={item.text}
-                  selected={selectedPoolId === item.id}
-                  onTap={() => handlePoolTap(item.id)}
-                />
-              ))}
-              {allDone && <p className="font-body text-xs text-muted-foreground italic">All words placed!</p>}
+          {/* Shared word bank — sticky 4th column on desktop, so it stays visible while scrolling */}
+          <div className="lg:w-64 shrink-0">
+            <div className="lg:sticky lg:top-28 rounded-xl border-2 border-dashed border-border p-3 sm:p-4 mt-6 lg:mt-0">
+              <h3 className="font-game text-[10px] sm:text-xs text-muted-foreground mb-3">Word Bank</h3>
+              <div className="flex flex-wrap gap-2">
+                {pool.map((item) => (
+                  <PoolTile
+                    key={item.id}
+                    id={item.id}
+                    text={item.text}
+                    selected={selectedPoolId === item.id}
+                    onTap={() => handlePoolTap(item.id)}
+                  />
+                ))}
+                {allDone && <p className="font-body text-xs text-muted-foreground italic">All words placed!</p>}
+              </div>
             </div>
+          </div>
           </div>
 
           <DragOverlay>
