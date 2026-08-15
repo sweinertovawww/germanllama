@@ -2,9 +2,29 @@ import React from "react";
 import { Check, ArrowLeftRight } from "lucide-react";
 import { MatchedPairData } from "@/hooks/useWortpaare";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { Lang } from "@/i18n/translations";
 
 interface MatchedPairProps {
   data: MatchedPairData;
+}
+
+function getTranslation(lang: Lang, pair: MatchedPairData["pair"], side: "a" | "b"): string {
+  if (lang === "de") return "";
+  const base = side === "a" ? pair.translation_a : pair.translation_b;
+  const en = side === "a" ? pair.translation_a_en : pair.translation_b_en;
+  const ko = side === "a" ? pair.translation_a_ko : pair.translation_b_ko;
+  const pl = side === "a" ? pair.translation_a_pl : pair.translation_b_pl;
+  const uk = side === "a" ? pair.translation_a_uk : pair.translation_b_uk;
+  const sk = side === "a" ? pair.translation_a_sk : pair.translation_b_sk;
+
+  switch (lang) {
+    case "ko": return ko || base;
+    case "pl": return pl || base;
+    case "en": return en || base;
+    case "uk": return uk || en || base;
+    case "sk": return sk || base;
+    default: return base;
+  }
 }
 
 const MatchedPair: React.FC<MatchedPairProps> = ({ data }) => {
@@ -17,7 +37,7 @@ const MatchedPair: React.FC<MatchedPairProps> = ({ data }) => {
       {/* Word A */}
       <div className="flex-1 text-center">
         <p className="font-body font-bold text-sm sm:text-base text-foreground/70">{pair.word_a}</p>
-        <p className="font-body text-xs text-muted-foreground">{lang === "de" ? "" : lang === "ko" ? (pair.translation_a_ko || pair.translation_a) : lang === "pl" ? (pair.translation_a_pl || pair.translation_a) : lang === "en" ? (pair.translation_a_en || pair.translation_a) : lang === "uk" ? (pair.translation_a_uk || pair.translation_a_en || pair.translation_a) : pair.translation_a}</p>
+        <p className="font-body text-xs text-muted-foreground">{getTranslation(lang, pair, "a")}</p>
       </div>
 
       {/* Badge */}
@@ -37,7 +57,7 @@ const MatchedPair: React.FC<MatchedPairProps> = ({ data }) => {
       {/* Word B */}
       <div className="flex-1 text-center">
         <p className="font-body font-bold text-sm sm:text-base text-foreground/70">{pair.word_b}</p>
-        <p className="font-body text-xs text-muted-foreground">{lang === "de" ? "" : lang === "ko" ? (pair.translation_b_ko || pair.translation_b) : lang === "pl" ? (pair.translation_b_pl || pair.translation_b) : lang === "en" ? (pair.translation_b_en || pair.translation_b) : lang === "uk" ? (pair.translation_b_uk || pair.translation_b_en || pair.translation_b) : pair.translation_b}</p>
+        <p className="font-body text-xs text-muted-foreground">{getTranslation(lang, pair, "b")}</p>
       </div>
 
       <Check className="w-4 h-4 text-primary shrink-0" />
