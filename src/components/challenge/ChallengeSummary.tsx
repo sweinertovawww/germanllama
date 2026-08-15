@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Trophy, Copy, Check, RotateCcw } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { currentShareUrl } from "@/lib/utils";
 
 interface ChallengeSummaryProps {
   perGameScores: number[];
@@ -9,7 +10,7 @@ interface ChallengeSummaryProps {
 }
 
 export default function ChallengeSummary({ perGameScores, onPlayAgain, variant = "standard" }: ChallengeSummaryProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [copied, setCopied] = useState(false);
 
   const totalScore = perGameScores.reduce((a, b) => a + b, 0);
@@ -23,7 +24,7 @@ export default function ChallengeSummary({ perGameScores, onPlayAgain, variant =
   };
 
   const handleShare = () => {
-    const text = t(variant === "a1" ? "shareChallengeA1" : "shareChallenge", { score: String(totalScore) });
+    const text = t(variant === "a1" ? "shareChallengeA1" : "shareChallenge", { score: String(totalScore), url: currentShareUrl(lang) });
     if (navigator.share) {
       navigator.share({ text }).catch(() => {});
     } else {

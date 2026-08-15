@@ -5,6 +5,7 @@ import MatchedPair from "./MatchedPair";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import { RotateCcw, Copy, Check } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { currentShareUrl } from "@/lib/utils";
 import type { Level } from "@/game/vocabularyData";
 
 interface WortpaareGameProps {
@@ -14,7 +15,7 @@ interface WortpaareGameProps {
 }
 
 const WortpaareGame: React.FC<WortpaareGameProps> = ({ onGameComplete, challengeMode = false, levelOverride }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { cards, matched, selected, shaking, loading, completed, selectCard, startGame } = useWortpaare(6, levelOverride);
   const [copied, setCopied] = useState(false);
 
@@ -32,7 +33,7 @@ const WortpaareGame: React.FC<WortpaareGameProps> = ({ onGameComplete, challenge
   }, [completed]);
 
   const handleShare = () => {
-    const text = t("shareWortpaare", { pairs: String(matched.length) });
+    const text = t("shareWortpaare", { pairs: String(matched.length), url: currentShareUrl(lang) });
     if (navigator.share) {
       navigator.share({ text }).catch(() => {});
     } else {

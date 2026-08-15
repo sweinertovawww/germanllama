@@ -15,6 +15,7 @@ import {
 import { ArrowLeft, GripVertical, Eye, EyeOff, Copy, Check } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { getStory, chunksToWords, pairColorClass, type StoryWord } from "@/data/beginnerStories";
+import { currentShareUrl } from "@/lib/utils";
 
 function shuffleArray<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -202,7 +203,7 @@ const StoryExercise = () => {
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(
-      `I rebuilt the "${story?.title}" story on GermanLlama! 🦙 germanllama.com`
+      `I rebuilt the "${story?.title}" story on GermanLlama! 🦙 ${currentShareUrl("en")}`
     );
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);

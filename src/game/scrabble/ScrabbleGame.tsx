@@ -4,6 +4,7 @@ import { type TileItem } from "./types";
 import { type Profession, type Level, PROFESSION_LIST } from "@/game/vocabularyData";
 import { generateCrossword, getWordsForProfession, type CrosswordData, type PlacedWord } from "./crosswordGenerator";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { currentShareUrl } from "@/lib/utils";
 import ScrabbleLobby from "./ScrabbleLobby";
 import ScrabbleGrid from "./ScrabbleGrid";
 import ScrabbleClues from "./ScrabbleClues";
@@ -44,7 +45,7 @@ interface ScrabbleGameProps {
 }
 
 export default function ScrabbleGame({ onGameComplete, challengeMode = false, initialProfession, levelOverride }: ScrabbleGameProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [phase, setPhase] = useState<GamePhase>("lobby");
   const [selectedProfessions, setSelectedProfessions] = useState<Profession[]>([]);
   const [crossword, setCrossword] = useState<CrosswordData | null>(null);
@@ -584,7 +585,7 @@ export default function ScrabbleGame({ onGameComplete, challengeMode = false, in
       );
     }
     const handleShare = () => {
-      const text = t("shareScrabble", { n: String(crossword.placed.length) });
+      const text = t("shareScrabble", { n: String(crossword.placed.length), url: currentShareUrl(lang) });
       if (navigator.share) {
         navigator.share({ text }).catch(() => {});
       } else {

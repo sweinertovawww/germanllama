@@ -7,6 +7,7 @@ import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Lang } from "@/i18n/translations";
+import { currentShareUrl } from "@/lib/utils";
 
 function getCardFace(card: FlashCard, language: Lang): string {
   if (language === "de") return card.german;
@@ -366,7 +367,7 @@ const Pexeso = ({ onGameComplete, challengeMode = false, levelOverride }: Pexeso
                           const newCompleted = completedGames + 1;
                           const newPairs = totalMatchedPairs + totalPairs;
                           navigator.clipboard.writeText(
-                            t("sharePexeso", { pairs: String(newPairs), rounds: String(newCompleted) })
+                            t("sharePexeso", { pairs: String(newPairs), rounds: String(newCompleted), url: currentShareUrl(lang) })
                           );
                           setCopied(true);
                           setTimeout(() => setCopied(false), 2000);

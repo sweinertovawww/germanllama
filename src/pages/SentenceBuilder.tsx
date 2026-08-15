@@ -17,6 +17,7 @@ import {
 } from "@dnd-kit/core";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { currentShareUrl } from "@/lib/utils";
 
 function shuffleArray<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -320,7 +321,7 @@ const SentenceBuilder = ({ onGameComplete, challengeMode = false, levelOverride 
     const finalScore = totalScore + score;
     const finalRounds = completedRounds + (allMatched ? 1 : 0);
     navigator.clipboard.writeText(
-      t("shareSentenceBuilder", { score: String(finalScore), rounds: String(finalRounds) })
+      t("shareSentenceBuilder", { score: String(finalScore), rounds: String(finalRounds), url: currentShareUrl(lang) })
     );
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
