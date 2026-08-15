@@ -251,6 +251,9 @@ const Layout = ({ children }: LayoutProps) => {
                   <span className={`font-game text-xs sm:text-sm leading-tight ${activeTab === "beginner" ? "text-accent" : "text-foreground"}`}>
                     {t("beginnerName")}
                   </span>
+                  <span className="font-body text-[9px] sm:text-[10px] text-muted-foreground block leading-snug">
+                    For complete beginners!
+                  </span>
                 </div>
                 <ArrowRight className={`w-4 h-4 sm:w-5 sm:h-5 shrink-0 ${activeTab === "beginner" ? "text-accent" : "text-accent/60"}`} />
               </button>
