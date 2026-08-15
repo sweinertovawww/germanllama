@@ -230,7 +230,7 @@ const StoryExercise = () => {
 
           <button
             onClick={() => setHideGerman((h) => !h)}
-            className="font-game text-[10px] sm:text-xs px-3 py-1.5 rounded-lg border-2 border-accent text-accent hover:bg-accent/10 transition-colors"
+            className="sm:hidden font-game text-[10px] px-3 py-1.5 rounded-lg border-2 border-accent text-accent hover:bg-accent/10 transition-colors"
           >
             {hideGerman ? "Show German" : "Hide German"}
           </button>
@@ -248,9 +248,17 @@ const StoryExercise = () => {
           <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-6">
           <div className="flex-1 min-w-0">
           {/* Column headers (desktop) */}
-          <div className="hidden sm:grid sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-x-4 mb-0.5">
+          <div className="hidden sm:grid sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-x-4 sm:items-center mb-0.5">
             <span className="font-game text-[9px] text-muted-foreground">English</span>
-            <span className="font-game text-[9px] text-muted-foreground">German</span>
+            <div className="flex items-center gap-2">
+              <span className="font-game text-[9px] text-muted-foreground">German</span>
+              <button
+                onClick={() => setHideGerman((h) => !h)}
+                className="font-game text-[8px] px-2 py-0.5 rounded border-2 border-accent text-accent hover:bg-accent/10 transition-colors"
+              >
+                {hideGerman ? "Show German" : "Hide German"}
+              </button>
+            </div>
             <span className="font-game text-[9px] text-muted-foreground">Build the sentence</span>
           </div>
 
