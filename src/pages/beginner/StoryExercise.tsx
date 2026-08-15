@@ -313,10 +313,10 @@ const StoryExercise = () => {
           </div>
 
           {/* Shared word bank — sticky 4th column on desktop, so it stays visible while scrolling */}
-          <div className="lg:w-80 shrink-0">
+          <div className="lg:w-96 shrink-0">
             <div className="lg:sticky lg:top-28 rounded-xl border-2 border-dashed border-border p-3 sm:p-4 mt-6 lg:mt-0">
               <h3 className="font-game text-[10px] sm:text-xs text-muted-foreground mb-3">Word Bank</h3>
-              <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+              <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
                 {pool.map((item) => (
                   <PoolTile
                     key={item.id}
