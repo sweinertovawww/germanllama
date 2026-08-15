@@ -19,6 +19,9 @@ import Scrabble from "./pages/Scrabble";
 import Challenge from "./pages/Challenge";
 import ChallengeA1 from "./pages/ChallengeA1";
 import ProfessionLanding from "./pages/professions/ProfessionLanding";
+import StartFromBeginning from "./pages/StartFromBeginning";
+import SentenceStructureList from "./pages/beginner/SentenceStructureList";
+import StoryExercise from "./pages/beginner/StoryExercise";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +46,9 @@ function AppRoutes() {
           <Route path="/scrabble" element={<Layout><Scrabble /></Layout>} />
           <Route path="/challenge" element={<Layout><Challenge /></Layout>} />
           <Route path="/challenge-a1" element={<Layout><ChallengeA1 /></Layout>} />
+          <Route path="/start-from-beginning" element={<Layout><StartFromBeginning /></Layout>} />
+          <Route path="/start-from-beginning/sentence-structure" element={<Layout><SentenceStructureList /></Layout>} />
+          <Route path="/start-from-beginning/sentence-structure/:storyId" element={<Layout><StoryExercise /></Layout>} />
           <Route path="/kontakt" element={<Layout><Kontakt /></Layout>} />
           <Route path="*" element={<NotFound />} />
         </Routes>

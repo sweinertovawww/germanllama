@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
-import { Gamepad2, Layers, Brain, PuzzleIcon, ArrowLeftRight, Grid3X3, Instagram, Users, Menu, X, Trophy } from "lucide-react";
+import { Gamepad2, Layers, Brain, PuzzleIcon, ArrowLeftRight, Grid3X3, Instagram, Users, Menu, X, Trophy, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -34,7 +34,7 @@ const Layout = ({ children }: LayoutProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const activeTab = location.pathname === "/challenge" ? "challenge" : location.pathname === "/challenge-a1" ? "challenge-a1" : location.pathname === "/flashcards" ? "flash-cards" : location.pathname === "/pexeso" ? "pexeso" : location.pathname === "/skladani-vet" ? "sentence-builder" : location.pathname === "/wortpaare" ? "wortpaare" : location.pathname === "/scrabble" ? "scrabble" : "llama-run";
+  const activeTab = location.pathname === "/challenge" ? "challenge" : location.pathname === "/challenge-a1" ? "challenge-a1" : location.pathname.startsWith("/start-from-beginning") ? "beginner" : location.pathname === "/flashcards" ? "flash-cards" : location.pathname === "/pexeso" ? "pexeso" : location.pathname === "/skladani-vet" ? "sentence-builder" : location.pathname === "/wortpaare" ? "wortpaare" : location.pathname === "/scrabble" ? "scrabble" : "llama-run";
 
   useEffect(() => { setMobileMenuOpen(false); }, [location.pathname]);
 
@@ -235,6 +235,27 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Tab Navigation */}
       <section className="bg-card border-b border-border">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          {/* Start from the beginning card — English only, accent (yellow) color */}
+          {lang === "en" && (
+            <div className="mb-2">
+              <button
+                onClick={() => navigate("/start-from-beginning")}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
+                  activeTab === "beginner"
+                    ? "border-accent bg-accent/10 shadow-lg"
+                    : "border-accent/30 bg-gradient-to-r from-accent/5 to-accent/10 hover:border-accent/60 hover:bg-accent/10"
+                }`}
+              >
+                <span className="text-2xl shrink-0">🦙</span>
+                <div className="flex-1 text-left min-w-0">
+                  <span className={`font-game text-xs sm:text-sm leading-tight ${activeTab === "beginner" ? "text-accent" : "text-foreground"}`}>
+                    {t("beginnerName")}
+                  </span>
+                </div>
+                <ArrowRight className={`w-4 h-4 sm:w-5 sm:h-5 shrink-0 ${activeTab === "beginner" ? "text-accent" : "text-accent/60"}`} />
+              </button>
+            </div>
+          )}
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
             {[
               { tab: "llama-run",       path: "/",              icon: <Gamepad2    className={`w-6 h-6 shrink-0 ${activeTab === "llama-run"       ? "text-primary-foreground" : "text-primary"}`} />, name: "Llama Run",               desc: t("llamaRunDesc") },

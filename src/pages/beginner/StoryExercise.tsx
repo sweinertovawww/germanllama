@@ -1,0 +1,323 @@
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import {
+  DndContext,
+  DragOverlay,
+  useDraggable,
+  useDroppable,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  DragStartEvent,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import { ArrowLeft, GripVertical } from "lucide-react";
+import SEOHead from "@/components/SEOHead";
+import { getStory, chunksToWords, pairColorClass, type StoryWord } from "@/data/beginnerStories";
+
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+interface PoolItem {
+  id: string;
+  text: string;
+}
+
+function buildPool(sentences: StoryWord[][]): PoolItem[] {
+  const items: PoolItem[] = [];
+  sentences.forEach((words, sIdx) => {
+    words.forEach((w, wIdx) => items.push({ id: `pool-${sIdx}-${wIdx}`, text: w.text }));
+  });
+  return shuffleArray(items);
+}
+
+// Word bank tile — draggable and tappable
+function PoolTile({
+  id,
+  text,
+  selected,
+  onTap,
+}: {
+  id: string;
+  text: string;
+  selected: boolean;
+  onTap: () => void;
+}) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id });
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      onClick={onTap}
+      style={{ touchAction: "none" }}
+      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 font-body text-sm cursor-grab active:cursor-grabbing select-none transition-all ${
+        isDragging
+          ? "opacity-30 border-primary/30 bg-muted/50"
+          : selected
+            ? "border-primary bg-primary/10 shadow-md ring-2 ring-primary/30"
+            : "border-border bg-card hover:border-primary/50 hover:shadow-sm"
+      }`}
+    >
+      <GripVertical className="w-3.5 h-3.5 text-muted-foreground shrink-0 hidden sm:block" />
+      <span className="text-foreground font-semibold">{text}</span>
+    </div>
+  );
+}
+
+// Blank slot inside a sentence being built — droppable and tappable
+function Slot({
+  id,
+  answerText,
+  filled,
+  colorClass,
+  shaking,
+  clickable,
+  onTap,
+}: {
+  id: string;
+  answerText: string;
+  filled: boolean;
+  colorClass: string;
+  shaking: boolean;
+  clickable: boolean;
+  onTap: () => void;
+}) {
+  const { setNodeRef, isOver } = useDroppable({ id });
+  return (
+    <div
+      ref={setNodeRef}
+      onClick={onTap}
+      style={{ minWidth: `${Math.max(answerText.length, 2)}ch` }}
+      className={`min-h-[38px] flex items-center justify-center px-2 py-1.5 rounded-lg border-2 transition-all ${
+        shaking
+          ? "animate-shake border-destructive bg-destructive/10"
+          : filled
+            ? "border-transparent bg-transparent"
+            : isOver
+              ? "border-primary bg-primary/10 scale-[1.03]"
+              : clickable
+                ? "border-primary/50 bg-primary/5 cursor-pointer border-dashed animate-pulse"
+                : "border-border bg-muted/30 border-dashed"
+      }`}
+    >
+      {filled && <span className={`font-body text-sm font-bold ${colorClass}`}>{answerText}</span>}
+    </div>
+  );
+}
+
+const StoryExercise = () => {
+  const { storyId } = useParams<{ storyId: string }>();
+  const story = storyId ? getStory(storyId) : undefined;
+
+  const germanBySentence = useMemo(
+    () => story?.sentences.map((s) => chunksToWords(s.german)) ?? [],
+    [story]
+  );
+  const englishBySentence = useMemo(
+    () => story?.sentences.map((s) => chunksToWords(s.english)) ?? [],
+    [story]
+  );
+
+  const [hideGerman, setHideGerman] = useState(false);
+  const [filled, setFilled] = useState<Record<string, boolean>>({});
+  const [pool, setPool] = useState<PoolItem[]>([]);
+  const [selectedPoolId, setSelectedPoolId] = useState<string | null>(null);
+  const [shakeSlot, setShakeSlot] = useState<string | null>(null);
+  const [activeDragId, setActiveDragId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setPool(buildPool(germanBySentence));
+    setFilled({});
+    setSelectedPoolId(null);
+    setHideGerman(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [storyId]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 8 } })
+  );
+
+  const attemptPlace = useCallback(
+    (poolItem: PoolItem, slotId: string, sIdx: number, wIdx: number) => {
+      const target = germanBySentence[sIdx]?.[wIdx];
+      if (!target) return;
+      if (!filled[slotId] && target.text === poolItem.text) {
+        setFilled((prev) => ({ ...prev, [slotId]: true }));
+        setPool((prev) => prev.filter((p) => p.id !== poolItem.id));
+      } else {
+        setShakeSlot(slotId);
+        setTimeout(() => setShakeSlot((s) => (s === slotId ? null : s)), 400);
+      }
+      setSelectedPoolId(null);
+    },
+    [filled, germanBySentence]
+  );
+
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    setActiveDragId(String(event.active.id));
+    setSelectedPoolId(null);
+  }, []);
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      setActiveDragId(null);
+      const { active, over } = event;
+      if (!over) return;
+      const poolItem = pool.find((p) => p.id === active.id);
+      if (!poolItem) return;
+      const match = String(over.id).match(/^slot-(\d+)-(\d+)$/);
+      if (!match) return;
+      attemptPlace(poolItem, String(over.id), Number(match[1]), Number(match[2]));
+    },
+    [pool, attemptPlace]
+  );
+
+  const handlePoolTap = useCallback((id: string) => {
+    setSelectedPoolId((prev) => (prev === id ? null : id));
+  }, []);
+
+  const handleSlotTap = useCallback(
+    (slotId: string, sIdx: number, wIdx: number) => {
+      if (!selectedPoolId) return;
+      const poolItem = pool.find((p) => p.id === selectedPoolId);
+      if (!poolItem) return;
+      attemptPlace(poolItem, slotId, sIdx, wIdx);
+    },
+    [selectedPoolId, pool, attemptPlace]
+  );
+
+  const activeDragText = useMemo(() => pool.find((p) => p.id === activeDragId)?.text ?? "", [activeDragId, pool]);
+
+  if (!story) {
+    return (
+      <section className="max-w-4xl mx-auto px-4 py-16 text-center">
+        <p className="font-body text-muted-foreground">Story not found.</p>
+        <Link to="/start-from-beginning/sentence-structure" className="text-accent underline font-body text-sm">
+          Back to Sentence Structure
+        </Link>
+      </section>
+    );
+  }
+
+  const allDone = pool.length === 0;
+
+  return (
+    <>
+      <SEOHead
+        title={`${story.title} | Start German From the Beginning | GermanLlama`}
+        description="Read a short German story side by side with English, then rebuild each sentence yourself."
+        canonical={`/start-from-beginning/sentence-structure/${story.id}`}
+      />
+      <section className="max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
+        <Link
+          to="/start-from-beginning/sentence-structure"
+          className="inline-flex items-center gap-1.5 font-body text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors mb-3"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to Sentence Structure
+        </Link>
+
+        <h1 className="font-game text-lg sm:text-xl text-foreground mb-2">{story.title}</h1>
+        <p className="font-body text-muted-foreground text-xs sm:text-sm mb-4">
+          Read the story below. When you're ready, hide the German and rebuild each sentence from the word bank.
+        </p>
+
+        <button
+          onClick={() => setHideGerman((h) => !h)}
+          className="font-game text-[10px] sm:text-xs px-4 py-2 rounded-lg border-2 border-accent text-accent hover:bg-accent/10 transition-colors mb-4"
+        >
+          {hideGerman ? "Show German" : "Hide German"}
+        </button>
+
+        {allDone && (
+          <div className="mb-4 rounded-xl border-2 border-accent bg-accent/10 px-4 py-3 text-center">
+            <p className="font-game text-xs sm:text-sm text-accent">🎉 Great job! You rebuilt the whole story.</p>
+          </div>
+        )}
+
+        <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+          <div className="space-y-3 sm:space-y-4">
+            {story.sentences.map((_, sIdx) => {
+              const deWords = germanBySentence[sIdx];
+              const enWords = englishBySentence[sIdx];
+              return (
+                <div key={sIdx} className="rounded-xl border-2 border-border bg-card p-3 sm:p-4">
+                  {!hideGerman && (
+                    <p className="font-body text-sm sm:text-base flex flex-wrap gap-x-1.5 mb-1">
+                      {deWords.map((w, i) => (
+                        <span key={i} className={`font-semibold ${pairColorClass(w.pair)}`}>
+                          {w.text}
+                        </span>
+                      ))}
+                    </p>
+                  )}
+                  <p className="font-body text-xs sm:text-sm text-muted-foreground flex flex-wrap gap-x-1.5 mb-3">
+                    {enWords.map((w, i) => (
+                      <span key={i} className={pairColorClass(w.pair)}>
+                        {w.text}
+                      </span>
+                    ))}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                    {deWords.map((w, wIdx) => {
+                      const slotId = `slot-${sIdx}-${wIdx}`;
+                      const isFilled = !!filled[slotId];
+                      return (
+                        <Slot
+                          key={slotId}
+                          id={slotId}
+                          answerText={w.text}
+                          filled={isFilled}
+                          colorClass={pairColorClass(w.pair)}
+                          shaking={shakeSlot === slotId}
+                          clickable={selectedPoolId !== null && !isFilled}
+                          onTap={() => handleSlotTap(slotId, sIdx, wIdx)}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Shared word bank */}
+          <div className="mt-6 rounded-xl border-2 border-dashed border-border p-3 sm:p-4">
+            <h3 className="font-game text-[10px] sm:text-xs text-muted-foreground mb-3">Word Bank</h3>
+            <div className="flex flex-wrap gap-2">
+              {pool.map((item) => (
+                <PoolTile
+                  key={item.id}
+                  id={item.id}
+                  text={item.text}
+                  selected={selectedPoolId === item.id}
+                  onTap={() => handlePoolTap(item.id)}
+                />
+              ))}
+              {allDone && <p className="font-body text-xs text-muted-foreground italic">All words placed!</p>}
+            </div>
+          </div>
+
+          <DragOverlay>
+            {activeDragId ? (
+              <div className="flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-primary bg-card shadow-lg font-body text-sm opacity-80">
+                <GripVertical className="w-3.5 h-3.5 text-primary shrink-0" />
+                <span className="text-foreground font-semibold">{activeDragText}</span>
+              </div>
+            ) : null}
+          </DragOverlay>
+        </DndContext>
+      </section>
+    </>
+  );
+};
+
+export default StoryExercise;
