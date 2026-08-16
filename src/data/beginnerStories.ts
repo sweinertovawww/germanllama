@@ -28,6 +28,30 @@ export function chunksToWords(chunks: StoryChunk[]): StoryWord[] {
   return chunks.flatMap((chunk) => chunk.text.split(" ").map((text) => ({ text, pair: chunk.pair })));
 }
 
+export interface VocabPair {
+  en: string;
+  de: string;
+}
+
+/** Every unique English/German chunk pair used in the story (for vocabulary drilling). */
+export function getStoryVocabPairs(story: Story): VocabPair[] {
+  const seen = new Set<string>();
+  const pairs: VocabPair[] = [];
+  for (const sentence of story.sentences) {
+    for (const enChunk of sentence.english) {
+      const deChunk = sentence.german.find((c) => c.pair === enChunk.pair);
+      if (!deChunk) continue;
+      const en = enChunk.text.replace(/[.,!?]+$/, "");
+      const de = deChunk.text.replace(/[.,!?]+$/, "");
+      const key = `${en}::${de}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      pairs.push({ en, de });
+    }
+  }
+  return pairs;
+}
+
 export const PAIR_COLOR_CLASSES = [
   "text-green-600",
   "text-blue-600",

@@ -285,6 +285,12 @@ const StoryExercise = () => {
                   {copied ? "Copied!" : "Share"}
                 </button>
               </div>
+              <Link
+                to={`/start-from-beginning/sentence-structure/${story.id}/llama-jump`}
+                className="font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
+              >
+                🦙 Train Vocabulary by Playing Llama Jump
+              </Link>
             </div>
           </div>
         )}
