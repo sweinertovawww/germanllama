@@ -51,7 +51,7 @@ export default async function middleware(request: Request) {
     return next();
   }
 
-  const origin = await fetch(new URL("/index.html", url));
+  const origin = await fetch(new URL("/index.html", url), { cache: "no-store" });
   if (!origin.ok) {
     return next();
   }
@@ -75,6 +75,11 @@ export default async function middleware(request: Request) {
 
   return new Response(html, {
     status: 200,
-    headers: { "content-type": "text/html; charset=utf-8" },
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      // Vercel's CDN keys its cache by pathname only by default, which would otherwise
+      // serve the same cached HTML for every ?lang= value on a given path.
+      "cache-control": "no-store, must-revalidate",
+    },
   });
 }
