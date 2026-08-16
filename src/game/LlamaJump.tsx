@@ -2,19 +2,24 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { getStory, getStoryVocabPairs, type VocabPair } from "@/data/beginnerStories";
 import { currentShareUrl } from "@/lib/utils";
+import { isTranslationCorrect } from "@/game/vocabularyData";
 
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
 const GROUND_Y = 640;
 const GRAVITY = 0.6;
 const JUMP_FORCE = -12;
+const LLAMA_X = 30;
+const LLAMA_W = 40;
 
-const TILE_X = 15;
-const TILE_W = 200;
-const TILE_H = 44;
-const TILE_SPEED_INITIAL = 2.6;
-const TILE_SPEED_INCREMENT = 0.04;
-const NEXT_TILE_DELAY = 45;
+const TILE_H = 14;
+const TILE_W_MIN = 60;
+const TILE_W_MAX = 80;
+const GAP_MIN = 45;
+const GAP_MAX = 95;
+const SPEED_INITIAL = 4;
+const SPEED_INCREMENT = 0.0015;
+const FALL_LIMIT = GROUND_Y + 140;
 const START_LIVES = 3;
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -27,17 +32,14 @@ function shuffleArray<T>(arr: T[]): T[] {
 }
 
 interface Tile {
-  y: number;
-  de: string;
-  correct: boolean;
-  resolved: boolean;
+  x: number;
+  width: number;
 }
 
 const drawLlama = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: number, hurt: boolean) => {
   const legOffset = Math.sin(frame * 0.3) * 4;
   ctx.save();
   if (hurt) ctx.globalAlpha = 0.5;
-
   ctx.fillStyle = "#e8d5b7";
   ctx.fillRect(x + 8, y + 10, 24, 20);
   ctx.fillRect(x + 26, y - 10, 8, 22);
@@ -68,21 +70,9 @@ const drawSky = (ctx: CanvasRenderingContext2D, offset: number) => {
   }
 };
 
-const drawGround = (ctx: CanvasRenderingContext2D, offset: number) => {
-  ctx.fillStyle = "#8b7355";
-  ctx.fillRect(0, GROUND_Y + 40, CANVAS_WIDTH, 20);
-  ctx.fillStyle = "#a08868";
-  ctx.fillRect(0, GROUND_Y + 38, CANVAS_WIDTH, 4);
-  ctx.fillStyle = "#9a815f";
-  for (let i = 0; i < 30; i++) {
-    const dx = ((i * 50 + offset * 0.5) % (CANVAS_WIDTH + 20)) - 10;
-    ctx.fillRect(dx, GROUND_Y + 44, 2, 2);
-  }
-};
-
 const drawScene = (
   ctx: CanvasRenderingContext2D,
-  g: { llamaY: number; frameCount: number; tile: Tile | null; score: number; lives: number; prompt: string; hurtTimer: number; flashTimer: number }
+  g: { llamaY: number; frameCount: number; tiles: Tile[]; score: number; lives: number; hurtTimer: number; flashTimer: number }
 ) => {
   const grad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
   grad.addColorStop(0, "#87CEEB");
@@ -92,7 +82,6 @@ const drawScene = (
   ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
   drawSky(ctx, g.frameCount);
-  drawGround(ctx, g.frameCount);
 
   ctx.fillStyle = "#c4a882";
   for (let i = 0; i < 5; i++) {
@@ -104,54 +93,29 @@ const drawScene = (
     ctx.fill();
   }
 
-  // Falling tile
-  if (g.tile && !g.tile.resolved) {
-    const t = g.tile;
-    ctx.save();
-    ctx.fillStyle = "#d4b96a";
-    ctx.strokeStyle = "#8b6f2f";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.roundRect(TILE_X, t.y, TILE_W, TILE_H, 8);
-    ctx.fill();
-    ctx.stroke();
-    ctx.fillStyle = "#2a1a0a";
-    ctx.font = "13px 'Press Start 2P', monospace";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(t.de, TILE_X + TILE_W / 2, t.y + TILE_H / 2 + 1);
-    ctx.restore();
+  // Tiles (thin brown stepping platforms, no text)
+  for (const t of g.tiles) {
+    ctx.fillStyle = "#8b7355";
+    ctx.fillRect(t.x, GROUND_Y, t.width, TILE_H);
+    ctx.fillStyle = "#a08868";
+    ctx.fillRect(t.x, GROUND_Y, t.width, 3);
   }
 
   // Llama
-  drawLlama(ctx, 30, g.llamaY, g.frameCount, g.hurtTimer > 0);
+  drawLlama(ctx, LLAMA_X, g.llamaY, g.frameCount, g.hurtTimer > 0);
 
-  // Catch flash
   if (g.flashTimer > 0) {
-    ctx.fillStyle = g.flashTimer % 2 === 0 ? "rgba(120,220,140,0.35)" : "rgba(255,255,255,0)";
+    ctx.fillStyle = g.flashTimer % 2 === 0 ? "rgba(120,220,140,0.3)" : "rgba(255,255,255,0)";
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   }
 
-  // Prompt bar
-  ctx.fillStyle = "rgba(10,10,10,0.85)";
-  ctx.fillRect(0, 0, CANVAS_WIDTH, 46);
-  ctx.fillStyle = "#ffd629";
-  ctx.font = "11px 'Press Start 2P', monospace";
-  ctx.textAlign = "left";
-  ctx.textBaseline = "middle";
-  ctx.fillText("Catch:", 14, 23);
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "14px 'Press Start 2P', monospace";
-  ctx.fillText(g.prompt, 90, 23);
-
-  // Score + lives
   ctx.textAlign = "right";
-  ctx.font = "13px 'Press Start 2P', monospace";
+  ctx.font = "14px 'Press Start 2P', monospace";
   ctx.fillStyle = "#2a1a0a";
-  ctx.fillText(`${g.score}`, CANVAS_WIDTH - 14, 70);
+  ctx.fillText(`${g.score}`, CANVAS_WIDTH - 14, 30);
   ctx.textAlign = "left";
   ctx.font = "16px sans-serif";
-  ctx.fillText("❤️".repeat(Math.max(0, g.lives)), 14, 70);
+  ctx.fillText("❤️".repeat(Math.max(0, g.lives)), 14, 32);
 };
 
 interface LlamaJumpProps {
@@ -165,88 +129,121 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
-  const [gameState, setGameState] = useState<"idle" | "playing" | "over">("idle");
+  const [gameState, setGameState] = useState<"idle" | "playing" | "quiz" | "over">("idle");
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => parseInt(localStorage.getItem("llama-jump-highscore") || "0"));
   const [copied, setCopied] = useState(false);
+  const [currentPair, setCurrentPair] = useState<VocabPair | null>(null);
+  const [answerInput, setAnswerInput] = useState("");
+  const [answerResult, setAnswerResult] = useState<"correct" | "wrong" | null>(null);
+  const answerInputRef = useRef<HTMLInputElement>(null);
 
   const queueRef = useRef<VocabPair[]>([]);
   const queueIndexRef = useRef(0);
-  const distractorStreakRef = useRef(0);
-  const nextTileDelayRef = useRef(0);
+  const landingsUntilQuizRef = useRef(4);
 
   const gameRef = useRef({
     llamaY: GROUND_Y,
     velocityY: 0,
     isJumping: false,
+    onGround: true,
     frameCount: 0,
-    speed: TILE_SPEED_INITIAL,
+    speed: SPEED_INITIAL,
     score: 0,
     lives: START_LIVES,
-    tile: null as Tile | null,
-    currentPair: null as VocabPair | null,
+    tiles: [] as Tile[],
     hurtTimer: 0,
     flashTimer: 0,
+    landedTileCount: 0,
   });
 
   const jump = useCallback(() => {
     const g = gameRef.current;
-    if (!g.isJumping) {
+    if (g.onGround && !g.isJumping) {
       g.velocityY = JUMP_FORCE;
       g.isJumping = true;
+      g.onGround = false;
     }
   }, []);
 
-  const nextPrompt = useCallback(() => {
+  const nextQuizPair = useCallback(() => {
     if (queueIndexRef.current >= queueRef.current.length) {
       queueRef.current = shuffleArray(vocabPool);
       queueIndexRef.current = 0;
     }
     const pair = queueRef.current[queueIndexRef.current];
     queueIndexRef.current++;
-    gameRef.current.currentPair = pair;
     return pair;
   }, [vocabPool]);
 
-  const spawnTile = useCallback(() => {
+  const spawnTile = useCallback((afterX: number) => {
     const g = gameRef.current;
-    if (!g.currentPair) g.currentPair = nextPrompt();
-    const forceCorrect = distractorStreakRef.current >= 3;
-    const showCorrect = forceCorrect || Math.random() < 0.45;
-    let de: string;
-    if (showCorrect) {
-      de = g.currentPair.de;
-      distractorStreakRef.current = 0;
-    } else {
-      const others = vocabPool.filter((p) => p.de !== g.currentPair!.de);
-      const pick = others[Math.floor(Math.random() * others.length)] ?? g.currentPair;
-      de = pick.de;
-      distractorStreakRef.current++;
-    }
-    g.tile = { y: -TILE_H, de, correct: showCorrect, resolved: false };
-  }, [nextPrompt, vocabPool]);
+    const gap = GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN);
+    const width = TILE_W_MIN + Math.random() * (TILE_W_MAX - TILE_W_MIN);
+    g.tiles.push({ x: afterX + gap, width });
+  }, []);
 
   const startGame = useCallback(() => {
     const g = gameRef.current;
     g.llamaY = GROUND_Y;
     g.velocityY = 0;
     g.isJumping = false;
+    g.onGround = true;
     g.frameCount = 0;
-    g.speed = TILE_SPEED_INITIAL;
+    g.speed = SPEED_INITIAL;
     g.score = 0;
     g.lives = START_LIVES;
-    g.tile = null;
-    g.currentPair = null;
     g.hurtTimer = 0;
     g.flashTimer = 0;
+    g.landedTileCount = 0;
+    g.tiles = [{ x: 0, width: 160 }];
+    let lastEnd = 160;
+    while (lastEnd < CANVAS_WIDTH + 300) {
+      const gap = GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN);
+      const width = TILE_W_MIN + Math.random() * (TILE_W_MAX - TILE_W_MIN);
+      const x = lastEnd + gap;
+      g.tiles.push({ x, width });
+      lastEnd = x + width;
+    }
     queueRef.current = shuffleArray(vocabPool);
     queueIndexRef.current = 0;
-    distractorStreakRef.current = 0;
-    nextTileDelayRef.current = 0;
-    nextPrompt();
+    landingsUntilQuizRef.current = 3 + Math.floor(Math.random() * 3);
     setScore(0);
+    setCurrentPair(null);
+    setAnswerInput("");
+    setAnswerResult(null);
     setGameState("playing");
-  }, [vocabPool, nextPrompt]);
+  }, [vocabPool]);
+
+  const resumeGame = useCallback(() => {
+    setCurrentPair(null);
+    setAnswerInput("");
+    setAnswerResult(null);
+    setGameState("playing");
+  }, []);
+
+  const triggerQuiz = useCallback(() => {
+    setCurrentPair(nextQuizPair());
+    setAnswerInput("");
+    setAnswerResult(null);
+    setGameState("quiz");
+    setTimeout(() => answerInputRef.current?.focus(), 100);
+  }, [nextQuizPair]);
+
+  const handleAnswerSubmit = useCallback(() => {
+    if (!currentPair || answerResult !== null) return;
+    const isCorrect = isTranslationCorrect(answerInput, currentPair.de);
+    setAnswerResult(isCorrect ? "correct" : "wrong");
+    if (isCorrect) {
+      gameRef.current.score += 3;
+      setScore(gameRef.current.score);
+      if (gameRef.current.score > parseInt(localStorage.getItem("llama-jump-highscore") || "0")) {
+        setHighScore(gameRef.current.score);
+        localStorage.setItem("llama-jump-highscore", String(gameRef.current.score));
+      }
+    }
+    setTimeout(resumeGame, 1200);
+  }, [currentPair, answerInput, answerResult, resumeGame]);
 
   // Responsive scaling
   useEffect(() => {
@@ -268,6 +265,14 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   // Keyboard controls
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
+      if (gameState === "quiz") {
+        if (e.code === "Enter") {
+          e.preventDefault();
+          answerInputRef.current?.blur();
+          handleAnswerSubmit();
+        }
+        return;
+      }
       if (e.code === "ArrowUp" || e.code === "Space") {
         e.preventDefault();
         if (gameState === "idle" || gameState === "over") startGame();
@@ -276,7 +281,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [gameState, jump, startGame]);
+  }, [gameState, jump, startGame, handleAnswerSubmit]);
 
   // Main loop
   useEffect(() => {
@@ -294,71 +299,77 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       if (g.hurtTimer > 0) g.hurtTimer--;
       if (g.flashTimer > 0) g.flashTimer--;
 
+      // Scroll tiles left
+      g.tiles = g.tiles.filter((t) => {
+        t.x -= g.speed;
+        return t.x + t.width > -20;
+      });
+      // Keep spawning ahead
+      const rightmost = g.tiles.reduce((max, t) => Math.max(max, t.x + t.width), 0);
+      if (rightmost < CANVAS_WIDTH + 200) {
+        spawnTile(rightmost);
+      }
+
+      // Physics
       g.velocityY += GRAVITY;
       g.llamaY += g.velocityY;
-      if (g.llamaY >= GROUND_Y) {
-        g.llamaY = GROUND_Y;
-        g.velocityY = 0;
-        g.isJumping = false;
-      }
 
-      // Tile movement / spawning
-      if (g.tile && !g.tile.resolved) {
-        g.tile.y += g.speed;
-        if (g.tile.y > CANVAS_HEIGHT) {
-          g.tile.resolved = true;
-          if (g.tile.correct) g.currentPair = nextPrompt();
-          nextTileDelayRef.current = NEXT_TILE_DELAY;
-          g.tile = null;
-        } else {
-          const llamaBox = { x: 30, y: g.llamaY - 30, w: 40, h: 60 };
-          const tileBox = { x: TILE_X, y: g.tile.y, w: TILE_W, h: TILE_H };
-          const overlap =
-            llamaBox.x < tileBox.x + tileBox.w &&
-            llamaBox.x + llamaBox.w > tileBox.x &&
-            llamaBox.y < tileBox.y + tileBox.h &&
-            llamaBox.y + llamaBox.h > tileBox.y;
-          if (overlap && g.isJumping) {
-            g.tile.resolved = true;
-            if (g.tile.correct) {
-              g.score += 1;
-              setScore(g.score);
-              g.flashTimer = 10;
-              if (g.score > parseInt(localStorage.getItem("llama-jump-highscore") || "0")) {
-                setHighScore(g.score);
-                localStorage.setItem("llama-jump-highscore", String(g.score));
-              }
-              g.currentPair = nextPrompt();
-            } else {
-              g.lives -= 1;
-              g.hurtTimer = 20;
+      const llamaFootX = LLAMA_X + LLAMA_W / 2;
+      const tileHere = g.tiles.find((t) => llamaFootX >= t.x && llamaFootX <= t.x + t.width);
+
+      if (g.velocityY >= 0) {
+        // Falling or resting — check landing
+        if (tileHere && g.llamaY >= GROUND_Y) {
+          if (!g.onGround) {
+            g.landedTileCount++;
+            g.score += 1;
+            setScore(g.score);
+            landingsUntilQuizRef.current--;
+            if (landingsUntilQuizRef.current <= 0) {
+              landingsUntilQuizRef.current = 3 + Math.floor(Math.random() * 3);
+              g.llamaY = GROUND_Y;
+              g.velocityY = 0;
+              g.isJumping = false;
+              g.onGround = true;
+              triggerQuiz();
+              return;
             }
-            nextTileDelayRef.current = NEXT_TILE_DELAY;
-            g.tile = null;
+          }
+          g.llamaY = GROUND_Y;
+          g.velocityY = 0;
+          g.isJumping = false;
+          g.onGround = true;
+        } else {
+          g.onGround = false;
+          if (g.llamaY > FALL_LIMIT) {
+            // Missed the tile — lose a life
+            g.lives -= 1;
+            g.hurtTimer = 25;
+            if (g.lives <= 0) {
+              setGameState("over");
+              return;
+            }
+            // Respawn on solid ground under the llama
+            g.tiles = g.tiles.filter((t) => t.x > LLAMA_X + 120).map((t) => ({ ...t }));
+            g.tiles.unshift({ x: 0, width: 140 });
+            g.llamaY = GROUND_Y;
+            g.velocityY = 0;
+            g.isJumping = false;
+            g.onGround = true;
           }
         }
-      } else if (!g.tile) {
-        if (nextTileDelayRef.current > 0) {
-          nextTileDelayRef.current--;
-        } else {
-          spawnTile();
-        }
+      } else {
+        g.onGround = false;
       }
 
-      g.speed += TILE_SPEED_INCREMENT * 0.02;
-
-      if (g.lives <= 0) {
-        setGameState("over");
-        return;
-      }
+      g.speed += SPEED_INCREMENT;
 
       drawScene(ctx, {
         llamaY: g.llamaY,
         frameCount: g.frameCount,
-        tile: g.tile,
+        tiles: g.tiles,
         score: g.score,
         lives: g.lives,
-        prompt: g.currentPair?.en ?? "",
         hurtTimer: g.hurtTimer,
         flashTimer: g.flashTimer,
       });
@@ -368,7 +379,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
 
     animId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animId);
-  }, [gameState, nextPrompt, spawnTile]);
+  }, [gameState, spawnTile, triggerQuiz]);
 
   // Idle frame
   useEffect(() => {
@@ -380,14 +391,13 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     drawScene(ctx, {
       llamaY: GROUND_Y,
       frameCount: 0,
-      tile: null,
+      tiles: [{ x: 0, width: 200 }],
       score: 0,
       lives: START_LIVES,
-      prompt: vocabPool[0]?.en ?? "",
       hurtTimer: 0,
       flashTimer: 0,
     });
-  }, [gameState, vocabPool]);
+  }, [gameState]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(
@@ -421,7 +431,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
             <div className="bg-card/95 rounded-2xl p-6 shadow-2xl border-2 border-primary flex flex-col items-center gap-4 max-w-[85%]">
               <p className="font-game text-sm text-foreground text-center">🦙 Llama Jump</p>
               <p className="font-body text-xs text-muted-foreground text-center leading-relaxed">
-                Jump onto the tile that matches the English word shown at the top. Stay on the ground if it's wrong!
+                Jump from tile to tile — don't fall in the gaps! Every few tiles, translate a word from the story.
               </p>
               <button
                 onClick={startGame}
@@ -429,6 +439,46 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
               >
                 START
               </button>
+            </div>
+          </div>
+        )}
+
+        {gameState === "quiz" && currentPair && (
+          <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
+            <div className="bg-card rounded-xl p-4 sm:p-6 shadow-2xl text-center max-w-[90%] sm:max-w-md mx-4 border-2 border-primary">
+              <p className="font-game text-[10px] sm:text-xs text-muted-foreground mb-2">Translate to German:</p>
+              <p className="font-game text-sm sm:text-base text-card-foreground mb-4">{currentPair.en}</p>
+              <div className="flex gap-2 justify-center items-center">
+                <input
+                  ref={answerInputRef}
+                  type="text"
+                  value={answerInput}
+                  onChange={(e) => setAnswerInput(e.target.value)}
+                  disabled={answerResult !== null}
+                  placeholder="Type in German..."
+                  className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-40 sm:w-56"
+                />
+                <button
+                  onClick={() => { answerInputRef.current?.blur(); handleAnswerSubmit(); }}
+                  disabled={answerResult !== null}
+                  className="font-game text-xs px-3 sm:px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+                >
+                  OK
+                </button>
+              </div>
+              {answerResult === "correct" && (
+                <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
+                  Correct! +3
+                </p>
+              )}
+              {answerResult === "wrong" && (
+                <p className="font-game text-xs text-destructive mt-3">
+                  It's "{currentPair.de}"
+                </p>
+              )}
+              {!answerResult && (
+                <p className="text-muted-foreground text-xs mt-3 hidden sm:block">Press Enter to confirm</p>
+              )}
             </div>
           </div>
         )}
@@ -460,7 +510,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
         )}
       </div>
 
-      {gameState === "playing" && (
+      {(gameState === "playing" || gameState === "quiz") && (
         <button
           onClick={jump}
           className="bg-primary text-primary-foreground font-game text-sm w-full max-w-xs py-4 rounded-xl hover:opacity-90 transition-opacity active:scale-95 touch-manipulation shadow-md"
