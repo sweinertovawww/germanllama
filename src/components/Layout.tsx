@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
@@ -23,6 +23,18 @@ const Layout = ({ children }: LayoutProps) => {
   const [visitDate, setVisitDate] = useState<string>("");
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const [navHeight, setNavHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    const el = navRef.current;
+    if (!el) return;
+    const update = () => setNavHeight(el.offsetHeight);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const NATIVE_LANGS: { code: Lang; flag: string }[] = [
     { code: "cs", flag: "🇨🇿" },
@@ -93,7 +105,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
       {/* Navigation */}
-      <nav className="w-full bg-card border-b border-border fixed top-0 z-50">
+      <nav ref={navRef} className="w-full bg-card border-b border-border fixed top-0 z-50">
         {/* Desktop: 3 × flex-1 columns — guaranteed no overlap at any width */}
         <div className="max-w-6xl mx-auto px-4 py-2 sm:py-6 flex items-center gap-4">
 
@@ -226,8 +238,8 @@ const Layout = ({ children }: LayoutProps) => {
           )}
         </div>
       </nav>
-      {/* Spacer for fixed nav */}
-      <div className="h-[128px] sm:h-[160px] md:h-[100px]" />
+      {/* Spacer for fixed nav — matches its real measured height, so it never drifts out of sync */}
+      <div style={{ height: navHeight }} />
 
       <InstallPrompt />
 
