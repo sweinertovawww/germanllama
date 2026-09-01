@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Lang } from "@/i18n/translations";
+import InstallPrompt from "@/components/InstallPrompt";
 
 const FLAG: Record<Lang, string> = {
   cs: "🇨🇿", ko: "🇰🇷", en: "🇬🇧", pl: "🇵🇱", de: "🇩🇪", uk: "🇺🇦", sk: "🇸🇰",
@@ -157,23 +158,8 @@ const Layout = ({ children }: LayoutProps) => {
                 ))}
               </div>
             </div>
-            {/* Mobile: flag-only lang switcher + hamburger */}
-            <div className="md:hidden flex items-center gap-2">
-              <div className="flex items-center gap-0.5">
-                {NATIVE_LANGS.map(({ code, flag }) => (
-                  <button
-                    key={code}
-                    onClick={() => setLang(code)}
-                    className={`text-sm leading-none px-1 py-1 rounded-lg transition-all ${
-                      lang === code
-                        ? "bg-primary/15 ring-1 ring-primary/40"
-                        : "opacity-50 hover:opacity-90 hover:bg-muted"
-                    }`}
-                  >
-                    {flag}
-                  </button>
-                ))}
-              </div>
+            {/* Mobile: hamburger only — language flags live in their own row below */}
+            <div className="md:hidden flex items-center">
               <button
                 onClick={() => setMobileMenuOpen((o) => !o)}
                 className="p-1.5 rounded-lg text-foreground/70 hover:text-primary hover:bg-muted transition-all"
@@ -184,6 +170,24 @@ const Layout = ({ children }: LayoutProps) => {
             </div>
           </div>
 
+        </div>
+
+        {/* Mobile: language flags — dedicated full-width row for bigger, evenly spaced tap targets */}
+        <div className="md:hidden border-t border-border bg-card px-2 py-1.5 flex items-center justify-center gap-1">
+          {NATIVE_LANGS.map(({ code, flag }) => (
+            <button
+              key={code}
+              onClick={() => setLang(code)}
+              aria-label={code}
+              className={`text-lg leading-none px-2.5 py-1.5 rounded-lg transition-all ${
+                lang === code
+                  ? "bg-primary/15 ring-1 ring-primary/40"
+                  : "opacity-50 hover:opacity-90 active:opacity-100 hover:bg-muted"
+              }`}
+            >
+              {flag}
+            </button>
+          ))}
         </div>
 
         {/* Mobile dropdown menu */}
@@ -223,7 +227,9 @@ const Layout = ({ children }: LayoutProps) => {
         </div>
       </nav>
       {/* Spacer for fixed nav */}
-      <div className="h-[88px] sm:h-[120px] md:h-[100px]" />
+      <div className="h-[128px] sm:h-[160px] md:h-[100px]" />
+
+      <InstallPrompt />
 
       {/* Hero Section */}
       <header className="relative overflow-hidden bg-primary/10" style={{ backgroundImage: `url(${heroBackground})`, backgroundSize: 'cover', backgroundPosition: 'center 40%' }}>
