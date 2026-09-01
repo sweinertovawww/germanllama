@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 import heroBackground from "@/assets/hero-background.jpg";
@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Lang } from "@/i18n/translations";
+import InstallPrompt from "@/components/InstallPrompt";
 
 const FLAG: Record<Lang, string> = {
   cs: "🇨🇿", ko: "🇰🇷", en: "🇬🇧", pl: "🇵🇱", de: "🇩🇪", uk: "🇺🇦", sk: "🇸🇰",
@@ -22,6 +23,18 @@ const Layout = ({ children }: LayoutProps) => {
   const [visitDate, setVisitDate] = useState<string>("");
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const [navHeight, setNavHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    const el = navRef.current;
+    if (!el) return;
+    const update = () => setNavHeight(el.offsetHeight);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const NATIVE_LANGS: { code: Lang; flag: string }[] = [
     { code: "cs", flag: "🇨🇿" },
@@ -92,7 +105,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background">
       {/* Navigation */}
-      <nav className="w-full bg-card border-b border-border fixed top-0 z-50">
+      <nav ref={navRef} className="w-full bg-card border-b border-border fixed top-0 z-50">
         {/* Desktop: 3 × flex-1 columns — guaranteed no overlap at any width */}
         <div className="max-w-6xl mx-auto px-4 py-2 sm:py-6 flex items-center gap-4">
 
@@ -157,23 +170,8 @@ const Layout = ({ children }: LayoutProps) => {
                 ))}
               </div>
             </div>
-            {/* Mobile: flag-only lang switcher + hamburger */}
-            <div className="md:hidden flex items-center gap-2">
-              <div className="flex items-center gap-0.5">
-                {NATIVE_LANGS.map(({ code, flag }) => (
-                  <button
-                    key={code}
-                    onClick={() => setLang(code)}
-                    className={`text-sm leading-none px-1 py-1 rounded-lg transition-all ${
-                      lang === code
-                        ? "bg-primary/15 ring-1 ring-primary/40"
-                        : "opacity-50 hover:opacity-90 hover:bg-muted"
-                    }`}
-                  >
-                    {flag}
-                  </button>
-                ))}
-              </div>
+            {/* Mobile: hamburger only — language flags live in their own row below */}
+            <div className="md:hidden flex items-center">
               <button
                 onClick={() => setMobileMenuOpen((o) => !o)}
                 className="p-1.5 rounded-lg text-foreground/70 hover:text-primary hover:bg-muted transition-all"
@@ -184,6 +182,24 @@ const Layout = ({ children }: LayoutProps) => {
             </div>
           </div>
 
+        </div>
+
+        {/* Mobile: language flags — dedicated full-width row for bigger, evenly spaced tap targets */}
+        <div className="md:hidden border-t border-border bg-card px-2 py-1.5 flex items-center justify-center gap-1">
+          {NATIVE_LANGS.map(({ code, flag }) => (
+            <button
+              key={code}
+              onClick={() => setLang(code)}
+              aria-label={code}
+              className={`text-lg leading-none px-2.5 py-1.5 rounded-lg transition-all ${
+                lang === code
+                  ? "bg-primary/15 ring-1 ring-primary/40"
+                  : "opacity-50 hover:opacity-90 active:opacity-100 hover:bg-muted"
+              }`}
+            >
+              {flag}
+            </button>
+          ))}
         </div>
 
         {/* Mobile dropdown menu */}
@@ -222,8 +238,10 @@ const Layout = ({ children }: LayoutProps) => {
           )}
         </div>
       </nav>
-      {/* Spacer for fixed nav */}
-      <div className="h-[88px] sm:h-[120px] md:h-[100px]" />
+      {/* Spacer for fixed nav — matches its real measured height, so it never drifts out of sync */}
+      <div style={{ height: navHeight }} />
+
+      <InstallPrompt />
 
       {/* Hero Section */}
       <header className="relative overflow-hidden bg-primary/10" style={{ backgroundImage: `url(${heroBackground})`, backgroundSize: 'cover', backgroundPosition: 'center 40%' }}>

@@ -34,6 +34,16 @@ const cs = {
   copyright: "© 2026 Germanllama.com · Všechna práva vyhrazena.",
   followUs: "Sledujte nás:",
 
+  // PWA install
+  pwaInstallText: "Nainstaluj si GermanLlama na plochu telefonu",
+  pwaInstallButton: "Nainstalovat",
+  pwaInstallButtonIOS: "Jak na to",
+  pwaInstallModalTitle: "Přidej si GermanLlama na plochu",
+  pwaInstallModalStep1: "Klepni na ikonu Sdílet (čtvereček se šipkou) ve spodní liště Safari",
+  pwaInstallModalStep2: "Vyber „Přidat na plochu“",
+  pwaInstallModalStep3: "Potvrď tlačítkem „Přidat“",
+  pwaInstallClose: "Zavřít",
+
   // Game rules (Index.tsx)
   gameRules: "Pravidla Hry",
   jumpTitle: "Skákej",
@@ -378,6 +388,16 @@ const ko: typeof cs = {
   privacyLink: "개인정보",
   copyright: "© 2026 Germanllama.com · 모든 권리 보유.",
   followUs: "팔로우:",
+
+  // PWA install
+  pwaInstallText: "휴대폰 홈 화면에 GermanLlama를 설치하세요",
+  pwaInstallButton: "설치하기",
+  pwaInstallButtonIOS: "설치 방법",
+  pwaInstallModalTitle: "GermanLlama를 홈 화면에 추가하기",
+  pwaInstallModalStep1: "Safari 하단의 공유 아이콘(사각형에 화살표)을 탭하세요",
+  pwaInstallModalStep2: "'홈 화면에 추가'를 선택하세요",
+  pwaInstallModalStep3: "'추가'를 눌러 확인하세요",
+  pwaInstallClose: "닫기",
 
   // Game rules (Index.tsx)
   gameRules: "게임 규칙",
@@ -724,6 +744,16 @@ const en: typeof cs = {
   copyright: "© 2026 Germanllama.com · All rights reserved.",
   followUs: "Follow us:",
 
+  // PWA install
+  pwaInstallText: "Install GermanLlama on your phone's home screen",
+  pwaInstallButton: "Install",
+  pwaInstallButtonIOS: "How to install",
+  pwaInstallModalTitle: "Add GermanLlama to your Home Screen",
+  pwaInstallModalStep1: "Tap the Share icon (square with an arrow) in Safari's toolbar",
+  pwaInstallModalStep2: "Select \"Add to Home Screen\"",
+  pwaInstallModalStep3: "Confirm by tapping \"Add\"",
+  pwaInstallClose: "Close",
+
   // Game rules (Index.tsx)
   gameRules: "Game Rules",
   jumpTitle: "Jump",
@@ -1068,6 +1098,16 @@ const pl: typeof cs = {
   privacyLink: "prywatność",
   copyright: "© 2026 Germanllama.com · Wszelkie prawa zastrzeżone.",
   followUs: "Obserwuj nas:",
+
+  // PWA install
+  pwaInstallText: "Zainstaluj GermanLlama na ekranie głównym telefonu",
+  pwaInstallButton: "Zainstaluj",
+  pwaInstallButtonIOS: "Jak zainstalować",
+  pwaInstallModalTitle: "Dodaj GermanLlama do ekranu głównego",
+  pwaInstallModalStep1: "Stuknij ikonę Udostępnij (kwadrat ze strzałką) na pasku Safari",
+  pwaInstallModalStep2: "Wybierz „Dodaj do ekranu głównego”",
+  pwaInstallModalStep3: "Potwierdź przyciskiem „Dodaj”",
+  pwaInstallClose: "Zamknij",
 
   // Game rules (Index.tsx)
   gameRules: "Zasady gry",
@@ -1414,6 +1454,16 @@ const de: typeof cs = {
   copyright: "© 2026 Germanllama.com · Alle Rechte vorbehalten.",
   followUs: "Folge uns:",
 
+  // PWA install
+  pwaInstallText: "Installiere GermanLlama auf deinem Startbildschirm",
+  pwaInstallButton: "Installieren",
+  pwaInstallButtonIOS: "So geht's",
+  pwaInstallModalTitle: "GermanLlama zum Startbildschirm hinzufügen",
+  pwaInstallModalStep1: "Tippe in Safari unten auf das Teilen-Symbol (Quadrat mit Pfeil)",
+  pwaInstallModalStep2: "Wähle „Zum Home-Bildschirm“",
+  pwaInstallModalStep3: "Bestätige mit „Hinzufügen“",
+  pwaInstallClose: "Schließen",
+
   // Game rules (Index.tsx)
   gameRules: "Spielregeln",
   jumpTitle: "Springen",
@@ -1759,6 +1809,16 @@ const uk: typeof cs = {
   copyright: "© 2026 Germanllama.com · Всі права захищені.",
   followUs: "Стежте за нами:",
 
+  // PWA install
+  pwaInstallText: "Встанови GermanLlama на головний екран телефону",
+  pwaInstallButton: "Встановити",
+  pwaInstallButtonIOS: "Як встановити",
+  pwaInstallModalTitle: "Додай GermanLlama на головний екран",
+  pwaInstallModalStep1: "Натисни іконку Поділитися (квадрат зі стрілкою) внизу Safari",
+  pwaInstallModalStep2: "Обери „На початковий екран“",
+  pwaInstallModalStep3: "Підтверди кнопкою „Додати“",
+  pwaInstallClose: "Закрити",
+
   // Game rules (Index.tsx)
   gameRules: "Правила гри",
   jumpTitle: "Стрибай",
@@ -2103,6 +2163,16 @@ const sk: typeof cs = {
   privacyLink: "súkromia",
   copyright: "© 2026 Germanllama.com · Všetky práva vyhradené.",
   followUs: "Sledujte nás:",
+
+  // PWA install
+  pwaInstallText: "Nainštaluj si GermanLlama na plochu telefónu",
+  pwaInstallButton: "Nainštalovať",
+  pwaInstallButtonIOS: "Ako na to",
+  pwaInstallModalTitle: "Pridaj si GermanLlama na plochu",
+  pwaInstallModalStep1: "Klepni na ikonu Zdieľať (štvorček so šípkou) v spodnej lište Safari",
+  pwaInstallModalStep2: "Vyber „Pridať na plochu“",
+  pwaInstallModalStep3: "Potvrď tlačidlom „Pridať“",
+  pwaInstallClose: "Zavrieť",
 
   // Game rules (Index.tsx)
   gameRules: "Pravidlá hry",
