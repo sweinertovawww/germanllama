@@ -256,6 +256,18 @@ const saveJumpDailyScore = (name: string, score: number) => {
 
 const isMobileDevice = () => window.innerWidth < 768;
 
+// Ring of sparkles around the share button, same as Llama Run's ShareButtons.
+const SPARKLE_POSITIONS = [
+  { angle: 0, delay: "0s" },
+  { angle: 45, delay: "0.15s" },
+  { angle: 90, delay: "0.3s" },
+  { angle: 135, delay: "0.45s" },
+  { angle: 180, delay: "0.6s" },
+  { angle: 225, delay: "0.75s" },
+  { angle: 270, delay: "0.9s" },
+  { angle: 315, delay: "1.05s" },
+];
+
 interface LlamaJumpProps {
   storyId: string;
 }
@@ -940,27 +952,66 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
               >
                 🦙 Try again
               </button>
-              <div className="flex gap-2 sm:gap-3">
-                {score > 0 && (
-                  <button
-                    onClick={handleCopy}
-                    className="flex items-center gap-1 font-game text-[10px] sm:text-xs px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-border bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/50 hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
-                  >
-                    {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                    {copied ? "Copied!" : "Share score"}
-                  </button>
-                )}
-                <button
-                  onClick={handleNewPlayer}
-                  className="font-game text-[10px] sm:text-xs px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-destructive/50 bg-card/80 text-destructive hover:border-destructive hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
-                >
-                  👤 New player
-                </button>
-              </div>
+              <button
+                onClick={handleNewPlayer}
+                className="font-game text-[10px] sm:text-xs px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-destructive/50 bg-card/80 text-destructive hover:border-destructive hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
+              >
+                👤 New player
+              </button>
             </div>
           </div>
         )}
       </div>
+
+      {gameState === "over" && score > 0 && (
+        <div className="bg-share-bg rounded-2xl shadow-lg p-6 w-full max-w-xs flex flex-col items-center gap-3 relative overflow-hidden">
+          {Array.from({ length: 20 }).map((_, i) => {
+            const left = Math.random() * 100;
+            const top = Math.random() * 100;
+            const delay = (Math.random() * 2).toFixed(2);
+            const size = Math.random() > 0.5 ? "text-sm" : "text-xs";
+            return (
+              <span
+                key={`bg-${i}`}
+                className={`absolute ${size} pointer-events-none`}
+                style={{ left: `${left}%`, top: `${top}%`, animation: `sparkle-float 2s ease-in-out ${delay}s infinite` }}
+              >
+                ✨
+              </span>
+            );
+          })}
+          <span className="relative z-10 font-game text-sm text-foreground text-center">
+            📣 Show off and share your result 🤩
+          </span>
+          <div className="relative">
+            {SPARKLE_POSITIONS.map((sp, i) => {
+              const rad = (sp.angle * Math.PI) / 180;
+              const x = Math.cos(rad) * 38;
+              const y = Math.sin(rad) * 38;
+              return (
+                <span
+                  key={i}
+                  className="absolute left-1/2 top-1/2 text-xs pointer-events-none"
+                  style={{
+                    ["--sp-x" as string]: `${x}px`,
+                    ["--sp-y" as string]: `${y}px`,
+                    animation: `sparkle-burst 1.6s ease-in-out ${sp.delay} infinite`,
+                  }}
+                >
+                  ✨
+                </span>
+              );
+            })}
+            <button
+              onClick={handleCopy}
+              className="relative z-10 flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copied ? "Copied!" : "Copy"}
+            </button>
+          </div>
+        </div>
+      )}
 
       {gameState === "playing" && (
         <button
