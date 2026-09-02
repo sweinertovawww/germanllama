@@ -6,7 +6,10 @@ import { currentShareUrl } from "@/lib/utils";
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
 const GROUND_Y = 640;
-const GRAVITY = 0.6;
+// Lower gravity = a longer, floatier jump arc, which means more horizontal
+// distance covered per jump even at a slow scroll speed — this is what lets
+// tiles/gaps stay comfortably long instead of needing to shrink to match speed.
+const GRAVITY = 0.3;
 const JUMP_FORCE = -12;
 const LLAMA_X = 30;
 const LLAMA_W = 40;
@@ -16,14 +19,15 @@ const LLAMA_W = 40;
 const LLAMA_FOOT_OFFSET = 40;
 
 const TILE_H = 14;
-const TILE_W_MIN = 60;
-const TILE_W_MAX = 80;
-// A jump's horizontal reach is speed × (fixed airtime) — at this low a speed
-// that's much less than it used to be, so gaps have to be sized down to match
-// or a jump can't cross them at all. Kept just under the reach of the
-// tightest case (jumping up a level) at SPEED_INITIAL.
-const GAP_MIN = 22;
-const GAP_MAX = 36;
+const TILE_W_MIN = 85;
+const TILE_W_MAX = 110;
+// A jump's horizontal reach is speed × (fixed airtime). Sized comfortably
+// under the reach of the tightest case (jumping up a level) at SPEED_INITIAL,
+// so a jump always crosses the gap — see STAIR_TILE_W below for why widening
+// the tiles themselves needed a floatier jump (lower GRAVITY) rather than
+// just bigger numbers here.
+const GAP_MIN = 60;
+const GAP_MAX = 80;
 const SPEED_INITIAL = 1.3;
 const SPEED_INCREMENT = 0.00036;
 // Capped so a jump's horizontal reach can never grow enough to clear two
@@ -43,7 +47,7 @@ const LEVEL_STEP = 70;
 // comfortably exceeds this width) but can't clear two of them back-to-back
 // even at SPEED_MAX (steps have no gap between them) — otherwise the llama
 // could skip a step and meet one more than one level away from where it is.
-const STAIR_TILE_W = 38;
+const STAIR_TILE_W = 85;
 const STAIR_LEN_MIN = 2;
 const STAIR_LEN_MAX = 4;
 
