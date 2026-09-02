@@ -46,12 +46,14 @@ function PoolTile({
   text,
   colorClass,
   selected,
+  hintActive,
   onTap,
 }: {
   id: string;
   text: string;
   colorClass: string;
   selected: boolean;
+  hintActive: boolean;
   onTap: () => void;
 }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id });
@@ -67,7 +69,9 @@ function PoolTile({
           ? "opacity-30 border-primary/30 bg-muted/50"
           : selected
             ? "border-primary bg-primary/10 shadow-md ring-2 ring-primary/30"
-            : "border-border bg-card hover:border-primary/50 hover:shadow-sm"
+            : hintActive
+              ? "border-primary/50 bg-primary/5 ring-2 ring-primary/20 animate-pulse"
+              : "border-border bg-card hover:border-primary/50 hover:shadow-sm"
       }`}
     >
       <span className={`font-semibold break-words ${colorClass}`}>{text}</span>
@@ -82,7 +86,8 @@ function Slot({
   filled,
   colorClass,
   shaking,
-  clickable,
+  selected,
+  hintActive,
   onTap,
 }: {
   id: string;
@@ -90,7 +95,8 @@ function Slot({
   filled: boolean;
   colorClass: string;
   shaking: boolean;
-  clickable: boolean;
+  selected: boolean;
+  hintActive: boolean;
   onTap: () => void;
 }) {
   const { setNodeRef, isOver } = useDroppable({ id });
@@ -106,9 +112,11 @@ function Slot({
             ? "border-transparent bg-transparent"
             : isOver
               ? "border-primary bg-primary/10 scale-[1.03]"
-              : clickable
-                ? "border-primary/50 bg-primary/5 cursor-pointer border-dashed animate-pulse"
-                : "border-border bg-muted/30 border-dashed"
+              : selected
+                ? "border-primary bg-primary/10 shadow-md ring-2 ring-primary/30 cursor-pointer"
+                : hintActive
+                  ? "border-primary/50 bg-primary/5 cursor-pointer border-dashed animate-pulse"
+                  : "border-border bg-muted/30 border-dashed cursor-pointer hover:border-primary/40"
       }`}
     >
       {filled && <span className={`font-body text-xs sm:text-sm font-bold ${colorClass}`}>{answerText}</span>}
@@ -133,6 +141,7 @@ const StoryExercise = () => {
   const [filled, setFilled] = useState<Record<string, boolean>>({});
   const [pool, setPool] = useState<PoolItem[]>([]);
   const [selectedPoolId, setSelectedPoolId] = useState<string | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<{ id: string; sIdx: number; wIdx: number } | null>(null);
   const [shakeSlot, setShakeSlot] = useState<string | null>(null);
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -141,6 +150,7 @@ const StoryExercise = () => {
     setPool(buildPool(germanBySentence));
     setFilled({});
     setSelectedPoolId(null);
+    setSelectedSlot(null);
     setHideGerman(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storyId]);
@@ -162,6 +172,7 @@ const StoryExercise = () => {
         setTimeout(() => setShakeSlot((s) => (s === slotId ? null : s)), 400);
       }
       setSelectedPoolId(null);
+      setSelectedSlot(null);
     },
     [filled, germanBySentence]
   );
@@ -169,6 +180,7 @@ const StoryExercise = () => {
   const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveDragId(String(event.active.id));
     setSelectedPoolId(null);
+    setSelectedSlot(null);
   }, []);
 
   const handleDragEnd = useCallback(
@@ -185,18 +197,32 @@ const StoryExercise = () => {
     [pool, attemptPlace]
   );
 
-  const handlePoolTap = useCallback((id: string) => {
-    setSelectedPoolId((prev) => (prev === id ? null : id));
-  }, []);
+  const handlePoolTap = useCallback(
+    (id: string) => {
+      // A slot was tapped first — place this word into it (reverse order flow).
+      if (selectedSlot) {
+        const poolItem = pool.find((p) => p.id === id);
+        if (poolItem) attemptPlace(poolItem, selectedSlot.id, selectedSlot.sIdx, selectedSlot.wIdx);
+        return;
+      }
+      setSelectedPoolId((prev) => (prev === id ? null : id));
+    },
+    [selectedSlot, pool, attemptPlace]
+  );
 
   const handleSlotTap = useCallback(
     (slotId: string, sIdx: number, wIdx: number) => {
-      if (!selectedPoolId) return;
-      const poolItem = pool.find((p) => p.id === selectedPoolId);
-      if (!poolItem) return;
-      attemptPlace(poolItem, slotId, sIdx, wIdx);
+      if (filled[slotId]) return;
+      // A word was tapped first — place it into this slot (original flow).
+      if (selectedPoolId) {
+        const poolItem = pool.find((p) => p.id === selectedPoolId);
+        if (poolItem) attemptPlace(poolItem, slotId, sIdx, wIdx);
+        return;
+      }
+      // Nothing selected yet — arm this slot so the next word tap fills it.
+      setSelectedSlot((prev) => (prev?.id === slotId ? null : { id: slotId, sIdx, wIdx }));
     },
-    [selectedPoolId, pool, attemptPlace]
+    [filled, selectedPoolId, pool, attemptPlace]
   );
 
   const activeDragItem = useMemo(() => pool.find((p) => p.id === activeDragId), [activeDragId, pool]);
@@ -351,7 +377,8 @@ const StoryExercise = () => {
                           filled={isFilled}
                           colorClass={pairColorClass(w.pair)}
                           shaking={shakeSlot === slotId}
-                          clickable={selectedPoolId !== null && !isFilled}
+                          selected={selectedSlot?.id === slotId}
+                          hintActive={selectedPoolId !== null && !isFilled}
                           onTap={() => handleSlotTap(slotId, sIdx, wIdx)}
                         />
                       );
@@ -376,6 +403,7 @@ const StoryExercise = () => {
                     text={item.text}
                     colorClass={pairColorClass(item.pair)}
                     selected={selectedPoolId === item.id}
+                    hintActive={selectedSlot !== null}
                     onTap={() => handlePoolTap(item.id)}
                   />
                 ))}
