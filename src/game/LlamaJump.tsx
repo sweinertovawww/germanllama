@@ -62,6 +62,7 @@ const START_LIVES = 3;
 // (GAP_MIN is 28, so this must stay comfortably under that).
 const TRAMPOLINE_MIN_INTERVAL_FRAMES = 1800; // ~30s at 60fps
 const TRAMPOLINE_JITTER_FRAMES = 600; // up to ~10s extra
+const TRAMPOLINE_FIRST_DELAY_FRAMES = 600; // the very first one always shows up ~10s into a run
 const TRAMPOLINE_WIDTH = 22;
 const TRAMPOLINE_BOUNCE_FORCE = -14;
 
@@ -386,7 +387,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     g.flashTimer = 0;
     g.landedTileCount = 0;
     g.lastTrampolineFrame = 0;
-    g.nextTrampolineDelay = TRAMPOLINE_MIN_INTERVAL_FRAMES;
+    g.nextTrampolineDelay = TRAMPOLINE_FIRST_DELAY_FRAMES;
     g.tiles = [{ x: 0, width: 160, y: GROUND_Y }];
     g.trampolines = [];
     g.stars = [];
