@@ -832,9 +832,6 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
           <div className="absolute inset-0 flex items-center justify-center bg-foreground/40 backdrop-blur-[2px]">
             <div className="bg-card/95 rounded-2xl p-6 shadow-2xl border-2 border-primary flex flex-col items-center gap-4 max-w-[85%]">
               <p className="font-game text-sm text-foreground text-center">🦙 Llama Jump</p>
-              <p className="font-body text-xs text-muted-foreground text-center leading-relaxed">
-                Jump from tile to tile — don't fall in the gaps! Grab a 👒 sombrero to fill in a word, or a ⭐ star mid-jump for an article quiz.
-              </p>
               <input
                 type="text"
                 value={playerName}
