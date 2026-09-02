@@ -23,33 +23,24 @@ const TILE_W_MIN = 85;
 const TILE_W_MAX = 110;
 // A jump's horizontal reach is speed × (fixed airtime). Sized comfortably
 // under the reach of the tightest case (jumping up a level) at SPEED_INITIAL,
-// so a jump always crosses the gap — see STAIR_TILE_W below for why widening
-// the tiles themselves needed a floatier jump (lower GRAVITY) rather than
-// just bigger numbers here.
+// so a jump always crosses the gap — a floatier jump (lower GRAVITY) is what
+// makes it possible to keep tiles this long instead of shrinking them.
 const GAP_MIN = 60;
 const GAP_MAX = 80;
 const SPEED_INITIAL = 1.3;
 const SPEED_INCREMENT = 0.00036;
 // Capped so a jump's horizontal reach can never grow enough to clear two
-// staircase steps at once — otherwise a skipped step could land the llama on
-// a tile more than one level away from wherever it actually is.
+// tiles at once — otherwise a skipped tile could land the llama on one more
+// than one level away from wherever it actually is.
 const SPEED_MAX = 2.16;
 const FALL_LIMIT = GROUND_Y + 140;
 const START_LIVES = 3;
 
 // Multi-level platforms: a handful of fixed floors the llama can jump up onto
-// or drop down from. Steps within a staircase sit flush against each other
-// (no gap) but differ in height, so climbing up always needs an actual jump
-// while walking off a ledge down to a lower one happens naturally by falling.
+// or drop down from. Every tile sits after a gap (no flush/contiguous steps),
+// so reaching the next one — up, down, or level — always takes an active jump.
 const LEVELS = 4;
 const LEVEL_STEP = 70;
-// Sized so a jump reliably reaches the very next step (reach at SPEED_INITIAL
-// comfortably exceeds this width) but can't clear two of them back-to-back
-// even at SPEED_MAX (steps have no gap between them) — otherwise the llama
-// could skip a step and meet one more than one level away from where it is.
-const STAIR_TILE_W = 85;
-const STAIR_LEN_MIN = 2;
-const STAIR_LEN_MAX = 4;
 
 function levelToY(level: number) {
   return GROUND_Y - level * LEVEL_STEP;
@@ -194,32 +185,16 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     }
   }, []);
 
-  // Appends either a contiguous staircase (steps touching, height varies ±1
-  // level per step) or a standalone platform after a gap, at a level within
-  // reach of the previous one.
+  // Appends one long platform after a gap, at a level within jump reach of
+  // the previous one (level stays the same, or moves ±1).
   const spawnSegment = useCallback((afterX: number, afterLevel: number) => {
     const g = gameRef.current;
-    if (Math.random() < 0.45) {
-      const len = STAIR_LEN_MIN + Math.floor(Math.random() * (STAIR_LEN_MAX - STAIR_LEN_MIN + 1));
-      const gap = GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN);
-      let x = afterX + gap;
-      let level = afterLevel;
-      for (let i = 0; i < len; i++) {
-        if (i > 0) {
-          const dir = Math.random() < 0.5 ? 1 : -1;
-          level = Math.max(0, Math.min(LEVELS - 1, level + dir));
-        }
-        g.tiles.push({ x, width: STAIR_TILE_W, y: levelToY(level) });
-        x += STAIR_TILE_W;
-      }
-    } else {
-      const width = TILE_W_MIN + Math.random() * (TILE_W_MAX - TILE_W_MIN);
-      const gap = GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN);
-      const x = afterX + gap;
-      const dir = Math.random() < 0.5 ? 0 : Math.random() < 0.5 ? 1 : -1;
-      const level = Math.max(0, Math.min(LEVELS - 1, afterLevel + dir));
-      g.tiles.push({ x, width, y: levelToY(level) });
-    }
+    const width = TILE_W_MIN + Math.random() * (TILE_W_MAX - TILE_W_MIN);
+    const gap = GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN);
+    const x = afterX + gap;
+    const dir = Math.random() < 0.5 ? 0 : Math.random() < 0.5 ? 1 : -1;
+    const level = Math.max(0, Math.min(LEVELS - 1, afterLevel + dir));
+    g.tiles.push({ x, width, y: levelToY(level) });
   }, []);
 
   const rightmostTile = (tiles: Tile[]): Tile | null =>
