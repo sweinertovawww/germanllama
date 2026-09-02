@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Copy, Check } from "lucide-react";
-import { getStory, getStoryVocabPairs, type VocabPair } from "@/data/beginnerStories";
+import { getStory } from "@/data/beginnerStories";
 import { currentShareUrl } from "@/lib/utils";
-import { isTranslationCorrect } from "@/game/vocabularyData";
 
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
@@ -41,15 +40,6 @@ function levelToY(level: number) {
 }
 function yToLevel(y: number) {
   return Math.round((GROUND_Y - y) / LEVEL_STEP);
-}
-
-function shuffleArray<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
 }
 
 interface Tile {
@@ -151,23 +141,14 @@ interface LlamaJumpProps {
 
 const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   const story = useMemo(() => getStory(storyId), [storyId]);
-  const vocabPool = useMemo(() => (story ? getStoryVocabPairs(story) : []), [story]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
-  const [gameState, setGameState] = useState<"idle" | "playing" | "quiz" | "over">("idle");
+  const [gameState, setGameState] = useState<"idle" | "playing" | "over">("idle");
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => parseInt(localStorage.getItem("llama-jump-highscore") || "0"));
   const [copied, setCopied] = useState(false);
-  const [currentPair, setCurrentPair] = useState<VocabPair | null>(null);
-  const [answerInput, setAnswerInput] = useState("");
-  const [answerResult, setAnswerResult] = useState<"correct" | "wrong" | null>(null);
-  const answerInputRef = useRef<HTMLInputElement>(null);
-
-  const queueRef = useRef<VocabPair[]>([]);
-  const queueIndexRef = useRef(0);
-  const landingsUntilQuizRef = useRef(4);
 
   const gameRef = useRef({
     llamaY: GROUND_Y,
@@ -196,16 +177,6 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       g.onGround = false;
     }
   }, []);
-
-  const nextQuizPair = useCallback(() => {
-    if (queueIndexRef.current >= queueRef.current.length) {
-      queueRef.current = shuffleArray(vocabPool);
-      queueIndexRef.current = 0;
-    }
-    const pair = queueRef.current[queueIndexRef.current];
-    queueIndexRef.current++;
-    return pair;
-  }, [vocabPool]);
 
   // Appends either a contiguous staircase (steps touching, height varies ±1
   // level per step) or a standalone platform after a gap, at a level within
@@ -258,45 +229,9 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       if (!last || last.x + last.width >= CANVAS_WIDTH + 300) break;
       spawnSegment(last.x + last.width, yToLevel(last.y));
     }
-    queueRef.current = shuffleArray(vocabPool);
-    queueIndexRef.current = 0;
-    landingsUntilQuizRef.current = 3 + Math.floor(Math.random() * 3);
     setScore(0);
-    setCurrentPair(null);
-    setAnswerInput("");
-    setAnswerResult(null);
     setGameState("playing");
-  }, [vocabPool, spawnSegment]);
-
-  const resumeGame = useCallback(() => {
-    setCurrentPair(null);
-    setAnswerInput("");
-    setAnswerResult(null);
-    setGameState("playing");
-  }, []);
-
-  const triggerQuiz = useCallback(() => {
-    setCurrentPair(nextQuizPair());
-    setAnswerInput("");
-    setAnswerResult(null);
-    setGameState("quiz");
-    setTimeout(() => answerInputRef.current?.focus(), 100);
-  }, [nextQuizPair]);
-
-  const handleAnswerSubmit = useCallback(() => {
-    if (!currentPair || answerResult !== null) return;
-    const isCorrect = isTranslationCorrect(answerInput, currentPair.de);
-    setAnswerResult(isCorrect ? "correct" : "wrong");
-    if (isCorrect) {
-      gameRef.current.score += 3;
-      setScore(gameRef.current.score);
-      if (gameRef.current.score > parseInt(localStorage.getItem("llama-jump-highscore") || "0")) {
-        setHighScore(gameRef.current.score);
-        localStorage.setItem("llama-jump-highscore", String(gameRef.current.score));
-      }
-    }
-    setTimeout(resumeGame, 1200);
-  }, [currentPair, answerInput, answerResult, resumeGame]);
+  }, [spawnSegment]);
 
   // Responsive scaling
   useEffect(() => {
@@ -318,14 +253,6 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   // Keyboard controls
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (gameState === "quiz") {
-        if (e.code === "Enter") {
-          e.preventDefault();
-          answerInputRef.current?.blur();
-          handleAnswerSubmit();
-        }
-        return;
-      }
       if (e.code === "ArrowUp" || e.code === "Space") {
         e.preventDefault();
         if (gameState === "idle" || gameState === "over") startGame();
@@ -334,7 +261,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [gameState, jump, startGame, handleAnswerSubmit]);
+  }, [gameState, jump, startGame]);
 
   // Main loop
   useEffect(() => {
@@ -383,17 +310,6 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
             g.landedTileCount++;
             g.score += 1;
             setScore(g.score);
-            landingsUntilQuizRef.current--;
-            if (landingsUntilQuizRef.current <= 0) {
-              landingsUntilQuizRef.current = 3 + Math.floor(Math.random() * 3);
-              g.llamaY = tileHere.y;
-              g.velocityY = 0;
-              g.isJumping = false;
-              g.onGround = true;
-              g.airMinY = g.llamaY;
-              triggerQuiz();
-              return;
-            }
           }
           g.llamaY = tileHere.y;
           g.velocityY = 0;
@@ -407,6 +323,10 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
             g.lives -= 1;
             g.hurtTimer = 25;
             if (g.lives <= 0) {
+              if (g.score > parseInt(localStorage.getItem("llama-jump-highscore") || "0")) {
+                setHighScore(g.score);
+                localStorage.setItem("llama-jump-highscore", String(g.score));
+              }
               setGameState("over");
               return;
             }
@@ -441,7 +361,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
 
     animId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animId);
-  }, [gameState, spawnSegment, triggerQuiz]);
+  }, [gameState, spawnSegment]);
 
   // Idle frame
   useEffect(() => {
@@ -469,7 +389,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  if (!story || vocabPool.length === 0) {
+  if (!story) {
     return <p className="font-body text-muted-foreground text-sm">Story not found.</p>;
   }
 
@@ -493,7 +413,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
             <div className="bg-card/95 rounded-2xl p-6 shadow-2xl border-2 border-primary flex flex-col items-center gap-4 max-w-[85%]">
               <p className="font-game text-sm text-foreground text-center">🦙 Llama Jump</p>
               <p className="font-body text-xs text-muted-foreground text-center leading-relaxed">
-                Jump from tile to tile — don't fall in the gaps! Every few tiles, translate a word from the story.
+                Jump from tile to tile — don't fall in the gaps!
               </p>
               <button
                 onClick={startGame}
@@ -501,46 +421,6 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
               >
                 START
               </button>
-            </div>
-          </div>
-        )}
-
-        {gameState === "quiz" && currentPair && (
-          <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
-            <div className="bg-card rounded-xl p-4 sm:p-6 shadow-2xl text-center max-w-[90%] sm:max-w-md mx-4 border-2 border-primary">
-              <p className="font-game text-[10px] sm:text-xs text-muted-foreground mb-2">Translate to German:</p>
-              <p className="font-game text-sm sm:text-base text-card-foreground mb-4">{currentPair.en}</p>
-              <div className="flex gap-2 justify-center items-center">
-                <input
-                  ref={answerInputRef}
-                  type="text"
-                  value={answerInput}
-                  onChange={(e) => setAnswerInput(e.target.value)}
-                  disabled={answerResult !== null}
-                  placeholder="Type in German..."
-                  className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-primary focus:outline-none w-40 sm:w-56"
-                />
-                <button
-                  onClick={() => { answerInputRef.current?.blur(); handleAnswerSubmit(); }}
-                  disabled={answerResult !== null}
-                  className="font-game text-xs px-3 sm:px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
-                >
-                  OK
-                </button>
-              </div>
-              {answerResult === "correct" && (
-                <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
-                  Correct! +3
-                </p>
-              )}
-              {answerResult === "wrong" && (
-                <p className="font-game text-xs text-destructive mt-3">
-                  It's "{currentPair.de}"
-                </p>
-              )}
-              {!answerResult && (
-                <p className="text-muted-foreground text-xs mt-3 hidden sm:block">Press Enter to confirm</p>
-              )}
             </div>
           </div>
         )}
@@ -572,7 +452,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
         )}
       </div>
 
-      {(gameState === "playing" || gameState === "quiz") && (
+      {gameState === "playing" && (
         <button
           onClick={jump}
           className="bg-primary text-primary-foreground font-game text-sm w-full max-w-xs py-4 rounded-xl hover:opacity-90 transition-opacity active:scale-95 touch-manipulation shadow-md"
