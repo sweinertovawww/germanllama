@@ -56,11 +56,13 @@ const SPEED_MAX = 2.16;
 const FALL_LIMIT = GROUND_Y + 140;
 const START_LIVES = 3;
 
-// A rare safety net: appears at ground level under an elevated tile every so
-// often. Falling onto it bounces the llama back up instead of costing a life.
+// A rare safety net: appears at ground level in the gap leading up to an
+// elevated tile, every so often. Falling onto it bounces the llama back up
+// instead of costing a life. Narrow enough to always fit inside the gap
+// (GAP_MIN is 28, so this must stay comfortably under that).
 const TRAMPOLINE_MIN_INTERVAL_FRAMES = 1800; // ~30s at 60fps
 const TRAMPOLINE_JITTER_FRAMES = 600; // up to ~10s extra
-const TRAMPOLINE_WIDTH = 80;
+const TRAMPOLINE_WIDTH = 22;
 const TRAMPOLINE_BOUNCE_FORCE = -14;
 
 // Multi-level platforms: a handful of fixed floors the llama can jump up onto
@@ -356,10 +358,11 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       g.stars.push({ x: afterX + gap / 2, y: Math.min(prevY, y) - 45, collected: false });
     }
 
-    // Rare rescue net: only ever placed under an elevated tile, and only once
-    // the min-interval-plus-jitter has actually elapsed since the last one.
+    // Rare rescue net: sits in the gap leading up to an elevated tile (right
+    // where a missed jump would actually fall through), only once the
+    // min-interval-plus-jitter has actually elapsed since the last one.
     if (level > 0 && g.frameCount - g.lastTrampolineFrame > g.nextTrampolineDelay) {
-      g.trampolines.push({ x: x + width / 2 - TRAMPOLINE_WIDTH / 2, width: TRAMPOLINE_WIDTH, used: false });
+      g.trampolines.push({ x: afterX + gap / 2 - TRAMPOLINE_WIDTH / 2, width: TRAMPOLINE_WIDTH, used: false });
       g.lastTrampolineFrame = g.frameCount;
       g.nextTrampolineDelay = TRAMPOLINE_MIN_INTERVAL_FRAMES + Math.random() * TRAMPOLINE_JITTER_FRAMES;
     }
