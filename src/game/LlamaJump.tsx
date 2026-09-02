@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { getStory } from "@/data/beginnerStories";
 import { currentShareUrl } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 import { drawStar, drawSombrero, type Star, type Sombrero } from "@/game/collectibles";
 import {
   QUESTIONS,
@@ -254,6 +255,30 @@ const saveJumpDailyScore = (name: string, score: number) => {
   }
 };
 
+// Global Top 10 — same principle as Llama Run's leaderboard, kept in its own
+// table since the two games score on very different scales.
+interface LeaderboardEntry {
+  name: string;
+  score: number;
+}
+
+const fetchLeaderboard = async (): Promise<LeaderboardEntry[]> => {
+  const { data, error } = await supabase
+    .from("llama_jump_leaderboard")
+    .select("name, score")
+    .order("score", { ascending: false })
+    .limit(10);
+  if (error) {
+    console.error("Llama Jump leaderboard fetch error:", error);
+    return [];
+  }
+  return data || [];
+};
+
+const saveToLeaderboardDB = async (name: string, score: number) => {
+  await supabase.from("llama_jump_leaderboard").insert({ name, score });
+};
+
 const isMobileDevice = () => window.innerWidth < 768;
 
 // Ring of sparkles around the share button, same as Llama Run's ShareButtons.
@@ -287,6 +312,11 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   const [playerName, setPlayerName] = useState(() => localStorage.getItem("llama-jump-player-name") || "");
   const playerNameRef = useRef(playerName);
   const [dailyBest, setDailyBest] = useState(() => getJumpDailyBest());
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+
+  useEffect(() => {
+    fetchLeaderboard().then(setLeaderboard);
+  }, []);
 
   const [quizType, setQuizType] = useState<"article" | "fill" | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
@@ -363,6 +393,9 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     if (finalScore > 0) {
       saveJumpDailyScore(playerNameRef.current, finalScore);
       setDailyBest(getJumpDailyBest());
+      saveToLeaderboardDB(playerNameRef.current, finalScore).then(() => {
+        fetchLeaderboard().then(setLeaderboard);
+      });
     }
     if (finalScore > parseInt(localStorage.getItem("llama-jump-highscore") || "0")) {
       setHighScore(finalScore);
@@ -680,6 +713,9 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
               if (g.score > 0) {
                 saveJumpDailyScore(playerNameRef.current, g.score);
                 setDailyBest(getJumpDailyBest());
+                saveToLeaderboardDB(playerNameRef.current, g.score).then(() => {
+                  fetchLeaderboard().then(setLeaderboard);
+                });
               }
               if (g.score > parseInt(localStorage.getItem("llama-jump-highscore") || "0")) {
                 setHighScore(g.score);
@@ -1026,6 +1062,31 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
         Press <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">↑</kbd> or{" "}
         <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">SPACE</kbd> to jump
       </p>
+
+      <div className="w-full max-w-xs mt-2">
+        <h3 className="font-game text-xs text-center text-primary mb-2">🏆 Global Top 10</h3>
+        <table className="w-full text-xs font-game">
+          <thead>
+            <tr className="border-b border-border">
+              <th className="text-left py-1 px-2 text-muted-foreground">#</th>
+              <th className="text-left py-1 px-2 text-muted-foreground">Name</th>
+              <th className="text-right py-1 px-2 text-muted-foreground">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: 10 }).map((_, i) => {
+              const entry = leaderboard[i];
+              return (
+                <tr key={i} className="border-b border-border/50">
+                  <td className="py-1 px-2 text-muted-foreground">{i + 1}.</td>
+                  <td className="py-1 px-2 text-foreground">{entry?.name || "—"}</td>
+                  <td className="py-1 px-2 text-right text-foreground">{entry?.score ?? "—"}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 
