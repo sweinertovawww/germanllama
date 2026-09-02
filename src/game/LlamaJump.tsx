@@ -254,6 +254,8 @@ const saveJumpDailyScore = (name: string, score: number) => {
   }
 };
 
+const isMobileDevice = () => window.innerWidth < 768;
+
 interface LlamaJumpProps {
   storyId: string;
 }
@@ -264,6 +266,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [gameState, setGameState] = useState<"idle" | "playing" | "quiz" | "over">("idle");
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => parseInt(localStorage.getItem("llama-jump-highscore") || "0"));
@@ -460,11 +463,65 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     setGameState("playing");
   }, [spawnSegment, playerName]);
 
+  // Fullscreen mode on mobile — same principle as Llama Run: once you're
+  // actually playing (not on the idle screen), take over the full viewport
+  // instead of staying embedded in the page, so the canvas gets much more
+  // room. Locks body scroll/touch while active.
+  useEffect(() => {
+    if (gameState !== "idle" && isMobileDevice()) {
+      setIsFullscreen(true);
+      document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+      document.body.style.height = "100%";
+      document.body.style.touchAction = "none";
+      document.body.style.overscrollBehavior = "none";
+    } else {
+      setIsFullscreen(false);
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
+      document.body.style.touchAction = "";
+      document.body.style.overscrollBehavior = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
+      document.body.style.touchAction = "";
+      document.body.style.overscrollBehavior = "";
+    };
+  }, [gameState]);
+
+  // Prevent iOS pinch-zoom/double-tap while fullscreen
+  useEffect(() => {
+    if (!isFullscreen) return;
+    const preventGesture = (e: Event) => e.preventDefault();
+    document.addEventListener("gesturestart", preventGesture, { passive: false });
+    document.addEventListener("gesturechange", preventGesture, { passive: false });
+    document.addEventListener("gestureend", preventGesture, { passive: false });
+    document.addEventListener("dblclick", preventGesture, { passive: false });
+    return () => {
+      document.removeEventListener("gesturestart", preventGesture);
+      document.removeEventListener("gesturechange", preventGesture);
+      document.removeEventListener("gestureend", preventGesture);
+      document.removeEventListener("dblclick", preventGesture);
+    };
+  }, [isFullscreen]);
+
   // Responsive scaling
   useEffect(() => {
     const updateScale = () => {
       const container = containerRef.current;
       if (!container) return;
+      if (isFullscreen) {
+        const availW = window.innerWidth - 8;
+        const availH = window.innerHeight - 110;
+        setScale(Math.min(availW / CANVAS_WIDTH, availH / CANVAS_HEIGHT));
+        return;
+      }
       const parentWidth = container.parentElement?.clientWidth || window.innerWidth;
       const maxWidth = Math.min(parentWidth - 16, CANVAS_WIDTH);
       const scaleByWidth = maxWidth / CANVAS_WIDTH;
@@ -475,7 +532,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     updateScale();
     window.addEventListener("resize", updateScale);
     return () => window.removeEventListener("resize", updateScale);
-  }, []);
+  }, [isFullscreen]);
 
   // Keyboard controls
   useEffect(() => {
@@ -697,11 +754,18 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleNewPlayer = () => {
+    setPlayerName("");
+    localStorage.removeItem("llama-jump-player-name");
+    setScore(0);
+    setGameState("idle");
+  };
+
   if (!story) {
     return <p className="font-body text-muted-foreground text-sm">Story not found.</p>;
   }
 
-  return (
+  const gameContent = (
     <div className="flex flex-col items-center w-full gap-3 sm:gap-4">
       <div
         ref={containerRef}
@@ -849,31 +913,50 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
 
         {gameState === "over" && (
           <div className="absolute inset-0 flex items-center justify-center z-30">
-            <div className="absolute inset-0 bg-foreground/60" />
-            <div className="relative z-10 flex flex-col items-center gap-3 bg-card/95 rounded-2xl p-6 shadow-2xl border-2 border-primary mx-4 max-w-[90%]">
-              <p className="font-game text-lg text-destructive">Game Over</p>
-              <p className="font-game text-sm text-foreground">Score: <span className="text-primary">{score}</span></p>
-              <p className="font-game text-xs text-muted-foreground">Best: <span className="text-primary">{highScore}</span></p>
-              {dailyBest && (
-                <p className="font-body text-[10px] text-muted-foreground">
-                  🏆 Today's best: {dailyBest.name} — {dailyBest.score}
+            <div className="absolute inset-0 bg-foreground/60 animate-game-over-flash" />
+            <div className="relative z-10 flex flex-col items-center gap-3 sm:gap-4 bg-card/95 rounded-2xl p-4 sm:p-8 shadow-2xl border-2 border-primary mx-4 max-w-[90%]">
+              <p className="font-game text-lg sm:text-2xl text-destructive">💀 GAME OVER</p>
+              <div className="flex flex-col items-center gap-1">
+                <p className="font-game text-sm sm:text-base text-foreground">
+                  Score: <span className="text-primary">{score}</span>
                 </p>
-              )}
+                <p className="font-game text-xs text-muted-foreground">
+                  Best: <span className="text-primary">{highScore}</span>
+                </p>
+                {dailyBest && (
+                  <p className="font-body text-[10px] text-muted-foreground mt-1">
+                    🏆 Today's best: {dailyBest.name} — {dailyBest.score}
+                  </p>
+                )}
+              </div>
               <button
                 onClick={startGame}
-                className="font-game text-sm px-8 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg"
+                className="font-game text-sm sm:text-base px-8 sm:px-12 py-3 sm:py-4 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all animate-retry-pulse whitespace-nowrap"
+                style={{
+                  background: "linear-gradient(135deg, hsl(168, 72%, 40%), hsl(168, 72%, 30%))",
+                  color: "hsl(0, 0%, 100%)",
+                  boxShadow: "0 4px 20px hsla(168, 72%, 40%, 0.4), 0 0 30px hsla(168, 72%, 40%, 0.2)",
+                }}
               >
-                Try Again
+                🦙 Try again
               </button>
-              {score > 0 && (
+              <div className="flex gap-2 sm:gap-3">
+                {score > 0 && (
+                  <button
+                    onClick={handleCopy}
+                    className="flex items-center gap-1 font-game text-[10px] sm:text-xs px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-border bg-card/80 text-muted-foreground hover:text-foreground hover:border-primary/50 hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
+                  >
+                    {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                    {copied ? "Copied!" : "Share score"}
+                  </button>
+                )}
                 <button
-                  onClick={handleCopy}
-                  className="flex items-center gap-2 font-game text-xs px-4 py-2 rounded-lg border-2 border-border text-muted-foreground hover:border-primary/50 hover:text-foreground transition-colors"
+                  onClick={handleNewPlayer}
+                  className="font-game text-[10px] sm:text-xs px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-destructive/50 bg-card/80 text-destructive hover:border-destructive hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
                 >
-                  {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                  {copied ? "Copied!" : "Share score"}
+                  👤 New player
                 </button>
-              )}
+              </div>
             </div>
           </div>
         )}
@@ -894,6 +977,24 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       </p>
     </div>
   );
+
+  if (isFullscreen) {
+    return (
+      <div
+        className="fixed inset-0 z-[100] bg-background flex items-center justify-center"
+        style={{ touchAction: "none", overscrollBehavior: "none" }}
+      >
+        <div
+          className="w-full h-full max-w-[500px] flex flex-col items-center justify-center overflow-hidden"
+          style={{ aspectRatio: "9/16", maxHeight: "100dvh" }}
+        >
+          {gameContent}
+        </div>
+      </div>
+    );
+  }
+
+  return gameContent;
 };
 
 export default LlamaJump;
