@@ -58,13 +58,16 @@ const START_LIVES = 3;
 
 // A rare safety net: appears at ground level in the gap leading up to an
 // elevated tile, every so often. Falling onto it bounces the llama back up
-// instead of costing a life. Narrow enough to always fit inside the gap
-// (GAP_MIN is 28, so this must stay comfortably under that).
+// instead of costing a life. That gap is widened specifically for this spot
+// (still just barely jumpable, so a good jump can still clear it) to give
+// the llama actual room to fall through onto the trampoline.
 const TRAMPOLINE_MIN_INTERVAL_FRAMES = 1800; // ~30s at 60fps
 const TRAMPOLINE_JITTER_FRAMES = 600; // up to ~10s extra
 const TRAMPOLINE_FIRST_DELAY_FRAMES = 600; // the very first one always shows up ~10s into a run
-const TRAMPOLINE_WIDTH = 22;
+const TRAMPOLINE_WIDTH = 32;
 const TRAMPOLINE_BOUNCE_FORCE = -14;
+const TRAMPOLINE_GAP_MIN = 42;
+const TRAMPOLINE_GAP_MAX = 50;
 
 // Multi-level platforms: a handful of fixed floors the llama can jump up onto
 // or drop down from. Every tile sits after a gap (no flush/contiguous steps),
@@ -391,11 +394,19 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   const spawnSegment = useCallback((afterX: number, afterLevel: number) => {
     const g = gameRef.current;
     const width = TILE_W_MIN + Math.random() * (TILE_W_MAX - TILE_W_MIN);
-    const gap = GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN);
-    const x = afterX + gap;
     const dir = Math.random() < 0.5 ? 0 : Math.random() < 0.5 ? 1 : -1;
     const level = Math.max(0, Math.min(LEVELS - 1, afterLevel + dir));
     const y = levelToY(level);
+
+    // Rare rescue net: sits in the gap leading up to an elevated tile (right
+    // where a missed jump would actually fall through), only once the
+    // min-interval-plus-jitter has actually elapsed since the last one. That
+    // gap is widened up front so there's real room to fall onto it.
+    const wantsTrampoline = level > 0 && g.frameCount - g.lastTrampolineFrame > g.nextTrampolineDelay;
+    const gap = wantsTrampoline
+      ? TRAMPOLINE_GAP_MIN + Math.random() * (TRAMPOLINE_GAP_MAX - TRAMPOLINE_GAP_MIN)
+      : GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN);
+    const x = afterX + gap;
     g.tiles.push({ x, width, y });
 
     if (Math.random() < SOMBRERO_CHANCE) {
@@ -406,10 +417,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       g.stars.push({ x: afterX + gap / 2, y: Math.min(prevY, y) - 45, collected: false });
     }
 
-    // Rare rescue net: sits in the gap leading up to an elevated tile (right
-    // where a missed jump would actually fall through), only once the
-    // min-interval-plus-jitter has actually elapsed since the last one.
-    if (level > 0 && g.frameCount - g.lastTrampolineFrame > g.nextTrampolineDelay) {
+    if (wantsTrampoline) {
       g.trampolines.push({ x: afterX + gap / 2 - TRAMPOLINE_WIDTH / 2, width: TRAMPOLINE_WIDTH, used: false });
       g.lastTrampolineFrame = g.frameCount;
       g.nextTrampolineDelay = TRAMPOLINE_MIN_INTERVAL_FRAMES + Math.random() * TRAMPOLINE_JITTER_FRAMES;
