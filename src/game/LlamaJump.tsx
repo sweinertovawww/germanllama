@@ -11,6 +11,10 @@ const GRAVITY = 0.6;
 const JUMP_FORCE = -12;
 const LLAMA_X = 30;
 const LLAMA_W = 40;
+// drawLlama's legs bottom out at y+40 (baseline, before the walk-cycle wobble) —
+// physics treats llamaY as the foot/ground-contact point, so rendering must
+// shift the sprite up by this much for the feet to actually land on the tile.
+const LLAMA_FOOT_OFFSET = 40;
 
 const TILE_H = 14;
 const TILE_W_MIN = 60;
@@ -124,8 +128,8 @@ const drawScene = (
     ctx.fillRect(t.x, t.y, t.width, 3);
   }
 
-  // Llama
-  drawLlama(ctx, LLAMA_X, g.llamaY, g.frameCount, g.hurtTimer > 0);
+  // Llama — shift up so the feet (not the sprite's y origin) sit on the tile
+  drawLlama(ctx, LLAMA_X, g.llamaY - LLAMA_FOOT_OFFSET, g.frameCount, g.hurtTimer > 0);
 
   if (g.flashTimer > 0) {
     ctx.fillStyle = g.flashTimer % 2 === 0 ? "rgba(120,220,140,0.3)" : "rgba(255,255,255,0)";
