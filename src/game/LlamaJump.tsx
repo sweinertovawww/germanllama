@@ -22,6 +22,10 @@ const GAP_MIN = 45;
 const GAP_MAX = 95;
 const SPEED_INITIAL = 2.8;
 const SPEED_INCREMENT = 0.001;
+// Capped so a jump's horizontal reach can never grow enough to clear two
+// staircase steps at once — otherwise a skipped step could land the llama on
+// a tile more than one level away from wherever it actually is.
+const SPEED_MAX = 5;
 const FALL_LIMIT = GROUND_Y + 140;
 const START_LIVES = 3;
 
@@ -31,7 +35,10 @@ const START_LIVES = 3;
 // while walking off a ledge down to a lower one happens naturally by falling.
 const LEVELS = 4;
 const LEVEL_STEP = 70;
-const STAIR_TILE_W = 60;
+// Wide enough that a single fixed jump can't clear two of these back-to-back
+// (steps have no gap between them), so the llama can never skip a step and
+// meet one more than one level away from where it actually is.
+const STAIR_TILE_W = 100;
 const STAIR_LEN_MIN = 2;
 const STAIR_LEN_MAX = 4;
 
@@ -330,9 +337,16 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
               setGameState("over");
               return;
             }
-            // Respawn on solid ground under the llama
-            g.tiles = g.tiles.filter((t) => t.x > LLAMA_X + 120).map((t) => ({ ...t }));
-            g.tiles.unshift({ x: 0, width: 140, y: GROUND_Y });
+            // Respawn on solid ground under the llama. Discard every existing
+            // tile and rebuild ahead from level 0 — keeping old tiles here
+            // would leave them at whatever (possibly much higher) level they
+            // were generated at, unreachable from this fresh ground level.
+            g.tiles = [{ x: 0, width: 140, y: GROUND_Y }];
+            while (true) {
+              const last = rightmostTile(g.tiles);
+              if (!last || last.x + last.width >= CANVAS_WIDTH + 300) break;
+              spawnSegment(last.x + last.width, yToLevel(last.y));
+            }
             g.llamaY = GROUND_Y;
             g.velocityY = 0;
             g.isJumping = false;
@@ -344,7 +358,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
         g.onGround = false;
       }
 
-      g.speed += SPEED_INCREMENT;
+      g.speed = Math.min(SPEED_MAX, g.speed + SPEED_INCREMENT);
 
       drawScene(ctx, {
         llamaY: g.llamaY,
