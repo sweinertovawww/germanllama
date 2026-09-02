@@ -3170,3 +3170,9 @@ export function filterByProfession<T extends { profession: Profession }>(
 export function filterByLevel<T extends { level?: Level }>(items: T[], level: Level): T[] {
   return items.filter((item) => item.level === level);
 }
+
+/** Question.text embeds the German word after "má" (e.g. "Jaký člen má Lama?") — extract it for display. */
+export function getGermanWordFromText(text: string): string {
+  const m = text.match(/má\s+(.+?)\?/);
+  return m ? m[1] : text;
+}

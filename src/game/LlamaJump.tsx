@@ -3,9 +3,23 @@ import { Copy, Check } from "lucide-react";
 import { getStory } from "@/data/beginnerStories";
 import { currentShareUrl } from "@/lib/utils";
 import { drawStar, drawSombrero, type Star, type Sombrero } from "@/game/collectibles";
+import {
+  QUESTIONS,
+  FILL_QUESTIONS,
+  filterByLevel,
+  isTranslationCorrect,
+  getGermanWordFromText,
+  type Question,
+  type FillQuestion,
+} from "@/game/vocabularyData";
 
-const STAR_POINTS = 2;
-const SOMBRERO_POINTS = 5;
+// A1-only pools — collecting a star quizzes the article (der/die/das) for a
+// word, collecting a sombrero quizzes filling in a short A1 phrase/sentence.
+const ARTICLE_POOL = filterByLevel(QUESTIONS, "A1");
+const FILL_POOL = filterByLevel(FILL_QUESTIONS, "A1");
+
+const ARTICLE_POINTS = 3;
+const FILL_POINTS = 4;
 const SOMBRERO_CHANCE = 0.22;
 const STAR_CHANCE = 0.22;
 
@@ -175,10 +189,18 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
-  const [gameState, setGameState] = useState<"idle" | "playing" | "over">("idle");
+  const [gameState, setGameState] = useState<"idle" | "playing" | "quiz" | "over">("idle");
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => parseInt(localStorage.getItem("llama-jump-highscore") || "0"));
   const [copied, setCopied] = useState(false);
+
+  const [quizType, setQuizType] = useState<"article" | "fill" | null>(null);
+  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
+  const [articleResult, setArticleResult] = useState<"correct" | "wrong" | null>(null);
+  const [currentFillQuestion, setCurrentFillQuestion] = useState<FillQuestion | null>(null);
+  const [fillInput, setFillInput] = useState("");
+  const [fillResult, setFillResult] = useState<"correct" | "wrong" | null>(null);
+  const fillInputRef = useRef<HTMLInputElement>(null);
 
   const gameRef = useRef({
     llamaY: GROUND_Y,
@@ -209,6 +231,60 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       g.onGround = false;
     }
   }, []);
+
+  // Collecting a star/sombrero freezes the world (the main loop only runs
+  // while gameState === "playing") and opens a quiz overlay instead of
+  // awarding points directly — points only come from answering correctly.
+  const triggerArticleQuiz = useCallback(() => {
+    setCurrentQuestion(ARTICLE_POOL[Math.floor(Math.random() * ARTICLE_POOL.length)]);
+    setArticleResult(null);
+    setQuizType("article");
+    setGameState("quiz");
+  }, []);
+
+  const triggerFillQuiz = useCallback(() => {
+    setCurrentFillQuestion(FILL_POOL[Math.floor(Math.random() * FILL_POOL.length)]);
+    setFillInput("");
+    setFillResult(null);
+    setQuizType("fill");
+    setGameState("quiz");
+    setTimeout(() => fillInputRef.current?.focus(), 100);
+  }, []);
+
+  const resumeGame = useCallback(() => {
+    setQuizType(null);
+    setCurrentQuestion(null);
+    setArticleResult(null);
+    setCurrentFillQuestion(null);
+    setFillInput("");
+    setFillResult(null);
+    setGameState("playing");
+  }, []);
+
+  const handleAnswer = useCallback(
+    (index: number) => {
+      if (!currentQuestion || articleResult !== null) return;
+      const isCorrect = index === currentQuestion.correct;
+      setArticleResult(isCorrect ? "correct" : "wrong");
+      if (isCorrect) {
+        gameRef.current.score += ARTICLE_POINTS;
+        setScore(gameRef.current.score);
+      }
+      setTimeout(resumeGame, isCorrect ? 900 : 1400);
+    },
+    [currentQuestion, articleResult, resumeGame]
+  );
+
+  const handleFillSubmit = useCallback(() => {
+    if (!currentFillQuestion || fillResult !== null) return;
+    const isCorrect = isTranslationCorrect(fillInput, currentFillQuestion.answer);
+    setFillResult(isCorrect ? "correct" : "wrong");
+    if (isCorrect) {
+      gameRef.current.score += FILL_POINTS;
+      setScore(gameRef.current.score);
+    }
+    setTimeout(resumeGame, isCorrect ? 900 : 1400);
+  }, [currentFillQuestion, fillInput, fillResult, resumeGame]);
 
   // Appends one long platform after a gap, at a level within jump reach of
   // the previous one (level stays the same, or moves ±1). Sometimes adds a
@@ -282,6 +358,17 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   // Keyboard controls
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
+      if (gameState === "quiz") {
+        if (quizType === "fill" && e.code === "Enter") {
+          e.preventDefault();
+          fillInputRef.current?.blur();
+          handleFillSubmit();
+        } else if (quizType === "article" && ["Digit1", "Digit2", "Digit3"].includes(e.code)) {
+          e.preventDefault();
+          handleAnswer(Number(e.code.slice(-1)) - 1);
+        }
+        return;
+      }
       if (e.code === "ArrowUp" || e.code === "Space") {
         e.preventDefault();
         if (gameState === "idle" || gameState === "over") startGame();
@@ -290,7 +377,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [gameState, jump, startGame]);
+  }, [gameState, quizType, jump, startGame, handleFillSubmit, handleAnswer]);
 
   // Main loop
   useEffect(() => {
@@ -335,21 +422,23 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       const llamaFootX = LLAMA_X + LLAMA_W / 2;
       const llamaBodyY = g.llamaY - 20;
 
-      // Sombreros: collectible any time (standing or mid-air), like Llama Run
+      // Sombreros: collectible any time (standing or mid-air), like Llama Run.
+      // Collecting one pauses the game and opens the fill-in-the-phrase quiz.
       for (const s of g.sombreros) {
         if (!s.collected && Math.abs(llamaFootX - s.x) < 26 && Math.abs(llamaBodyY - s.y) < 30) {
           s.collected = true;
-          g.score += SOMBRERO_POINTS;
-          setScore(g.score);
+          triggerFillQuiz();
+          return;
         }
       }
-      // Stars: only collectible while airborne, same as Llama Run
+      // Stars: only collectible while airborne, same as Llama Run. Collecting
+      // one pauses the game and opens the article (der/die/das) quiz.
       if (!g.onGround) {
         for (const s of g.stars) {
           if (!s.collected && Math.abs(llamaFootX - s.x) < 22 && Math.abs(llamaBodyY - s.y) < 28) {
             s.collected = true;
-            g.score += STAR_POINTS;
-            setScore(g.score);
+            triggerArticleQuiz();
+            return;
           }
         }
       }
@@ -430,11 +519,12 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
 
     animId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animId);
-  }, [gameState, spawnSegment]);
+  }, [gameState, spawnSegment, triggerFillQuiz, triggerArticleQuiz]);
 
-  // Idle frame
+  // Idle frame — skip for "quiz" too, so the frozen game scene stays visible
+  // behind the quiz overlay instead of being replaced by the placeholder.
   useEffect(() => {
-    if (gameState === "playing") return;
+    if (gameState === "playing" || gameState === "quiz") return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -484,7 +574,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
             <div className="bg-card/95 rounded-2xl p-6 shadow-2xl border-2 border-primary flex flex-col items-center gap-4 max-w-[85%]">
               <p className="font-game text-sm text-foreground text-center">🦙 Llama Jump</p>
               <p className="font-body text-xs text-muted-foreground text-center leading-relaxed">
-                Jump from tile to tile — don't fall in the gaps!
+                Jump from tile to tile — don't fall in the gaps! Grab a 👒 sombrero to fill in a word, or a ⭐ star mid-jump for an article quiz.
               </p>
               <button
                 onClick={startGame}
@@ -492,6 +582,90 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
               >
                 START
               </button>
+            </div>
+          </div>
+        )}
+
+        {gameState === "quiz" && quizType === "article" && currentQuestion && (
+          <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
+            <div className="bg-card rounded-xl p-3 sm:p-6 shadow-2xl text-center max-w-[95%] sm:max-w-md mx-2 sm:mx-4 border-2 border-primary">
+              <p className="font-game text-xs sm:text-sm text-card-foreground mb-3 sm:mb-4 leading-relaxed">
+                What is the article for "{getGermanWordFromText(currentQuestion.text)}"?
+              </p>
+              <div className="flex gap-2 sm:gap-3 justify-center">
+                {currentQuestion.options.map((opt, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleAnswer(i)}
+                    disabled={articleResult !== null}
+                    className={`font-game text-xs sm:text-sm px-3 sm:px-5 py-2 sm:py-3 rounded-lg border-2 transition-all ${
+                      articleResult !== null && i === currentQuestion.correct
+                        ? "border-primary bg-primary/20 text-card-foreground scale-105"
+                        : articleResult === "wrong"
+                          ? "bg-destructive/20 text-card-foreground border-destructive/50 opacity-60"
+                          : "bg-card text-card-foreground border-border hover:border-primary hover:bg-muted"
+                    }`}
+                  >
+                    <span className="text-muted-foreground text-xs mr-1">{i + 1}.</span>
+                    {opt}
+                  </button>
+                ))}
+              </div>
+              {articleResult === "correct" && (
+                <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
+                  Correct! +{ARTICLE_POINTS}
+                </p>
+              )}
+              {articleResult === "wrong" && (
+                <p className="font-game text-xs text-destructive mt-3">
+                  ✗ Wrong! Correct: {currentQuestion.options[currentQuestion.correct]} — 0 points
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {gameState === "quiz" && quizType === "fill" && currentFillQuestion && (
+          <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
+            <div className="bg-card rounded-xl p-3 sm:p-6 shadow-2xl text-center max-w-[95%] sm:max-w-md mx-2 sm:mx-4 border-2 border-accent">
+              <p className="font-game text-xs sm:text-sm text-accent mb-2">Fill in the missing word:</p>
+              <p className="font-game text-xs sm:text-sm text-card-foreground mb-2 leading-relaxed">
+                {currentFillQuestion.sentence}
+              </p>
+              <p className="font-game text-xs text-muted-foreground mb-3 sm:mb-4 italic">
+                {currentFillQuestion.translationEn ?? currentFillQuestion.translation}
+              </p>
+              <div className="flex gap-2 justify-center items-center">
+                <input
+                  ref={fillInputRef}
+                  type="text"
+                  value={fillInput}
+                  onChange={(e) => setFillInput(e.target.value)}
+                  disabled={fillResult !== null}
+                  placeholder="Type in German..."
+                  className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-accent focus:outline-none w-32 sm:w-48"
+                />
+                <button
+                  onClick={() => { fillInputRef.current?.blur(); handleFillSubmit(); }}
+                  disabled={fillResult !== null}
+                  className="font-game text-xs px-3 sm:px-4 py-2 rounded-lg bg-accent text-accent-foreground hover:opacity-90 transition-opacity"
+                >
+                  OK
+                </button>
+              </div>
+              {fillResult === "correct" && (
+                <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
+                  Correct! +{FILL_POINTS}
+                </p>
+              )}
+              {fillResult === "wrong" && (
+                <p className="font-game text-xs text-destructive mt-3">
+                  ✗ Wrong! Answer: "{currentFillQuestion.answer}"
+                </p>
+              )}
+              {!fillResult && (
+                <p className="text-muted-foreground text-xs mt-3 hidden sm:block">Press Enter to confirm</p>
+              )}
             </div>
           </div>
         )}

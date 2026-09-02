@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Copy, Check, ArrowLeft, Gamepad2 } from "lucide-react";
-import { QUESTIONS, FILL_QUESTIONS, filterByProfession, filterByLevel, isTranslationCorrect, type Question, type FillQuestion, type Profession, type Level } from "./vocabularyData";
+import { QUESTIONS, FILL_QUESTIONS, filterByProfession, filterByLevel, isTranslationCorrect, getGermanWordFromText, type Question, type FillQuestion, type Profession, type Level } from "./vocabularyData";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -34,11 +34,6 @@ const PROF_LABEL_KEYS: Record<Profession, keyof typeof translations.cs> = {
   zahradník: "profLabelZahradnik",
   zedník: "profLabelZednik",
 };
-
-function getGermanWordFromText(text: string): string {
-  const m = text.match(/má\s+(.+?)\?/);
-  return m ? m[1] : text;
-}
 
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
