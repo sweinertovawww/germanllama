@@ -6,11 +6,12 @@ import { currentShareUrl } from "@/lib/utils";
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
 const GROUND_Y = 640;
-// Lower gravity = a longer, floatier jump arc, which means more horizontal
-// distance covered per jump even at a slow scroll speed — this is what lets
-// tiles/gaps stay comfortably long instead of needing to shrink to match speed.
-const GRAVITY = 0.3;
-const JUMP_FORCE = -12;
+// Tuned as a pair for a modest arc (just clears one level, not a big leap)
+// that still covers enough ground horizontally at a slow scroll speed — a
+// weaker jump force needs less gravity to match, which stretches the arc's
+// duration (and therefore its horizontal reach) without raising its peak.
+const GRAVITY = 0.36;
+const JUMP_FORCE = -9;
 const LLAMA_X = 30;
 const LLAMA_W = 40;
 // drawLlama's legs bottom out at y+40 (baseline, before the walk-cycle wobble) —
@@ -23,10 +24,9 @@ const TILE_W_MIN = 85;
 const TILE_W_MAX = 110;
 // A jump's horizontal reach is speed × (fixed airtime). Sized comfortably
 // under the reach of the tightest case (jumping up a level) at SPEED_INITIAL,
-// so a jump always crosses the gap — a floatier jump (lower GRAVITY) is what
-// makes it possible to keep tiles this long instead of shrinking them.
-const GAP_MIN = 60;
-const GAP_MAX = 80;
+// so a jump always crosses the gap.
+const GAP_MIN = 28;
+const GAP_MAX = 42;
 const SPEED_INITIAL = 1.3;
 const SPEED_INCREMENT = 0.00036;
 // Capped so a jump's horizontal reach can never grow enough to clear two
