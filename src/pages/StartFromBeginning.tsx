@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
+import { STORIES } from "@/data/beginnerStories";
 
 const CATEGORIES = [
   {
@@ -23,6 +24,13 @@ const CATEGORIES = [
     desc: "Coming soon.",
     path: null,
     available: false,
+  },
+  {
+    id: "games",
+    title: "Games",
+    desc: "Practice story vocabulary by playing Llama Jump.",
+    path: `/start-from-beginning/sentence-structure/${STORIES[0]?.id}/llama-jump`,
+    available: true,
   },
 ];
 
