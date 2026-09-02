@@ -227,6 +227,30 @@ const drawScene = (
   ctx.fillText("❤️".repeat(Math.max(0, g.lives)), 14, 32);
 };
 
+// Local-only "today's best" — same principle as Llama Run's daily best, but
+// no backend: just localStorage, scoped to today's date, one entry.
+interface DailyEntry {
+  name: string;
+  score: number;
+  date: string;
+}
+
+const getTodayStr = () => new Date().toISOString().slice(0, 10);
+
+const getJumpDailyBest = (): DailyEntry | null => {
+  const entry: DailyEntry | null = JSON.parse(localStorage.getItem("llama-jump-daily") || "null");
+  if (!entry || entry.date !== getTodayStr()) return null;
+  return entry;
+};
+
+const saveJumpDailyScore = (name: string, score: number) => {
+  const today = getTodayStr();
+  const existing = getJumpDailyBest();
+  if (!existing || existing.date !== today || score > existing.score) {
+    localStorage.setItem("llama-jump-daily", JSON.stringify({ name, score, date: today }));
+  }
+};
+
 interface LlamaJumpProps {
   storyId: string;
 }
@@ -241,6 +265,10 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => parseInt(localStorage.getItem("llama-jump-highscore") || "0"));
   const [copied, setCopied] = useState(false);
+
+  const [playerName, setPlayerName] = useState(() => localStorage.getItem("llama-jump-player-name") || "");
+  const playerNameRef = useRef(playerName);
+  const [dailyBest, setDailyBest] = useState(() => getJumpDailyBest());
 
   const [quizType, setQuizType] = useState<"article" | "fill" | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
@@ -312,6 +340,25 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     setGameState("playing");
   }, []);
 
+  const exitGame = useCallback(() => {
+    const finalScore = gameRef.current.score;
+    if (finalScore > 0) {
+      saveJumpDailyScore(playerNameRef.current, finalScore);
+      setDailyBest(getJumpDailyBest());
+    }
+    if (finalScore > parseInt(localStorage.getItem("llama-jump-highscore") || "0")) {
+      setHighScore(finalScore);
+      localStorage.setItem("llama-jump-highscore", String(finalScore));
+    }
+    setQuizType(null);
+    setCurrentQuestion(null);
+    setArticleResult(null);
+    setCurrentFillQuestion(null);
+    setFillInput("");
+    setFillResult(null);
+    setGameState("over");
+  }, []);
+
   const handleAnswer = useCallback(
     (index: number) => {
       if (!currentQuestion || articleResult !== null) return;
@@ -373,6 +420,10 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     tiles.reduce<Tile | null>((best, t) => (!best || t.x + t.width > best.x + best.width ? t : best), null);
 
   const startGame = useCallback(() => {
+    const name = playerName.trim() || "Player";
+    playerNameRef.current = name;
+    localStorage.setItem("llama-jump-player-name", name);
+
     const g = gameRef.current;
     g.llamaY = GROUND_Y;
     g.velocityY = 0;
@@ -399,7 +450,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     }
     setScore(0);
     setGameState("playing");
-  }, [spawnSegment]);
+  }, [spawnSegment, playerName]);
 
   // Responsive scaling
   useEffect(() => {
@@ -549,6 +600,10 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
             g.lives -= 1;
             g.hurtTimer = 25;
             if (g.lives <= 0) {
+              if (g.score > 0) {
+                saveJumpDailyScore(playerNameRef.current, g.score);
+                setDailyBest(getJumpDailyBest());
+              }
               if (g.score > parseInt(localStorage.getItem("llama-jump-highscore") || "0")) {
                 setHighScore(g.score);
                 localStorage.setItem("llama-jump-highscore", String(g.score));
@@ -628,7 +683,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(
-      `I scored ${score} points in Llama Jump on GermanLlama! 🦙 ${currentShareUrl("en")}`
+      `${playerNameRef.current} scored ${score} points in Llama Jump on GermanLlama! 🦙 ${currentShareUrl("en")}`
     );
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -660,14 +715,44 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
               <p className="font-body text-xs text-muted-foreground text-center leading-relaxed">
                 Jump from tile to tile — don't fall in the gaps! Grab a 👒 sombrero to fill in a word, or a ⭐ star mid-jump for an article quiz.
               </p>
+              <input
+                type="text"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && playerName.trim()) {
+                    (e.target as HTMLInputElement).blur();
+                    startGame();
+                  }
+                }}
+                placeholder="Your name"
+                maxLength={20}
+                className="font-game text-xs px-4 py-2.5 rounded-xl border-2 border-primary/40 bg-card text-card-foreground focus:border-primary focus:outline-none w-full text-center"
+              />
               <button
                 onClick={startGame}
-                className="font-game text-sm px-8 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg"
+                disabled={!playerName.trim()}
+                className="font-game text-sm px-8 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 START
               </button>
+              {dailyBest && (
+                <p className="font-body text-[10px] text-muted-foreground text-center">
+                  🏆 Today's best: {dailyBest.name} — {dailyBest.score}
+                </p>
+              )}
             </div>
           </div>
+        )}
+
+        {/* Exit button during play or quiz */}
+        {(gameState === "playing" || gameState === "quiz") && (
+          <button
+            onClick={exitGame}
+            className="absolute top-2 right-2 font-game text-xs px-3 py-1 rounded bg-destructive/80 text-destructive-foreground hover:bg-destructive transition-colors z-20"
+          >
+            Exit
+          </button>
         )}
 
         {gameState === "quiz" && quizType === "article" && currentQuestion && (
@@ -761,6 +846,11 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
               <p className="font-game text-lg text-destructive">Game Over</p>
               <p className="font-game text-sm text-foreground">Score: <span className="text-primary">{score}</span></p>
               <p className="font-game text-xs text-muted-foreground">Best: <span className="text-primary">{highScore}</span></p>
+              {dailyBest && (
+                <p className="font-body text-[10px] text-muted-foreground">
+                  🏆 Today's best: {dailyBest.name} — {dailyBest.score}
+                </p>
+              )}
               <button
                 onClick={startGame}
                 className="font-game text-sm px-8 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg"
