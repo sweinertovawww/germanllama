@@ -20,12 +20,12 @@ const TILE_W_MIN = 60;
 const TILE_W_MAX = 80;
 const GAP_MIN = 45;
 const GAP_MAX = 95;
-const SPEED_INITIAL = 1.44;
-const SPEED_INCREMENT = 0.0004;
+const SPEED_INITIAL = 1.3;
+const SPEED_INCREMENT = 0.00036;
 // Capped so a jump's horizontal reach can never grow enough to clear two
 // staircase steps at once — otherwise a skipped step could land the llama on
 // a tile more than one level away from wherever it actually is.
-const SPEED_MAX = 2.4;
+const SPEED_MAX = 2.16;
 const FALL_LIMIT = GROUND_Y + 140;
 const START_LIVES = 3;
 
