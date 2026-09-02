@@ -56,6 +56,13 @@ const SPEED_MAX = 2.16;
 const FALL_LIMIT = GROUND_Y + 140;
 const START_LIVES = 3;
 
+// A rare safety net: appears at ground level under an elevated tile every so
+// often. Falling onto it bounces the llama back up instead of costing a life.
+const TRAMPOLINE_MIN_INTERVAL_FRAMES = 1800; // ~30s at 60fps
+const TRAMPOLINE_JITTER_FRAMES = 600; // up to ~10s extra
+const TRAMPOLINE_WIDTH = 80;
+const TRAMPOLINE_BOUNCE_FORCE = -14;
+
 // Multi-level platforms: a handful of fixed floors the llama can jump up onto
 // or drop down from. Every tile sits after a gap (no flush/contiguous steps),
 // so reaching the next one — up, down, or level — always takes an active jump.
@@ -73,6 +80,12 @@ interface Tile {
   x: number;
   width: number;
   y: number;
+}
+
+interface Trampoline {
+  x: number;
+  width: number;
+  used: boolean;
 }
 
 const drawLlama = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: number, hurt: boolean) => {
@@ -96,6 +109,33 @@ const drawLlama = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: n
   ctx.restore();
 };
 
+const drawTrampoline = (ctx: CanvasRenderingContext2D, x: number, width: number) => {
+  const cx = x + width / 2;
+  const y = GROUND_Y + TILE_H;
+  ctx.save();
+  // Legs
+  ctx.strokeStyle = "#7a5c3e";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(x + 6, y + 4);
+  ctx.lineTo(x + 14, y + 16);
+  ctx.moveTo(x + width - 6, y + 4);
+  ctx.lineTo(x + width - 14, y + 16);
+  ctx.stroke();
+  // Frame ring
+  ctx.strokeStyle = "#c0392b";
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.ellipse(cx, y, width / 2, 8, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  // Bouncy bed
+  ctx.fillStyle = "#2980b9";
+  ctx.beginPath();
+  ctx.ellipse(cx, y, width / 2 - 4, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+};
+
 const drawSky = (ctx: CanvasRenderingContext2D, offset: number) => {
   ctx.fillStyle = "rgba(255,255,255,0.6)";
   for (let i = 0; i < 4; i++) {
@@ -115,6 +155,7 @@ const drawScene = (
     llamaY: number;
     frameCount: number;
     tiles: Tile[];
+    trampolines: Trampoline[];
     stars: Star[];
     sombreros: Sombrero[];
     score: number;
@@ -153,6 +194,10 @@ const drawScene = (
     ctx.fillRect(t.x, t.y, t.width, TILE_H);
     ctx.fillStyle = "#a08868";
     ctx.fillRect(t.x, t.y, t.width, 3);
+  }
+
+  for (const tr of g.trampolines) {
+    if (!tr.used) drawTrampoline(ctx, tr.x, tr.width);
   }
 
   for (const s of g.sombreros) {
@@ -216,11 +261,14 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     score: 0,
     lives: START_LIVES,
     tiles: [] as Tile[],
+    trampolines: [] as Trampoline[],
     stars: [] as Star[],
     sombreros: [] as Sombrero[],
     hurtTimer: 0,
     flashTimer: 0,
     landedTileCount: 0,
+    lastTrampolineFrame: 0,
+    nextTrampolineDelay: TRAMPOLINE_MIN_INTERVAL_FRAMES,
   });
 
   const jump = useCallback(() => {
@@ -307,6 +355,14 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       const prevY = levelToY(afterLevel);
       g.stars.push({ x: afterX + gap / 2, y: Math.min(prevY, y) - 45, collected: false });
     }
+
+    // Rare rescue net: only ever placed under an elevated tile, and only once
+    // the min-interval-plus-jitter has actually elapsed since the last one.
+    if (level > 0 && g.frameCount - g.lastTrampolineFrame > g.nextTrampolineDelay) {
+      g.trampolines.push({ x: x + width / 2 - TRAMPOLINE_WIDTH / 2, width: TRAMPOLINE_WIDTH, used: false });
+      g.lastTrampolineFrame = g.frameCount;
+      g.nextTrampolineDelay = TRAMPOLINE_MIN_INTERVAL_FRAMES + Math.random() * TRAMPOLINE_JITTER_FRAMES;
+    }
   }, []);
 
   const rightmostTile = (tiles: Tile[]): Tile | null =>
@@ -326,7 +382,10 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     g.hurtTimer = 0;
     g.flashTimer = 0;
     g.landedTileCount = 0;
+    g.lastTrampolineFrame = 0;
+    g.nextTrampolineDelay = TRAMPOLINE_MIN_INTERVAL_FRAMES;
     g.tiles = [{ x: 0, width: 160, y: GROUND_Y }];
+    g.trampolines = [];
     g.stars = [];
     g.sombreros = [];
     while (true) {
@@ -408,6 +467,10 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
         s.x -= g.speed;
         return !s.collected && s.x > -30;
       });
+      g.trampolines = g.trampolines.filter((t) => {
+        t.x -= g.speed;
+        return !t.used && t.x + t.width > -20;
+      });
       // Keep spawning ahead
       const rightmost = rightmostTile(g.tiles);
       if (!rightmost || rightmost.x + rightmost.width < CANVAS_WIDTH + 200) {
@@ -465,7 +528,19 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
           g.airMinY = g.llamaY;
         } else {
           g.onGround = false;
-          if (g.llamaY > FALL_LIMIT) {
+
+          // Rescue net: bounce back up instead of falling all the way to
+          // FALL_LIMIT if a trampoline happens to be under this exact spot.
+          const trampolineHere = g.trampolines.find(
+            (t) => !t.used && llamaFootX >= t.x && llamaFootX <= t.x + t.width
+          );
+          if (trampolineHere && g.llamaY >= GROUND_Y - 4) {
+            trampolineHere.used = true;
+            g.llamaY = GROUND_Y - 4;
+            g.velocityY = TRAMPOLINE_BOUNCE_FORCE;
+            g.airMinY = g.llamaY;
+            g.isJumping = true;
+          } else if (g.llamaY > FALL_LIMIT) {
             // Missed the tile — lose a life
             g.lives -= 1;
             g.hurtTimer = 25;
@@ -482,8 +557,11 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
             // would leave them at whatever (possibly much higher) level they
             // were generated at, unreachable from this fresh ground level.
             g.tiles = [{ x: 0, width: 140, y: GROUND_Y }];
+            g.trampolines = [];
             g.stars = [];
             g.sombreros = [];
+            g.lastTrampolineFrame = g.frameCount;
+            g.nextTrampolineDelay = TRAMPOLINE_MIN_INTERVAL_FRAMES + Math.random() * TRAMPOLINE_JITTER_FRAMES;
             while (true) {
               const last = rightmostTile(g.tiles);
               if (!last || last.x + last.width >= CANVAS_WIDTH + 300) break;
@@ -506,6 +584,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
         llamaY: g.llamaY,
         frameCount: g.frameCount,
         tiles: g.tiles,
+        trampolines: g.trampolines,
         stars: g.stars,
         sombreros: g.sombreros,
         score: g.score,
@@ -533,6 +612,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       llamaY: GROUND_Y,
       frameCount: 0,
       tiles: [{ x: 0, width: 200, y: GROUND_Y }],
+      trampolines: [],
       stars: [],
       sombreros: [],
       score: 0,
