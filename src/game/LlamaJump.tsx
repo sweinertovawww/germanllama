@@ -18,8 +18,12 @@ const LLAMA_FOOT_OFFSET = 40;
 const TILE_H = 14;
 const TILE_W_MIN = 60;
 const TILE_W_MAX = 80;
-const GAP_MIN = 45;
-const GAP_MAX = 95;
+// A jump's horizontal reach is speed × (fixed airtime) — at this low a speed
+// that's much less than it used to be, so gaps have to be sized down to match
+// or a jump can't cross them at all. Kept just under the reach of the
+// tightest case (jumping up a level) at SPEED_INITIAL.
+const GAP_MIN = 22;
+const GAP_MAX = 36;
 const SPEED_INITIAL = 1.3;
 const SPEED_INCREMENT = 0.00036;
 // Capped so a jump's horizontal reach can never grow enough to clear two
@@ -35,10 +39,11 @@ const START_LIVES = 3;
 // while walking off a ledge down to a lower one happens naturally by falling.
 const LEVELS = 4;
 const LEVEL_STEP = 70;
-// Wide enough that a single fixed jump can't clear two of these back-to-back
-// (steps have no gap between them), so the llama can never skip a step and
-// meet one more than one level away from where it actually is.
-const STAIR_TILE_W = 100;
+// Sized so a jump reliably reaches the very next step (reach at SPEED_INITIAL
+// comfortably exceeds this width) but can't clear two of them back-to-back
+// even at SPEED_MAX (steps have no gap between them) — otherwise the llama
+// could skip a step and meet one more than one level away from where it is.
+const STAIR_TILE_W = 38;
 const STAIR_LEN_MIN = 2;
 const STAIR_LEN_MAX = 4;
 
