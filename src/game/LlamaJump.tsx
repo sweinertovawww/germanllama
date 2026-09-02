@@ -17,10 +17,27 @@ const TILE_W_MIN = 60;
 const TILE_W_MAX = 80;
 const GAP_MIN = 45;
 const GAP_MAX = 95;
-const SPEED_INITIAL = 4;
-const SPEED_INCREMENT = 0.0015;
+const SPEED_INITIAL = 2.8;
+const SPEED_INCREMENT = 0.001;
 const FALL_LIMIT = GROUND_Y + 140;
 const START_LIVES = 3;
+
+// Multi-level platforms: a handful of fixed floors the llama can jump up onto
+// or drop down from. Steps within a staircase sit flush against each other
+// (no gap) but differ in height, so climbing up always needs an actual jump
+// while walking off a ledge down to a lower one happens naturally by falling.
+const LEVELS = 4;
+const LEVEL_STEP = 70;
+const STAIR_TILE_W = 60;
+const STAIR_LEN_MIN = 2;
+const STAIR_LEN_MAX = 4;
+
+function levelToY(level: number) {
+  return GROUND_Y - level * LEVEL_STEP;
+}
+function yToLevel(y: number) {
+  return Math.round((GROUND_Y - y) / LEVEL_STEP);
+}
 
 function shuffleArray<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -34,6 +51,7 @@ function shuffleArray<T>(arr: T[]): T[] {
 interface Tile {
   x: number;
   width: number;
+  y: number;
 }
 
 const drawLlama = (ctx: CanvasRenderingContext2D, x: number, y: number, frame: number, hurt: boolean) => {
@@ -95,10 +113,15 @@ const drawScene = (
 
   // Tiles (thin brown stepping platforms, no text)
   for (const t of g.tiles) {
+    // Faint support column down to ground level so elevated tiles read as "floating up", not misplaced
+    if (t.y < GROUND_Y) {
+      ctx.fillStyle = "rgba(139,115,85,0.15)";
+      ctx.fillRect(t.x + t.width / 2 - 3, t.y + TILE_H, 6, GROUND_Y - t.y);
+    }
     ctx.fillStyle = "#8b7355";
-    ctx.fillRect(t.x, GROUND_Y, t.width, TILE_H);
+    ctx.fillRect(t.x, t.y, t.width, TILE_H);
     ctx.fillStyle = "#a08868";
-    ctx.fillRect(t.x, GROUND_Y, t.width, 3);
+    ctx.fillRect(t.x, t.y, t.width, 3);
   }
 
   // Llama
@@ -147,6 +170,10 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     velocityY: 0,
     isJumping: false,
     onGround: true,
+    // Highest point (smallest Y) reached since the last landing — a tile can
+    // only be landed on if the llama actually rose at least that high first,
+    // which is what forces a real jump to reach a higher step.
+    airMinY: GROUND_Y,
     frameCount: 0,
     speed: SPEED_INITIAL,
     score: 0,
@@ -176,12 +203,36 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     return pair;
   }, [vocabPool]);
 
-  const spawnTile = useCallback((afterX: number) => {
+  // Appends either a contiguous staircase (steps touching, height varies ±1
+  // level per step) or a standalone platform after a gap, at a level within
+  // reach of the previous one.
+  const spawnSegment = useCallback((afterX: number, afterLevel: number) => {
     const g = gameRef.current;
-    const gap = GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN);
-    const width = TILE_W_MIN + Math.random() * (TILE_W_MAX - TILE_W_MIN);
-    g.tiles.push({ x: afterX + gap, width });
+    if (Math.random() < 0.45) {
+      const len = STAIR_LEN_MIN + Math.floor(Math.random() * (STAIR_LEN_MAX - STAIR_LEN_MIN + 1));
+      const gap = GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN);
+      let x = afterX + gap;
+      let level = afterLevel;
+      for (let i = 0; i < len; i++) {
+        if (i > 0) {
+          const dir = Math.random() < 0.5 ? 1 : -1;
+          level = Math.max(0, Math.min(LEVELS - 1, level + dir));
+        }
+        g.tiles.push({ x, width: STAIR_TILE_W, y: levelToY(level) });
+        x += STAIR_TILE_W;
+      }
+    } else {
+      const width = TILE_W_MIN + Math.random() * (TILE_W_MAX - TILE_W_MIN);
+      const gap = GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN);
+      const x = afterX + gap;
+      const dir = Math.random() < 0.5 ? 0 : Math.random() < 0.5 ? 1 : -1;
+      const level = Math.max(0, Math.min(LEVELS - 1, afterLevel + dir));
+      g.tiles.push({ x, width, y: levelToY(level) });
+    }
   }, []);
+
+  const rightmostTile = (tiles: Tile[]): Tile | null =>
+    tiles.reduce<Tile | null>((best, t) => (!best || t.x + t.width > best.x + best.width ? t : best), null);
 
   const startGame = useCallback(() => {
     const g = gameRef.current;
@@ -189,6 +240,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     g.velocityY = 0;
     g.isJumping = false;
     g.onGround = true;
+    g.airMinY = GROUND_Y;
     g.frameCount = 0;
     g.speed = SPEED_INITIAL;
     g.score = 0;
@@ -196,14 +248,11 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     g.hurtTimer = 0;
     g.flashTimer = 0;
     g.landedTileCount = 0;
-    g.tiles = [{ x: 0, width: 160 }];
-    let lastEnd = 160;
-    while (lastEnd < CANVAS_WIDTH + 300) {
-      const gap = GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN);
-      const width = TILE_W_MIN + Math.random() * (TILE_W_MAX - TILE_W_MIN);
-      const x = lastEnd + gap;
-      g.tiles.push({ x, width });
-      lastEnd = x + width;
+    g.tiles = [{ x: 0, width: 160, y: GROUND_Y }];
+    while (true) {
+      const last = rightmostTile(g.tiles);
+      if (!last || last.x + last.width >= CANVAS_WIDTH + 300) break;
+      spawnSegment(last.x + last.width, yToLevel(last.y));
     }
     queueRef.current = shuffleArray(vocabPool);
     queueIndexRef.current = 0;
@@ -213,7 +262,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     setAnswerInput("");
     setAnswerResult(null);
     setGameState("playing");
-  }, [vocabPool]);
+  }, [vocabPool, spawnSegment]);
 
   const resumeGame = useCallback(() => {
     setCurrentPair(null);
@@ -305,21 +354,27 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
         return t.x + t.width > -20;
       });
       // Keep spawning ahead
-      const rightmost = g.tiles.reduce((max, t) => Math.max(max, t.x + t.width), 0);
-      if (rightmost < CANVAS_WIDTH + 200) {
-        spawnTile(rightmost);
+      const rightmost = rightmostTile(g.tiles);
+      if (!rightmost || rightmost.x + rightmost.width < CANVAS_WIDTH + 200) {
+        spawnSegment(rightmost ? rightmost.x + rightmost.width : 0, rightmost ? yToLevel(rightmost.y) : 0);
       }
 
       // Physics
       g.velocityY += GRAVITY;
       g.llamaY += g.velocityY;
+      g.airMinY = Math.min(g.airMinY, g.llamaY);
 
       const llamaFootX = LLAMA_X + LLAMA_W / 2;
       const tileHere = g.tiles.find((t) => llamaFootX >= t.x && llamaFootX <= t.x + t.width);
+      // A tile only counts as a valid landing if the llama actually rose at
+      // least as high as its surface first (airMinY <= tile.y) — that's what
+      // makes climbing onto a higher step require a real jump, while walking
+      // off a ledge down onto a lower one still works without jumping.
+      const canLand = tileHere && g.airMinY <= tileHere.y;
 
       if (g.velocityY >= 0) {
         // Falling or resting — check landing
-        if (tileHere && g.llamaY >= GROUND_Y) {
+        if (canLand && tileHere && g.llamaY >= tileHere.y) {
           if (!g.onGround) {
             g.landedTileCount++;
             g.score += 1;
@@ -327,18 +382,20 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
             landingsUntilQuizRef.current--;
             if (landingsUntilQuizRef.current <= 0) {
               landingsUntilQuizRef.current = 3 + Math.floor(Math.random() * 3);
-              g.llamaY = GROUND_Y;
+              g.llamaY = tileHere.y;
               g.velocityY = 0;
               g.isJumping = false;
               g.onGround = true;
+              g.airMinY = g.llamaY;
               triggerQuiz();
               return;
             }
           }
-          g.llamaY = GROUND_Y;
+          g.llamaY = tileHere.y;
           g.velocityY = 0;
           g.isJumping = false;
           g.onGround = true;
+          g.airMinY = g.llamaY;
         } else {
           g.onGround = false;
           if (g.llamaY > FALL_LIMIT) {
@@ -351,11 +408,12 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
             }
             // Respawn on solid ground under the llama
             g.tiles = g.tiles.filter((t) => t.x > LLAMA_X + 120).map((t) => ({ ...t }));
-            g.tiles.unshift({ x: 0, width: 140 });
+            g.tiles.unshift({ x: 0, width: 140, y: GROUND_Y });
             g.llamaY = GROUND_Y;
             g.velocityY = 0;
             g.isJumping = false;
             g.onGround = true;
+            g.airMinY = GROUND_Y;
           }
         }
       } else {
@@ -379,7 +437,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
 
     animId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animId);
-  }, [gameState, spawnTile, triggerQuiz]);
+  }, [gameState, spawnSegment, triggerQuiz]);
 
   // Idle frame
   useEffect(() => {
@@ -391,7 +449,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     drawScene(ctx, {
       llamaY: GROUND_Y,
       frameCount: 0,
-      tiles: [{ x: 0, width: 200 }],
+      tiles: [{ x: 0, width: 200, y: GROUND_Y }],
       score: 0,
       lives: START_LIVES,
       hurtTimer: 0,
