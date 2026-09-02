@@ -2,6 +2,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { getStory } from "@/data/beginnerStories";
 import { currentShareUrl } from "@/lib/utils";
+import { drawStar, drawSombrero, type Star, type Sombrero } from "@/game/collectibles";
+
+const STAR_POINTS = 2;
+const SOMBRERO_POINTS = 5;
+const SOMBRERO_CHANCE = 0.22;
+const STAR_CHANCE = 0.22;
 
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 800;
@@ -91,7 +97,17 @@ const drawSky = (ctx: CanvasRenderingContext2D, offset: number) => {
 
 const drawScene = (
   ctx: CanvasRenderingContext2D,
-  g: { llamaY: number; frameCount: number; tiles: Tile[]; score: number; lives: number; hurtTimer: number; flashTimer: number }
+  g: {
+    llamaY: number;
+    frameCount: number;
+    tiles: Tile[];
+    stars: Star[];
+    sombreros: Sombrero[];
+    score: number;
+    lives: number;
+    hurtTimer: number;
+    flashTimer: number;
+  }
 ) => {
   const grad = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
   grad.addColorStop(0, "#87CEEB");
@@ -123,6 +139,13 @@ const drawScene = (
     ctx.fillRect(t.x, t.y, t.width, TILE_H);
     ctx.fillStyle = "#a08868";
     ctx.fillRect(t.x, t.y, t.width, 3);
+  }
+
+  for (const s of g.sombreros) {
+    if (!s.collected) drawSombrero(ctx, s.x, s.y, g.frameCount);
+  }
+  for (const s of g.stars) {
+    if (!s.collected) drawStar(ctx, s.x, s.y, g.frameCount);
   }
 
   // Llama — shift up so the feet (not the sprite's y origin) sit on the tile
@@ -171,6 +194,8 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     score: 0,
     lives: START_LIVES,
     tiles: [] as Tile[],
+    stars: [] as Star[],
+    sombreros: [] as Sombrero[],
     hurtTimer: 0,
     flashTimer: 0,
     landedTileCount: 0,
@@ -186,7 +211,9 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   }, []);
 
   // Appends one long platform after a gap, at a level within jump reach of
-  // the previous one (level stays the same, or moves ±1).
+  // the previous one (level stays the same, or moves ±1). Sometimes adds a
+  // sombrero resting on the new tile, or a star floating mid-air in the gap
+  // leading up to it.
   const spawnSegment = useCallback((afterX: number, afterLevel: number) => {
     const g = gameRef.current;
     const width = TILE_W_MIN + Math.random() * (TILE_W_MAX - TILE_W_MIN);
@@ -194,7 +221,16 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     const x = afterX + gap;
     const dir = Math.random() < 0.5 ? 0 : Math.random() < 0.5 ? 1 : -1;
     const level = Math.max(0, Math.min(LEVELS - 1, afterLevel + dir));
-    g.tiles.push({ x, width, y: levelToY(level) });
+    const y = levelToY(level);
+    g.tiles.push({ x, width, y });
+
+    if (Math.random() < SOMBRERO_CHANCE) {
+      g.sombreros.push({ x: x + width / 2, y: y - 22, collected: false });
+    }
+    if (Math.random() < STAR_CHANCE) {
+      const prevY = levelToY(afterLevel);
+      g.stars.push({ x: afterX + gap / 2, y: Math.min(prevY, y) - 45, collected: false });
+    }
   }, []);
 
   const rightmostTile = (tiles: Tile[]): Tile | null =>
@@ -215,6 +251,8 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     g.flashTimer = 0;
     g.landedTileCount = 0;
     g.tiles = [{ x: 0, width: 160, y: GROUND_Y }];
+    g.stars = [];
+    g.sombreros = [];
     while (true) {
       const last = rightmostTile(g.tiles);
       if (!last || last.x + last.width >= CANVAS_WIDTH + 300) break;
@@ -270,10 +308,18 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       if (g.hurtTimer > 0) g.hurtTimer--;
       if (g.flashTimer > 0) g.flashTimer--;
 
-      // Scroll tiles left
+      // Scroll tiles and collectibles left
       g.tiles = g.tiles.filter((t) => {
         t.x -= g.speed;
         return t.x + t.width > -20;
+      });
+      g.stars = g.stars.filter((s) => {
+        s.x -= g.speed;
+        return !s.collected && s.x > -30;
+      });
+      g.sombreros = g.sombreros.filter((s) => {
+        s.x -= g.speed;
+        return !s.collected && s.x > -30;
       });
       // Keep spawning ahead
       const rightmost = rightmostTile(g.tiles);
@@ -287,6 +333,27 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       g.airMinY = Math.min(g.airMinY, g.llamaY);
 
       const llamaFootX = LLAMA_X + LLAMA_W / 2;
+      const llamaBodyY = g.llamaY - 20;
+
+      // Sombreros: collectible any time (standing or mid-air), like Llama Run
+      for (const s of g.sombreros) {
+        if (!s.collected && Math.abs(llamaFootX - s.x) < 26 && Math.abs(llamaBodyY - s.y) < 30) {
+          s.collected = true;
+          g.score += SOMBRERO_POINTS;
+          setScore(g.score);
+        }
+      }
+      // Stars: only collectible while airborne, same as Llama Run
+      if (!g.onGround) {
+        for (const s of g.stars) {
+          if (!s.collected && Math.abs(llamaFootX - s.x) < 22 && Math.abs(llamaBodyY - s.y) < 28) {
+            s.collected = true;
+            g.score += STAR_POINTS;
+            setScore(g.score);
+          }
+        }
+      }
+
       const tileHere = g.tiles.find((t) => llamaFootX >= t.x && llamaFootX <= t.x + t.width);
       // A tile only counts as a valid landing if the llama actually rose at
       // least as high as its surface first (airMinY <= tile.y) — that's what
@@ -326,6 +393,8 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
             // would leave them at whatever (possibly much higher) level they
             // were generated at, unreachable from this fresh ground level.
             g.tiles = [{ x: 0, width: 140, y: GROUND_Y }];
+            g.stars = [];
+            g.sombreros = [];
             while (true) {
               const last = rightmostTile(g.tiles);
               if (!last || last.x + last.width >= CANVAS_WIDTH + 300) break;
@@ -348,6 +417,8 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
         llamaY: g.llamaY,
         frameCount: g.frameCount,
         tiles: g.tiles,
+        stars: g.stars,
+        sombreros: g.sombreros,
         score: g.score,
         lives: g.lives,
         hurtTimer: g.hurtTimer,
@@ -372,6 +443,8 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
       llamaY: GROUND_Y,
       frameCount: 0,
       tiles: [{ x: 0, width: 200, y: GROUND_Y }],
+      stars: [],
+      sombreros: [],
       score: 0,
       lives: START_LIVES,
       hurtTimer: 0,
