@@ -994,7 +994,7 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Arbeitskleidung?", options: ["der", "die", "das"], correct: 1, translation: "pracovní oděv", translationKo: "작업복", translationEn: "work clothing", translationPl: "odzież robocza", translationUk: "робочий одяг", translationSk: "pracovný odev", profession: "obecné" },
 ];
 
-export const FILL_QUESTIONS: FillQuestion[] = [
+export const FILL_QUESTIONS = [
   // === OBECNÉ (základy) ===
   { sentence: "Ich ___ Deutsch.", answer: "spreche", translation: "Já mluvím německy.", translationKo: "나는 독일어를 할 줄 압니다.", translationEn: "I speak German.", translationPl: "Mówię po niemiecku.", translationUk: "Я розмовляю німецькою.", translationSk: "Ja hovorím po nemecky.", profession: "obecné", level: "A1" },
   { sentence: "Er ___ ein Buch.", answer: "liest", translation: "On čte knihu.", translationKo: "그는 책을 읽고 있습니다.", translationEn: "He is reading a book.", translationPl: "On czyta książkę.", translationUk: "Він читає книжку.", translationSk: "On číta knihu.", profession: "obecné", level: "A1" },
@@ -3135,7 +3135,7 @@ export const FILL_QUESTIONS: FillQuestion[] = [
   { sentence: "Das ist ein ___.", answer: "Telefon", translation: "To je telefon.", translationKo: "이것은 핸드폰이에요.", translationEn: "This is a telephone.", translationPl: "To jest telefon.", translationUk: "Це телефон.", translationSk: "Toto je telefón.", profession: "kancelář", level: "A1" },
   { sentence: "Wo ist das ___?", answer: "Heft", translation: "Kde je sešit?", translationKo: "공책은 어디에 있어요?", translationEn: "Where is the exercise book?", translationPl: "Gdzie jest zeszyt?", translationUk: "Де зошит?", translationSk: "Kde je zošit?", profession: "učitel", level: "A1" },
   { sentence: "Das ist ein ___.", answer: "Stift", translation: "To je pero / tužka.", translationKo: "이것은 펜 / 연필이에요.", translationEn: "This is a pen.", translationPl: "To jest długopis / ołówek.", translationUk: "Це ручка/олівець.", translationSk: "Toto je pero / ceruzka.", profession: "učitel", level: "A1" },
-];
+] as FillQuestion[];
 
 
 // Helper to extract German word from question text
