@@ -265,16 +265,28 @@ interface LeaderboardEntry {
 }
 
 const fetchLeaderboard = async (): Promise<LeaderboardEntry[]> => {
+  // Every play inserts a new row (no per-player upsert), so a single player
+  // who replays a lot could otherwise fill every Top 10 slot with their own
+  // attempts. Fetch a wider pool and keep only each player's best score.
   const { data, error } = await supabase
     .from("llama_jump_leaderboard")
     .select("name, score")
     .order("score", { ascending: false })
-    .limit(10);
+    .limit(100);
   if (error) {
     console.error("Llama Jump leaderboard fetch error:", error);
     return [];
   }
-  return data || [];
+  const seenNames = new Set<string>();
+  const topPerPlayer: LeaderboardEntry[] = [];
+  for (const entry of data || []) {
+    const key = entry.name.trim().toLowerCase();
+    if (seenNames.has(key)) continue;
+    seenNames.add(key);
+    topPerPlayer.push(entry);
+    if (topPerPlayer.length === 10) break;
+  }
+  return topPerPlayer;
 };
 
 const saveToLeaderboardDB = async (name: string, score: number) => {
