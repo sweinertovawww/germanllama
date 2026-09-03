@@ -3,6 +3,7 @@ import { Copy, Check } from "lucide-react";
 import { getStory } from "@/data/beginnerStories";
 import { currentShareUrl } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { drawStar, drawSombrero, type Star, type Sombrero } from "@/game/collectibles";
 import {
   QUESTIONS,
@@ -10,6 +11,7 @@ import {
   filterByLevel,
   isTranslationCorrect,
   getGermanWordFromText,
+  getTranslation,
   type Question,
   type FillQuestion,
 } from "@/game/vocabularyData";
@@ -299,6 +301,7 @@ interface LlamaJumpProps {
 
 const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   const story = useMemo(() => getStory(storyId), [storyId]);
+  const { t, lang } = useLanguage();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -796,7 +799,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(
-      `${playerNameRef.current} scored ${score} points in Llama Jump on GermanLlama! 🦙 ${currentShareUrl("en")}`
+      t("shareLlamaJump", { name: playerNameRef.current, score, url: currentShareUrl(lang) })
     );
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -810,7 +813,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
   };
 
   if (!story) {
-    return <p className="font-body text-muted-foreground text-sm">Story not found.</p>;
+    return <p className="font-body text-muted-foreground text-sm">{t("storyNotFound")}</p>;
   }
 
   const gameContent = (
@@ -842,7 +845,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
                     startGame();
                   }
                 }}
-                placeholder="Your name"
+                placeholder={t("namePlaceholder")}
                 maxLength={20}
                 className="font-game text-xs px-4 py-2.5 rounded-xl border-2 border-primary/40 bg-card text-card-foreground focus:border-primary focus:outline-none w-full text-center"
               />
@@ -851,11 +854,11 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
                 disabled={!playerName.trim()}
                 className="font-game text-sm px-8 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                START
+                {t("startGameBtn")}
               </button>
               {dailyBest && (
                 <p className="font-body text-[10px] text-muted-foreground text-center">
-                  🏆 Today's best: {dailyBest.name} — {dailyBest.score}
+                  {t("todayBest")}: {dailyBest.name} — {dailyBest.score}
                 </p>
               )}
             </div>
@@ -868,7 +871,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
             onClick={exitGame}
             className="absolute top-2 right-2 font-game text-xs px-3 py-1 rounded bg-destructive/80 text-destructive-foreground hover:bg-destructive transition-colors z-20"
           >
-            Exit
+            {t("exitBtn")}
           </button>
         )}
 
@@ -876,7 +879,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
           <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
             <div className="bg-card rounded-xl p-3 sm:p-6 shadow-2xl text-center max-w-[95%] sm:max-w-md mx-2 sm:mx-4 border-2 border-primary">
               <p className="font-game text-xs sm:text-sm text-card-foreground mb-3 sm:mb-4 leading-relaxed">
-                What is the article for "{getGermanWordFromText(currentQuestion.text)}"?
+                {t("questionArticle", { word: getGermanWordFromText(currentQuestion.text) })}
               </p>
               <div className="flex gap-2 sm:gap-3 justify-center">
                 {currentQuestion.options.map((opt, i) => (
@@ -899,12 +902,12 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
               </div>
               {articleResult === "correct" && (
                 <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
-                  Correct! +{ARTICLE_POINTS}
+                  {t("articleCorrectPts", { points: ARTICLE_POINTS })}
                 </p>
               )}
               {articleResult === "wrong" && (
                 <p className="font-game text-xs text-destructive mt-3">
-                  ✗ Wrong! Correct: {currentQuestion.options[currentQuestion.correct]} — 0 points
+                  {t("wrongArticle", { article: currentQuestion.options[currentQuestion.correct] })}
                 </p>
               )}
             </div>
@@ -914,12 +917,12 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
         {gameState === "quiz" && quizType === "fill" && currentFillQuestion && (
           <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
             <div className="bg-card rounded-xl p-3 sm:p-6 shadow-2xl text-center max-w-[95%] sm:max-w-md mx-2 sm:mx-4 border-2 border-accent">
-              <p className="font-game text-xs sm:text-sm text-accent mb-2">Fill in the missing word:</p>
+              <p className="font-game text-xs sm:text-sm text-accent mb-2">{t("fillWord")}</p>
               <p className="font-game text-xs sm:text-sm text-card-foreground mb-2 leading-relaxed">
                 {currentFillQuestion.sentence}
               </p>
               <p className="font-game text-xs text-muted-foreground mb-3 sm:mb-4 italic">
-                {currentFillQuestion.translationEn ?? currentFillQuestion.translation}
+                {getTranslation(currentFillQuestion, lang)}
               </p>
               <div className="flex gap-2 justify-center items-center">
                 <input
@@ -928,7 +931,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
                   value={fillInput}
                   onChange={(e) => setFillInput(e.target.value)}
                   disabled={fillResult !== null}
-                  placeholder="Type in German..."
+                  placeholder={t("fillPlaceholder")}
                   className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-accent focus:outline-none w-32 sm:w-48"
                 />
                 <button
@@ -941,16 +944,16 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
               </div>
               {fillResult === "correct" && (
                 <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
-                  Correct! +{FILL_POINTS}
+                  {t("fillCorrectPts", { word: currentFillQuestion.answer, points: FILL_POINTS })}
                 </p>
               )}
               {fillResult === "wrong" && (
                 <p className="font-game text-xs text-destructive mt-3">
-                  ✗ Wrong! Answer: "{currentFillQuestion.answer}"
+                  {t("wrong0", { word: currentFillQuestion.answer })}
                 </p>
               )}
               {!fillResult && (
-                <p className="text-muted-foreground text-xs mt-3 hidden sm:block">Press Enter to confirm</p>
+                <p className="text-muted-foreground text-xs mt-3 hidden sm:block">{t("enterConfirm")}</p>
               )}
             </div>
           </div>
@@ -960,17 +963,17 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
           <div className="absolute inset-0 flex items-center justify-center z-30">
             <div className="absolute inset-0 bg-foreground/60 animate-game-over-flash" />
             <div className="relative z-10 flex flex-col items-center gap-3 sm:gap-4 bg-card/95 rounded-2xl p-4 sm:p-8 shadow-2xl border-2 border-primary mx-4 max-w-[90%]">
-              <p className="font-game text-lg sm:text-2xl text-destructive">💀 GAME OVER</p>
+              <p className="font-game text-lg sm:text-2xl text-destructive">{t("gameOverText")}</p>
               <div className="flex flex-col items-center gap-1">
                 <p className="font-game text-sm sm:text-base text-foreground">
-                  Score: <span className="text-primary">{score}</span>
+                  {t("scoreLabel")}: <span className="text-primary">{score}</span>
                 </p>
                 <p className="font-game text-xs text-muted-foreground">
-                  Best: <span className="text-primary">{highScore}</span>
+                  {t("bestLabel")}: <span className="text-primary">{highScore}</span>
                 </p>
                 {dailyBest && (
                   <p className="font-body text-[10px] text-muted-foreground mt-1">
-                    🏆 Today's best: {dailyBest.name} — {dailyBest.score}
+                    {t("todayBest")}: {dailyBest.name} — {dailyBest.score}
                   </p>
                 )}
               </div>
@@ -983,13 +986,13 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
                   boxShadow: "0 4px 20px hsla(168, 72%, 40%, 0.4), 0 0 30px hsla(168, 72%, 40%, 0.2)",
                 }}
               >
-                🦙 Try again
+                {t("tryAgainBtn")}
               </button>
               <button
                 onClick={handleNewPlayer}
                 className="font-game text-[10px] sm:text-xs px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border-2 border-destructive/50 bg-card/80 text-destructive hover:border-destructive hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
               >
-                👤 New player
+                {t("newPlayer")}
               </button>
             </div>
           </div>
@@ -1014,7 +1017,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
             );
           })}
           <span className="relative z-10 font-game text-sm text-foreground text-center">
-            📣 Show off and share your result 🤩
+            {t("shareBoast")}
           </span>
           <div className="relative">
             {SPARKLE_POSITIONS.map((sp, i) => {
@@ -1040,7 +1043,7 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
               className="relative z-10 flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-md"
             >
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              {copied ? "Copied!" : "Copy"}
+              {copied ? t("copied") : t("copy")}
             </button>
           </div>
         </div>
@@ -1051,23 +1054,23 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
           onClick={jump}
           className="bg-primary text-primary-foreground font-game text-sm w-full max-w-xs py-4 rounded-xl hover:opacity-90 transition-opacity active:scale-95 touch-manipulation shadow-md"
         >
-          JUMP
+          {t("jumpBtn")}
         </button>
       )}
 
       <p className="text-muted-foreground text-xs hidden sm:block">
-        Press <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">↑</kbd> or{" "}
-        <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">SPACE</kbd> to jump
+        {t("useKeys")} <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">↑</kbd> {t("orKey")}{" "}
+        <kbd className="bg-muted px-2 py-1 rounded text-xs font-game">SPACE</kbd> {t("forJump")}
       </p>
 
       <div className="w-full max-w-xs mt-2">
-        <h3 className="font-game text-xs text-center text-primary mb-2">🏆 Global Top 10</h3>
+        <h3 className="font-game text-xs text-center text-primary mb-2">{t("globalTop10")}</h3>
         <table className="w-full text-xs font-game">
           <thead>
             <tr className="border-b border-border">
               <th className="text-left py-1 px-2 text-muted-foreground">#</th>
-              <th className="text-left py-1 px-2 text-muted-foreground">Name</th>
-              <th className="text-right py-1 px-2 text-muted-foreground">Score</th>
+              <th className="text-left py-1 px-2 text-muted-foreground">{t("nameCol")}</th>
+              <th className="text-right py-1 px-2 text-muted-foreground">{t("scoreCol")}</th>
             </tr>
           </thead>
           <tbody>

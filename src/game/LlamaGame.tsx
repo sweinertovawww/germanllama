@@ -1,21 +1,12 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Copy, Check, ArrowLeft, Gamepad2 } from "lucide-react";
-import { QUESTIONS, FILL_QUESTIONS, filterByProfession, filterByLevel, isTranslationCorrect, getGermanWordFromText, type Question, type FillQuestion, type Profession, type Level } from "./vocabularyData";
+import { QUESTIONS, FILL_QUESTIONS, filterByProfession, filterByLevel, isTranslationCorrect, getGermanWordFromText, getTranslation, type Question, type FillQuestion, type Profession, type Level } from "./vocabularyData";
 import { useProfessionFilter } from "@/hooks/useProfessionFilter";
 import ProfessionFilter from "@/components/ProfessionFilter";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { translations, type Lang } from "@/i18n/translations";
+import { translations } from "@/i18n/translations";
 import { drawStar, drawSombrero, type Star, type Sombrero } from "./collectibles";
-
-function getTranslation(q: Question | FillQuestion, lang: Lang): string {
-  if (lang === "ko") return q.translationKo;
-  if (lang === "en") return q.translationEn ?? q.translation;
-  if (lang === "pl") return q.translationPl ?? q.translation;
-  if (lang === "uk") return q.translationUk ?? q.translationEn ?? q.translation;
-  if (lang === "sk") return q.translationSk ?? q.translation;
-  return q.translation;
-}
 
 const PROF_LABEL_KEYS: Record<Profession, keyof typeof translations.cs> = {
   obecné: "profLabelObecne",

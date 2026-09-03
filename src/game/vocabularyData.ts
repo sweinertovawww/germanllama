@@ -1,3 +1,5 @@
+import type { Lang } from "@/i18n/translations";
+
 export type Profession = "obecné" | "truhlář" | "zedník" | "instalatér" | "elektrikář" | "gastro" | "pokladní" | "uklízečka" | "sestřička" | "kancelář" | "automechanik" | "zahradník" | "učitel" | "kadeřník" | "systemy_pro_haseni";
 
 export type Level = "A1";
@@ -52,6 +54,16 @@ export interface FillQuestion {
   translationSk?: string;
   profession: Profession;
   level?: Level;
+}
+
+/** Picks the right-language translation off a Question/FillQuestion, falling back to Czech. */
+export function getTranslation(q: Question | FillQuestion, lang: Lang): string {
+  if (lang === "ko") return q.translationKo;
+  if (lang === "en") return q.translationEn ?? q.translation;
+  if (lang === "pl") return q.translationPl ?? q.translation;
+  if (lang === "uk") return q.translationUk ?? q.translationEn ?? q.translation;
+  if (lang === "sk") return q.translationSk ?? q.translation;
+  return q.translation;
 }
 
 export const QUESTIONS: Question[] = [
