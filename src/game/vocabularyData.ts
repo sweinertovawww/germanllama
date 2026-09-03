@@ -994,7 +994,7 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Arbeitskleidung?", options: ["der", "die", "das"], correct: 1, translation: "pracovní oděv", translationKo: "작업복", translationEn: "work clothing", translationPl: "odzież robocza", translationUk: "робочий одяг", translationSk: "pracovný odev", profession: "obecné" },
 ];
 
-export const FILL_QUESTIONS: FillQuestion[] = [
+export const FILL_QUESTIONS = [
   // === OBECNÉ (základy) ===
   { sentence: "Ich ___ Deutsch.", answer: "spreche", translation: "Já mluvím německy.", translationKo: "나는 독일어를 할 줄 압니다.", translationEn: "I speak German.", translationPl: "Mówię po niemiecku.", translationUk: "Я розмовляю німецькою.", translationSk: "Ja hovorím po nemecky.", profession: "obecné", level: "A1" },
   { sentence: "Er ___ ein Buch.", answer: "liest", translation: "On čte knihu.", translationKo: "그는 책을 읽고 있습니다.", translationEn: "He is reading a book.", translationPl: "On czyta książkę.", translationUk: "Він читає книжку.", translationSk: "On číta knihu.", profession: "obecné", level: "A1" },
