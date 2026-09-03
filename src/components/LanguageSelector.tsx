@@ -3,13 +3,13 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import type { Lang } from "@/i18n/translations";
 import germanLlamaLogo from "@/assets/germanllama-logo.png";
 
-interface LangOption {
+export interface LangOption {
   code: Lang;
   flag: string;
   nameKey: "langNameCs" | "langNameDe" | "langNameEn" | "langNamePl" | "langNameKo" | "langNameUk" | "langNameSk";
 }
 
-const LANG_OPTIONS: LangOption[] = [
+export const LANG_OPTIONS: LangOption[] = [
   { code: "cs", flag: "🇨🇿", nameKey: "langNameCs" },
   { code: "en", flag: "🇬🇧", nameKey: "langNameEn" },
   { code: "pl", flag: "🇵🇱", nameKey: "langNamePl" },

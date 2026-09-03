@@ -14,8 +14,10 @@ import {
 } from "@dnd-kit/core";
 import { ArrowLeft, GripVertical, Eye, EyeOff, Copy, Check } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
-import { getStory, chunksToWords, pairColorClass, type StoryWord } from "@/data/beginnerStories";
+import { getStory, getStoryTitle, getNativeChunks, chunksToWords, pairColorClass, type StoryWord } from "@/data/beginnerStories";
 import { currentShareUrl } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LANG_OPTIONS } from "@/components/LanguageSelector";
 
 function shuffleArray<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -127,14 +129,18 @@ function Slot({
 const StoryExercise = () => {
   const { storyId } = useParams<{ storyId: string }>();
   const story = storyId ? getStory(storyId) : undefined;
+  const { t, lang } = useLanguage();
+  const nativeOption = LANG_OPTIONS.find((o) => o.code === lang);
+  const nativeFlag = nativeOption?.flag ?? "🌐";
+  const nativeLabel = nativeOption ? t(nativeOption.nameKey) : lang.toUpperCase();
 
   const germanBySentence = useMemo(
     () => story?.sentences.map((s) => chunksToWords(s.german)) ?? [],
     [story]
   );
-  const englishBySentence = useMemo(
-    () => story?.sentences.map((s) => chunksToWords(s.english)) ?? [],
-    [story]
+  const nativeBySentence = useMemo(
+    () => story?.sentences.map((s) => chunksToWords(getNativeChunks(s, lang))) ?? [],
+    [story, lang]
   );
 
   const [hideGerman, setHideGerman] = useState(false);
@@ -227,20 +233,20 @@ const StoryExercise = () => {
 
   const activeDragItem = useMemo(() => pool.find((p) => p.id === activeDragId), [activeDragId, pool]);
 
+  const storyTitle = story ? getStoryTitle(story, lang) : "";
+
   const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(
-      `I rebuilt the "${story?.title}" story on GermanLlama! 🦙 ${currentShareUrl("en")}`
-    );
+    navigator.clipboard.writeText(t("shareStoryRebuilt", { title: storyTitle, url: currentShareUrl(lang) }));
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  }, [story]);
+  }, [t, storyTitle, lang]);
 
   if (!story) {
     return (
       <section className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <p className="font-body text-muted-foreground">Story not found.</p>
+        <p className="font-body text-muted-foreground">{t("storyNotFound")}</p>
         <Link to="/start-from-beginning/sentence-structure" className="text-accent underline font-body text-sm">
-          Back to Sentence Structure
+          {t("backToSentenceStructure")}
         </Link>
       </section>
     );
@@ -251,8 +257,8 @@ const StoryExercise = () => {
   return (
     <>
       <SEOHead
-        title={`${story.title} | Start German From the Beginning | GermanLlama`}
-        description="Read a short German story side by side with English, then rebuild each sentence yourself."
+        title={`${storyTitle} | ${t("beginnerName")} | GermanLlama`}
+        description={t("storyInstructions")}
         canonical={`/start-from-beginning/sentence-structure/${story.id}`}
       />
       <section className="max-w-6xl mx-auto px-3 sm:px-4 pt-2 sm:pt-4 pb-[42vh] sm:pb-[38vh] lg:pb-4">
@@ -261,7 +267,7 @@ const StoryExercise = () => {
             to="/start-from-beginning/sentence-structure"
             className="inline-flex items-center gap-1.5 font-body text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            <ArrowLeft className="w-3.5 h-3.5" /> Back
+            <ArrowLeft className="w-3.5 h-3.5" /> {t("back")}
           </Link>
 
           <button
@@ -269,20 +275,16 @@ const StoryExercise = () => {
             className="justify-self-start flex items-center gap-1.5 font-game text-[10px] sm:text-xs px-3 py-1.5 rounded-lg border-2 border-foreground text-foreground hover:bg-foreground/10 transition-colors w-fit"
           >
             {hideGerman ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-            {hideGerman ? "Show German" : "Hide German"}
+            {hideGerman ? t("showGermanBtn") : t("hideGermanBtn")}
           </button>
         </div>
 
-        <h1 className="font-game text-sm sm:text-lg text-foreground mb-1">{story.title}</h1>
-        <p className="font-body text-muted-foreground text-[11px] sm:text-xs mb-2">
-          Read the sentences in English and German. Words with the same meaning are marked with the same color. Then
-          hide the German sentences and try to translate the English sentences correctly. The words in the word bank
-          are color-coded to make choosing easier.
-        </p>
+        <h1 className="font-game text-sm sm:text-lg text-foreground mb-1">{storyTitle}</h1>
+        <p className="font-body text-muted-foreground text-[11px] sm:text-xs mb-2">{t("storyInstructions")}</p>
 
         {allDone && (
           <div className="mb-2 rounded-xl border-2 border-accent bg-accent/10 px-4 py-3 text-center space-y-2">
-            <p className="font-game text-xs sm:text-sm text-accent">🎉 Great job! You rebuilt the whole story.</p>
+            <p className="font-game text-xs sm:text-sm text-accent">{t("storyRebuiltSuccess")}</p>
             <div className="flex flex-col items-center gap-2">
               <div className="relative">
                 {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
@@ -308,7 +310,7 @@ const StoryExercise = () => {
                   className="relative z-10 flex items-center gap-2 font-game text-xs px-5 py-3 rounded-xl bg-accent text-accent-foreground hover:scale-105 transition-transform shadow-md"
                 >
                   {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  {copied ? "Copied!" : "Share"}
+                  {copied ? t("copied") : t("shareBtn")}
                 </button>
               </div>
             </div>
@@ -320,22 +322,22 @@ const StoryExercise = () => {
           <div className="flex-1 min-w-0">
           {/* Column headers (desktop) */}
           <div className="hidden sm:grid sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-x-4 mb-0.5">
-            <span className="font-game text-[9px] text-muted-foreground">English</span>
-            <span className="font-game text-[9px] text-muted-foreground">German</span>
-            <span className="font-game text-[9px] text-muted-foreground">Build the sentence</span>
+            <span className="font-game text-[9px] text-muted-foreground">{nativeLabel}</span>
+            <span className="font-game text-[9px] text-muted-foreground">{t("langNameDe")}</span>
+            <span className="font-game text-[9px] text-muted-foreground">{t("buildColumnHeader")}</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-x-4 gap-y-0.5 sm:gap-y-0">
             {story.sentences.map((_, sIdx) => {
               const deWords = germanBySentence[sIdx];
-              const enWords = englishBySentence[sIdx];
+              const nativeWords = nativeBySentence[sIdx];
               const rowBorder = "py-1 sm:py-1.5 border-b border-border/50";
               return (
                 <React.Fragment key={sIdx}>
-                  {/* English column */}
+                  {/* Native language column */}
                   <p className={`font-body text-[11px] sm:text-xs text-muted-foreground flex flex-wrap content-start gap-x-1.5 ${rowBorder}`}>
-                    <span className="sm:hidden shrink-0">🇬🇧</span>
-                    {enWords.map((w, i) => (
+                    <span className="sm:hidden shrink-0">{nativeFlag}</span>
+                    {nativeWords.map((w, i) => (
                       <span key={i} className={pairColorClass(w.pair)}>
                         {w.text}
                       </span>
@@ -345,7 +347,7 @@ const StoryExercise = () => {
                   {/* German column (hideable) */}
                   <p className={`font-body text-xs sm:text-sm flex flex-wrap content-start gap-x-1.5 min-h-[1.25rem] ${rowBorder}`}>
                     {hideGerman ? (
-                      <span className="text-muted-foreground italic text-[10px]">🙈 hidden</span>
+                      <span className="text-muted-foreground italic text-[10px]">🙈 {t("hiddenLabel")}</span>
                     ) : (
                       <>
                         <span className="sm:hidden shrink-0">🇩🇪</span>
@@ -388,7 +390,7 @@ const StoryExercise = () => {
               sticky 4th column on desktop */}
           <div className="lg:w-[28rem] shrink-0">
             <div className="scrollbar-visible fixed inset-x-0 bottom-0 z-40 max-h-[36vh] overflow-y-auto bg-card border-t-2 border-border shadow-[0_-6px_16px_-4px_rgba(0,0,0,0.15)] rounded-t-2xl px-3 py-2 sm:px-4 sm:py-3 lg:sticky lg:top-28 lg:max-h-none lg:overflow-visible lg:bg-transparent lg:shadow-none lg:border-2 lg:border-dashed lg:rounded-xl lg:p-3">
-              <h3 className="font-game text-[10px] sm:text-xs text-muted-foreground mb-1.5 lg:mb-3">Word Bank</h3>
+              <h3 className="font-game text-[10px] sm:text-xs text-muted-foreground mb-1.5 lg:mb-3">{t("wordBankLabel")}</h3>
               <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-1.5 sm:gap-1.5 lg:gap-1">
                 {pool.map((item) => (
                   <PoolTile
@@ -401,7 +403,7 @@ const StoryExercise = () => {
                     onTap={() => handlePoolTap(item.id)}
                   />
                 ))}
-                {allDone && <p className="font-body text-xs text-muted-foreground italic">All words placed!</p>}
+                {allDone && <p className="font-body text-xs text-muted-foreground italic">{t("allWordsPlaced")}</p>}
               </div>
             </div>
           </div>

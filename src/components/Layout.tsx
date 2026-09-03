@@ -253,30 +253,28 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Tab Navigation */}
       <section className="bg-card border-b border-border">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-          {/* Start from the beginning card — English only, accent (yellow) color */}
-          {lang === "en" && (
-            <div className="mb-2">
-              <button
-                onClick={() => navigate("/start-from-beginning")}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
-                  activeTab === "beginner"
-                    ? "border-accent bg-accent/10 shadow-lg"
-                    : "border-accent/30 bg-gradient-to-r from-accent/5 to-accent/10 hover:border-accent/60 hover:bg-accent/10"
-                }`}
-              >
-                <span className="text-2xl shrink-0">🦙</span>
-                <div className="flex-1 text-left min-w-0">
-                  <span className={`font-game text-xs sm:text-sm leading-tight ${activeTab === "beginner" ? "text-accent" : "text-foreground"}`}>
-                    {t("beginnerName")}
-                  </span>
-                  <span className="font-body text-[9px] sm:text-[10px] text-muted-foreground block leading-snug">
-                    For complete beginners!
-                  </span>
-                </div>
-                <ArrowRight className={`w-4 h-4 sm:w-5 sm:h-5 shrink-0 ${activeTab === "beginner" ? "text-accent" : "text-accent/60"}`} />
-              </button>
-            </div>
-          )}
+          {/* Start from the beginning card — accent (yellow) color */}
+          <div className="mb-2">
+            <button
+              onClick={() => navigate("/start-from-beginning")}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
+                activeTab === "beginner"
+                  ? "border-accent bg-accent/10 shadow-lg"
+                  : "border-accent/30 bg-gradient-to-r from-accent/5 to-accent/10 hover:border-accent/60 hover:bg-accent/10"
+              }`}
+            >
+              <span className="text-2xl shrink-0">🦙</span>
+              <div className="flex-1 text-left min-w-0">
+                <span className={`font-game text-xs sm:text-sm leading-tight ${activeTab === "beginner" ? "text-accent" : "text-foreground"}`}>
+                  {t("beginnerName")}
+                </span>
+                <span className="font-body text-[9px] sm:text-[10px] text-muted-foreground block leading-snug">
+                  {t("beginnerSubtitle")}
+                </span>
+              </div>
+              <ArrowRight className={`w-4 h-4 sm:w-5 sm:h-5 shrink-0 ${activeTab === "beginner" ? "text-accent" : "text-accent/60"}`} />
+            </button>
+          </div>
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
             {[
               { tab: "llama-run",       path: "/",              icon: <Gamepad2    className={`w-6 h-6 shrink-0 ${activeTab === "llama-run"       ? "text-primary-foreground" : "text-primary"}`} />, name: "Llama Run",               desc: t("llamaRunDesc") },
