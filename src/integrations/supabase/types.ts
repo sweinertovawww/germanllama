@@ -77,6 +77,27 @@ export type Database = {
         }
         Relationships: []
       }
+      llama_jump_leaderboard: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          score: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          score?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          score?: number
+        }
+        Relationships: []
+      }
       word_pairs: {
         Row: {
           category: string | null
