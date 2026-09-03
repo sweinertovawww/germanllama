@@ -3198,6 +3198,7 @@ export function normalizeText(text: string): string {
     .replace(/[\u0300-\u036f]/g, "")
     .trim()
     .toLowerCase()
+    .replace(/\u00df/g, "ss")
     .replace(/\s+/g, " ");
 }
 
