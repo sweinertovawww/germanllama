@@ -1087,23 +1087,29 @@ const LlamaJump = ({ storyId }: LlamaJumpProps) => {
     </div>
   );
 
-  if (isFullscreen) {
-    return (
+  // Keep this wrapper structure present at every render (fullscreen or not) —
+  // only its classes/styles change. If the tree shape itself changed between
+  // renders, React would unmount and remount the canvas underneath, and the
+  // running rAF loop (which doesn't depend on isFullscreen) would keep
+  // drawing into the now-detached old canvas, leaving the new one blank for
+  // a beat — the "white screen for the first second" bug on mobile.
+  return (
+    <div
+      className={isFullscreen ? "fixed inset-0 z-[100] bg-background flex items-center justify-center" : "contents"}
+      style={isFullscreen ? { touchAction: "none", overscrollBehavior: "none" } : undefined}
+    >
       <div
-        className="fixed inset-0 z-[100] bg-background flex items-center justify-center"
-        style={{ touchAction: "none", overscrollBehavior: "none" }}
+        className={
+          isFullscreen
+            ? "w-full h-full max-w-[500px] flex flex-col items-center justify-center overflow-hidden"
+            : "contents"
+        }
+        style={isFullscreen ? { aspectRatio: "9/16", maxHeight: "100dvh" } : undefined}
       >
-        <div
-          className="w-full h-full max-w-[500px] flex flex-col items-center justify-center overflow-hidden"
-          style={{ aspectRatio: "9/16", maxHeight: "100dvh" }}
-        >
-          {gameContent}
-        </div>
+        {gameContent}
       </div>
-    );
-  }
-
-  return gameContent;
+    </div>
+  );
 };
 
 export default LlamaJump;
