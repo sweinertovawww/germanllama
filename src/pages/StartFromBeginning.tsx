@@ -12,7 +12,7 @@ const StartFromBeginning = () => {
       id: "sentence-structure",
       title: t("categorySentenceStructure"),
       desc: t("categorySentenceStructureDesc"),
-      path: "/start-from-beginning/sentence-structure",
+      path: `/start-from-beginning/sentence-structure/${STORIES[0]?.id}`,
       available: true,
     },
     {

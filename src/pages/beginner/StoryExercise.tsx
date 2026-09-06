@@ -14,7 +14,7 @@ import {
 } from "@dnd-kit/core";
 import { ArrowLeft, GripVertical, Eye, EyeOff, Copy, Check } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
-import { getStory, getStoryTitle, getNativeChunks, chunksToWords, pairColorClass, type StoryWord } from "@/data/beginnerStories";
+import { STORIES, getStory, getStoryTitle, getNativeChunks, chunksToWords, pairColorClass, type StoryWord } from "@/data/beginnerStories";
 import { currentShareUrl } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANG_OPTIONS } from "@/components/LanguageSelector";
@@ -245,7 +245,7 @@ const StoryExercise = () => {
     return (
       <section className="max-w-4xl mx-auto px-4 py-16 text-center">
         <p className="font-body text-muted-foreground">{t("storyNotFound")}</p>
-        <Link to="/start-from-beginning/sentence-structure" className="text-accent underline font-body text-sm">
+        <Link to="/start-from-beginning" className="text-accent underline font-body text-sm">
           {t("backToSentenceStructure")}
         </Link>
       </section>
@@ -264,7 +264,7 @@ const StoryExercise = () => {
       <section className="max-w-6xl mx-auto px-3 sm:px-4 pt-2 sm:pt-4 pb-[42vh] sm:pb-[38vh] lg:pb-4">
         <div className="flex items-center justify-between flex-wrap gap-2 mb-2 sm:grid sm:grid-cols-[1fr_1fr_1.3fr] sm:gap-x-4 sm:justify-normal">
           <Link
-            to="/start-from-beginning/sentence-structure"
+            to="/start-from-beginning"
             className="inline-flex items-center gap-1.5 font-body text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" /> {t("back")}
@@ -278,6 +278,27 @@ const StoryExercise = () => {
             {hideGerman ? t("showGermanBtn") : t("hideGermanBtn")}
           </button>
         </div>
+
+        {STORIES.length > 1 && (
+          <div className="mb-2">
+            <h2 className="font-game text-[9px] sm:text-[10px] text-muted-foreground mb-1">{t("chooseTopicLabel")}</h2>
+            <div className="flex flex-nowrap gap-1.5 overflow-x-auto scrollbar-visible pb-1 -mx-3 px-3 sm:mx-0 sm:px-0 sm:flex-wrap">
+              {STORIES.map((s) => (
+                <Link
+                  key={s.id}
+                  to={`/start-from-beginning/sentence-structure/${s.id}`}
+                  className={`shrink-0 font-game text-[10px] sm:text-xs px-3 py-1.5 rounded-lg border-2 whitespace-nowrap transition-colors ${
+                    s.id === story.id
+                      ? "border-accent bg-accent/15 text-foreground"
+                      : "border-border bg-card text-muted-foreground hover:border-accent/50 hover:text-foreground"
+                  }`}
+                >
+                  🦙 {getStoryTitle(s, lang)}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         <h1 className="font-game text-sm sm:text-lg text-foreground mb-1">{storyTitle}</h1>
         <p className="font-body text-muted-foreground text-[11px] sm:text-xs mb-2">{t("storyInstructions")}</p>

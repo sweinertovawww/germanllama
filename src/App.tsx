@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Layout from "@/components/Layout";
@@ -20,9 +20,9 @@ import Challenge from "./pages/Challenge";
 import ChallengeA1 from "./pages/ChallengeA1";
 import ProfessionLanding from "./pages/professions/ProfessionLanding";
 import StartFromBeginning from "./pages/StartFromBeginning";
-import SentenceStructureList from "./pages/beginner/SentenceStructureList";
 import StoryExercise from "./pages/beginner/StoryExercise";
 import LlamaJumpPage from "./pages/beginner/LlamaJumpPage";
+import { STORIES } from "@/data/beginnerStories";
 
 const queryClient = new QueryClient();
 
@@ -48,7 +48,7 @@ function AppRoutes() {
           <Route path="/challenge" element={<Layout><Challenge /></Layout>} />
           <Route path="/challenge-a1" element={<Layout><ChallengeA1 /></Layout>} />
           <Route path="/start-from-beginning" element={<Layout><StartFromBeginning /></Layout>} />
-          <Route path="/start-from-beginning/sentence-structure" element={<Layout><SentenceStructureList /></Layout>} />
+          <Route path="/start-from-beginning/sentence-structure" element={<Navigate to={`/start-from-beginning/sentence-structure/${STORIES[0]?.id}`} replace />} />
           <Route path="/start-from-beginning/sentence-structure/:storyId" element={<Layout><StoryExercise /></Layout>} />
           <Route path="/start-from-beginning/sentence-structure/:storyId/llama-jump" element={<Layout><LlamaJumpPage /></Layout>} />
           <Route path="/kontakt" element={<Layout><Kontakt /></Layout>} />
