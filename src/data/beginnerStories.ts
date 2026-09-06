@@ -424,14 +424,14 @@ export const STORIES: Story[] = [
         },
       },
       {
-        german: [{ text: "Wir", pair: 1 }, { text: "essen", pair: 2 }, { text: "zusammen", pair: 4 }, { text: "zu Abend.", pair: 3 }],
+        german: [{ text: "Am Abend", pair: 1 }, { text: "essen wir", pair: 2 }, { text: "zusammen.", pair: 3 }],
         native: {
-          en: [{ text: "We", pair: 1 }, { text: "eat", pair: 2 }, { text: "dinner", pair: 3 }, { text: "together.", pair: 4 }],
-          cs: [{ text: "My", pair: 1 }, { text: "jíme", pair: 2 }, { text: "večeři", pair: 3 }, { text: "společně.", pair: 4 }],
-          pl: [{ text: "My", pair: 1 }, { text: "jemy", pair: 2 }, { text: "kolację", pair: 3 }, { text: "razem.", pair: 4 }],
-          ko: [{ text: "우리는", pair: 1 }, { text: "함께", pair: 4 }, { text: "저녁을", pair: 3 }, { text: "먹어요.", pair: 2 }],
-          uk: [{ text: "Ми", pair: 1 }, { text: "їмо", pair: 2 }, { text: "вечерю", pair: 3 }, { text: "разом.", pair: 4 }],
-          sk: [{ text: "My", pair: 1 }, { text: "jeme", pair: 2 }, { text: "večeru", pair: 3 }, { text: "spolu.", pair: 4 }],
+          en: [{ text: "In the evening", pair: 1 }, { text: "we eat", pair: 2 }, { text: "together.", pair: 3 }],
+          cs: [{ text: "Večer", pair: 1 }, { text: "jíme", pair: 2 }, { text: "spolu.", pair: 3 }],
+          pl: [{ text: "Wieczorem", pair: 1 }, { text: "jemy", pair: 2 }, { text: "razem.", pair: 3 }],
+          ko: [{ text: "저녁에", pair: 1 }, { text: "우리는 함께", pair: 3 }, { text: "먹어요.", pair: 2 }],
+          uk: [{ text: "Ввечері", pair: 1 }, { text: "ми їмо", pair: 2 }, { text: "разом.", pair: 3 }],
+          sk: [{ text: "Večer", pair: 1 }, { text: "jeme", pair: 2 }, { text: "spolu.", pair: 3 }],
         },
       },
       {
