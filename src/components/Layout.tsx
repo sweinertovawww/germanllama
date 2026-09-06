@@ -317,14 +317,9 @@ const Layout = ({ children }: LayoutProps) => {
             >
               <span className="text-2xl shrink-0">🦙</span>
               <div className="flex-1 text-left min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className={`font-game text-xs sm:text-sm leading-tight ${activeTab === "challenge" ? "text-primary" : "text-foreground"}`}>
-                    {t("challengeName")}
-                  </span>
-                  <span className="font-game text-[8px] px-1.5 py-0.5 rounded bg-primary text-primary-foreground shrink-0">
-                    CHALLENGE
-                  </span>
-                </div>
+                <span className={`font-game text-xs sm:text-sm leading-tight ${activeTab === "challenge" ? "text-primary" : "text-foreground"}`}>
+                  {t("challengeName")}
+                </span>
                 <span className="font-body text-[9px] sm:text-[10px] text-muted-foreground block leading-snug">
                   {t("challengeDesc")}
                 </span>
@@ -345,14 +340,9 @@ const Layout = ({ children }: LayoutProps) => {
             >
               <span className="text-2xl shrink-0">🦙</span>
               <div className="flex-1 text-left min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className={`font-game text-xs sm:text-sm leading-tight ${activeTab === "challenge-a1" ? "text-primary" : "text-foreground"}`}>
-                    {t("challengeNameA1")}
-                  </span>
-                  <span className="font-game text-[8px] px-1.5 py-0.5 rounded bg-primary text-primary-foreground shrink-0">
-                    A1
-                  </span>
-                </div>
+                <span className={`font-game text-xs sm:text-sm leading-tight ${activeTab === "challenge-a1" ? "text-primary" : "text-foreground"}`}>
+                  {t("challengeNameA1")}
+                </span>
                 <span className="font-body text-[9px] sm:text-[10px] text-muted-foreground block leading-snug">
                   {t("challengeDescA1")}
                 </span>
