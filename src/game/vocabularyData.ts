@@ -994,7 +994,7 @@ export const QUESTIONS: Question[] = [
   { text: "Jaký člen má Arbeitskleidung?", options: ["der", "die", "das"], correct: 1, translation: "pracovní oděv", translationKo: "작업복", translationEn: "work clothing", translationPl: "odzież robocza", translationUk: "робочий одяг", translationSk: "pracovný odev", profession: "obecné" },
 ];
 
-export const FILL_QUESTIONS = [
+const FILL_QUESTIONS_1: FillQuestion[] = [
   // === OBECNÉ (základy) ===
   { sentence: "Ich ___ Deutsch.", answer: "spreche", translation: "Já mluvím německy.", translationKo: "나는 독일어를 할 줄 압니다.", translationEn: "I speak German.", translationPl: "Mówię po niemiecku.", translationUk: "Я розмовляю німецькою.", translationSk: "Ja hovorím po nemecky.", profession: "obecné", level: "A1" },
   { sentence: "Er ___ ein Buch.", answer: "liest", translation: "On čte knihu.", translationKo: "그는 책을 읽고 있습니다.", translationEn: "He is reading a book.", translationPl: "On czyta książkę.", translationUk: "Він читає книжку.", translationSk: "On číta knihu.", profession: "obecné", level: "A1" },
@@ -1395,6 +1395,9 @@ export const FILL_QUESTIONS = [
      { sentence: "Der ___ beginnt um sechs Uhr.", answer: "Schichtplan", translation: "Plán směn začíná v šest hodin.", translationKo: "교대 일정은 6시에 시작됩니다.", translationEn: "The shift schedule starts at six.", translationPl: "Harmonogram zmian zaczyna się o szóstej.", translationUk: "Розклад змін починається о шостій.", translationSk: "Plán zmien začína o šiestej hodine.", profession: "obecné" },
      { sentence: "Wir arbeiten heute in ___.", answer: "Vollzeit", translation: "Dnes pracujeme na plný úvazek.", translationKo: "오늘 우리는 풀타임으로 일합니다.", translationEn: "Today we work full-time.", translationPl: "Dziś pracujemy na pełen etat.", translationUk: "Сьогодні ми працюємо повний день.", translationSk: "Dnes pracujeme na plný úväzok.", profession: "obecné" },
      { sentence: "Die ___ ist im Erdgeschoss.", answer: "Kantine", translation: "Jídelna je v přízemí.", translationKo: "식당은 1층에 있습니다.", translationEn: "The canteen is on the ground floor.", translationPl: "Stołówka jest na parterze.", translationUk: "Їдальня знаходиться на першому поверсі.", translationSk: "Jedáleň je na prízemí.", profession: "obecné" },
+];
+
+const FILL_QUESTIONS_2: FillQuestion[] = [
      { sentence: "Ich hole meine Sachen aus dem ___.", answer: "Spind", translation: "Vyzvednu si věci ze skříňky.", translationKo: "나는 사물함에서 내 물건을 가져갈 것이다.", translationEn: "I will pick up my things from the locker.", translationPl: "Odbiorę swoje rzeczy z szafki.", translationUk: "Я заберу свої речі з шафки.", translationSk: "Vyzdvihnem si veci zo skrinky.", profession: "obecné" },
      { sentence: "Wo ist der nächste ___?", answer: "Feuerlöscher", translation: "Kde je nejbližší hasicí přístroj?", translationKo: "가장 가까운 소화기는 어디에 있나요?", translationEn: "Where is the nearest fire extinguisher?", translationPl: "Gdzie jest najbliższa gaśnica?", translationUk: "Де найближчий вогнегасник?", translationSk: "Kde je najbližší hasiaci prístroj?", profession: "obecné" },
      { sentence: "Die ___ muss angepasst werden.", answer: "Arbeitszeit", translation: "Pracovní doba se musí upravit.", translationKo: "근무시간을 조정해야 합니다.", translationEn: "The working hours need to be adjusted.", translationPl: "Godziny pracy muszą zostać dostosowane.", translationUk: "Робочий час потрібно скоригувати.", translationSk: "Pracovný čas sa musí upraviť.", profession: "obecné" },
@@ -1795,6 +1798,9 @@ export const FILL_QUESTIONS = [
   { sentence: "Die Verbindung hält mit ___ besser.", answer: "Dübeln", translation: "Spoj drží s kolíky lépe.", translationKo: "조인트는 핀과 더 잘 고정됩니다.", translationEn: "The joint holds better with dowels.", translationPl: "Połączenie trzyma lepiej z kołkami.", translationUk: "Шов тримається краще з дюбелями.", translationSk: "Spoj drží s kolíkmi lepšie.", profession: "truhlář" },
   { sentence: "Dieses Holz hat eine schöne ___.", answer: "Farbe", translation: "Toto dřevo má krásnou barvu.", translationKo: "이 나무는 색깔이 아름답습니다.", translationEn: "This wood has a beautiful colour.", translationPl: "To drewno ma piękny kolor.", translationUk: "Це дерево має гарний колір.", translationSk: "Toto drevo má krásnu farbu.", profession: "truhlář" },
   { sentence: "Ich benutze die ___ für Rundungen.", answer: "Fräse", translation: "Používám frézu na zaoblení.", translationKo: "저는 라운딩 커터를 사용합니다.", translationEn: "I am using the milling machine for rounding.", translationPl: "Używam frezarki do zaokrąglania.", translationUk: "Я використовую фрезер для заокруглення.", translationSk: "Používam frézu na zaoblenie.", profession: "truhlář" },
+];
+
+const FILL_QUESTIONS_3: FillQuestion[] = [
   { sentence: "Der Leim muss ___ Minuten trocknen.", answer: "zwanzig", translation: "Lepidlo musí schnout dvacet minut.", translationKo: "접착제는 20분 동안 건조되어야 합니다.", translationEn: "The glue needs to dry for twenty minutes.", translationPl: "Klej musi schnąć przez dwadzieścia minut.", translationUk: "Клей повинен сохнути двадцять хвилин.", translationSk: "Lepidlo musí schnúť dvadsať minút.", profession: "truhlář" },
   { sentence: "Bitte bring mir die ___.", answer: "Schraubzwinge", translation: "Prosím přines mi svěrku.", translationKo: "집게 좀 가져다 주세요.", translationEn: "Please bring me the clamp.", translationPl: "Proszę przynieść mi ścisk.", translationUk: "Будь ласка, принесіть мені затискач.", translationSk: "Prosím prines mi svorku.", profession: "truhlář" },
   { sentence: "Die ___ ist zu stumpf geworden.", answer: "Säge", translation: "Pila se příliš ztupila.", translationKo: "톱이 너무 무뎌졌습니다.", translationEn: "The saw has become too blunt.", translationPl: "Piła stała się zbyt tępa.", translationUk: "Пилка стала занадто тупою.", translationSk: "Píla sa príliš otupila.", profession: "truhlář" },
@@ -2195,6 +2201,9 @@ export const FILL_QUESTIONS = [
   { sentence: "Die ___ erscheint auf dem Bon.", answer: "Gutschrift", translation: "Dobropis se zobrazí na dokladu.", translationKo: "크레딧이 영수증에 표시됩니다.", translationEn: "The credit note appears on the receipt.", translationPl: "Nota kredytowa pojawi się na paragonie.", translationUk: "Кредит-нота відображається на чеку.", translationSk: "Dobropis sa zobrazí na doklade.", profession: "pokladní" },
   { sentence: "Der ___ bringt die Ware ins Lager.", answer: "Lagerist", translation: "Skladník přináší zboží na sklad.", translationKo: "창고 직원이 상품을 창고로 가져갑니다.", translationEn: "The warehouse worker brings the goods to the warehouse.", translationPl: "Magazynier przynosi towar do magazynu.", translationUk: "Складський робітник приносить товар на склад.", translationSk: "Skladník prináša tovar na sklad.", profession: "pokladní" },
   { sentence: "Der ___ kontrolliert die Lieferung.", answer: "Lagerist", translation: "Skladník kontroluje dodávku.", translationKo: "창고 직원이 배송을 확인합니다.", translationEn: "The warehouse worker checks the delivery.", translationPl: "Magazynier sprawdza dostawę.", translationUk: "Складський робітник перевіряє поставку.", translationSk: "Skladník kontroluje dodávku.", profession: "pokladní" },
+];
+
+const FILL_QUESTIONS_4: FillQuestion[] = [
   { sentence: "Ich bin ___ von Beruf.", answer: "Lagerist", translation: "Jsem skladník z povolání.", translationKo: "저는 창고 직원입니다.", translationEn: "I am a warehouse worker by profession.", translationPl: "Jestem magazynierem z zawodu.", translationUk: "Я складський робітник за фахом.", translationSk: "Som skladník z povolania.", profession: "pokladní" },
   { sentence: "Die ___ muss mit dem Gabelstapler transportiert werden.", answer: "Palette", translation: "Paleta musí být transportována zdvižkou.", translationKo: "팔레트는 지게차로 운반해야 합니다.", translationEn: "The pallet must be transported with the forklift.", translationPl: "Paleta musi być transportowana wózkiem widłowym.", translationUk: "Палету потрібно перевезти навантажувачем.", translationSk: "Paleta musí byť prepravená vysokozdvižným vozíkom.", profession: "pokladní" },
   { sentence: "Bitte stell die ___ ans Regal.", answer: "Palette", translation: "Prosím postav paletu k regálu.", translationKo: "팔레트를 선반 옆에 놓아주세요.", translationEn: "Please put the pallet next to the shelf.", translationPl: "Proszę postawić paletę przy regale.", translationUk: "Будь ласка, поставте палету до стелажу.", translationSk: "Prosím postav paletu k regálu.", profession: "pokladní" },
@@ -2595,6 +2604,9 @@ export const FILL_QUESTIONS = [
   { sentence: "Die Prüfung dauert ___ Minuten.", answer: "neunzig", translation: "Zkouška trvá devadesát minut.", translationKo: "시험은 90분 동안 진행됩니다.", translationEn: "The exam lasts ninety minutes.", translationPl: "Egzamin trwa dziewięćdziesiąt minut.", translationUk: "Іспит триває дев'яносто хвилин.", translationSk: "Skúška trvá deväťdesiat minút.", profession: "učitel" },
   { sentence: "Bitte öffnen Sie ___ Seite zwanzig.", answer: "bitte", translation: "Otevřete prosím stránku dvacet.", translationKo: "20페이지를 열어주세요.", translationEn: "Please open page twenty.", translationPl: "Proszę otworzyć stronę dwudziestą.", translationUk: "Будь ласка, відкрийте двадцяту сторінку.", translationSk: "Otvorte prosím stranu dvadsať.", profession: "učitel" },
   { sentence: "Die Klasse hat ___ Schüler.", answer: "fünfundzwanzig", translation: "Třída má dvacet pět žáků.", translationKo: "그 학급에는 25명의 학생이 있습니다.", translationEn: "The class has twenty-five pupils.", translationPl: "Klasa ma dwadzieścia pięć uczniów.", translationUk: "У класі двадцять п'ять учнів.", translationSk: "Trieda má dvadsaťpäť žiakov.", profession: "učitel" },
+];
+
+const FILL_QUESTIONS_5: FillQuestion[] = [
   { sentence: "Das Buch ist ___ empfehlenswert.", answer: "sehr", translation: "Kniha je velmi doporučeníhodná.", translationKo: "이 책은 적극 권장됩니다.", translationEn: "The book is highly recommended.", translationPl: "Książka jest bardzo polecana.", translationUk: "Книга дуже рекомендована.", translationSk: "Kniha je veľmi odporúčaniahodná.", profession: "učitel" },
   { sentence: "Die Stunde beginnt ___ um acht.", answer: "immer", translation: "Hodina začíná vždy v osm.", translationKo: "수업은 항상 8시에 시작해요.", translationEn: "The lesson always starts at eight.", translationPl: "Lekcja zawsze zaczyna się o ósmej.", translationUk: "Урок завжди починається о восьмій.", translationSk: "Hodina začína vždy o ôsmej.", profession: "učitel" },
   { sentence: "Die Tafel wird ___ Kreide beschrieben.", answer: "mit", translation: "Na tabuli se píše křídou.", translationKo: "칠판에 분필이 적혀 있습니다.", translationEn: "You write on the board with chalk.", translationPl: "Kredą piszesz na tablicy.", translationUk: "Ви пишете на дошці крейдою.", translationSk: "Na tabuľu sa píše kriedou.", profession: "učitel" },
@@ -2995,6 +3007,9 @@ export const FILL_QUESTIONS = [
   { sentence: "Wir setzen die ___ ein.", answer: "Türzarge", translation: "Zárubeň osadíme.", translationKo: "문틀을 설치합니다.", translationEn: "We install the door frame.", translationPl: "Montujemy ościeżnicę.", translationUk: "Ми встановлюємо дверну коробку.", translationSk: "Zárubňu osadíme.", profession: "truhlář" },
   { sentence: "Die ___ ist aus Eichenholz.", answer: "Arbeitsplatte", translation: "Pracovní deska je z dubového dřeva.", translationKo: "작업대 상판은 참나무로 만들어졌습니다.", translationEn: "The worktop is made of oak.", translationPl: "Blat roboczy jest z dębiny.", translationUk: "Стільниця зроблена з дуба.", translationSk: "Pracovná doska je z dubového dreva.", profession: "truhlář" },
   { sentence: "Wir schleifen die ___.", answer: "Arbeitsplatte", translation: "Pracovní desku brousíme.", translationKo: "작업대 상판을 사포질합니다.", translationEn: "We sand the worktop.", translationPl: "Szlifujemy blat roboczy.", translationUk: "Ми шліфуємо стільницю.", translationSk: "Pracovnú dosku brúsime.", profession: "truhlář" },
+];
+
+const FILL_QUESTIONS_6: FillQuestion[] = [
   { sentence: "Die ___ steht in der Werkstatt.", answer: "Palette", translation: "Paleta stojí v dílně.", translationKo: "팔레트는 작업장에 있습니다.", translationEn: "The pallet is in the workshop.", translationPl: "Paleta stoi w warsztacie.", translationUk: "Піддон стоїть у майстерні.", translationSk: "Paleta stojí v dielni.", profession: "truhlář" },
   { sentence: "Wir laden die ___ auf den Wagen.", answer: "Palette", translation: "Paletu nakládáme na vozík.", translationKo: "팔레트를 수레에 싣습니다.", translationEn: "We load the pallet onto the cart.", translationPl: "Ładujemy paletę na wózek.", translationUk: "Ми вантажимо піддон на візок.", translationSk: "Paletu nakladáme na vozík.", profession: "truhlář" },
   // === NOVÁ SLOVÍČKA - INSTALATÉR (Bauhaus) ===
@@ -3135,7 +3150,11 @@ export const FILL_QUESTIONS = [
   { sentence: "Das ist ein ___.", answer: "Telefon", translation: "To je telefon.", translationKo: "이것은 핸드폰이에요.", translationEn: "This is a telephone.", translationPl: "To jest telefon.", translationUk: "Це телефон.", translationSk: "Toto je telefón.", profession: "kancelář", level: "A1" },
   { sentence: "Wo ist das ___?", answer: "Heft", translation: "Kde je sešit?", translationKo: "공책은 어디에 있어요?", translationEn: "Where is the exercise book?", translationPl: "Gdzie jest zeszyt?", translationUk: "Де зошит?", translationSk: "Kde je zošit?", profession: "učitel", level: "A1" },
   { sentence: "Das ist ein ___.", answer: "Stift", translation: "To je pero / tužka.", translationKo: "이것은 펜 / 연필이에요.", translationEn: "This is a pen.", translationPl: "To jest długopis / ołówek.", translationUk: "Це ручка/олівець.", translationSk: "Toto je pero / ceruzka.", profession: "učitel", level: "A1" },
-] as FillQuestion[];
+];
+
+export const FILL_QUESTIONS: FillQuestion[] = [
+  ...FILL_QUESTIONS_1, ...FILL_QUESTIONS_2, ...FILL_QUESTIONS_3, ...FILL_QUESTIONS_4, ...FILL_QUESTIONS_5, ...FILL_QUESTIONS_6
+];
 
 
 // Helper to extract German word from question text
