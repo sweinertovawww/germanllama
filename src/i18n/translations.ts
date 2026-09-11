@@ -406,6 +406,7 @@ const cs = {
   labyrinthCaughtTitle: "🐺 Vlk tě dostal!",
   labyrinthCaughtText: "Přišel/přišla jsi o všechny body. Zkus to znovu a nezastavuj se!",
   labyrinthNewPathOpened: "🚪 Otevřela se nová cesta poblíž!",
+  labyrinthWrongPenalty: "✗ Správně: {word} — −{points} bodů",
 };
 
 const ko: typeof cs = {
@@ -814,6 +815,7 @@ const ko: typeof cs = {
   labyrinthCaughtTitle: "🐺 늑대에게 잡혔어요!",
   labyrinthCaughtText: "모든 점수를 잃었어요. 다시 도전하고 멈추지 마세요!",
   labyrinthNewPathOpened: "🚪 근처에 새로운 길이 열렸어요!",
+  labyrinthWrongPenalty: "✗ 정답: {word} — −{points}점",
 };
 
 const en: typeof cs = {
@@ -1222,6 +1224,7 @@ const en: typeof cs = {
   labyrinthCaughtTitle: "🐺 The wolf got you!",
   labyrinthCaughtText: "You lost all your points. Try again, and keep moving!",
   labyrinthNewPathOpened: "🚪 A new path opened nearby!",
+  labyrinthWrongPenalty: "✗ Correct: {word} — −{points} points",
 };
 
 const pl: typeof cs = {
@@ -1630,6 +1633,7 @@ const pl: typeof cs = {
   labyrinthCaughtTitle: "🐺 Wilk cię złapał!",
   labyrinthCaughtText: "Straciłeś/aś wszystkie punkty. Spróbuj ponownie i nie zatrzymuj się!",
   labyrinthNewPathOpened: "🚪 W pobliżu otworzyła się nowa ścieżka!",
+  labyrinthWrongPenalty: "✗ Poprawnie: {word} — −{points} punktów",
 };
 
 const de: typeof cs = {
@@ -2038,6 +2042,7 @@ const de: typeof cs = {
   labyrinthCaughtTitle: "🐺 Der Wolf hat dich erwischt!",
   labyrinthCaughtText: "Du hast alle Punkte verloren. Versuch's noch mal und bleib in Bewegung!",
   labyrinthNewPathOpened: "🚪 In der Nähe hat sich ein neuer Weg geöffnet!",
+  labyrinthWrongPenalty: "✗ Richtig: {word} — −{points} Punkte",
 };
 
 const uk: typeof cs = {
@@ -2446,6 +2451,7 @@ const uk: typeof cs = {
   labyrinthCaughtTitle: "🐺 Вовк тебе спіймав!",
   labyrinthCaughtText: "Ти втратив/втратила всі бали. Спробуй ще раз і не зупиняйся!",
   labyrinthNewPathOpened: "🚪 Поруч відкрився новий шлях!",
+  labyrinthWrongPenalty: "✗ Правильно: {word} — −{points} очок",
 };
 
 const sk: typeof cs = {
@@ -2854,6 +2860,7 @@ const sk: typeof cs = {
   labyrinthCaughtTitle: "🐺 Vlk ťa dostal!",
   labyrinthCaughtText: "Prišiel/prišla si o všetky body. Skús to znova a nezastavuj sa!",
   labyrinthNewPathOpened: "🚪 Nablízku sa otvorila nová cesta!",
+  labyrinthWrongPenalty: "✗ Správne: {word} — −{points} bodov",
 };
 
 export const translations: Record<Lang, typeof cs> = { cs, ko, en, pl, de, uk, sk };
