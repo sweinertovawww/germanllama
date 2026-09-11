@@ -177,18 +177,23 @@ function bfsNextStep(maze: Cell[][], from: { col: number; row: number }, to: { c
   return cur;
 }
 
-/** Picks a cell for a new star: far enough from the llama, not already holding another star. */
 // How far around the llama a correctly-answered question can knock down a wall — close enough
 // that the new shortcut is actually reachable and useful right away.
 const OPEN_WALL_RADIUS = 3;
+// How long the newly-opened wall glows on the canvas, so it's impossible to miss.
+const NEW_PATH_FLASH_FRAMES = 90;
 
 /** Knocks down one existing wall near `near` (grid distance, not path distance), turning the maze's
  *  single deterministic corridor into one with a genuine alternate route — a real way to lose the wolf. */
-function openNewPath(maze: Cell[][], near: { col: number; row: number }) {
+function collectOpenableWalls(
+  maze: Cell[][],
+  near: { col: number; row: number },
+  maxRadius: number
+): { col: number; row: number; dir: Dir }[] {
   const candidates: { col: number; row: number; dir: Dir }[] = [];
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
-      if (Math.abs(c - near.col) + Math.abs(r - near.row) > OPEN_WALL_RADIUS) continue;
+      if (maxRadius < Infinity && Math.abs(c - near.col) + Math.abs(r - near.row) > maxRadius) continue;
       const cell = maze[r][c];
       for (const dir of ["N", "S", "E", "W"] as Dir[]) {
         if (!cell.walls[dir]) continue;
@@ -200,13 +205,23 @@ function openNewPath(maze: Cell[][], near: { col: number; row: number }) {
       }
     }
   }
-  if (candidates.length === 0) return;
+  return candidates;
+}
+
+/** Knocks down one wall and reports exactly where, so the caller can point the player at it —
+ *  falls back to the whole maze if the immediate radius has nothing left to open (never silently no-ops). */
+function openNewPath(maze: Cell[][], near: { col: number; row: number }): { col: number; row: number; dir: Dir } | null {
+  let candidates = collectOpenableWalls(maze, near, OPEN_WALL_RADIUS);
+  if (candidates.length === 0) candidates = collectOpenableWalls(maze, near, Infinity);
+  if (candidates.length === 0) return null; // only possible if the entire maze is already fully open
   const pick = shuffle(candidates)[0];
   const [dc, dr] = DIR_DELTA[pick.dir];
   maze[pick.row][pick.col].walls[pick.dir] = false;
   maze[pick.row + dr][pick.col + dc].walls[OPPOSITE[pick.dir]] = false;
+  return pick;
 }
 
+/** Picks a cell for a new star: far enough from the llama, not already holding another star. */
 function pickStarCell(maze: Cell[][], from: { col: number; row: number }, avoid: StarTile[]): { col: number; row: number } {
   const dist = bfsDistances(maze, from);
   const isAvoided = (c: number, r: number) => avoid.some((a) => a.col === c && a.row === r);
@@ -353,6 +368,25 @@ function drawMaze(ctx: CanvasRenderingContext2D, maze: Cell[][]) {
   }
 }
 
+/** A pulsing golden glow right where a wall just came down, so the new opening is impossible to miss. */
+function drawNewPathGlow(ctx: CanvasRenderingContext2D, flash: { col: number; row: number; dir: Dir; framesLeft: number }) {
+  const [dc, dr] = DIR_DELTA[flash.dir];
+  const x0 = flash.col * CELL + CELL / 2;
+  const y0 = flash.row * CELL + CELL / 2;
+  const midX = x0 + (dc * CELL) / 2;
+  const midY = y0 + (dr * CELL) / 2;
+  const pulse = 0.6 + 0.4 * Math.sin(flash.framesLeft * 0.3);
+  ctx.save();
+  ctx.globalAlpha = Math.min(1, flash.framesLeft / 20) * pulse;
+  ctx.fillStyle = "#ffd700";
+  ctx.shadowColor = "#ffd700";
+  ctx.shadowBlur = 14;
+  ctx.beginPath();
+  ctx.arc(midX, midY, 13, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
 interface GameState {
   maze: Cell[][];
   pos: { col: number; row: number };
@@ -368,6 +402,11 @@ interface GameState {
   wolf: { col: number; row: number };
   wolfFacing: Dir;
   wolfMoveFrames: number;
+  newPathFlash: { col: number; row: number; dir: Dir; framesLeft: number } | null;
+  // The wolf doesn't move at all until the first star is reached — a hard guarantee (not just a
+  // distance estimate, which the wolf's dynamic re-pathing toward your *current* spot can undercut)
+  // that you always get a real shot at that first correct answer and the escape route it opens.
+  firstStarPending: boolean;
 }
 
 function makeInitialGameState(): GameState {
@@ -385,6 +424,8 @@ function makeInitialGameState(): GameState {
     remainingFrames: GAME_FRAMES,
     score: 0,
     lastVerbIdx: -1,
+    newPathFlash: null,
+    firstStarPending: true,
     // Placeholder — placeStars must run first, then placeWolf positions it for real
     // (its minimum distance depends on where the stars ended up).
     wolf: start,
@@ -393,8 +434,9 @@ function makeInitialGameState(): GameState {
   };
 }
 
-/** Positions the wolf only once stars exist — guarantees it starts farther from the llama than the
- *  nearest star, so the first star (and the escape route answering it opens) is always reachable first. */
+/** Positions the wolf a bit farther than the nearest star for better initial pacing — not itself a
+ *  guarantee (the wolf re-paths toward wherever the llama *currently* is, which can undercut a purely
+ *  distance-based estimate), so the real guarantee is firstStarPending freezing it until that star lands. */
 function placeWolf(state: GameState) {
   const dist = bfsDistances(state.maze, state.pos);
   const nearestStarDist = Math.min(...state.stars.map((s) => dist[s.row][s.col]));
@@ -418,6 +460,7 @@ const LlamaLabyrinth = () => {
   const [currentAnswer, setCurrentAnswer] = useState(""); // "/"-separated accepted variants, for isTranslationCorrect
   const [input, setInput] = useState("");
   const [result, setResult] = useState<"correct" | "wrong" | null>(null);
+  const [pathOpened, setPathOpened] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const g = useRef<GameState>(makeInitialGameState());
@@ -435,6 +478,7 @@ const LlamaLabyrinth = () => {
     setScore(0);
     setTimeLeft(GAME_SECONDS);
     setResult(null);
+    setPathOpened(false);
     setOutcome(null);
     setGameState("playing");
   }, [spawnStar]);
@@ -474,8 +518,14 @@ const LlamaLabyrinth = () => {
       g.current.score += STAR_POINTS;
       setScore(g.current.score);
       // A correct answer earns a real escape route: knock down one wall near the llama so the
-      // wolf's chase no longer has just one deterministic corridor to follow.
-      openNewPath(g.current.maze, g.current.pos);
+      // wolf's chase no longer has just one deterministic corridor to follow. openNewPath always
+      // finds *something* to open (it falls back to the whole maze), so this only comes back null
+      // if literally every wall in the maze is already down.
+      const opened = openNewPath(g.current.maze, g.current.pos);
+      setPathOpened(opened !== null);
+      if (opened) g.current.newPathFlash = { ...opened, framesLeft: NEW_PATH_FLASH_FRAMES };
+    } else {
+      setPathOpened(false);
     }
     setTimeout(resumeGame, isCorrect ? CORRECT_FLASH_MS : WRONG_FLASH_MS);
   }, [input, currentAnswer, result, resumeGame]);
@@ -486,6 +536,7 @@ const LlamaLabyrinth = () => {
     (star: StarTile) => {
       const state = g.current;
       state.stars = state.stars.filter((s) => s !== star);
+      state.firstStarPending = false; // the wolf's grace period ends the moment any star is reached
 
       let idx = Math.floor(Math.random() * VERB_CONJUGATIONS.length);
       if (VERB_CONJUGATIONS.length > 1) {
@@ -609,23 +660,31 @@ const LlamaLabyrinth = () => {
       }
 
       // The wolf creeps one cell closer, on its own slower cadence, always re-pathing toward
-      // wherever the llama currently is.
-      state.wolfMoveFrames -= 1;
-      if (state.wolfMoveFrames <= 0) {
-        state.wolfMoveFrames = WOLF_STEP_FRAMES;
-        const next = bfsNextStep(state.maze, state.wolf, state.pos);
-        if (next.col !== state.wolf.col || next.row !== state.wolf.row) {
-          state.wolfFacing =
-            next.col > state.wolf.col ? "E" : next.col < state.wolf.col ? "W" : next.row > state.wolf.row ? "S" : "N";
-          state.wolf = next;
-        }
-        if (state.wolf.col === state.pos.col && state.wolf.row === state.pos.row) {
-          caughtByWolf();
-          return;
+      // wherever the llama currently is — but not at all until the first star is reached.
+      if (!state.firstStarPending) {
+        state.wolfMoveFrames -= 1;
+        if (state.wolfMoveFrames <= 0) {
+          state.wolfMoveFrames = WOLF_STEP_FRAMES;
+          const next = bfsNextStep(state.maze, state.wolf, state.pos);
+          if (next.col !== state.wolf.col || next.row !== state.wolf.row) {
+            state.wolfFacing =
+              next.col > state.wolf.col ? "E" : next.col < state.wolf.col ? "W" : next.row > state.wolf.row ? "S" : "N";
+            state.wolf = next;
+          }
+          if (state.wolf.col === state.pos.col && state.wolf.row === state.pos.row) {
+            caughtByWolf();
+            return;
+          }
         }
       }
 
+      if (state.newPathFlash) {
+        state.newPathFlash.framesLeft -= 1;
+        if (state.newPathFlash.framesLeft <= 0) state.newPathFlash = null;
+      }
+
       drawMaze(ctx, state.maze);
+      if (state.newPathFlash) drawNewPathGlow(ctx, state.newPathFlash);
       for (const star of state.stars) drawStar(ctx, star.col * CELL + CELL / 2, star.row * CELL + CELL / 2, state.frameCount);
       drawWolfSprite(ctx, state.wolf.col * CELL + CELL / 2, state.wolf.row * CELL + CELL / 2, state.wolfFacing, state.frameCount);
 
@@ -715,9 +774,14 @@ const LlamaLabyrinth = () => {
                 </button>
               </div>
               {result === "correct" && (
-                <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
-                  {t("articleCorrectPts", { points: STAR_POINTS })}
-                </p>
+                <>
+                  <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
+                    {t("articleCorrectPts", { points: STAR_POINTS })}
+                  </p>
+                  {pathOpened && (
+                    <p className="font-game text-[10px] sm:text-xs mt-1.5 text-accent">{t("labyrinthNewPathOpened")}</p>
+                  )}
+                </>
               )}
               {result === "wrong" && (
                 <p className="font-game text-xs text-destructive mt-3">{t("wrong0", { word: currentAnswer.split("/")[0] })}</p>

@@ -405,6 +405,7 @@ const cs = {
   ruleLabyrinthWolfText: "Vlk tě pomalu pronásleduje. Když se dlouho nehýbeš, dostihne tě a přijdeš o všechny body.",
   labyrinthCaughtTitle: "🐺 Vlk tě dostal!",
   labyrinthCaughtText: "Přišel/přišla jsi o všechny body. Zkus to znovu a nezastavuj se!",
+  labyrinthNewPathOpened: "🚪 Otevřela se nová cesta poblíž!",
 };
 
 const ko: typeof cs = {
@@ -812,6 +813,7 @@ const ko: typeof cs = {
   ruleLabyrinthWolfText: "늑대가 천천히 너를 쫓아와요. 오래 멈춰 있으면 따라잡혀서 모든 점수를 잃어요.",
   labyrinthCaughtTitle: "🐺 늑대에게 잡혔어요!",
   labyrinthCaughtText: "모든 점수를 잃었어요. 다시 도전하고 멈추지 마세요!",
+  labyrinthNewPathOpened: "🚪 근처에 새로운 길이 열렸어요!",
 };
 
 const en: typeof cs = {
@@ -1219,6 +1221,7 @@ const en: typeof cs = {
   ruleLabyrinthWolfText: "A wolf is slowly stalking you. Stand still too long and it'll catch you — costing you all your points.",
   labyrinthCaughtTitle: "🐺 The wolf got you!",
   labyrinthCaughtText: "You lost all your points. Try again, and keep moving!",
+  labyrinthNewPathOpened: "🚪 A new path opened nearby!",
 };
 
 const pl: typeof cs = {
@@ -1626,6 +1629,7 @@ const pl: typeof cs = {
   ruleLabyrinthWolfText: "Wilk powoli cię śledzi. Jeśli długo się nie ruszasz, dopadnie cię i stracisz wszystkie punkty.",
   labyrinthCaughtTitle: "🐺 Wilk cię złapał!",
   labyrinthCaughtText: "Straciłeś/aś wszystkie punkty. Spróbuj ponownie i nie zatrzymuj się!",
+  labyrinthNewPathOpened: "🚪 W pobliżu otworzyła się nowa ścieżka!",
 };
 
 const de: typeof cs = {
@@ -2033,6 +2037,7 @@ const de: typeof cs = {
   ruleLabyrinthWolfText: "Ein Wolf verfolgt dich langsam. Bleibst du zu lange stehen, holt er dich ein und du verlierst alle Punkte.",
   labyrinthCaughtTitle: "🐺 Der Wolf hat dich erwischt!",
   labyrinthCaughtText: "Du hast alle Punkte verloren. Versuch's noch mal und bleib in Bewegung!",
+  labyrinthNewPathOpened: "🚪 In der Nähe hat sich ein neuer Weg geöffnet!",
 };
 
 const uk: typeof cs = {
@@ -2440,6 +2445,7 @@ const uk: typeof cs = {
   ruleLabyrinthWolfText: "Вовк повільно тебе переслідує. Якщо довго стоїш на місці, він тебе наздожене і ти втратиш усі бали.",
   labyrinthCaughtTitle: "🐺 Вовк тебе спіймав!",
   labyrinthCaughtText: "Ти втратив/втратила всі бали. Спробуй ще раз і не зупиняйся!",
+  labyrinthNewPathOpened: "🚪 Поруч відкрився новий шлях!",
 };
 
 const sk: typeof cs = {
@@ -2847,6 +2853,7 @@ const sk: typeof cs = {
   ruleLabyrinthWolfText: "Vlk ťa pomaly prenasleduje. Keď sa dlho nehýbeš, dobehne ťa a prídeš o všetky body.",
   labyrinthCaughtTitle: "🐺 Vlk ťa dostal!",
   labyrinthCaughtText: "Prišiel/prišla si o všetky body. Skús to znova a nezastavuj sa!",
+  labyrinthNewPathOpened: "🚪 Nablízku sa otvorila nová cesta!",
 };
 
 export const translations: Record<Lang, typeof cs> = { cs, ko, en, pl, de, uk, sk };
