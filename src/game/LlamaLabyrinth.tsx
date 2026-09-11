@@ -183,6 +183,8 @@ function bfsNextStep(maze: Cell[][], from: { col: number; row: number }, to: { c
 const OPEN_WALL_RADIUS = 3;
 // How long the newly-opened wall glows on the canvas, so it's impossible to miss.
 const NEW_PATH_FLASH_FRAMES = 90;
+// How long the floating "+5"/"−3" score popup rises and fades once play resumes.
+const SCORE_POPUP_FRAMES = 60;
 
 /** Knocks down one existing wall near `near` (grid distance, not path distance), turning the maze's
  *  single deterministic corridor into one with a genuine alternate route — a real way to lose the wolf. */
@@ -385,10 +387,33 @@ function drawNewPathGlow(
   ctx.globalAlpha = Math.min(1, flash.framesLeft / 20) * pulse;
   ctx.fillStyle = color;
   ctx.shadowColor = color;
-  ctx.shadowBlur = 14;
+  ctx.shadowBlur = 20;
   ctx.beginPath();
-  ctx.arc(midX, midY, 13, 0, Math.PI * 2);
+  ctx.arc(midX, midY, 20, 0, Math.PI * 2);
   ctx.fill();
+  ctx.restore();
+}
+
+/** Floating "+5" / "−3" score popup — rises and fades over the cell where the star was answered,
+ *  so a point gain or loss is visible in the maze itself, not just in the quiz overlay's text. */
+function drawScorePopup(ctx: CanvasRenderingContext2D, popup: { col: number; row: number; text: string; kind: "correct" | "wrong"; framesLeft: number }) {
+  const progress = 1 - popup.framesLeft / SCORE_POPUP_FRAMES;
+  const x = popup.col * CELL + CELL / 2;
+  const y = popup.row * CELL + CELL / 2 - progress * 34; // rises ~34px over its lifetime
+  const scale = progress < 0.15 ? 0.7 + (progress / 0.15) * 0.5 : 1; // quick pop-in
+  const color = popup.kind === "correct" ? "#22c55e" : "#ef4444";
+  ctx.save();
+  ctx.globalAlpha = Math.min(1, popup.framesLeft / 15);
+  ctx.translate(x, y);
+  ctx.scale(scale, scale);
+  ctx.font = "bold 15px 'Press Start 2P', monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "rgba(0,0,0,0.55)";
+  ctx.strokeText(popup.text, 0, 0);
+  ctx.fillStyle = color;
+  ctx.fillText(popup.text, 0, 0);
   ctx.restore();
 }
 
@@ -408,6 +433,7 @@ interface GameState {
   wolfFacing: Dir;
   wolfMoveFrames: number;
   newPathFlash: { col: number; row: number; dir: Dir; framesLeft: number; kind: "correct" | "wrong" } | null;
+  scorePopup: { col: number; row: number; text: string; kind: "correct" | "wrong"; framesLeft: number } | null;
   // The wolf doesn't move at all until the first star is reached — a hard guarantee (not just a
   // distance estimate, which the wolf's dynamic re-pathing toward your *current* spot can undercut)
   // that you always get a real shot at that first correct answer and the escape route it opens.
@@ -430,6 +456,7 @@ function makeInitialGameState(): GameState {
     score: 0,
     lastVerbIdx: -1,
     newPathFlash: null,
+    scorePopup: null,
     firstStarPending: true,
     // Placeholder — placeStars must run first, then placeWolf positions it for real
     // (its minimum distance depends on where the stars ended up).
@@ -466,6 +493,7 @@ const LlamaLabyrinth = () => {
   const [input, setInput] = useState("");
   const [result, setResult] = useState<"correct" | "wrong" | null>(null);
   const [pathOpened, setPathOpened] = useState(false);
+  const [scoreFlash, setScoreFlash] = useState<"up" | "down" | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const g = useRef<GameState>(makeInitialGameState());
@@ -484,6 +512,7 @@ const LlamaLabyrinth = () => {
     setTimeLeft(GAME_SECONDS);
     setResult(null);
     setPathOpened(false);
+    setScoreFlash(null);
     setOutcome(null);
     setGameState("playing");
   }, [spawnStar]);
@@ -528,6 +557,17 @@ const LlamaLabyrinth = () => {
       g.current.score = Math.max(0, g.current.score - WRONG_PENALTY);
     }
     setScore(g.current.score);
+    // A floating +5/−3 rises from where you answered — visible in the maze itself once play resumes,
+    // not just as text inside the quiz overlay — plus a quick color pulse on the HUD score.
+    g.current.scorePopup = {
+      col: g.current.pos.col,
+      row: g.current.pos.row,
+      text: isCorrect ? `+${STAR_POINTS}` : `−${WRONG_PENALTY}`,
+      kind: isCorrect ? "correct" : "wrong",
+      framesLeft: SCORE_POPUP_FRAMES,
+    };
+    setScoreFlash(isCorrect ? "up" : "down");
+    setTimeout(() => setScoreFlash(null), 700);
     // openNewPath always finds *something* to open (it falls back to the whole maze), so this only
     // comes back null if literally every wall in the maze is already down.
     const opened = openNewPath(g.current.maze, g.current.pos);
@@ -688,6 +728,10 @@ const LlamaLabyrinth = () => {
         state.newPathFlash.framesLeft -= 1;
         if (state.newPathFlash.framesLeft <= 0) state.newPathFlash = null;
       }
+      if (state.scorePopup) {
+        state.scorePopup.framesLeft -= 1;
+        if (state.scorePopup.framesLeft <= 0) state.scorePopup = null;
+      }
 
       drawMaze(ctx, state.maze);
       if (state.newPathFlash) drawNewPathGlow(ctx, state.newPathFlash);
@@ -697,6 +741,7 @@ const LlamaLabyrinth = () => {
       const fx = state.animFrom.col + (state.pos.col - state.animFrom.col) * state.tweenProgress;
       const fy = state.animFrom.row + (state.pos.row - state.animFrom.row) * state.tweenProgress;
       drawLlamaSprite(ctx, fx * CELL + CELL / 2, fy * CELL + CELL / 2, state.facing, state.frameCount);
+      if (state.scorePopup) drawScorePopup(ctx, state.scorePopup);
 
       animId = requestAnimationFrame(loop);
     };
@@ -709,7 +754,13 @@ const LlamaLabyrinth = () => {
       {(gameState === "playing" || gameState === "quiz") && (
         <div className="flex items-center justify-between w-full" style={{ maxWidth: CANVAS_SIZE }}>
           <span className="font-game text-[10px] sm:text-xs text-foreground">
-            {t("scoreLabel")}: <span className="text-primary">{score}</span>
+            {t("scoreLabel")}:{" "}
+            <span
+              className={`inline-block transition-all duration-200 ${scoreFlash ? "scale-125" : "scale-100 text-primary"}`}
+              style={scoreFlash ? { color: scoreFlash === "up" ? "hsl(142, 71%, 45%)" : "hsl(0, 72%, 51%)" } : undefined}
+            >
+              {score}
+            </span>
           </span>
           <span className="font-game text-[10px] sm:text-xs text-muted-foreground">{t("challengeTimeLeft", { s: timeLeft })}</span>
         </div>
