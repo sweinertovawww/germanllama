@@ -389,6 +389,19 @@ const cs = {
   ruleLivesTitle: "3 životy",
   ruleLivesText: "Zmeškaná plošina tě stojí život — pokud tě zrovna nevykatapultuje vzácná trampolína zpět nahoru!",
   llamaJumpSeoDesc: "Skoč na správné německé slovo a procvič si slovní zásobu z příběhu.",
+  categoryVerbsDesc: "Časuj německá slovesa v labyrintu s lamou.",
+  llamaLabyrinthSeoDesc: "Proveď lamu labyrintem a najdi správně časovaná slovesa.",
+  ruleLabyrinthMoveTitle: "Pohyb",
+  ruleLabyrinthMoveText: "Používej šipky ↑ ↓ ← → (nebo tlačítka na obrazovce) a proveď lamu labyrintem.",
+  ruleLabyrinthVerbTitle: "Najdi správný tvar",
+  ruleLabyrinthVerbText: "Nahoře uvidíš zájmeno a sloveso — doveď lamu na políčko se správně časovaným tvarem.",
+  ruleLabyrinthLivesTitle: "3 životy",
+  ruleLabyrinthLivesText: "Špatně časovaný tvar tě stojí život. Při nule životů hra končí.",
+  labyrinthFindPrompt: "Najdi tvar:",
+  labyrinthRoundLabel: "Kolo {n}/{total}",
+  labyrinthControlsHint: "Pohybuj se šipkami ↑ ↓ ← →",
+  labyrinthWinTitle: "🦙 Únik se povedl!",
+  labyrinthWinText: "Prošel/prošla jsi celým labyrintem se skóre {score}!",
 };
 
 const ko: typeof cs = {
@@ -780,6 +793,19 @@ const ko: typeof cs = {
   ruleLivesTitle: "생명 3개",
   ruleLivesText: "발판을 놓치면 생명을 하나 잃어요 — 단, 희귀한 트램펄린이 다시 튕겨 올려줄 수도 있어요!",
   llamaJumpSeoDesc: "올바른 독일어 단어로 점프해서 이야기 속 어휘를 연습하세요.",
+  categoryVerbsDesc: "라마와 함께 미로에서 독일어 동사를 활용해보세요.",
+  llamaLabyrinthSeoDesc: "라마를 미로 속으로 이끌고 올바르게 활용된 동사를 찾아보세요.",
+  ruleLabyrinthMoveTitle: "이동",
+  ruleLabyrinthMoveText: "화살표 키 ↑ ↓ ← → (또는 화면 버튼)를 사용해 라마를 미로 속으로 움직이세요.",
+  ruleLabyrinthVerbTitle: "올바른 형태 찾기",
+  ruleLabyrinthVerbText: "위에 대명사와 동사가 표시됩니다 — 올바르게 활용된 칸으로 라마를 이동하세요.",
+  ruleLabyrinthLivesTitle: "생명 3개",
+  ruleLabyrinthLivesText: "잘못된 동사 형태를 고르면 생명을 잃습니다. 생명이 0이 되면 게임이 끝납니다.",
+  labyrinthFindPrompt: "형태를 찾으세요:",
+  labyrinthRoundLabel: "라운드 {n}/{total}",
+  labyrinthControlsHint: "화살표 ↑ ↓ ← →로 이동하세요",
+  labyrinthWinTitle: "🦙 탈출 성공!",
+  labyrinthWinText: "점수 {score}로 미로를 완주했어요!",
 };
 
 const en: typeof cs = {
@@ -1171,6 +1197,19 @@ const en: typeof cs = {
   ruleLivesTitle: "3 lives",
   ruleLivesText: "Missing a platform costs a life — unless a rare trampoline happens to bounce you back up!",
   llamaJumpSeoDesc: "Jump onto the correct German word to practice vocabulary from the story.",
+  categoryVerbsDesc: "Conjugate German verbs in a llama maze.",
+  llamaLabyrinthSeoDesc: "Guide the llama through a maze and find the correctly conjugated verb forms.",
+  ruleLabyrinthMoveTitle: "Move",
+  ruleLabyrinthMoveText: "Use the arrow keys ↑ ↓ ← → (or the on-screen buttons) to guide the llama through the maze.",
+  ruleLabyrinthVerbTitle: "Find the right form",
+  ruleLabyrinthVerbText: "A pronoun and a verb appear above — steer the llama onto the tile with the correctly conjugated form.",
+  ruleLabyrinthLivesTitle: "3 lives",
+  ruleLabyrinthLivesText: "A wrong verb form costs a life. The game ends at zero lives.",
+  labyrinthFindPrompt: "Find the form:",
+  labyrinthRoundLabel: "Round {n}/{total}",
+  labyrinthControlsHint: "Move with the arrows ↑ ↓ ← →",
+  labyrinthWinTitle: "🦙 You escaped!",
+  labyrinthWinText: "You made it through the maze with a score of {score}!",
 };
 
 const pl: typeof cs = {
@@ -1562,6 +1601,19 @@ const pl: typeof cs = {
   ruleLivesTitle: "3 życia",
   ruleLivesText: "Ominięcie platformy kosztuje jedno życie — chyba że rzadka trampolina odbije cię z powrotem w górę!",
   llamaJumpSeoDesc: "Skacz na poprawne niemieckie słowo, aby ćwiczyć słownictwo z opowiadania.",
+  categoryVerbsDesc: "Odmieniaj niemieckie czasowniki w labiryncie z lamą.",
+  llamaLabyrinthSeoDesc: "Poprowadź lamę przez labirynt i znajdź poprawnie odmienione formy czasownika.",
+  ruleLabyrinthMoveTitle: "Ruch",
+  ruleLabyrinthMoveText: "Użyj strzałek ↑ ↓ ← → (lub przycisków na ekranie), aby poprowadzić lamę przez labirynt.",
+  ruleLabyrinthVerbTitle: "Znajdź poprawną formę",
+  ruleLabyrinthVerbText: "Na górze pojawi się zaimek i czasownik — zaprowadź lamę na pole z poprawnie odmienioną formą.",
+  ruleLabyrinthLivesTitle: "3 życia",
+  ruleLabyrinthLivesText: "Zła forma czasownika kosztuje życie. Gra kończy się przy zera życiach.",
+  labyrinthFindPrompt: "Znajdź formę:",
+  labyrinthRoundLabel: "Runda {n}/{total}",
+  labyrinthControlsHint: "Poruszaj się strzałkami ↑ ↓ ← →",
+  labyrinthWinTitle: "🦙 Udało się uciec!",
+  labyrinthWinText: "Przeszedłeś/przeszłaś przez labirynt z wynikiem {score}!",
 };
 
 const de: typeof cs = {
@@ -1953,6 +2005,19 @@ const de: typeof cs = {
   ruleLivesTitle: "3 Leben",
   ruleLivesText: "Eine verpasste Plattform kostet ein Leben — außer ein seltenes Trampolin katapultiert dich zurück nach oben!",
   llamaJumpSeoDesc: "Springe auf das richtige deutsche Wort, um den Wortschatz der Geschichte zu üben.",
+  categoryVerbsDesc: "Konjugiere deutsche Verben in einem Lama-Labyrinth.",
+  llamaLabyrinthSeoDesc: "Führe das Lama durchs Labyrinth und finde die richtig konjugierten Verbformen.",
+  ruleLabyrinthMoveTitle: "Bewegen",
+  ruleLabyrinthMoveText: "Nutze die Pfeiltasten ↑ ↓ ← → (oder die Bildschirmtasten), um das Lama durchs Labyrinth zu führen.",
+  ruleLabyrinthVerbTitle: "Finde die richtige Form",
+  ruleLabyrinthVerbText: "Oben erscheinen ein Pronomen und ein Verb — steuere das Lama auf das Feld mit der richtig konjugierten Form.",
+  ruleLabyrinthLivesTitle: "3 Leben",
+  ruleLabyrinthLivesText: "Eine falsche Verbform kostet ein Leben. Bei null Leben endet das Spiel.",
+  labyrinthFindPrompt: "Finde die Form:",
+  labyrinthRoundLabel: "Runde {n}/{total}",
+  labyrinthControlsHint: "Bewege dich mit den Pfeilen ↑ ↓ ← →",
+  labyrinthWinTitle: "🦙 Geschafft!",
+  labyrinthWinText: "Du hast das Labyrinth mit {score} Punkten geschafft!",
 };
 
 const uk: typeof cs = {
@@ -2344,6 +2409,19 @@ const uk: typeof cs = {
   ruleLivesTitle: "3 життя",
   ruleLivesText: "Пропущена платформа коштує життя — хіба що рідкісний батут підкине тебе назад угору!",
   llamaJumpSeoDesc: "Стрибай на правильне німецьке слово, щоб практикувати слова з історії.",
+  categoryVerbsDesc: "Відмінюй німецькі дієслова в лабіринті з ламою.",
+  llamaLabyrinthSeoDesc: "Проведи ламу лабіринтом і знайди правильно відмінені форми дієслова.",
+  ruleLabyrinthMoveTitle: "Рух",
+  ruleLabyrinthMoveText: "Використовуй стрілки ↑ ↓ ← → (або кнопки на екрані), щоб вести ламу лабіринтом.",
+  ruleLabyrinthVerbTitle: "Знайди правильну форму",
+  ruleLabyrinthVerbText: "Зверху з'являться займенник і дієслово — приведи ламу на клітинку з правильно відміненою формою.",
+  ruleLabyrinthLivesTitle: "3 життя",
+  ruleLabyrinthLivesText: "Неправильна форма дієслова коштує життя. Гра закінчується при нулі життів.",
+  labyrinthFindPrompt: "Знайди форму:",
+  labyrinthRoundLabel: "Раунд {n}/{total}",
+  labyrinthControlsHint: "Рухайся стрілками ↑ ↓ ← →",
+  labyrinthWinTitle: "🦙 Втеча вдалася!",
+  labyrinthWinText: "Ти пройшов/пройшла лабіринт із результатом {score}!",
 };
 
 const sk: typeof cs = {
@@ -2735,6 +2813,19 @@ const sk: typeof cs = {
   ruleLivesTitle: "3 životy",
   ruleLivesText: "Zmeškaná plošina ťa stojí život — pokiaľ ťa práve nevykatapultuje vzácna trampolína späť nahor!",
   llamaJumpSeoDesc: "Skoč na správne nemecké slovo a precvič si slovnú zásobu z príbehu.",
+  categoryVerbsDesc: "Časuj nemecké slovesá v labyrinte s lamou.",
+  llamaLabyrinthSeoDesc: "Preveď lamu labyrintom a nájdi správne časované tvary slovesa.",
+  ruleLabyrinthMoveTitle: "Pohyb",
+  ruleLabyrinthMoveText: "Používaj šípky ↑ ↓ ← → (alebo tlačidlá na obrazovke) a preveď lamu labyrintom.",
+  ruleLabyrinthVerbTitle: "Nájdi správny tvar",
+  ruleLabyrinthVerbText: "Hore uvidíš zámeno a sloveso — doveď lamu na políčko so správne časovaným tvarom.",
+  ruleLabyrinthLivesTitle: "3 životy",
+  ruleLabyrinthLivesText: "Nesprávne časovaný tvar ťa stojí život. Pri nule životov hra končí.",
+  labyrinthFindPrompt: "Nájdi tvar:",
+  labyrinthRoundLabel: "Kolo {n}/{total}",
+  labyrinthControlsHint: "Pohybuj sa šípkami ↑ ↓ ← →",
+  labyrinthWinTitle: "🦙 Únik sa podaril!",
+  labyrinthWinText: "Prešiel/prešla si celým labyrintom so skóre {score}!",
 };
 
 export const translations: Record<Lang, typeof cs> = { cs, ko, en, pl, de, uk, sk };
