@@ -159,32 +159,38 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
   ctx.closePath();
 }
 
-const LLAMA_BODY = "#e8d5b7";
-const LLAMA_HEAD = "#f0e0c8";
-const LLAMA_ACCENT = "#d4b896";
-const LLAMA_DARK = "#2a1a0a";
-
 const FACING_ANGLE: Record<Dir, number> = { E: 0, S: Math.PI / 2, W: Math.PI, N: -Math.PI / 2 };
 
-/** Top-down llama sprite, same color palette as Llama Run/Llama Jump's side-on sprite, redrawn for a bird's-eye maze view. */
-function drawLlamaTopDown(ctx: CanvasRenderingContext2D, x: number, y: number, facing: Dir, frame: number) {
-  const bob = Math.sin(frame * 0.3) * 1.2;
+// The llama's bounding box in LlamaJump's own drawLlama (x+4..x+38, y-28..y+40) — used
+// to center that exact sprite on its own midpoint before scaling/rotating it here.
+const SPRITE_OX = -21;
+const SPRITE_OY = -6;
+const SPRITE_SCALE = (CELL - 8) / 68;
+
+/** The exact same pixel-art llama as Llama Run/Llama Jump (identical shapes and colors), scaled down
+ *  and rotated to face the direction of travel for this top-down maze. */
+function drawLlamaSprite(ctx: CanvasRenderingContext2D, cx: number, cy: number, facing: Dir, frame: number) {
+  const legOffset = Math.sin(frame * 0.3) * 4;
+  const x = SPRITE_OX;
+  const y = SPRITE_OY;
   ctx.save();
-  ctx.translate(x, y + bob);
+  ctx.translate(cx, cy);
   ctx.rotate(FACING_ANGLE[facing]);
-  ctx.fillStyle = LLAMA_BODY;
-  ctx.beginPath();
-  ctx.ellipse(0, 0, 13, 10, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = LLAMA_HEAD;
-  ctx.beginPath();
-  ctx.ellipse(12, 0, 7, 6, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = LLAMA_ACCENT;
-  ctx.fillRect(7, -9, 3, 6);
-  ctx.fillRect(13, -9, 3, 6);
-  ctx.fillStyle = LLAMA_DARK;
-  ctx.fillRect(15, -2, 2, 2);
+  ctx.scale(SPRITE_SCALE, SPRITE_SCALE);
+  ctx.fillStyle = "#e8d5b7";
+  ctx.fillRect(x + 8, y + 10, 24, 20);
+  ctx.fillRect(x + 26, y - 10, 8, 22);
+  ctx.fillStyle = "#f0e0c8";
+  ctx.fillRect(x + 24, y - 22, 14, 14);
+  ctx.fillStyle = "#d4b896";
+  ctx.fillRect(x + 32, y - 28, 4, 8);
+  ctx.fillStyle = "#2a1a0a";
+  ctx.fillRect(x + 33, y - 18, 3, 3);
+  ctx.fillStyle = "#d4b896";
+  ctx.fillRect(x + 10, y + 28, 5, 12 + legOffset);
+  ctx.fillRect(x + 20, y + 28, 5, 12 - legOffset);
+  ctx.fillStyle = "#c8a878";
+  ctx.fillRect(x + 4, y + 8, 6, 4);
   ctx.restore();
 }
 
@@ -486,7 +492,7 @@ const LlamaLabyrinth = () => {
 
       const fx = state.animFrom.col + (state.pos.col - state.animFrom.col) * state.tweenProgress;
       const fy = state.animFrom.row + (state.pos.row - state.animFrom.row) * state.tweenProgress;
-      drawLlamaTopDown(ctx, fx * CELL + CELL / 2, fy * CELL + CELL / 2, state.facing, state.frameCount);
+      drawLlamaSprite(ctx, fx * CELL + CELL / 2, fy * CELL + CELL / 2, state.facing, state.frameCount);
 
       animId = requestAnimationFrame(loop);
     };
