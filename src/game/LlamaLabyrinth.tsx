@@ -22,6 +22,14 @@ const WRONG_FLASH_MS = 1400;
 // A freshly-spawned star sits at least this many *path* steps from the llama's
 // current spot, so it's never handed to you for free.
 const STAR_MIN_DIST = 2;
+// The wolf takes one cell every this many frames — slow enough that actively moving
+// llama easily stays ahead, but standing still for a few seconds lets it close in.
+const WOLF_STEP_FRAMES = 40;
+// The wolf's starting distance from the llama (in path steps) is kept in this range —
+// far enough for a real grace period, close enough that idling actually gets punished
+// in well under a minute even on a maze with a long, winding diameter.
+const WOLF_START_MIN_DIST = 10;
+const WOLF_START_MAX_DIST = 20;
 
 type Dir = "N" | "S" | "E" | "W";
 const DIR_DELTA: Record<Dir, [number, number]> = { N: [0, -1], S: [0, 1], E: [1, 0], W: [-1, 0] };
@@ -99,6 +107,69 @@ function bfsDistances(maze: Cell[][], start: { col: number; row: number }): numb
   return dist;
 }
 
+/** A cell WOLF_START_MIN_DIST..WOLF_START_MAX_DIST path-steps from `from` — falls back to the single
+ *  farthest cell available if the maze's diameter is too short to reach that range. */
+function pickWolfStartCell(maze: Cell[][], from: { col: number; row: number }): { col: number; row: number } {
+  const dist = bfsDistances(maze, from);
+  const inRange: { col: number; row: number }[] = [];
+  let farthest = from;
+  let farthestDist = -1;
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const d = dist[r][c];
+      if (d < 0) continue;
+      if (d >= WOLF_START_MIN_DIST && d <= WOLF_START_MAX_DIST) inRange.push({ col: c, row: r });
+      if (d > farthestDist) {
+        farthestDist = d;
+        farthest = { col: c, row: r };
+      }
+    }
+  }
+  if (inRange.length > 0) return shuffle(inRange)[0];
+  return farthest;
+}
+
+/** The first step of the shortest path from `from` toward `to` — one BFS per wolf move, cheap on an 8×8 maze. */
+function bfsNextStep(maze: Cell[][], from: { col: number; row: number }, to: { col: number; row: number }): { col: number; row: number } {
+  if (from.col === to.col && from.row === to.row) return from;
+  const key = (c: number, r: number) => `${c},${r}`;
+  const prev = new Map<string, { col: number; row: number }>();
+  const visited = new Set([key(from.col, from.row)]);
+  const queue: { col: number; row: number }[] = [from];
+  let qi = 0;
+  while (qi < queue.length) {
+    const cur = queue[qi++];
+    if (cur.col === to.col && cur.row === to.row) break;
+    const cell = maze[cur.row][cur.col];
+    const neighbors: [Dir, number, number][] = [
+      ["N", cur.col, cur.row - 1],
+      ["S", cur.col, cur.row + 1],
+      ["E", cur.col + 1, cur.row],
+      ["W", cur.col - 1, cur.row],
+    ];
+    for (const [dir, nc, nr] of neighbors) {
+      if (nc < 0 || nc >= COLS || nr < 0 || nr >= ROWS) continue;
+      if (cell.walls[dir]) continue;
+      const k = key(nc, nr);
+      if (visited.has(k)) continue;
+      visited.add(k);
+      prev.set(k, cur);
+      queue.push({ col: nc, row: nr });
+    }
+  }
+  const toKey = key(to.col, to.row);
+  if (!visited.has(toKey)) return from; // unreachable — shouldn't happen in a perfect maze
+  let cur = to;
+  let curKey = toKey;
+  let parent = prev.get(curKey);
+  while (parent && !(parent.col === from.col && parent.row === from.row)) {
+    cur = parent;
+    curKey = key(cur.col, cur.row);
+    parent = prev.get(curKey);
+  }
+  return cur;
+}
+
 /** Picks a cell for a new star: far enough from the llama, not already holding another star. */
 function pickStarCell(maze: Cell[][], from: { col: number; row: number }, avoid: StarTile[]): { col: number; row: number } {
   const dist = bfsDistances(maze, from);
@@ -151,6 +222,41 @@ function drawLlamaSprite(ctx: CanvasRenderingContext2D, cx: number, cy: number, 
   ctx.fillRect(x + 20, y + 28, 5, 12 - legOffset);
   ctx.fillStyle = "#c8a878";
   ctx.fillRect(x + 4, y + 8, 6, 4);
+  ctx.restore();
+}
+
+// The wolf's bounding box in LlamaGame's own drawWolf (x-8..x+52, y-6..y+32) — centered the same way as the llama.
+const WOLF_OX = -22;
+const WOLF_OY = -13;
+
+/** The exact same pixel-art wolf as Llama Run (identical shapes and colors), scaled and rotated to face
+ *  whichever way it's currently stalking. */
+function drawWolfSprite(ctx: CanvasRenderingContext2D, cx: number, cy: number, facing: Dir, frame: number) {
+  const legOffset = Math.sin(frame * 0.4) * 3;
+  const x = WOLF_OX;
+  const y = WOLF_OY;
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(FACING_ANGLE[facing]);
+  ctx.scale(SPRITE_SCALE, SPRITE_SCALE);
+  ctx.fillStyle = "#555";
+  ctx.fillRect(x + 4, y + 8, 30, 16);
+  ctx.fillStyle = "#666";
+  ctx.fillRect(x + 30, y + 2, 14, 14);
+  ctx.fillStyle = "#444";
+  ctx.fillRect(x + 36, y - 6, 4, 8);
+  ctx.fillRect(x + 42, y - 4, 4, 6);
+  ctx.fillStyle = "#777";
+  ctx.fillRect(x + 44, y + 8, 8, 6);
+  ctx.fillStyle = "#ff3333";
+  ctx.fillRect(x + 38, y + 5, 3, 3);
+  ctx.fillStyle = "#444";
+  ctx.fillRect(x + 8, y + 22, 5, 10 + legOffset);
+  ctx.fillRect(x + 18, y + 22, 5, 10 - legOffset);
+  ctx.fillRect(x + 24, y + 22, 5, 10 + legOffset);
+  ctx.fillStyle = "#555";
+  ctx.fillRect(x - 4, y + 6, 10, 4);
+  ctx.fillRect(x - 8, y + 2, 6, 6);
   ctx.restore();
 }
 
@@ -223,13 +329,18 @@ interface GameState {
   remainingFrames: number;
   score: number;
   lastVerbIdx: number;
+  wolf: { col: number; row: number };
+  wolfFacing: Dir;
+  wolfMoveFrames: number;
 }
 
 function makeInitialGameState(): GameState {
+  const maze = generateMaze(COLS, ROWS);
+  const start = { col: 0, row: 0 };
   return {
-    maze: generateMaze(COLS, ROWS),
-    pos: { col: 0, row: 0 },
-    animFrom: { col: 0, row: 0 },
+    maze,
+    pos: start,
+    animFrom: start,
     tweening: false,
     tweenProgress: 1,
     facing: "E",
@@ -238,6 +349,11 @@ function makeInitialGameState(): GameState {
     remainingFrames: GAME_FRAMES,
     score: 0,
     lastVerbIdx: -1,
+    // Starts a bounded distance from the llama, so every run opens with a grace period that's
+    // still guaranteed to resolve in a reasonable time if you just stand still.
+    wolf: pickWolfStartCell(maze, start),
+    wolfFacing: "W",
+    wolfMoveFrames: WOLF_STEP_FRAMES,
   };
 }
 
@@ -248,6 +364,7 @@ const LlamaLabyrinth = () => {
   const [scale, setScale] = useState(1);
 
   const [gameState, setGameState] = useState<"idle" | "playing" | "quiz" | "over">("idle");
+  const [outcome, setOutcome] = useState<"timeup" | "caught" | null>(null);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(GAME_SECONDS);
   const [highScore, setHighScore] = useState(() => parseInt(localStorage.getItem("llama-labyrinth-highscore") || "0"));
@@ -272,17 +389,26 @@ const LlamaLabyrinth = () => {
     setScore(0);
     setTimeLeft(GAME_SECONDS);
     setResult(null);
+    setOutcome(null);
     setGameState("playing");
   }, [spawnStar]);
 
-  const finishGame = useCallback(() => {
+  const endGame = useCallback((reason: "timeup" | "caught") => {
     const finalScore = g.current.score;
     if (finalScore > parseInt(localStorage.getItem("llama-labyrinth-highscore") || "0")) {
       localStorage.setItem("llama-labyrinth-highscore", String(finalScore));
       setHighScore(finalScore);
     }
+    setOutcome(reason);
     setGameState("over");
   }, []);
+
+  // The wolf catching the llama wipes the run's score — real stakes for standing still too long.
+  const caughtByWolf = useCallback(() => {
+    g.current.score = 0;
+    setScore(0);
+    endGame("caught");
+  }, [endGame]);
 
   const exitGame = useCallback(() => {
     setGameState("idle");
@@ -332,9 +458,13 @@ const LlamaLabyrinth = () => {
 
   const onArrive = useCallback(() => {
     const state = g.current;
+    if (state.wolf.col === state.pos.col && state.wolf.row === state.pos.row) {
+      caughtByWolf();
+      return;
+    }
     const star = state.stars.find((s) => s.col === state.pos.col && s.row === state.pos.row);
     if (star) triggerQuiz(star);
-  }, [triggerQuiz]);
+  }, [triggerQuiz, caughtByWolf]);
 
   const tryMove = useCallback(
     (dir: Dir) => {
@@ -415,7 +545,7 @@ const LlamaLabyrinth = () => {
       state.remainingFrames -= 1;
 
       if (state.remainingFrames <= 0) {
-        finishGame();
+        endGame("timeup");
         return;
       }
       if (state.frameCount % 15 === 0) setTimeLeft(Math.max(0, Math.ceil(state.remainingFrames / 60)));
@@ -429,8 +559,26 @@ const LlamaLabyrinth = () => {
         }
       }
 
+      // The wolf creeps one cell closer, on its own slower cadence, always re-pathing toward
+      // wherever the llama currently is.
+      state.wolfMoveFrames -= 1;
+      if (state.wolfMoveFrames <= 0) {
+        state.wolfMoveFrames = WOLF_STEP_FRAMES;
+        const next = bfsNextStep(state.maze, state.wolf, state.pos);
+        if (next.col !== state.wolf.col || next.row !== state.wolf.row) {
+          state.wolfFacing =
+            next.col > state.wolf.col ? "E" : next.col < state.wolf.col ? "W" : next.row > state.wolf.row ? "S" : "N";
+          state.wolf = next;
+        }
+        if (state.wolf.col === state.pos.col && state.wolf.row === state.pos.row) {
+          caughtByWolf();
+          return;
+        }
+      }
+
       drawMaze(ctx, state.maze);
       for (const star of state.stars) drawStar(ctx, star.col * CELL + CELL / 2, star.row * CELL + CELL / 2, state.frameCount);
+      drawWolfSprite(ctx, state.wolf.col * CELL + CELL / 2, state.wolf.row * CELL + CELL / 2, state.wolfFacing, state.frameCount);
 
       const fx = state.animFrom.col + (state.pos.col - state.animFrom.col) * state.tweenProgress;
       const fy = state.animFrom.row + (state.pos.row - state.animFrom.row) * state.tweenProgress;
@@ -440,7 +588,7 @@ const LlamaLabyrinth = () => {
     };
     animId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animId);
-  }, [gameState, onArrive, finishGame]);
+  }, [gameState, onArrive, endGame, caughtByWolf]);
 
   return (
     <div className="flex flex-col items-center w-full gap-3 sm:gap-4">
@@ -534,8 +682,17 @@ const LlamaLabyrinth = () => {
           <div className="absolute inset-0 flex items-center justify-center z-30">
             <div className="absolute inset-0 bg-foreground/60 animate-game-over-flash" />
             <div className="relative z-10 flex flex-col items-center gap-3 sm:gap-4 bg-card/95 rounded-2xl p-4 sm:p-8 shadow-2xl border-2 border-primary mx-4 max-w-[90%] text-center">
-              <p className="font-game text-sm sm:text-lg text-primary">{t("labyrinthTimeUpTitle")}</p>
-              <p className="font-body text-xs sm:text-sm text-foreground">{t("labyrinthTimeUpText", { score })}</p>
+              {outcome === "caught" ? (
+                <>
+                  <p className="font-game text-sm sm:text-lg text-destructive">{t("labyrinthCaughtTitle")}</p>
+                  <p className="font-body text-xs sm:text-sm text-foreground">{t("labyrinthCaughtText")}</p>
+                </>
+              ) : (
+                <>
+                  <p className="font-game text-sm sm:text-lg text-primary">{t("labyrinthTimeUpTitle")}</p>
+                  <p className="font-body text-xs sm:text-sm text-foreground">{t("labyrinthTimeUpText", { score })}</p>
+                </>
+              )}
               <p className="font-game text-xs text-muted-foreground">
                 {t("bestLabel")}: <span className="text-primary">{highScore}</span>
               </p>

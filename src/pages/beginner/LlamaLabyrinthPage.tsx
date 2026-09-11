@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Move, Star, Timer } from "lucide-react";
+import { ArrowLeft, Move, Star, Timer, SkullIcon } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import LlamaLabyrinth from "@/game/LlamaLabyrinth";
@@ -53,9 +53,14 @@ const LlamaLabyrinthPage = () => {
                 text={t("ruleLabyrinthStarText")}
               />
               <RuleItem
-                icon={<Timer className="w-5 h-5 sm:w-6 sm:h-6 text-destructive" />}
+                icon={<Timer className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />}
                 title={t("ruleLabyrinthTimeTitle")}
                 text={t("ruleLabyrinthTimeText")}
+              />
+              <RuleItem
+                icon={<SkullIcon className="w-5 h-5 sm:w-6 sm:h-6 text-destructive" />}
+                title={t("ruleLabyrinthWolfTitle")}
+                text={t("ruleLabyrinthWolfText")}
               />
             </div>
           </div>

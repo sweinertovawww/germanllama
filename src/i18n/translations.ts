@@ -401,6 +401,10 @@ const cs = {
   labyrinthControlsHint: "Pohybuj se šipkami ↑ ↓ ← →",
   labyrinthTimeUpTitle: "⏰ Čas vypršel!",
   labyrinthTimeUpText: "Nasbíral/a jsi {score} bodů!",
+  ruleLabyrinthWolfTitle: "Pozor na vlka!",
+  ruleLabyrinthWolfText: "Vlk tě pomalu pronásleduje. Když se dlouho nehýbeš, dostihne tě a přijdeš o všechny body.",
+  labyrinthCaughtTitle: "🐺 Vlk tě dostal!",
+  labyrinthCaughtText: "Přišel/přišla jsi o všechny body. Zkus to znovu a nezastavuj se!",
 };
 
 const ko: typeof cs = {
@@ -804,6 +808,10 @@ const ko: typeof cs = {
   labyrinthControlsHint: "화살표 ↑ ↓ ← →로 이동하세요",
   labyrinthTimeUpTitle: "⏰ 시간 종료!",
   labyrinthTimeUpText: "{score}점을 모았어요!",
+  ruleLabyrinthWolfTitle: "늑대 조심!",
+  ruleLabyrinthWolfText: "늑대가 천천히 너를 쫓아와요. 오래 멈춰 있으면 따라잡혀서 모든 점수를 잃어요.",
+  labyrinthCaughtTitle: "🐺 늑대에게 잡혔어요!",
+  labyrinthCaughtText: "모든 점수를 잃었어요. 다시 도전하고 멈추지 마세요!",
 };
 
 const en: typeof cs = {
@@ -1207,6 +1215,10 @@ const en: typeof cs = {
   labyrinthControlsHint: "Move with the arrows ↑ ↓ ← →",
   labyrinthTimeUpTitle: "⏰ Time's up!",
   labyrinthTimeUpText: "You collected {score} points!",
+  ruleLabyrinthWolfTitle: "Watch out for the wolf!",
+  ruleLabyrinthWolfText: "A wolf is slowly stalking you. Stand still too long and it'll catch you — costing you all your points.",
+  labyrinthCaughtTitle: "🐺 The wolf got you!",
+  labyrinthCaughtText: "You lost all your points. Try again, and keep moving!",
 };
 
 const pl: typeof cs = {
@@ -1610,6 +1622,10 @@ const pl: typeof cs = {
   labyrinthControlsHint: "Poruszaj się strzałkami ↑ ↓ ← →",
   labyrinthTimeUpTitle: "⏰ Czas minął!",
   labyrinthTimeUpText: "Zdobyłeś/aś {score} punktów!",
+  ruleLabyrinthWolfTitle: "Uważaj na wilka!",
+  ruleLabyrinthWolfText: "Wilk powoli cię śledzi. Jeśli długo się nie ruszasz, dopadnie cię i stracisz wszystkie punkty.",
+  labyrinthCaughtTitle: "🐺 Wilk cię złapał!",
+  labyrinthCaughtText: "Straciłeś/aś wszystkie punkty. Spróbuj ponownie i nie zatrzymuj się!",
 };
 
 const de: typeof cs = {
@@ -2013,6 +2029,10 @@ const de: typeof cs = {
   labyrinthControlsHint: "Bewege dich mit den Pfeilen ↑ ↓ ← →",
   labyrinthTimeUpTitle: "⏰ Zeit abgelaufen!",
   labyrinthTimeUpText: "Du hast {score} Punkte gesammelt!",
+  ruleLabyrinthWolfTitle: "Achtung, Wolf!",
+  ruleLabyrinthWolfText: "Ein Wolf verfolgt dich langsam. Bleibst du zu lange stehen, holt er dich ein und du verlierst alle Punkte.",
+  labyrinthCaughtTitle: "🐺 Der Wolf hat dich erwischt!",
+  labyrinthCaughtText: "Du hast alle Punkte verloren. Versuch's noch mal und bleib in Bewegung!",
 };
 
 const uk: typeof cs = {
@@ -2416,6 +2436,10 @@ const uk: typeof cs = {
   labyrinthControlsHint: "Рухайся стрілками ↑ ↓ ← →",
   labyrinthTimeUpTitle: "⏰ Час вийшов!",
   labyrinthTimeUpText: "Ти зібрав/зібрала {score} балів!",
+  ruleLabyrinthWolfTitle: "Обережно, вовк!",
+  ruleLabyrinthWolfText: "Вовк повільно тебе переслідує. Якщо довго стоїш на місці, він тебе наздожене і ти втратиш усі бали.",
+  labyrinthCaughtTitle: "🐺 Вовк тебе спіймав!",
+  labyrinthCaughtText: "Ти втратив/втратила всі бали. Спробуй ще раз і не зупиняйся!",
 };
 
 const sk: typeof cs = {
@@ -2819,6 +2843,10 @@ const sk: typeof cs = {
   labyrinthControlsHint: "Pohybuj sa šípkami ↑ ↓ ← →",
   labyrinthTimeUpTitle: "⏰ Čas vypršal!",
   labyrinthTimeUpText: "Nazbieral/a si {score} bodov!",
+  ruleLabyrinthWolfTitle: "Pozor na vlka!",
+  ruleLabyrinthWolfText: "Vlk ťa pomaly prenasleduje. Keď sa dlho nehýbeš, dobehne ťa a prídeš o všetky body.",
+  labyrinthCaughtTitle: "🐺 Vlk ťa dostal!",
+  labyrinthCaughtText: "Prišiel/prišla si o všetky body. Skús to znova a nezastavuj sa!",
 };
 
 export const translations: Record<Lang, typeof cs> = { cs, ko, en, pl, de, uk, sk };
