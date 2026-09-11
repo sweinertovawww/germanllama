@@ -1,73 +1,49 @@
-# Welcome to your Lovable project
+# GermanLlama
 
-## Project info
+[www.germanllama.com](https://www.germanllama.com) — herní platforma pro samostudium němčiny, zaměřená na česky a slovensky mluvící pracovníky v Německu (obor-specifická slovní zásoba: truhlář, zedník, instalatér, elektrikář, gastro, zdravotnictví a další).
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Jazyky rozhraní
 
-## How can I edit this code?
+Čeština, angličtina, polština, korejština, ukrajinština, slovenština (`src/i18n/translations.ts`, `src/contexts/LanguageContext.tsx`).
 
-There are several ways of editing your application.
+## Hry a cvičení
 
-**Use Lovable**
+- **Llama Run** (`/`) — skákací hra, odpovídej na slovíčka za běhu
+- **Flash Cards** (`/flashcards`)
+- **Pexeso** (`/pexeso`)
+- **Skládání vět** (`/skladani-vet`)
+- **Wortpaare** — párování synonym/antonym (`/wortpaare`, data v Supabase tabulce `word_pairs`)
+- **Scrabble** (`/scrabble`)
+- **Challenge / Challenge A1** (`/challenge`, `/challenge-a1`)
+- **Start from beginning** — příběhy + Llama Jump pro úplné začátečníky (`/start-from-beginning/...`)
+- **Němčina do práce** — landing stránky pro jednotlivé profese (`/nemcina-do-prace/:slug`)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Tech stack
 
-Changes made via Lovable will be committed automatically to this repo.
+Vite + React 18 + TypeScript, shadcn-ui + Tailwind CSS, Supabase (anon klíč, RLS), Vercel (hosting + edge middleware pro `?lang=` SEO meta tagy, viz `middleware.ts`).
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Vývoj
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
 npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+npm run dev        # dev server
+npm run build       # produkční build
+npm run lint         # eslint
+npm test              # vitest
 ```
 
-**Edit a file directly in GitHub**
+Zkopíruj `.env.example` do `.env` a doplň Supabase/Gemini klíče (nikdy necommitovat `.env`).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Supabase
 
-**Use GitHub Codespaces**
+Migrace v `supabase/migrations/`. Lokálně:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```sh
+npx supabase link --project-ref <project-id>
+npx supabase migration list       # porovná lokální/remote stav
+npx supabase db push                # nahraje nové migrace
+```
 
-## What technologies are used for this project?
+## Deploy
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Git → GitHub → Vercel (auto-deploy z `main`). Práce probíhá ve feature branchích, mergují se přes Pull Request.

@@ -19,7 +19,7 @@ const Wortpaare = () => {
           "@type": "VideoGame",
           name: "Slovní páry",
           description: "Hra na přiřazování německých synonym a antonym",
-          url: "https://germanllama.lovable.app/wortpaare",
+          url: "https://www.germanllama.com/wortpaare",
           inLanguage: "cs",
           genre: "Educational",
           playMode: "SinglePlayer",
