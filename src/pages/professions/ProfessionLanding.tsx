@@ -668,7 +668,7 @@ const ProfessionLanding = () => {
     "@type": "WebPage",
     name: page.metaTitle,
     description: page.metaDesc,
-    url: `https://germanllama.lovable.app/nemcina-do-prace/${slug}`,
+    url: `https://www.germanllama.com/nemcina-do-prace/${slug}`,
   };
 
   return (

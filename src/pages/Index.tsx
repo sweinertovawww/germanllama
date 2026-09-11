@@ -32,7 +32,7 @@ const Index = () => {
           "@type": "VideoGame",
           name: "Llama Run",
           description: "Skákací hra pro učení německých slovíček a členů",
-          url: "https://germanllama.lovable.app/",
+          url: "https://www.germanllama.com/",
           inLanguage: "cs",
           genre: "Educational",
           playMode: "SinglePlayer",

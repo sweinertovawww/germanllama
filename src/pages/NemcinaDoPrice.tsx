@@ -49,7 +49,7 @@ const NemcinaDoPrice = () => {
     "@type": "CollectionPage",
     name: "Němčina do práce – přehled profesí",
     description: "Naučte se německá slovíčka a fráze pro vaši profesi. Skladník, automechanik, kuchař a další.",
-    url: "https://germanllama.lovable.app/nemcina-do-prace",
+    url: "https://www.germanllama.com/nemcina-do-prace",
   };
 
   return (
