@@ -1,34 +1,27 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import {
-  VERB_CONJUGATIONS,
-  PRONOUN_LABEL,
-  PRONOUNS,
-  getVerbTranslation,
-  type Pronoun,
-  type VerbConjugation,
-} from "@/data/verbConjugations";
+import { drawStar } from "@/game/collectibles";
+import { isTranslationCorrect } from "@/game/vocabularyData";
+import { VERB_CONJUGATIONS, PRONOUNS, getNativePhrase, getGermanAnswer, type Pronoun } from "@/data/verbConjugations";
 
-// A single persistent maze per game — the llama explores deeper into it round
-// by round rather than restarting fresh each time, so "escaping the labyrinth"
-// after ROUNDS_TOTAL correct picks actually means something.
+// A single persistent maze per game. The llama roams it freely, collecting stars —
+// each one poses a short native-language phrase ("on vaří") to translate into German.
 const COLS = 8;
 const ROWS = 8;
 const CELL = 46;
 const CANVAS_SIZE = COLS * CELL;
 
-const ROUNDS_TOTAL = 8;
-const START_LIVES = 3;
-const POINTS_PER_ROUND = 10;
+const GAME_SECONDS = 90;
+const GAME_FRAMES = GAME_SECONDS * 60;
+const STAR_POINTS = 5;
+const STARS_ACTIVE = 3;
 const MOVE_FRAMES = 8; // frames for one cell-to-cell slide
-const CORRECT_FLASH_MS = 550;
-const WRONG_FLASH_MS = 650;
-// A round's 4 tiles are placed at cells this many *path* steps from the
-// llama's current spot (not straight-line) — far enough to require real
-// navigation, not so far the round drags on.
-const TILE_MIN_DIST = 3;
-const TILE_MAX_DIST = 16;
+const CORRECT_FLASH_MS = 900;
+const WRONG_FLASH_MS = 1400;
+// A freshly-spawned star sits at least this many *path* steps from the llama's
+// current spot, so it's never handed to you for free.
+const STAR_MIN_DIST = 2;
 
 type Dir = "N" | "S" | "E" | "W";
 const DIR_DELTA: Record<Dir, [number, number]> = { N: [0, -1], S: [0, 1], E: [1, 0], W: [-1, 0] };
@@ -38,12 +31,9 @@ interface Cell {
   walls: Record<Dir, boolean>;
 }
 
-interface WordTile {
+interface StarTile {
   col: number;
   row: number;
-  text: string;
-  correct: boolean;
-  gone: boolean;
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -109,54 +99,24 @@ function bfsDistances(maze: Cell[][], start: { col: number; row: number }): numb
   return dist;
 }
 
-/** Correct form + 3 distractors for one pronoun slot of a verb, shuffled. Distractors are the verb's other forms
- *  first (closest grammatically), topped up from other verbs if a verb has too many duplicate forms (e.g. schließen). */
-function pickChoices(verb: VerbConjugation, pronoun: Pronoun): { text: string; correct: boolean }[] {
-  const correctText = verb.forms[pronoun];
-  const ownPool = Array.from(new Set(PRONOUNS.filter((p) => p !== pronoun).map((p) => verb.forms[p]))).filter(
-    (f) => f !== correctText
-  );
-  const distractors = shuffle(ownPool).slice(0, 3);
-  if (distractors.length < 3) {
-    const others = shuffle(VERB_CONJUGATIONS.filter((v) => v !== verb));
-    outer: for (const v of others) {
-      for (const p of PRONOUNS) {
-        const f = v.forms[p];
-        if (f !== correctText && !distractors.includes(f)) {
-          distractors.push(f);
-          if (distractors.length >= 3) break outer;
-        }
-      }
-    }
-  }
-  return shuffle([{ text: correctText, correct: true }, ...distractors.map((d) => ({ text: d, correct: false }))]);
-}
-
-function pickTileCells(maze: Cell[][], from: { col: number; row: number }, count: number): { col: number; row: number }[] {
+/** Picks a cell for a new star: far enough from the llama, not already holding another star. */
+function pickStarCell(maze: Cell[][], from: { col: number; row: number }, avoid: StarTile[]): { col: number; row: number } {
   const dist = bfsDistances(maze, from);
+  const isAvoided = (c: number, r: number) => avoid.some((a) => a.col === c && a.row === r);
   const inRange: { col: number; row: number }[] = [];
   const fallback: { col: number; row: number }[] = [];
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
       if (c === from.col && r === from.row) continue;
+      if (isAvoided(c, r)) continue;
       const d = dist[r][c];
       if (d < 0) continue;
-      if (d >= TILE_MIN_DIST && d <= TILE_MAX_DIST) inRange.push({ col: c, row: r });
+      if (d >= STAR_MIN_DIST) inRange.push({ col: c, row: r });
       else fallback.push({ col: c, row: r });
     }
   }
-  const pool = inRange.length >= count ? inRange : [...inRange, ...fallback];
-  return shuffle(pool).slice(0, count);
-}
-
-function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r);
-  ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r);
-  ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
+  const pool = inRange.length > 0 ? inRange : fallback;
+  return shuffle(pool)[0] ?? { col: from.col, row: from.row };
 }
 
 const FACING_ANGLE: Record<Dir, number> = { E: 0, S: Math.PI / 2, W: Math.PI, N: -Math.PI / 2 };
@@ -192,12 +152,6 @@ function drawLlamaSprite(ctx: CanvasRenderingContext2D, cx: number, cy: number, 
   ctx.fillStyle = "#c8a878";
   ctx.fillRect(x + 4, y + 8, 6, 4);
   ctx.restore();
-}
-
-interface FlashState {
-  col: number;
-  row: number;
-  kind: "correct" | "wrong";
 }
 
 function drawMaze(ctx: CanvasRenderingContext2D, maze: Cell[][]) {
@@ -257,27 +211,6 @@ function drawMaze(ctx: CanvasRenderingContext2D, maze: Cell[][]) {
   }
 }
 
-function drawTile(ctx: CanvasRenderingContext2D, tile: WordTile, flash: FlashState | null) {
-  if (tile.gone) return;
-  const cx = tile.col * CELL + CELL / 2;
-  const cy = tile.row * CELL + CELL / 2;
-  ctx.font = "bold 10px system-ui, sans-serif";
-  const textW = ctx.measureText(tile.text).width;
-  const w = Math.max(CELL - 8, textW + 14);
-  const h = 22;
-  const flashing = flash && flash.col === tile.col && flash.row === tile.row;
-  ctx.fillStyle = flashing ? (flash!.kind === "correct" ? "rgba(120,220,140,0.95)" : "rgba(230,90,90,0.95)") : "rgba(255,255,255,0.94)";
-  ctx.strokeStyle = flashing ? (flash!.kind === "correct" ? "#2f9e58" : "#c0392b") : "#8b7355";
-  ctx.lineWidth = 2;
-  roundRect(ctx, cx - w / 2, cy - h / 2, w, h, 6);
-  ctx.fill();
-  ctx.stroke();
-  ctx.fillStyle = "#2a1a0a";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText(tile.text, cx, cy + 1);
-}
-
 interface GameState {
   maze: Cell[][];
   pos: { col: number; row: number };
@@ -286,12 +219,9 @@ interface GameState {
   tweenProgress: number;
   facing: Dir;
   frameCount: number;
-  tiles: WordTile[];
-  resolving: boolean;
-  flash: FlashState | null;
+  stars: StarTile[];
+  remainingFrames: number;
   score: number;
-  lives: number;
-  round: number; // rounds completed so far
   lastVerbIdx: number;
 }
 
@@ -304,12 +234,9 @@ function makeInitialGameState(): GameState {
     tweenProgress: 1,
     facing: "E",
     frameCount: 0,
-    tiles: [],
-    resolving: false,
-    flash: null,
+    stars: [],
+    remainingFrames: GAME_FRAMES,
     score: 0,
-    lives: START_LIVES,
-    round: 0,
     lastVerbIdx: -1,
   };
 }
@@ -320,52 +247,40 @@ const LlamaLabyrinth = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
-  const [gameState, setGameState] = useState<"idle" | "playing" | "over">("idle");
-  const [outcome, setOutcome] = useState<"win" | "lose" | null>(null);
+  const [gameState, setGameState] = useState<"idle" | "playing" | "quiz" | "over">("idle");
   const [score, setScore] = useState(0);
-  const [lives, setLives] = useState(START_LIVES);
-  const [round, setRound] = useState(1);
+  const [timeLeft, setTimeLeft] = useState(GAME_SECONDS);
   const [highScore, setHighScore] = useState(() => parseInt(localStorage.getItem("llama-labyrinth-highscore") || "0"));
-  const [verb, setVerb] = useState<VerbConjugation>(VERB_CONJUGATIONS[0]);
-  const [pronoun, setPronoun] = useState<Pronoun>("ich");
+
+  const [currentPhrase, setCurrentPhrase] = useState("");
+  const [currentAnswer, setCurrentAnswer] = useState(""); // "/"-separated accepted variants, for isTranslationCorrect
+  const [input, setInput] = useState("");
+  const [result, setResult] = useState<"correct" | "wrong" | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const g = useRef<GameState>(makeInitialGameState());
 
-  const startRound = useCallback((state: GameState) => {
-    let idx = Math.floor(Math.random() * VERB_CONJUGATIONS.length);
-    if (VERB_CONJUGATIONS.length > 1) {
-      while (idx === state.lastVerbIdx) idx = Math.floor(Math.random() * VERB_CONJUGATIONS.length);
-    }
-    state.lastVerbIdx = idx;
-    const nextVerb = VERB_CONJUGATIONS[idx];
-    const nextPronoun = PRONOUNS[Math.floor(Math.random() * PRONOUNS.length)];
-    const choices = pickChoices(nextVerb, nextPronoun);
-    const cells = pickTileCells(state.maze, state.pos, choices.length);
-    state.tiles = choices.map((choice, i) => ({ ...cells[i], text: choice.text, correct: choice.correct, gone: false }));
-    state.resolving = false;
-    state.flash = null;
-    setVerb(nextVerb);
-    setPronoun(nextPronoun);
+  const spawnStar = useCallback((state: GameState) => {
+    const cell = pickStarCell(state.maze, state.pos, state.stars);
+    state.stars.push({ col: cell.col, row: cell.row });
   }, []);
 
   const startGame = useCallback(() => {
     const state = makeInitialGameState();
+    for (let i = 0; i < STARS_ACTIVE; i++) spawnStar(state);
     g.current = state;
-    startRound(state);
     setScore(0);
-    setLives(START_LIVES);
-    setRound(1);
-    setOutcome(null);
+    setTimeLeft(GAME_SECONDS);
+    setResult(null);
     setGameState("playing");
-  }, [startRound]);
+  }, [spawnStar]);
 
-  const finishGame = useCallback((result: "win" | "lose") => {
+  const finishGame = useCallback(() => {
     const finalScore = g.current.score;
     if (finalScore > parseInt(localStorage.getItem("llama-labyrinth-highscore") || "0")) {
       localStorage.setItem("llama-labyrinth-highscore", String(finalScore));
       setHighScore(finalScore);
     }
-    setOutcome(result);
     setGameState("over");
   }, []);
 
@@ -373,48 +288,58 @@ const LlamaLabyrinth = () => {
     setGameState("idle");
   }, []);
 
-  // Called once a cell-to-cell slide finishes landing exactly on the target cell.
+  const resumeGame = useCallback(() => {
+    spawnStar(g.current);
+    setResult(null);
+    setGameState("playing");
+  }, [spawnStar]);
+
+  const handleSubmit = useCallback(() => {
+    if (result !== null) return;
+    const isCorrect = isTranslationCorrect(input, currentAnswer);
+    setResult(isCorrect ? "correct" : "wrong");
+    if (isCorrect) {
+      g.current.score += STAR_POINTS;
+      setScore(g.current.score);
+    }
+    setTimeout(resumeGame, isCorrect ? CORRECT_FLASH_MS : WRONG_FLASH_MS);
+  }, [input, currentAnswer, result, resumeGame]);
+
+  // Landing on a star freezes movement and poses a translation quiz — picking up
+  // the star mid-frame so it visually vanishes the instant it's touched.
+  const triggerQuiz = useCallback(
+    (star: StarTile) => {
+      const state = g.current;
+      state.stars = state.stars.filter((s) => s !== star);
+
+      let idx = Math.floor(Math.random() * VERB_CONJUGATIONS.length);
+      if (VERB_CONJUGATIONS.length > 1) {
+        while (idx === state.lastVerbIdx) idx = Math.floor(Math.random() * VERB_CONJUGATIONS.length);
+      }
+      state.lastVerbIdx = idx;
+      const verb = VERB_CONJUGATIONS[idx];
+      const pronoun = PRONOUNS[Math.floor(Math.random() * PRONOUNS.length)] as Pronoun;
+
+      setCurrentPhrase(getNativePhrase(verb, lang, pronoun));
+      setCurrentAnswer(getGermanAnswer(verb, pronoun));
+      setInput("");
+      setResult(null);
+      setGameState("quiz");
+      setTimeout(() => inputRef.current?.focus(), 100);
+    },
+    [lang]
+  );
+
   const onArrive = useCallback(() => {
     const state = g.current;
-    const tile = state.tiles.find((tl) => !tl.gone && tl.col === state.pos.col && tl.row === state.pos.row);
-    if (!tile) return;
-
-    if (tile.correct) {
-      state.score += POINTS_PER_ROUND;
-      setScore(state.score);
-      state.resolving = true;
-      state.flash = { col: tile.col, row: tile.row, kind: "correct" };
-      const nextRound = state.round + 1;
-      state.round = nextRound;
-      setTimeout(() => {
-        if (nextRound >= ROUNDS_TOTAL) {
-          finishGame("win");
-        } else {
-          setRound(nextRound + 1);
-          startRound(state);
-        }
-      }, CORRECT_FLASH_MS);
-    } else {
-      tile.gone = true;
-      state.lives -= 1;
-      setLives(state.lives);
-      state.resolving = true;
-      state.flash = { col: tile.col, row: tile.row, kind: "wrong" };
-      setTimeout(() => {
-        if (state.lives <= 0) {
-          finishGame("lose");
-        } else {
-          state.resolving = false;
-          state.flash = null;
-        }
-      }, WRONG_FLASH_MS);
-    }
-  }, [finishGame, startRound]);
+    const star = state.stars.find((s) => s.col === state.pos.col && s.row === state.pos.row);
+    if (star) triggerQuiz(star);
+  }, [triggerQuiz]);
 
   const tryMove = useCallback(
     (dir: Dir) => {
       const state = g.current;
-      if (gameState !== "playing" || state.tweening || state.resolving) return;
+      if (gameState !== "playing" || state.tweening) return;
       const { col, row } = state.pos;
       const cell = state.maze[row]?.[col];
       if (!cell || cell.walls[dir]) return;
@@ -441,6 +366,13 @@ const LlamaLabyrinth = () => {
         }
         return;
       }
+      if (gameState === "quiz") {
+        if (e.code === "Enter") {
+          e.preventDefault();
+          handleSubmit();
+        }
+        return;
+      }
       const map: Partial<Record<string, Dir>> = { ArrowUp: "N", ArrowDown: "S", ArrowLeft: "W", ArrowRight: "E" };
       const dir = map[e.key];
       if (dir) {
@@ -450,7 +382,7 @@ const LlamaLabyrinth = () => {
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [gameState, startGame, tryMove]);
+  }, [gameState, startGame, tryMove, handleSubmit]);
 
   // Responsive scaling — fit the container width, same principle as the other llama games.
   useEffect(() => {
@@ -466,7 +398,9 @@ const LlamaLabyrinth = () => {
     return () => window.removeEventListener("resize", updateScale);
   }, []);
 
-  // Main render loop — advances the cell-to-cell slide animation and redraws every frame.
+  // Main render loop — only runs while actually roaming (paused during the quiz overlay,
+  // which is exactly when the countdown should pause too). Advances the slide animation,
+  // ticks the timer down, and redraws every frame.
   useEffect(() => {
     if (gameState !== "playing") return;
     const canvas = canvasRef.current;
@@ -478,6 +412,14 @@ const LlamaLabyrinth = () => {
     const loop = () => {
       const state = g.current;
       state.frameCount++;
+      state.remainingFrames -= 1;
+
+      if (state.remainingFrames <= 0) {
+        finishGame();
+        return;
+      }
+      if (state.frameCount % 15 === 0) setTimeLeft(Math.max(0, Math.ceil(state.remainingFrames / 60)));
+
       if (state.tweening) {
         state.tweenProgress += 1 / MOVE_FRAMES;
         if (state.tweenProgress >= 1) {
@@ -488,7 +430,7 @@ const LlamaLabyrinth = () => {
       }
 
       drawMaze(ctx, state.maze);
-      for (const tile of state.tiles) drawTile(ctx, tile, state.flash);
+      for (const star of state.stars) drawStar(ctx, star.col * CELL + CELL / 2, star.row * CELL + CELL / 2, state.frameCount);
 
       const fx = state.animFrom.col + (state.pos.col - state.animFrom.col) * state.tweenProgress;
       const fy = state.animFrom.row + (state.pos.row - state.animFrom.row) * state.tweenProgress;
@@ -498,33 +440,17 @@ const LlamaLabyrinth = () => {
     };
     animId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animId);
-  }, [gameState, onArrive]);
-
-  const pronounLabel = PRONOUN_LABEL[pronoun];
+  }, [gameState, onArrive, finishGame]);
 
   return (
     <div className="flex flex-col items-center w-full gap-3 sm:gap-4">
-      {gameState === "playing" && (
-        <>
-          <div className="flex items-center justify-between w-full" style={{ maxWidth: CANVAS_SIZE }}>
-            <span className="font-game text-[10px] sm:text-xs text-muted-foreground">
-              {t("labyrinthRoundLabel", { n: round, total: ROUNDS_TOTAL })}
-            </span>
-            <span className="text-sm sm:text-base">{"❤️".repeat(Math.max(0, lives))}</span>
-            <span className="font-game text-[10px] sm:text-xs text-foreground">
-              {t("scoreLabel")}: <span className="text-primary">{score}</span>
-            </span>
-          </div>
-          <div className="bg-muted rounded-2xl border-2 border-border px-4 py-2 text-center w-full" style={{ maxWidth: CANVAS_SIZE }}>
-            <p className="font-body text-[9px] sm:text-[10px] text-muted-foreground mb-0.5">{t("labyrinthFindPrompt")}</p>
-            <p className="font-game text-xs sm:text-sm text-foreground">
-              {pronounLabel} ___{" "}
-              <span className="font-body font-normal text-muted-foreground text-[10px] sm:text-xs">
-                ({verb.infinitive} — {getVerbTranslation(verb, lang)})
-              </span>
-            </p>
-          </div>
-        </>
+      {(gameState === "playing" || gameState === "quiz") && (
+        <div className="flex items-center justify-between w-full" style={{ maxWidth: CANVAS_SIZE }}>
+          <span className="font-game text-[10px] sm:text-xs text-foreground">
+            {t("scoreLabel")}: <span className="text-primary">{score}</span>
+          </span>
+          <span className="font-game text-[10px] sm:text-xs text-muted-foreground">{t("challengeTimeLeft", { s: timeLeft })}</span>
+        </div>
       )}
 
       <div
@@ -559,7 +485,7 @@ const LlamaLabyrinth = () => {
           </div>
         )}
 
-        {gameState === "playing" && (
+        {(gameState === "playing" || gameState === "quiz") && (
           <button
             onClick={exitGame}
             className="absolute top-2 right-2 font-game text-xs px-3 py-1 rounded bg-destructive/80 text-destructive-foreground hover:bg-destructive transition-colors z-20"
@@ -568,26 +494,51 @@ const LlamaLabyrinth = () => {
           </button>
         )}
 
+        {gameState === "quiz" && (
+          <div className="absolute inset-0 bg-foreground/70 flex items-center justify-center">
+            <div className="bg-card rounded-xl p-3 sm:p-6 shadow-2xl text-center max-w-[95%] sm:max-w-md mx-2 sm:mx-4 border-2 border-accent">
+              <p className="font-game text-xs sm:text-sm text-accent mb-2">{t("labyrinthStarPrompt")}</p>
+              <p className="font-game text-sm sm:text-base text-card-foreground mb-3 sm:mb-4">{currentPhrase}</p>
+              <div className="flex gap-2 justify-center items-center">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  disabled={result !== null}
+                  placeholder={t("fillPlaceholder")}
+                  className="font-game text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg border-2 border-border bg-card text-card-foreground focus:border-accent focus:outline-none w-32 sm:w-48"
+                />
+                <button
+                  onClick={handleSubmit}
+                  disabled={result !== null}
+                  className="font-game text-xs px-3 sm:px-4 py-2 rounded-lg bg-accent text-accent-foreground hover:opacity-90 transition-opacity"
+                >
+                  OK
+                </button>
+              </div>
+              {result === "correct" && (
+                <p className="font-game text-xs mt-3" style={{ color: "hsl(142, 71%, 45%)" }}>
+                  {t("articleCorrectPts", { points: STAR_POINTS })}
+                </p>
+              )}
+              {result === "wrong" && (
+                <p className="font-game text-xs text-destructive mt-3">{t("wrong0", { word: currentAnswer.split("/")[0] })}</p>
+              )}
+              {!result && <p className="text-muted-foreground text-xs mt-3 hidden sm:block">{t("enterConfirm")}</p>}
+            </div>
+          </div>
+        )}
+
         {gameState === "over" && (
           <div className="absolute inset-0 flex items-center justify-center z-30">
             <div className="absolute inset-0 bg-foreground/60 animate-game-over-flash" />
             <div className="relative z-10 flex flex-col items-center gap-3 sm:gap-4 bg-card/95 rounded-2xl p-4 sm:p-8 shadow-2xl border-2 border-primary mx-4 max-w-[90%] text-center">
-              {outcome === "win" ? (
-                <>
-                  <p className="font-game text-sm sm:text-lg text-primary">{t("labyrinthWinTitle")}</p>
-                  <p className="font-body text-xs sm:text-sm text-foreground">{t("labyrinthWinText", { score })}</p>
-                </>
-              ) : (
-                <p className="font-game text-lg sm:text-2xl text-destructive">{t("gameOverText")}</p>
-              )}
-              <div className="flex flex-col items-center gap-1">
-                <p className="font-game text-sm sm:text-base text-foreground">
-                  {t("scoreLabel")}: <span className="text-primary">{score}</span>
-                </p>
-                <p className="font-game text-xs text-muted-foreground">
-                  {t("bestLabel")}: <span className="text-primary">{highScore}</span>
-                </p>
-              </div>
+              <p className="font-game text-sm sm:text-lg text-primary">{t("labyrinthTimeUpTitle")}</p>
+              <p className="font-body text-xs sm:text-sm text-foreground">{t("labyrinthTimeUpText", { score })}</p>
+              <p className="font-game text-xs text-muted-foreground">
+                {t("bestLabel")}: <span className="text-primary">{highScore}</span>
+              </p>
               <button
                 onClick={startGame}
                 className="font-game text-sm sm:text-base px-8 sm:px-12 py-3 sm:py-4 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all animate-retry-pulse whitespace-nowrap"
