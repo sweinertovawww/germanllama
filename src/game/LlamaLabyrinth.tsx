@@ -171,6 +171,35 @@ function bfsNextStep(maze: Cell[][], from: { col: number; row: number }, to: { c
 }
 
 /** Picks a cell for a new star: far enough from the llama, not already holding another star. */
+// How far around the llama a correctly-answered question can knock down a wall — close enough
+// that the new shortcut is actually reachable and useful right away.
+const OPEN_WALL_RADIUS = 3;
+
+/** Knocks down one existing wall near `near` (grid distance, not path distance), turning the maze's
+ *  single deterministic corridor into one with a genuine alternate route — a real way to lose the wolf. */
+function openNewPath(maze: Cell[][], near: { col: number; row: number }) {
+  const candidates: { col: number; row: number; dir: Dir }[] = [];
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      if (Math.abs(c - near.col) + Math.abs(r - near.row) > OPEN_WALL_RADIUS) continue;
+      const cell = maze[r][c];
+      for (const dir of ["N", "S", "E", "W"] as Dir[]) {
+        if (!cell.walls[dir]) continue;
+        const [dc, dr] = DIR_DELTA[dir];
+        const nc = c + dc;
+        const nr = r + dr;
+        if (nc < 0 || nc >= COLS || nr < 0 || nr >= ROWS) continue;
+        candidates.push({ col: c, row: r, dir });
+      }
+    }
+  }
+  if (candidates.length === 0) return;
+  const pick = shuffle(candidates)[0];
+  const [dc, dr] = DIR_DELTA[pick.dir];
+  maze[pick.row][pick.col].walls[pick.dir] = false;
+  maze[pick.row + dr][pick.col + dc].walls[OPPOSITE[pick.dir]] = false;
+}
+
 function pickStarCell(maze: Cell[][], from: { col: number; row: number }, avoid: StarTile[]): { col: number; row: number } {
   const dist = bfsDistances(maze, from);
   const isAvoided = (c: number, r: number) => avoid.some((a) => a.col === c && a.row === r);
@@ -427,6 +456,9 @@ const LlamaLabyrinth = () => {
     if (isCorrect) {
       g.current.score += STAR_POINTS;
       setScore(g.current.score);
+      // A correct answer earns a real escape route: knock down one wall near the llama so the
+      // wolf's chase no longer has just one deterministic corridor to follow.
+      openNewPath(g.current.maze, g.current.pos);
     }
     setTimeout(resumeGame, isCorrect ? CORRECT_FLASH_MS : WRONG_FLASH_MS);
   }, [input, currentAnswer, result, resumeGame]);
