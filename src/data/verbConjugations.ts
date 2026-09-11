@@ -50,6 +50,9 @@ export interface VerbConjugation {
   translationSk?: string;
   forms: Record<Pronoun, string>;
   nativeForms: NativeForms;
+  /** Disambiguation appended to the native phrase in languages where the translated verb is otherwise
+   *  ambiguous — e.g. Czech/Slovak "stát" = both "to cost" and "to stand", identical conjugated forms. */
+  phraseNote?: Partial<Record<Lang, string>>;
 }
 
 /** Picks the right-language translation off a verb, falling back to Czech — same convention as vocabularyData's getTranslation. */
@@ -100,7 +103,9 @@ export function getNativePronounWord(lang: Lang, pronoun: Pronoun): string {
 
 /** A short native-language phrase like "on vaří" for the star-quiz prompt. */
 export function getNativePhrase(verb: VerbConjugation, lang: Lang, pronoun: Pronoun): string {
-  return `${getNativePronounWord(lang, pronoun)} ${getNativeVerbForm(verb, lang, pronoun)}`;
+  const base = `${getNativePronounWord(lang, pronoun)} ${getNativeVerbForm(verb, lang, pronoun)}`;
+  const note = verb.phraseNote?.[lang];
+  return note ? `${base} ${note}` : base;
 }
 
 /** Accepted-answer string for isTranslationCorrect — "/"-separated variants covering "<pronoun> <form>" and the bare form. */
@@ -308,6 +313,9 @@ export const VERB_CONJUGATIONS: VerbConjugation[] = [
       sk: ["stojím", "stojíš", "stojí", "stojíme", "stojíte", "stoja"],
       ko: "들어요",
     },
+    // "stát"/"stáť" is a Czech/Slovak homonym (to cost vs. to stand) with identical conjugated forms,
+    // and Korean "들다" alone is similarly ambiguous (lift/hold/enter/...) — spell out which sense.
+    phraseNote: { cs: "(o ceně)", sk: "(o cene)", ko: "(가격)" },
   },
   {
     infinitive: "bezahlen",
