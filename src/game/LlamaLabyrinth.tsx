@@ -30,6 +30,10 @@ const WOLF_STEP_FRAMES = 40;
 // in well under a minute even on a maze with a long, winding diameter.
 const WOLF_START_MIN_DIST = 10;
 const WOLF_START_MAX_DIST = 20;
+// Guarantees a real first move: the wolf's start distance is always pushed out at least
+// this much farther than the nearest star, so reaching that star — and opening the first
+// escape route — never depends on luck.
+const WOLF_SAFETY_MARGIN = 3;
 
 type Dir = "N" | "S" | "E" | "W";
 const DIR_DELTA: Record<Dir, [number, number]> = { N: [0, -1], S: [0, 1], E: [1, 0], W: [-1, 0] };
@@ -107,18 +111,20 @@ function bfsDistances(maze: Cell[][], start: { col: number; row: number }): numb
   return dist;
 }
 
-/** A cell WOLF_START_MIN_DIST..WOLF_START_MAX_DIST path-steps from `from` — falls back to the single
- *  farthest cell available if the maze's diameter is too short to reach that range. */
-function pickWolfStartCell(maze: Cell[][], from: { col: number; row: number }): { col: number; row: number } {
+/** A cell at least `minDist` (and at most WOLF_START_MAX_DIST, when that leaves any candidates)
+ *  path-steps from `from` — falls back to the single farthest cell available otherwise. */
+function pickWolfStartCell(maze: Cell[][], from: { col: number; row: number }, minDist: number): { col: number; row: number } {
   const dist = bfsDistances(maze, from);
   const inRange: { col: number; row: number }[] = [];
+  const atLeastMin: { col: number; row: number }[] = [];
   let farthest = from;
   let farthestDist = -1;
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
       const d = dist[r][c];
       if (d < 0) continue;
-      if (d >= WOLF_START_MIN_DIST && d <= WOLF_START_MAX_DIST) inRange.push({ col: c, row: r });
+      if (d >= minDist && d <= WOLF_START_MAX_DIST) inRange.push({ col: c, row: r });
+      if (d >= minDist) atLeastMin.push({ col: c, row: r });
       if (d > farthestDist) {
         farthestDist = d;
         farthest = { col: c, row: r };
@@ -126,6 +132,7 @@ function pickWolfStartCell(maze: Cell[][], from: { col: number; row: number }): 
     }
   }
   if (inRange.length > 0) return shuffle(inRange)[0];
+  if (atLeastMin.length > 0) return shuffle(atLeastMin)[0];
   return farthest;
 }
 
@@ -378,12 +385,21 @@ function makeInitialGameState(): GameState {
     remainingFrames: GAME_FRAMES,
     score: 0,
     lastVerbIdx: -1,
-    // Starts a bounded distance from the llama, so every run opens with a grace period that's
-    // still guaranteed to resolve in a reasonable time if you just stand still.
-    wolf: pickWolfStartCell(maze, start),
+    // Placeholder — placeStars must run first, then placeWolf positions it for real
+    // (its minimum distance depends on where the stars ended up).
+    wolf: start,
     wolfFacing: "W",
     wolfMoveFrames: WOLF_STEP_FRAMES,
   };
+}
+
+/** Positions the wolf only once stars exist — guarantees it starts farther from the llama than the
+ *  nearest star, so the first star (and the escape route answering it opens) is always reachable first. */
+function placeWolf(state: GameState) {
+  const dist = bfsDistances(state.maze, state.pos);
+  const nearestStarDist = Math.min(...state.stars.map((s) => dist[s.row][s.col]));
+  const minDist = Math.max(WOLF_START_MIN_DIST, nearestStarDist + WOLF_SAFETY_MARGIN);
+  state.wolf = pickWolfStartCell(state.maze, state.pos, minDist);
 }
 
 const LlamaLabyrinth = () => {
@@ -414,6 +430,7 @@ const LlamaLabyrinth = () => {
   const startGame = useCallback(() => {
     const state = makeInitialGameState();
     for (let i = 0; i < STARS_ACTIVE; i++) spawnStar(state);
+    placeWolf(state);
     g.current = state;
     setScore(0);
     setTimeLeft(GAME_SECONDS);
