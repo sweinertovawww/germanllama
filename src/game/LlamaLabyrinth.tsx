@@ -15,6 +15,7 @@ const CANVAS_SIZE = COLS * CELL;
 const GAME_SECONDS = 90;
 const GAME_FRAMES = GAME_SECONDS * 60;
 const STAR_POINTS = 5;
+const WRONG_PENALTY = 3;
 const STARS_ACTIVE = 3;
 const MOVE_FRAMES = 8; // frames for one cell-to-cell slide
 const CORRECT_FLASH_MS = 900;
@@ -369,17 +370,21 @@ function drawMaze(ctx: CanvasRenderingContext2D, maze: Cell[][]) {
 }
 
 /** A pulsing golden glow right where a wall just came down, so the new opening is impossible to miss. */
-function drawNewPathGlow(ctx: CanvasRenderingContext2D, flash: { col: number; row: number; dir: Dir; framesLeft: number }) {
+function drawNewPathGlow(
+  ctx: CanvasRenderingContext2D,
+  flash: { col: number; row: number; dir: Dir; framesLeft: number; kind: "correct" | "wrong" }
+) {
   const [dc, dr] = DIR_DELTA[flash.dir];
   const x0 = flash.col * CELL + CELL / 2;
   const y0 = flash.row * CELL + CELL / 2;
   const midX = x0 + (dc * CELL) / 2;
   const midY = y0 + (dr * CELL) / 2;
   const pulse = 0.6 + 0.4 * Math.sin(flash.framesLeft * 0.3);
+  const color = flash.kind === "correct" ? "#22c55e" : "#ef4444";
   ctx.save();
   ctx.globalAlpha = Math.min(1, flash.framesLeft / 20) * pulse;
-  ctx.fillStyle = "#ffd700";
-  ctx.shadowColor = "#ffd700";
+  ctx.fillStyle = color;
+  ctx.shadowColor = color;
   ctx.shadowBlur = 14;
   ctx.beginPath();
   ctx.arc(midX, midY, 13, 0, Math.PI * 2);
@@ -402,7 +407,7 @@ interface GameState {
   wolf: { col: number; row: number };
   wolfFacing: Dir;
   wolfMoveFrames: number;
-  newPathFlash: { col: number; row: number; dir: Dir; framesLeft: number } | null;
+  newPathFlash: { col: number; row: number; dir: Dir; framesLeft: number; kind: "correct" | "wrong" } | null;
   // The wolf doesn't move at all until the first star is reached — a hard guarantee (not just a
   // distance estimate, which the wolf's dynamic re-pathing toward your *current* spot can undercut)
   // that you always get a real shot at that first correct answer and the escape route it opens.
@@ -516,17 +521,18 @@ const LlamaLabyrinth = () => {
     setResult(isCorrect ? "correct" : "wrong");
     if (isCorrect) {
       g.current.score += STAR_POINTS;
-      setScore(g.current.score);
-      // A correct answer earns a real escape route: knock down one wall near the llama so the
-      // wolf's chase no longer has just one deterministic corridor to follow. openNewPath always
-      // finds *something* to open (it falls back to the whole maze), so this only comes back null
-      // if literally every wall in the maze is already down.
-      const opened = openNewPath(g.current.maze, g.current.pos);
-      setPathOpened(opened !== null);
-      if (opened) g.current.newPathFlash = { ...opened, framesLeft: NEW_PATH_FLASH_FRAMES };
     } else {
-      setPathOpened(false);
+      // A wrong answer still has to leave you a way out — it costs points instead of earning them,
+      // but the escape route opens regardless. Otherwise a run of wrong answers with the wolf closing
+      // in would have no way out at all.
+      g.current.score = Math.max(0, g.current.score - WRONG_PENALTY);
     }
+    setScore(g.current.score);
+    // openNewPath always finds *something* to open (it falls back to the whole maze), so this only
+    // comes back null if literally every wall in the maze is already down.
+    const opened = openNewPath(g.current.maze, g.current.pos);
+    setPathOpened(opened !== null);
+    if (opened) g.current.newPathFlash = { ...opened, framesLeft: NEW_PATH_FLASH_FRAMES, kind: isCorrect ? "correct" : "wrong" };
     setTimeout(resumeGame, isCorrect ? CORRECT_FLASH_MS : WRONG_FLASH_MS);
   }, [input, currentAnswer, result, resumeGame]);
 
@@ -779,12 +785,19 @@ const LlamaLabyrinth = () => {
                     {t("articleCorrectPts", { points: STAR_POINTS })}
                   </p>
                   {pathOpened && (
-                    <p className="font-game text-[10px] sm:text-xs mt-1.5 text-accent">{t("labyrinthNewPathOpened")}</p>
+                    <p className="font-game text-[10px] sm:text-xs mt-1.5" style={{ color: "hsl(142, 71%, 45%)" }}>
+                      {t("labyrinthNewPathOpened")}
+                    </p>
                   )}
                 </>
               )}
               {result === "wrong" && (
-                <p className="font-game text-xs text-destructive mt-3">{t("wrong0", { word: currentAnswer.split("/")[0] })}</p>
+                <>
+                  <p className="font-game text-xs text-destructive mt-3">
+                    {t("labyrinthWrongPenalty", { word: currentAnswer.split("/")[0], points: WRONG_PENALTY })}
+                  </p>
+                  {pathOpened && <p className="font-game text-[10px] sm:text-xs mt-1.5 text-destructive">{t("labyrinthNewPathOpened")}</p>}
+                </>
               )}
               {!result && <p className="text-muted-foreground text-xs mt-3 hidden sm:block">{t("enterConfirm")}</p>}
             </div>
