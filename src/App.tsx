@@ -22,6 +22,7 @@ import ProfessionLanding from "./pages/professions/ProfessionLanding";
 import StartFromBeginning from "./pages/StartFromBeginning";
 import StoryExercise from "./pages/beginner/StoryExercise";
 import LlamaJumpPage from "./pages/beginner/LlamaJumpPage";
+import LlamaLabyrinthPage from "./pages/beginner/LlamaLabyrinthPage";
 import { STORIES } from "@/data/beginnerStories";
 
 const queryClient = new QueryClient();
@@ -51,6 +52,7 @@ function AppRoutes() {
           <Route path="/start-from-beginning/sentence-structure" element={<Navigate to={`/start-from-beginning/sentence-structure/${STORIES[0]?.id}`} replace />} />
           <Route path="/start-from-beginning/sentence-structure/:storyId" element={<Layout><StoryExercise /></Layout>} />
           <Route path="/start-from-beginning/sentence-structure/:storyId/llama-jump" element={<Layout><LlamaJumpPage /></Layout>} />
+          <Route path="/start-from-beginning/verbs/llama-labyrint" element={<Layout><LlamaLabyrinthPage /></Layout>} />
           <Route path="/kontakt" element={<Layout><Kontakt /></Layout>} />
           <Route path="*" element={<NotFound />} />
         </Routes>

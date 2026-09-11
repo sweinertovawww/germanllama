@@ -18,9 +18,9 @@ const StartFromBeginning = () => {
     {
       id: "verbs",
       title: t("categoryVerbs"),
-      desc: t("categoryComingSoon"),
-      path: null,
-      available: false,
+      desc: t("categoryVerbsDesc"),
+      path: "/start-from-beginning/verbs/llama-labyrint",
+      available: true,
     },
     {
       id: "articles",
