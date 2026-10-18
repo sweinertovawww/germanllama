@@ -75,6 +75,23 @@ function makePairs(questions: typeof FILL_QUESTIONS): SentencePair[] {
   });
 }
 
+// Saved pairs may carry translations from an older data version (e.g. the
+// April 2026 bug that put Korean into the Czech field), so refresh them from
+// the current FILL_QUESTIONS. Returns null if any sentence no longer exists.
+function refreshTranslations(saved: SentencePair[]): SentencePair[] | null {
+  const byGerman = new Map(
+    FILL_QUESTIONS.map((q) => [q.sentence.replace("___", q.answer), q] as const)
+  );
+  const refreshed: SentencePair[] = [];
+  for (const pair of saved) {
+    const q = byGerman.get(pair.fullGerman);
+    if (!q) return null;
+    const [fresh] = makePairs([q]);
+    refreshed.push({ ...pair, ...fresh, id: pair.id, matched: pair.matched });
+  }
+  return refreshed;
+}
+
 // Draggable end piece (desktop DnD)
 function DraggableEnd({
   id,
@@ -184,12 +201,18 @@ const SentenceBuilder = ({ onGameComplete, challengeMode = false, levelOverride 
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return null;
-      return JSON.parse(raw) as {
+      const parsed = JSON.parse(raw) as {
         pairs: SentencePair[];
         score: number;
         totalScore: number;
         completedRounds: number;
       };
+      const pairs = refreshTranslations(parsed.pairs);
+      if (!pairs) {
+        localStorage.removeItem(STORAGE_KEY);
+        return null;
+      }
+      return { ...parsed, pairs };
     } catch { return null; }
   };
 
